@@ -29,7 +29,8 @@ class Client(threading.Thread):
 			'join' : self.__cmd_join,
 			'part' : self.__cmd_part,
 			'auth' : self.__cmd_auth,
-			'delete' : self.__cmd_delete
+			'delete' : self.__cmd_delete,
+			'policy-file-request' : self.__cmd_policy
 		}
 	
 	def run(self):
@@ -52,7 +53,9 @@ class Client(threading.Thread):
 		
 	def parse(self, cmd):
 		"""Parsing de l'entre json sur le serveur"""
-		
+
+		if 'policy-file-request' in cmd:
+			return self.__cmd_list['policy-file-request'](cmd)
 		try:
 			json_cmd = json.loads(cmd)
 			if json_cmd['cmd'] and json_cmd['cmd'] in self.__cmd_list:
@@ -65,7 +68,13 @@ class Client(threading.Thread):
 				Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' n'est pas une commande valide", 'yellow')
 		except ValueError:
 			Log().add("[+] Command error : " + cmd + " , n'est pas une chaine json valide", 'ired')
-	
+
+	# flash-player send <policy-file-request/>
+	def __cmd_policy(self, args):
+		self.__squeue.put([self, "<cross-domain-policy><allow-access-from domain='*'" +
+			" to-ports='*' secure='false' /></cross-domain-policy>\0"])
+		return True
+
 	# {"cmd": "delete", "args": "irc"}
 	def __cmd_delete(self, args):
 		"""On supprimet un channel, si celui si existe et que Client est Master"""
