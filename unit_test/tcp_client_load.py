@@ -17,9 +17,19 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.handle()
 	time.sleep(5)
 	tcpclient.disconnect()
+	
+def create_tcp_client_(aim = 'default'):
+	tcpclient = TCPClient('localhost', 9999)
+	tcpclient.handle()
+	tcpclient.write('{"cmd":"join", "args":"irc"}\n')
+	tcpclient.handle()
+	time.sleep(5)
+	tcpclient.disconnect()
  
 def main():
-	for i in range(0,100):
+	client_thread = threading.Thread(target=create_tcp_client_, args=())
+	client_thread.start()
+	for i in range(0,5):
 		client_thread = threading.Thread(target=create_tcp_client, args=())
 		client_thread.start()
 	print '[i] Press ^C to exit'

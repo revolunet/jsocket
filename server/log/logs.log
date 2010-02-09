@@ -1,3 +1,870 @@
 2010-02-09 15:22:16,934 - [+] TCP Server launched on localhost:9999
 2010-02-09 15:22:24,276 - [+] Client connected ('127.0.0.1', 53410)
 2010-02-09 15:22:26,229 - [-] Client disconnected
+2010-02-09 19:09:30,203 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:09:34,858 - [+] Client connected ('127.0.0.1', 3588)
+2010-02-09 19:09:58,296 - [+] Client ('127.0.0.1', 3588) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:09:58,312 - [-] Client disconnected
+2010-02-09 19:09:58,375 - [+] Command error : {"cmd": "forward", "args": "message"} , 'forward' n'est pas une commande valide
+2010-02-09 19:10:26,358 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:10:30,717 - [+] Client connected ('127.0.0.1', 3589)
+2010-02-09 19:10:32,078 - [+] Client ('127.0.0.1', 3589) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:10:32,092 - [-] Client disconnected
+2010-02-09 19:10:32,092 - [+] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )
+2010-02-09 19:11:02,578 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:11:05,780 - [+] Client connected ('127.0.0.1', 3590)
+2010-02-09 19:11:05,780 - [+] Room : client ('127.0.0.1', 3590) joined Room irc
+2010-02-09 19:11:05,780 - [+] Room : irc 1 users
+2010-02-09 19:11:05,796 - [+] Client : l'utilisateur ('127.0.0.1', 3590) a rejoin le channel : irc
+2010-02-09 19:11:09,187 - [+] Client ('127.0.0.1', 3590) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:11:09,217 - [+] Room : client ('127.0.0.1', 3590) left Room irc
+2010-02-09 19:11:09,217 - [+] Room : irc 0 users
+2010-02-09 19:11:09,217 - [-] Client disconnected
+2010-02-09 19:11:47,046 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:11:52,000 - [+] Client connected ('127.0.0.1', 3595)
+2010-02-09 19:11:52,000 - [+] Room : client ('127.0.0.1', 3595) joined Room irc
+2010-02-09 19:11:52,000 - [+] Room : irc 1 users
+2010-02-09 19:11:52,000 - [+] Client : l'utilisateur ('127.0.0.1', 3595) a rejoin le channel : irc
+2010-02-09 19:11:54,625 - [+] Client connected ('127.0.0.1', 3596)
+2010-02-09 19:11:54,640 - [+] Room : client ('127.0.0.1', 3596) joined Room irc
+2010-02-09 19:11:54,640 - [+] Room : irc 2 users
+2010-02-09 19:11:54,640 - [+] Client : l'utilisateur ('127.0.0.1', 3596) a rejoin le channel : irc
+2010-02-09 19:11:57,812 - [+] Client connected ('127.0.0.1', 3601)
+2010-02-09 19:11:57,812 - [+] Room : client ('127.0.0.1', 3601) joined Room irc
+2010-02-09 19:11:57,812 - [+] Room : irc 3 users
+2010-02-09 19:11:57,812 - [+] Client : l'utilisateur ('127.0.0.1', 3601) a rejoin le channel : irc
+2010-02-09 19:12:04,108 - [+] Client ('127.0.0.1', 3596) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:12:04,125 - [+] Room : client ('127.0.0.1', 3596) left Room irc
+2010-02-09 19:12:04,125 - [+] Room : irc 2 users
+2010-02-09 19:12:04,125 - [-] Client disconnected
+2010-02-09 19:12:24,687 - [+] Room : client ('127.0.0.1', 3601) left Room irc
+2010-02-09 19:12:24,687 - [+] Room : irc 1 users
+2010-02-09 19:12:24,687 - [-] Client disconnected
+2010-02-09 19:12:27,265 - [+] Room : client ('127.0.0.1', 3595) left Room irc
+2010-02-09 19:12:27,280 - [+] Room : irc 0 users
+2010-02-09 19:12:27,280 - [-] Client disconnected
+2010-02-09 19:14:03,921 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:14:08,078 - [+] Client connected ('127.0.0.1', 3604)
+2010-02-09 19:14:08,078 - [+] Room : client ('127.0.0.1', 3604) joined Room irc
+2010-02-09 19:14:08,078 - [+] Room : irc 1 users
+2010-02-09 19:14:08,078 - [+] Client : l'utilisateur ('127.0.0.1', 3604) a rejoin le channel : irc
+2010-02-09 19:14:11,812 - [+] Client connected ('127.0.0.1', 3605)
+2010-02-09 19:14:11,828 - [+] Room : client ('127.0.0.1', 3605) joined Room irc
+2010-02-09 19:14:11,828 - [+] Room : irc 2 users
+2010-02-09 19:14:11,828 - [+] Client : l'utilisateur ('127.0.0.1', 3605) a rejoin le channel : irc
+2010-02-09 19:14:26,171 - [+] Client ('127.0.0.1', 3604) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:14:26,187 - [+] Room : client ('127.0.0.1', 3604) left Room irc
+2010-02-09 19:14:26,187 - [+] Room : irc 1 users
+2010-02-09 19:14:26,187 - [-] Client disconnected
+2010-02-09 19:14:26,217 - [+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )
+2010-02-09 19:14:46,765 - [+] Client connected ('127.0.0.1', 3606)
+2010-02-09 19:14:46,765 - [+] Room : client ('127.0.0.1', 3606) joined Room irc
+2010-02-09 19:14:46,765 - [+] Room : irc 2 users
+2010-02-09 19:14:46,765 - [+] Client : l'utilisateur ('127.0.0.1', 3606) a rejoin le channel : irc
+2010-02-09 19:14:49,000 - [+] Client connected ('127.0.0.1', 3607)
+2010-02-09 19:14:49,000 - [+] Room : client ('127.0.0.1', 3607) joined Room irc
+2010-02-09 19:14:49,000 - [+] Room : irc 3 users
+2010-02-09 19:14:49,000 - [+] Client : l'utilisateur ('127.0.0.1', 3607) a rejoin le channel : irc
+2010-02-09 19:14:55,483 - [+] Client ('127.0.0.1', 3607) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:14:55,500 - [+] Room : client ('127.0.0.1', 3607) left Room irc
+2010-02-09 19:14:55,500 - [+] Room : irc 2 users
+2010-02-09 19:14:55,500 - [-] Client disconnected
+2010-02-09 19:16:11,921 - [+] Room : client ('127.0.0.1', 3606) left Room irc
+2010-02-09 19:16:11,921 - [+] Room : irc 1 users
+2010-02-09 19:16:11,937 - [-] Client disconnected
+2010-02-09 19:16:14,467 - [+] Room : client ('127.0.0.1', 3605) left Room irc
+2010-02-09 19:16:14,483 - [+] Room : irc 0 users
+2010-02-09 19:16:14,483 - [-] Client disconnected
+2010-02-09 19:16:20,342 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:16:23,655 - [+] Client connected ('127.0.0.1', 3610)
+2010-02-09 19:16:23,655 - [+] Room : client ('127.0.0.1', 3610) joined Room irc
+2010-02-09 19:16:23,655 - [+] Room : irc 1 users
+2010-02-09 19:16:23,655 - [+] Client : l'utilisateur ('127.0.0.1', 3610) a rejoin le channel : irc
+2010-02-09 19:16:26,625 - [+] Client connected ('127.0.0.1', 3611)
+2010-02-09 19:16:26,625 - [+] Room : client ('127.0.0.1', 3611) joined Room irc
+2010-02-09 19:16:26,625 - [+] Room : irc 2 users
+2010-02-09 19:16:26,625 - [+] Client : l'utilisateur ('127.0.0.1', 3611) a rejoin le channel : irc
+2010-02-09 19:16:54,796 - [+] Client ('127.0.0.1', 3610) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:16:54,812 - [+] Room : client ('127.0.0.1', 3610) left Room irc
+2010-02-09 19:16:54,812 - [+] Room : irc 1 users
+2010-02-09 19:16:54,842 - [-] Client disconnected
+2010-02-09 19:16:54,842 - [+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )
+2010-02-09 19:17:52,842 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:17:56,921 - [+] Client connected ('127.0.0.1', 3614)
+2010-02-09 19:17:56,921 - [+] Room : client ('127.0.0.1', 3614) joined Room irc
+2010-02-09 19:17:56,921 - [+] Room : irc 1 users
+2010-02-09 19:17:56,921 - [+] Client : l'utilisateur ('127.0.0.1', 3614) a rejoin le channel : irc
+2010-02-09 19:17:59,375 - [+] Client connected ('127.0.0.1', 3615)
+2010-02-09 19:17:59,390 - [+] Room : client ('127.0.0.1', 3615) joined Room irc
+2010-02-09 19:17:59,390 - [+] Room : irc 2 users
+2010-02-09 19:17:59,390 - [+] Client : l'utilisateur ('127.0.0.1', 3615) a rejoin le channel : irc
+2010-02-09 19:18:00,421 - [+] Client ('127.0.0.1', 3615) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:18:00,421 - [+] Room : client ('127.0.0.1', 3615) left Room irc
+2010-02-09 19:18:00,421 - [+] Room : irc 1 users
+2010-02-09 19:18:00,421 - [-] Client disconnected
+2010-02-09 19:18:00,421 - [+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )
+2010-02-09 19:18:12,703 - [+] Client connected ('127.0.0.1', 3616)
+2010-02-09 19:18:12,703 - [+] Room : client ('127.0.0.1', 3616) joined Room irc
+2010-02-09 19:18:12,703 - [+] Room : irc 2 users
+2010-02-09 19:18:12,703 - [+] Client : l'utilisateur ('127.0.0.1', 3616) a rejoin le channel : irc
+2010-02-09 19:18:16,078 - [+] Client connected ('127.0.0.1', 3617)
+2010-02-09 19:18:16,078 - [+] Room : client ('127.0.0.1', 3617) joined Room irc
+2010-02-09 19:18:16,078 - [+] Room : irc 3 users
+2010-02-09 19:18:16,078 - [+] Client : l'utilisateur ('127.0.0.1', 3617) a rejoin le channel : irc
+2010-02-09 19:18:17,937 - [+] Client ('127.0.0.1', 3617) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:18:17,967 - [+] Room : client ('127.0.0.1', 3617) left Room irc
+2010-02-09 19:18:17,967 - [+] Room : irc 2 users
+2010-02-09 19:18:17,967 - [-] Client disconnected
+2010-02-09 19:18:32,515 - [+] Client connected ('127.0.0.1', 3618)
+2010-02-09 19:18:32,515 - [+] Room : client ('127.0.0.1', 3618) joined Room irc
+2010-02-09 19:18:32,515 - [+] Room : irc 3 users
+2010-02-09 19:18:32,515 - [+] Client : l'utilisateur ('127.0.0.1', 3618) a rejoin le channel : irc
+2010-02-09 19:18:34,828 - [+] Client ('127.0.0.1', 3618) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:18:34,842 - [+] Room : client ('127.0.0.1', 3618) left Room irc
+2010-02-09 19:18:34,842 - [+] Room : irc 2 users
+2010-02-09 19:18:34,858 - [-] Client disconnected
+2010-02-09 19:19:30,515 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:19:33,780 - [+] Client connected ('127.0.0.1', 3621)
+2010-02-09 19:19:33,780 - [+] Room : client ('127.0.0.1', 3621) joined Room irc
+2010-02-09 19:19:33,780 - [+] Room : irc 1 users
+2010-02-09 19:19:33,780 - [+] Client : l'utilisateur ('127.0.0.1', 3621) a rejoin le channel : irc
+2010-02-09 19:19:38,733 - [+] Client connected ('127.0.0.1', 3622)
+2010-02-09 19:19:38,733 - [+] Room : client ('127.0.0.1', 3622) joined Room irc
+2010-02-09 19:19:38,733 - [+] Room : irc 2 users
+2010-02-09 19:19:38,733 - [+] Client : l'utilisateur ('127.0.0.1', 3622) a rejoin le channel : irc
+2010-02-09 19:19:41,500 - [+] Client connected ('127.0.0.1', 3623)
+2010-02-09 19:19:41,500 - [+] Room : client ('127.0.0.1', 3623) joined Room irc
+2010-02-09 19:19:41,500 - [+] Room : irc 3 users
+2010-02-09 19:19:41,500 - [+] Client : l'utilisateur ('127.0.0.1', 3623) a rejoin le channel : irc
+2010-02-09 19:19:43,937 - [+] Client connected ('127.0.0.1', 3624)
+2010-02-09 19:19:43,937 - [+] Room : client ('127.0.0.1', 3624) joined Room irc
+2010-02-09 19:19:43,937 - [+] Room : irc 4 users
+2010-02-09 19:19:43,937 - [+] Client : l'utilisateur ('127.0.0.1', 3624) a rejoin le channel : irc
+2010-02-09 19:20:26,640 - [+] Client ('127.0.0.1', 3624) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:20:26,655 - [+] Room : client ('127.0.0.1', 3624) left Room irc
+2010-02-09 19:20:26,671 - [+] Room : irc 3 users
+2010-02-09 19:20:26,671 - [-] Client disconnected
+2010-02-09 19:20:56,703 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:21:01,296 - [+] Client connected ('127.0.0.1', 3625)
+2010-02-09 19:21:01,296 - [+] Room : client ('127.0.0.1', 3625) joined Room irc
+2010-02-09 19:21:01,296 - [+] Room : irc 1 users
+2010-02-09 19:21:01,296 - [+] Client : l'utilisateur ('127.0.0.1', 3625) a rejoin le channel : irc
+2010-02-09 19:21:03,858 - [+] Client connected ('127.0.0.1', 3626)
+2010-02-09 19:21:03,858 - [+] Room : client ('127.0.0.1', 3626) joined Room irc
+2010-02-09 19:21:03,858 - [+] Room : irc 2 users
+2010-02-09 19:21:03,858 - [+] Client : l'utilisateur ('127.0.0.1', 3626) a rejoin le channel : irc
+2010-02-09 19:21:06,000 - [+] Client connected ('127.0.0.1', 3627)
+2010-02-09 19:21:06,000 - [+] Room : client ('127.0.0.1', 3627) joined Room irc
+2010-02-09 19:21:06,000 - [+] Room : irc 3 users
+2010-02-09 19:21:06,000 - [+] Client : l'utilisateur ('127.0.0.1', 3627) a rejoin le channel : irc
+2010-02-09 19:21:13,078 - [+] Client ('127.0.0.1', 3627) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:21:13,092 - [+] Room : client ('127.0.0.1', 3627) left Room irc
+2010-02-09 19:21:13,092 - [+] Room : irc 2 users
+2010-02-09 19:21:13,092 - [-] Client disconnected
+2010-02-09 19:23:10,967 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:23:14,390 - [+] Client connected ('127.0.0.1', 3634)
+2010-02-09 19:23:14,390 - [+] Room : client ('127.0.0.1', 3634) joined Room irc
+2010-02-09 19:23:14,390 - [+] Room : irc 1 users
+2010-02-09 19:23:14,390 - [+] Client : l'utilisateur ('127.0.0.1', 3634) a rejoin le channel : irc
+2010-02-09 19:23:18,780 - [+] Client connected ('127.0.0.1', 3635)
+2010-02-09 19:23:18,780 - [+] Room : client ('127.0.0.1', 3635) joined Room irc
+2010-02-09 19:23:18,780 - [+] Room : irc 2 users
+2010-02-09 19:23:18,796 - [+] Client : l'utilisateur ('127.0.0.1', 3635) a rejoin le channel : irc
+2010-02-09 19:23:21,858 - [+] Client ('127.0.0.1', 3635) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:23:21,890 - [+] Room : client ('127.0.0.1', 3635) left Room irc
+2010-02-09 19:23:21,890 - [+] Room : irc 1 users
+2010-02-09 19:23:21,890 - [-] Client disconnected
+2010-02-09 19:23:21,890 - [+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )
+2010-02-09 19:23:28,765 - [+] Client connected ('127.0.0.1', 3636)
+2010-02-09 19:23:28,765 - [+] Room : client ('127.0.0.1', 3636) joined Room irc
+2010-02-09 19:23:28,765 - [+] Room : irc 2 users
+2010-02-09 19:23:28,765 - [+] Client : l'utilisateur ('127.0.0.1', 3636) a rejoin le channel : irc
+2010-02-09 19:23:31,625 - [+] Client connected ('127.0.0.1', 3637)
+2010-02-09 19:23:31,625 - [+] Room : client ('127.0.0.1', 3637) joined Room irc
+2010-02-09 19:23:31,625 - [+] Room : irc 3 users
+2010-02-09 19:23:31,625 - [+] Client : l'utilisateur ('127.0.0.1', 3637) a rejoin le channel : irc
+2010-02-09 19:23:35,280 - [+] Client ('127.0.0.1', 3637) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:23:35,296 - [+] Room : client ('127.0.0.1', 3637) left Room irc
+2010-02-09 19:23:35,296 - [+] Room : irc 2 users
+2010-02-09 19:23:35,328 - [-] Client disconnected
+2010-02-09 19:23:35,328 - [+] La commande : message a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:24:09,983 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:24:13,250 - [+] Client connected ('127.0.0.1', 3638)
+2010-02-09 19:24:13,250 - [+] Room : client ('127.0.0.1', 3638) joined Room irc
+2010-02-09 19:24:13,250 - [+] Room : irc 1 users
+2010-02-09 19:24:13,250 - [+] Client : l'utilisateur ('127.0.0.1', 3638) a rejoin le channel : irc
+2010-02-09 19:24:15,828 - [+] Client connected ('127.0.0.1', 3639)
+2010-02-09 19:24:15,828 - [+] Room : client ('127.0.0.1', 3639) joined Room irc
+2010-02-09 19:24:15,828 - [+] Room : irc 2 users
+2010-02-09 19:24:15,828 - [+] Client : l'utilisateur ('127.0.0.1', 3639) a rejoin le channel : irc
+2010-02-09 19:24:20,500 - [+] Client ('127.0.0.1', 3639) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:24:20,515 - [+] Room : client ('127.0.0.1', 3639) left Room irc
+2010-02-09 19:24:20,530 - [+] Room : irc 1 users
+2010-02-09 19:24:20,530 - [-] Client disconnected
+2010-02-09 19:24:20,530 - [+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )
+2010-02-09 19:24:30,828 - [+] Room : client ('127.0.0.1', 3638) left Room irc
+2010-02-09 19:24:30,828 - [+] Room : irc 0 users
+2010-02-09 19:24:30,828 - [-] Client disconnected
+2010-02-09 19:24:37,640 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:24:40,983 - [+] Client connected ('127.0.0.1', 3640)
+2010-02-09 19:24:40,983 - [+] Room : client ('127.0.0.1', 3640) joined Room irc
+2010-02-09 19:24:40,983 - [+] Room : irc 1 users
+2010-02-09 19:24:40,983 - [+] Client : l'utilisateur ('127.0.0.1', 3640) a rejoin le channel : irc
+2010-02-09 19:24:44,217 - [+] Client connected ('127.0.0.1', 3641)
+2010-02-09 19:24:44,217 - [+] Room : client ('127.0.0.1', 3641) joined Room irc
+2010-02-09 19:24:44,217 - [+] Room : irc 2 users
+2010-02-09 19:24:44,217 - [+] Client : l'utilisateur ('127.0.0.1', 3641) a rejoin le channel : irc
+2010-02-09 19:25:07,421 - [+] Client connected ('127.0.0.1', 3642)
+2010-02-09 19:25:07,421 - [+] Room : client ('127.0.0.1', 3642) joined Room irc
+2010-02-09 19:25:07,421 - [+] Room : irc 3 users
+2010-02-09 19:25:07,421 - [+] Client : l'utilisateur ('127.0.0.1', 3642) a rejoin le channel : irc
+2010-02-09 19:25:14,187 - [+] Client ('127.0.0.1', 3642) send : {"cmd": "forward", "args": "message"}
+2010-02-09 19:25:14,217 - [+] Room : client ('127.0.0.1', 3642) left Room irc
+2010-02-09 19:25:14,217 - [+] Room : irc 2 users
+2010-02-09 19:25:14,217 - [-] Client disconnected
+2010-02-09 19:25:14,217 - [+] La commande : message a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:25:28,000 - [+] Client connected ('127.0.0.1', 3645)
+2010-02-09 19:25:28,000 - [+] Room : client ('127.0.0.1', 3645) joined Room irc
+2010-02-09 19:25:28,000 - [+] Room : irc 3 users
+2010-02-09 19:25:28,000 - [+] Client : l'utilisateur ('127.0.0.1', 3645) a rejoin le channel : irc
+2010-02-09 19:26:04,875 - [+] Room : client ('127.0.0.1', 3645) left Room irc
+2010-02-09 19:26:04,890 - [+] Room : irc 2 users
+2010-02-09 19:26:04,890 - [-] Client disconnected
+2010-02-09 19:26:09,796 - [+] Client ('127.0.0.1', 3641) send : 
+2010-02-09 19:26:09,812 - [+] Room : client ('127.0.0.1', 3641) left Room irc
+2010-02-09 19:26:09,812 - [+] Room : irc 1 users
+2010-02-09 19:26:09,812 - [-] Client disconnected
+2010-02-09 19:26:09,812 - [+] Command error :  , n'est pas une chaine json valide
+2010-02-09 19:26:55,312 - [+] Room : client ('127.0.0.1', 3640) left Room irc
+2010-02-09 19:26:55,328 - [+] Room : irc 0 users
+2010-02-09 19:26:55,328 - [-] Client disconnected
+2010-02-09 19:28:14,358 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:28:21,640 - [+] Client connected ('127.0.0.1', 3649)
+2010-02-09 19:28:21,640 - [+] Room : client ('127.0.0.1', 3649) joined Room irc
+2010-02-09 19:28:21,655 - [+] Room : irc 1 users
+2010-02-09 19:28:21,671 - [+] Client : l'utilisateur ('127.0.0.1', 3649) a rejoin le channel : irc
+2010-02-09 19:28:21,671 - [+] Client ('127.0.0.1', 3649) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,671 - [+] Client : le client ('127.0.0.1', 3649) est a present master sur le serveur
+2010-02-09 19:28:21,671 - [+] Client ('127.0.0.1', 3649) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,671 - [+] Room : client ('127.0.0.1', 3649) joined Room irc
+2010-02-09 19:28:21,671 - [+] Room : irc 2 users
+2010-02-09 19:28:21,687 - [+] Client : l'utilisateur ('127.0.0.1', 3649) a rejoin le channel : irc
+2010-02-09 19:28:21,687 - [+] Client connected ('127.0.0.1', 3651)
+2010-02-09 19:28:21,687 - [+] Room : client ('127.0.0.1', 3651) joined Room irc
+2010-02-09 19:28:21,687 - [+] Room : irc 3 users
+2010-02-09 19:28:21,733 - [+] Client connected ('127.0.0.1', 3653)
+2010-02-09 19:28:21,733 - [+] Client : l'utilisateur ('127.0.0.1', 3651) a rejoin le channel : irc
+2010-02-09 19:28:21,733 - [+] Room : client ('127.0.0.1', 3653) joined Room irc
+2010-02-09 19:28:21,733 - [+] Client connected ('127.0.0.1', 3655)
+2010-02-09 19:28:21,733 - [+] Room : irc 4 users
+2010-02-09 19:28:21,733 - [+] Room : client ('127.0.0.1', 3655) joined Room irc
+2010-02-09 19:28:21,733 - [+] Client : l'utilisateur ('127.0.0.1', 3653) a rejoin le channel : irc
+2010-02-09 19:28:21,750 - [+] Client connected ('127.0.0.1', 3659)
+2010-02-09 19:28:21,750 - [+] Client connected ('127.0.0.1', 3661)
+2010-02-09 19:28:21,750 - [+] Client ('127.0.0.1', 3651) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,750 - [+] Client : le client ('127.0.0.1', 3651) est a present master sur le serveur
+2010-02-09 19:28:21,750 - [+] Room : client ('127.0.0.1', 3659) joined Room irc
+2010-02-09 19:28:21,750 - [+] Client ('127.0.0.1', 3653) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,750 - [+] Room : irc 5 users
+2010-02-09 19:28:21,750 - [+] Client ('127.0.0.1', 3651) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,750 - [+] Client : le client ('127.0.0.1', 3653) est a present master sur le serveur
+2010-02-09 19:28:21,750 - [+] Room : irc 6 users
+2010-02-09 19:28:21,765 - [+] Client connected ('127.0.0.1', 3663)
+2010-02-09 19:28:21,765 - [+] Room : client ('127.0.0.1', 3661) joined Room irc
+2010-02-09 19:28:21,765 - [+] Client ('127.0.0.1', 3653) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,765 - [+] Client : l'utilisateur ('127.0.0.1', 3655) a rejoin le channel : irc
+2010-02-09 19:28:21,765 - [+] Room : client ('127.0.0.1', 3651) joined Room irc
+2010-02-09 19:28:21,765 - [+] Client : l'utilisateur ('127.0.0.1', 3659) a rejoin le channel : irc
+2010-02-09 19:28:21,780 - [+] Room : client ('127.0.0.1', 3663) joined Room irc
+2010-02-09 19:28:21,780 - [+] Room : irc 9 users
+2010-02-09 19:28:21,780 - [+] Client connected ('127.0.0.1', 3665)
+2010-02-09 19:28:21,780 - [+] Room : irc 9 users
+2010-02-09 19:28:21,780 - [+] Client ('127.0.0.1', 3655) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,780 - [+] Room : irc 9 users
+2010-02-09 19:28:21,780 - [+] Client : l'utilisateur ('127.0.0.1', 3661) a rejoin le channel : irc
+2010-02-09 19:28:21,780 - [+] Client connected ('127.0.0.1', 3671)
+2010-02-09 19:28:21,796 - [+] Room : client ('127.0.0.1', 3665) joined Room irc
+2010-02-09 19:28:21,796 - [+] Client ('127.0.0.1', 3659) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,796 - [+] Client ('127.0.0.1', 3659) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,796 - [+] Client ('127.0.0.1', 3655) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,796 - [+] Client : l'utilisateur ('127.0.0.1', 3663) a rejoin le channel : irc
+2010-02-09 19:28:21,796 - [+] Client ('127.0.0.1', 3661) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,796 - [+] Room : client ('127.0.0.1', 3671) joined Room irc
+2010-02-09 19:28:21,796 - [+] Client connected ('127.0.0.1', 3675)
+2010-02-09 19:28:21,796 - [+] Room : irc 11 users
+2010-02-09 19:28:21,812 - [+] Client : l'utilisateur ('127.0.0.1', 3651) a rejoin le channel : irc
+2010-02-09 19:28:21,812 - [+] Client ('127.0.0.1', 3661) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,812 - [+] Client ('127.0.0.1', 3663) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,812 - [+] Room : irc 11 users
+2010-02-09 19:28:21,812 - [+] Client : l'utilisateur ('127.0.0.1', 3665) a rejoin le channel : irc
+2010-02-09 19:28:21,812 - [+] Room : client ('127.0.0.1', 3675) joined Room irc
+2010-02-09 19:28:21,812 - [+] Room : client ('127.0.0.1', 3653) joined Room irc
+2010-02-09 19:28:21,828 - [+] Client connected ('127.0.0.1', 3679)
+2010-02-09 19:28:21,828 - [+] Client ('127.0.0.1', 3663) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,828 - [+] Room : irc 13 users
+2010-02-09 19:28:21,828 - [+] Client : l'utilisateur ('127.0.0.1', 3671) a rejoin le channel : irc
+2010-02-09 19:28:21,828 - [+] Room : irc 13 users
+2010-02-09 19:28:21,828 - [+] Room : client ('127.0.0.1', 3679) joined Room irc
+2010-02-09 19:28:21,828 - [+] Client connected ('127.0.0.1', 3687)
+2010-02-09 19:28:21,828 - [+] Client : l'utilisateur ('127.0.0.1', 3675) a rejoin le channel : irc
+2010-02-09 19:28:21,828 - [+] Client : l'utilisateur ('127.0.0.1', 3653) a rejoin le channel : irc
+2010-02-09 19:28:21,842 - [+] Room : irc 14 users
+2010-02-09 19:28:21,842 - [+] Room : client ('127.0.0.1', 3687) joined Room irc
+2010-02-09 19:28:21,842 - [+] Client connected ('127.0.0.1', 3693)
+2010-02-09 19:28:21,842 - [+] Client ('127.0.0.1', 3665) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,842 - [+] Client : le client ('127.0.0.1', 3655) est a present master sur le serveur
+2010-02-09 19:28:21,842 - [+] Client : l'utilisateur ('127.0.0.1', 3679) a rejoin le channel : irc
+2010-02-09 19:28:21,842 - [+] Room : irc 15 users
+2010-02-09 19:28:21,858 - [+] Room : client ('127.0.0.1', 3693) joined Room irc
+2010-02-09 19:28:21,858 - [+] Client connected ('127.0.0.1', 3697)
+2010-02-09 19:28:21,858 - [+] Client ('127.0.0.1', 3671) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,858 - [+] Client : le client ('127.0.0.1', 3659) est a present master sur le serveur
+2010-02-09 19:28:21,858 - [+] Client : l'utilisateur ('127.0.0.1', 3687) a rejoin le channel : irc
+2010-02-09 19:28:21,858 - [+] Room : irc 16 users
+2010-02-09 19:28:21,858 - [+] Room : client ('127.0.0.1', 3697) joined Room irc
+2010-02-09 19:28:21,858 - [+] Client connected ('127.0.0.1', 3699)
+2010-02-09 19:28:21,858 - [+] Client ('127.0.0.1', 3675) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,858 - [+] Room : client ('127.0.0.1', 3655) joined Room irc
+2010-02-09 19:28:21,858 - [+] Client : l'utilisateur ('127.0.0.1', 3693) a rejoin le channel : irc
+2010-02-09 19:28:21,858 - [+] Room : irc 18 users
+2010-02-09 19:28:21,875 - [+] Room : client ('127.0.0.1', 3699) joined Room irc
+2010-02-09 19:28:21,875 - [+] Room : irc 19 users
+2010-02-09 19:28:21,875 - [+] Client : l'utilisateur ('127.0.0.1', 3655) a rejoin le channel : irc
+2010-02-09 19:28:21,875 - [+] Client : l'utilisateur ('127.0.0.1', 3697) a rejoin le channel : irc
+2010-02-09 19:28:21,875 - [+] Room : irc 19 users
+2010-02-09 19:28:21,875 - [+] Client : le client ('127.0.0.1', 3661) est a present master sur le serveur
+2010-02-09 19:28:21,875 - [+] Client ('127.0.0.1', 3665) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,875 - [+] Client connected ('127.0.0.1', 3703)
+2010-02-09 19:28:21,875 - [+] Client : l'utilisateur ('127.0.0.1', 3699) a rejoin le channel : irc
+2010-02-09 19:28:21,890 - [+] Room : client ('127.0.0.1', 3659) joined Room irc
+2010-02-09 19:28:21,890 - [+] Client ('127.0.0.1', 3679) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,890 - [+] Room : client ('127.0.0.1', 3703) joined Room irc
+2010-02-09 19:28:21,890 - [+] Client connected ('127.0.0.1', 3709)
+2010-02-09 19:28:21,890 - [+] Room : irc 21 users
+2010-02-09 19:28:21,890 - [+] Room : irc 21 users
+2010-02-09 19:28:21,890 - [+] Client connected ('127.0.0.1', 3717)
+2010-02-09 19:28:21,890 - [+] Room : client ('127.0.0.1', 3709) joined Room irc
+2010-02-09 19:28:21,890 - [+] Client : l'utilisateur ('127.0.0.1', 3659) a rejoin le channel : irc
+2010-02-09 19:28:21,905 - [+] Client : l'utilisateur ('127.0.0.1', 3703) a rejoin le channel : irc
+2010-02-09 19:28:21,905 - [+] Room : irc 22 users
+2010-02-09 19:28:21,905 - [+] Room : client ('127.0.0.1', 3717) joined Room irc
+2010-02-09 19:28:21,905 - [+] Client connected ('127.0.0.1', 3721)
+2010-02-09 19:28:21,905 - [+] Client ('127.0.0.1', 3671) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,905 - [+] Room : client ('127.0.0.1', 3661) joined Room irc
+2010-02-09 19:28:21,905 - [+] Client : l'utilisateur ('127.0.0.1', 3709) a rejoin le channel : irc
+2010-02-09 19:28:21,905 - [+] Room : irc 24 users
+2010-02-09 19:28:21,905 - [+] Client connected ('127.0.0.1', 3723)
+2010-02-09 19:28:21,905 - [+] Room : client ('127.0.0.1', 3721) joined Room irc
+2010-02-09 19:28:21,921 - [+] Room : irc 25 users
+2010-02-09 19:28:21,921 - [+] Client : l'utilisateur ('127.0.0.1', 3717) a rejoin le channel : irc
+2010-02-09 19:28:21,921 - [+] Room : client ('127.0.0.1', 3723) joined Room irc
+2010-02-09 19:28:21,921 - [+] Client connected ('127.0.0.1', 3729)
+2010-02-09 19:28:21,921 - [+] Room : irc 26 users
+2010-02-09 19:28:21,921 - [+] Client : l'utilisateur ('127.0.0.1', 3661) a rejoin le channel : irc
+2010-02-09 19:28:21,921 - [+] Room : irc 26 users
+2010-02-09 19:28:21,921 - [+] Room : client ('127.0.0.1', 3729) joined Room irc
+2010-02-09 19:28:21,921 - [+] Client connected ('127.0.0.1', 3733)
+2010-02-09 19:28:21,921 - [+] Client : l'utilisateur ('127.0.0.1', 3721) a rejoin le channel : irc
+2010-02-09 19:28:21,921 - [+] Client : le client ('127.0.0.1', 3663) est a present master sur le serveur
+2010-02-09 19:28:21,921 - [+] Client ('127.0.0.1', 3687) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,937 - [+] Client : l'utilisateur ('127.0.0.1', 3723) a rejoin le channel : irc
+2010-02-09 19:28:21,937 - [+] Room : irc 27 users
+2010-02-09 19:28:21,937 - [+] Room : client ('127.0.0.1', 3733) joined Room irc
+2010-02-09 19:28:21,937 - [+] Client connected ('127.0.0.1', 3737)
+2010-02-09 19:28:21,937 - [+] Room : client ('127.0.0.1', 3663) joined Room irc
+2010-02-09 19:28:21,937 - [+] Client ('127.0.0.1', 3675) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,937 - [+] Client : l'utilisateur ('127.0.0.1', 3729) a rejoin le channel : irc
+2010-02-09 19:28:21,937 - [+] Room : irc 29 users
+2010-02-09 19:28:21,953 - [+] Room : client ('127.0.0.1', 3737) joined Room irc
+2010-02-09 19:28:21,953 - [+] Client connected ('127.0.0.1', 3741)
+2010-02-09 19:28:21,953 - [+] Room : irc 30 users
+2010-02-09 19:28:21,953 - [+] Client : l'utilisateur ('127.0.0.1', 3733) a rejoin le channel : irc
+2010-02-09 19:28:21,953 - [+] Room : irc 30 users
+2010-02-09 19:28:21,953 - [+] Client : l'utilisateur ('127.0.0.1', 3663) a rejoin le channel : irc
+2010-02-09 19:28:21,953 - [+] Room : client ('127.0.0.1', 3741) joined Room irc
+2010-02-09 19:28:21,953 - [+] Client connected ('127.0.0.1', 3745)
+2010-02-09 19:28:21,953 - [+] Client : l'utilisateur ('127.0.0.1', 3737) a rejoin le channel : irc
+2010-02-09 19:28:21,953 - [+] Client : le client ('127.0.0.1', 3665) est a present master sur le serveur
+2010-02-09 19:28:21,953 - [+] Room : irc 31 users
+2010-02-09 19:28:21,953 - [+] Client ('127.0.0.1', 3693) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,967 - [+] Room : client ('127.0.0.1', 3745) joined Room irc
+2010-02-09 19:28:21,967 - [+] Client connected ('127.0.0.1', 3751)
+2010-02-09 19:28:21,967 - [+] Client ('127.0.0.1', 3697) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,967 - [+] Client : le client ('127.0.0.1', 3671) est a present master sur le serveur
+2010-02-09 19:28:21,967 - [+] Client : l'utilisateur ('127.0.0.1', 3741) a rejoin le channel : irc
+2010-02-09 19:28:21,967 - [+] Room : irc 32 users
+2010-02-09 19:28:21,967 - [+] Room : client ('127.0.0.1', 3751) joined Room irc
+2010-02-09 19:28:21,967 - [+] Client connected ('127.0.0.1', 3755)
+2010-02-09 19:28:21,967 - [+] Client ('127.0.0.1', 3699) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:21,967 - [+] Client : le client ('127.0.0.1', 3675) est a present master sur le serveur
+2010-02-09 19:28:21,967 - [+] Client : l'utilisateur ('127.0.0.1', 3745) a rejoin le channel : irc
+2010-02-09 19:28:21,967 - [+] Room : client ('127.0.0.1', 3755) joined Room irc
+2010-02-09 19:28:21,983 - [+] Room : irc 35 users
+2010-02-09 19:28:21,983 - [+] Client connected ('127.0.0.1', 3759)
+2010-02-09 19:28:21,983 - [+] Room : client ('127.0.0.1', 3665) joined Room irc
+2010-02-09 19:28:21,983 - [+] Client ('127.0.0.1', 3679) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:21,983 - [+] Client : l'utilisateur ('127.0.0.1', 3755) a rejoin le channel : irc
+2010-02-09 19:28:21,983 - [+] Room : irc 33 users
+2010-02-09 19:28:21,983 - [+] Room : client ('127.0.0.1', 3759) joined Room irc
+2010-02-09 19:28:21,983 - [+] Client connected ('127.0.0.1', 3763)
+2010-02-09 19:28:22,000 - [+] Room : client ('127.0.0.1', 3763) joined Room irc
+2010-02-09 19:28:22,000 - [+] Client : l'utilisateur ('127.0.0.1', 3751) a rejoin le channel : irc
+2010-02-09 19:28:22,000 - [+] Room : irc 36 users
+2010-02-09 19:28:22,000 - [+] Client connected ('127.0.0.1', 3767)
+2010-02-09 19:28:22,000 - [+] Room : irc 36 users
+2010-02-09 19:28:22,000 - [+] Client : l'utilisateur ('127.0.0.1', 3665) a rejoin le channel : irc
+2010-02-09 19:28:22,000 - [+] Client : l'utilisateur ('127.0.0.1', 3759) a rejoin le channel : irc
+2010-02-09 19:28:22,000 - [+] Client ('127.0.0.1', 3703) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,000 - [+] Client : le client ('127.0.0.1', 3679) est a present master sur le serveur
+2010-02-09 19:28:22,000 - [+] Room : irc 37 users
+2010-02-09 19:28:22,000 - [+] Room : client ('127.0.0.1', 3767) joined Room irc
+2010-02-09 19:28:22,000 - [+] Client connected ('127.0.0.1', 3773)
+2010-02-09 19:28:22,000 - [+] Client ('127.0.0.1', 3709) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,015 - [+] Client : l'utilisateur ('127.0.0.1', 3763) a rejoin le channel : irc
+2010-02-09 19:28:22,015 - [+] Room : client ('127.0.0.1', 3671) joined Room irc
+2010-02-09 19:28:22,015 - [+] Room : irc 39 users
+2010-02-09 19:28:22,015 - [+] Client connected ('127.0.0.1', 3777)
+2010-02-09 19:28:22,015 - [+] Room : client ('127.0.0.1', 3773) joined Room irc
+2010-02-09 19:28:22,015 - [+] Room : irc 40 users
+2010-02-09 19:28:22,015 - [+] Room : irc 40 users
+2010-02-09 19:28:22,015 - [+] Client : l'utilisateur ('127.0.0.1', 3767) a rejoin le channel : irc
+2010-02-09 19:28:22,015 - [+] Room : client ('127.0.0.1', 3777) joined Room irc
+2010-02-09 19:28:22,030 - [+] Client connected ('127.0.0.1', 3781)
+2010-02-09 19:28:22,030 - [+] Client : l'utilisateur ('127.0.0.1', 3671) a rejoin le channel : irc
+2010-02-09 19:28:22,030 - [+] Client : l'utilisateur ('127.0.0.1', 3773) a rejoin le channel : irc
+2010-02-09 19:28:22,030 - [+] Room : irc 41 users
+2010-02-09 19:28:22,030 - [+] Room : client ('127.0.0.1', 3781) joined Room irc
+2010-02-09 19:28:22,030 - [+] Client connected ('127.0.0.1', 3785)
+2010-02-09 19:28:22,030 - [+] Client ('127.0.0.1', 3717) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,030 - [+] Client : le client ('127.0.0.1', 3687) est a present master sur le serveur
+2010-02-09 19:28:22,030 - [+] Client : l'utilisateur ('127.0.0.1', 3777) a rejoin le channel : irc
+2010-02-09 19:28:22,046 - [+] Room : irc 42 users
+2010-02-09 19:28:22,046 - [+] Client connected ('127.0.0.1', 3789)
+2010-02-09 19:28:22,046 - [+] Room : client ('127.0.0.1', 3785) joined Room irc
+2010-02-09 19:28:22,046 - [+] Client ('127.0.0.1', 3721) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,046 - [+] Room : client ('127.0.0.1', 3675) joined Room irc
+2010-02-09 19:28:22,046 - [+] Client : l'utilisateur ('127.0.0.1', 3781) a rejoin le channel : irc
+2010-02-09 19:28:22,046 - [+] Room : client ('127.0.0.1', 3789) joined Room irc
+2010-02-09 19:28:22,046 - [+] Room : irc 45 users
+2010-02-09 19:28:22,046 - [+] Client connected ('127.0.0.1', 3793)
+2010-02-09 19:28:22,046 - [+] Room : irc 45 users
+2010-02-09 19:28:22,046 - [+] Room : irc 45 users
+2010-02-09 19:28:22,062 - [+] Client : l'utilisateur ('127.0.0.1', 3785) a rejoin le channel : irc
+2010-02-09 19:28:22,062 - [+] Client connected ('127.0.0.1', 3799)
+2010-02-09 19:28:22,062 - [+] Room : client ('127.0.0.1', 3793) joined Room irc
+2010-02-09 19:28:22,062 - [+] Client : l'utilisateur ('127.0.0.1', 3675) a rejoin le channel : irc
+2010-02-09 19:28:22,062 - [+] Client : l'utilisateur ('127.0.0.1', 3789) a rejoin le channel : irc
+2010-02-09 19:28:22,062 - [+] Room : client ('127.0.0.1', 3799) joined Room irc
+2010-02-09 19:28:22,062 - [+] Client connected ('127.0.0.1', 3803)
+2010-02-09 19:28:22,062 - [+] Room : irc 47 users
+2010-02-09 19:28:22,062 - [+] Room : client ('127.0.0.1', 3803) joined Room irc
+2010-02-09 19:28:22,078 - [+] Client ('127.0.0.1', 3687) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,078 - [+] Room : irc 47 users
+2010-02-09 19:28:22,078 - [+] Client : l'utilisateur ('127.0.0.1', 3793) a rejoin le channel : irc
+2010-02-09 19:28:22,078 - [+] Room : irc 48 users
+2010-02-09 19:28:22,078 - [+] Client connected ('127.0.0.1', 3807)
+2010-02-09 19:28:22,078 - [+] Client : le client ('127.0.0.1', 3693) est a present master sur le serveur
+2010-02-09 19:28:22,078 - [+] Client : l'utilisateur ('127.0.0.1', 3799) a rejoin le channel : irc
+2010-02-09 19:28:22,078 - [+] Client : l'utilisateur ('127.0.0.1', 3803) a rejoin le channel : irc
+2010-02-09 19:28:22,078 - [+] Room : client ('127.0.0.1', 3807) joined Room irc
+2010-02-09 19:28:22,078 - [+] Client connected ('127.0.0.1', 3813)
+2010-02-09 19:28:22,078 - [+] Client ('127.0.0.1', 3723) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,078 - [+] Client : le client ('127.0.0.1', 3697) est a present master sur le serveur
+2010-02-09 19:28:22,092 - [+] Room : irc 49 users
+2010-02-09 19:28:22,092 - [+] Room : client ('127.0.0.1', 3813) joined Room irc
+2010-02-09 19:28:22,092 - [+] Client ('127.0.0.1', 3729) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,092 - [+] Client connected ('127.0.0.1', 3817)
+2010-02-09 19:28:22,092 - [+] Client : le client ('127.0.0.1', 3699) est a present master sur le serveur
+2010-02-09 19:28:22,092 - [+] Client : l'utilisateur ('127.0.0.1', 3807) a rejoin le channel : irc
+2010-02-09 19:28:22,092 - [+] Room : irc 50 users
+2010-02-09 19:28:22,092 - [+] Room : client ('127.0.0.1', 3679) joined Room irc
+2010-02-09 19:28:22,092 - [+] Client ('127.0.0.1', 3733) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,108 - [+] Room : client ('127.0.0.1', 3817) joined Room irc
+2010-02-09 19:28:22,108 - [+] Client connected ('127.0.0.1', 3821)
+2010-02-09 19:28:22,108 - [+] Client : l'utilisateur ('127.0.0.1', 3813) a rejoin le channel : irc
+2010-02-09 19:28:22,108 - [+] Room : irc 52 users
+2010-02-09 19:28:22,108 - [+] Room : irc 52 users
+2010-02-09 19:28:22,108 - [+] Client connected ('127.0.0.1', 3825)
+2010-02-09 19:28:22,108 - [+] Room : client ('127.0.0.1', 3821) joined Room irc
+2010-02-09 19:28:22,108 - [+] Client : l'utilisateur ('127.0.0.1', 3679) a rejoin le channel : irc
+2010-02-09 19:28:22,108 - [+] Client : l'utilisateur ('127.0.0.1', 3817) a rejoin le channel : irc
+2010-02-09 19:28:22,108 - [+] Room : client ('127.0.0.1', 3825) joined Room irc
+2010-02-09 19:28:22,125 - [+] Client connected ('127.0.0.1', 3827)
+2010-02-09 19:28:22,125 - [+] Room : irc 54 users
+2010-02-09 19:28:22,125 - [+] Client : l'utilisateur ('127.0.0.1', 3821) a rejoin le channel : irc
+2010-02-09 19:28:22,125 - [+] Client : le client ('127.0.0.1', 3703) est a present master sur le serveur
+2010-02-09 19:28:22,125 - [+] Room : irc 54 users
+2010-02-09 19:28:22,125 - [+] Room : client ('127.0.0.1', 3827) joined Room irc
+2010-02-09 19:28:22,125 - [+] Client connected ('127.0.0.1', 3831)
+2010-02-09 19:28:22,125 - [+] Client ('127.0.0.1', 3737) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,125 - [+] Client ('127.0.0.1', 3693) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,125 - [+] Client : le client ('127.0.0.1', 3709) est a present master sur le serveur
+2010-02-09 19:28:22,125 - [+] Client : l'utilisateur ('127.0.0.1', 3825) a rejoin le channel : irc
+2010-02-09 19:28:22,125 - [+] Room : irc 55 users
+2010-02-09 19:28:22,125 - [+] Client connected ('127.0.0.1', 3837)
+2010-02-09 19:28:22,125 - [+] Room : client ('127.0.0.1', 3831) joined Room irc
+2010-02-09 19:28:22,140 - [+] Client : le client ('127.0.0.1', 3717) est a present master sur le serveur
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3697) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,140 - [+] Client : l'utilisateur ('127.0.0.1', 3827) a rejoin le channel : irc
+2010-02-09 19:28:22,140 - [+] Room : irc 56 users
+2010-02-09 19:28:22,140 - [+] Room : client ('127.0.0.1', 3837) joined Room irc
+2010-02-09 19:28:22,140 - [+] Client connected ('127.0.0.1', 3841)
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3741) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,140 - [+] Client : le client ('127.0.0.1', 3721) est a present master sur le serveur
+2010-02-09 19:28:22,140 - [+] Client : l'utilisateur ('127.0.0.1', 3831) a rejoin le channel : irc
+2010-02-09 19:28:22,140 - [+] Room : irc 57 users
+2010-02-09 19:28:22,140 - [+] Room : client ('127.0.0.1', 3841) joined Room irc
+2010-02-09 19:28:22,140 - [+] Client connected ('127.0.0.1', 3845)
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3699) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,140 - [+] Room : client ('127.0.0.1', 3687) joined Room irc
+2010-02-09 19:28:22,140 - [+] Client : l'utilisateur ('127.0.0.1', 3837) a rejoin le channel : irc
+2010-02-09 19:28:22,140 - [+] Room : irc 59 users
+2010-02-09 19:28:22,140 - [+] Room : client ('127.0.0.1', 3845) joined Room irc
+2010-02-09 19:28:22,140 - [+] Room : irc 60 users
+2010-02-09 19:28:22,140 - [+] Client : l'utilisateur ('127.0.0.1', 3841) a rejoin le channel : irc
+2010-02-09 19:28:22,140 - [+] Room : irc 60 users
+2010-02-09 19:28:22,140 - [+] Client : l'utilisateur ('127.0.0.1', 3845) a rejoin le channel : irc
+2010-02-09 19:28:22,140 - [+] Client : l'utilisateur ('127.0.0.1', 3687) a rejoin le channel : irc
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3745) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,140 - [+] Client : le client ('127.0.0.1', 3723) est a present master sur le serveur
+2010-02-09 19:28:22,140 - [+] Client : le client ('127.0.0.1', 3729) est a present master sur le serveur
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3755) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3751) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,140 - [+] Client : le client ('127.0.0.1', 3733) est a present master sur le serveur
+2010-02-09 19:28:22,140 - [+] Client : le client ('127.0.0.1', 3737) est a present master sur le serveur
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3703) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3759) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,140 - [+] Room : client ('127.0.0.1', 3693) joined Room irc
+2010-02-09 19:28:22,140 - [+] Room : irc 61 users
+2010-02-09 19:28:22,140 - [+] Client : l'utilisateur ('127.0.0.1', 3693) a rejoin le channel : irc
+2010-02-09 19:28:22,140 - [+] Client ('127.0.0.1', 3709) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,140 - [+] Room : client ('127.0.0.1', 3697) joined Room irc
+2010-02-09 19:28:22,140 - [+] Room : irc 62 users
+2010-02-09 19:28:22,155 - [+] Client : l'utilisateur ('127.0.0.1', 3697) a rejoin le channel : irc
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3763) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3741) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3767) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Room : client ('127.0.0.1', 3699) joined Room irc
+2010-02-09 19:28:22,155 - [+] Room : irc 63 users
+2010-02-09 19:28:22,155 - [+] Client : l'utilisateur ('127.0.0.1', 3699) a rejoin le channel : irc
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3745) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3755) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3751) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3717) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3777) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3773) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3721) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,155 - [+] Room : client ('127.0.0.1', 3703) joined Room irc
+2010-02-09 19:28:22,155 - [+] Room : irc 64 users
+2010-02-09 19:28:22,155 - [+] Client : l'utilisateur ('127.0.0.1', 3703) a rejoin le channel : irc
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3759) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3781) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Room : client ('127.0.0.1', 3709) joined Room irc
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3785) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Room : irc 65 users
+2010-02-09 19:28:22,155 - [+] Client : l'utilisateur ('127.0.0.1', 3709) a rejoin le channel : irc
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3789) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3763) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3793) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3767) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3799) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3773) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3803) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Room : client ('127.0.0.1', 3717) joined Room irc
+2010-02-09 19:28:22,155 - [+] Room : irc 66 users
+2010-02-09 19:28:22,155 - [+] Client : l'utilisateur ('127.0.0.1', 3717) a rejoin le channel : irc
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3777) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3723) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,155 - [+] Room : client ('127.0.0.1', 3721) joined Room irc
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3729) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,155 - [+] Room : irc 67 users
+2010-02-09 19:28:22,155 - [+] Client : l'utilisateur ('127.0.0.1', 3721) a rejoin le channel : irc
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3807) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3781) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3785) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3733) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,155 - [+] Client : le client ('127.0.0.1', 3789) est a present master sur le serveur
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3813) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,155 - [+] Client ('127.0.0.1', 3817) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3793) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3799) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3821) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3737) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3803) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3825) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Room : client ('127.0.0.1', 3723) joined Room irc
+2010-02-09 19:28:22,171 - [+] Room : irc 68 users
+2010-02-09 19:28:22,171 - [+] Client : l'utilisateur ('127.0.0.1', 3723) a rejoin le channel : irc
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3827) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Room : client ('127.0.0.1', 3729) joined Room irc
+2010-02-09 19:28:22,171 - [+] Room : irc 69 users
+2010-02-09 19:28:22,171 - [+] Client : l'utilisateur ('127.0.0.1', 3729) a rejoin le channel : irc
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3807) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3741) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3831) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Room : client ('127.0.0.1', 3733) joined Room irc
+2010-02-09 19:28:22,171 - [+] Room : irc 70 users
+2010-02-09 19:28:22,171 - [+] Client : l'utilisateur ('127.0.0.1', 3733) a rejoin le channel : irc
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3813) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3837) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3841) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3817) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3845) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3821) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Room : client ('127.0.0.1', 3737) joined Room irc
+2010-02-09 19:28:22,171 - [+] Room : irc 71 users
+2010-02-09 19:28:22,171 - [+] Client : l'utilisateur ('127.0.0.1', 3737) a rejoin le channel : irc
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3745) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3825) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3755) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3827) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Room : client ('127.0.0.1', 3741) joined Room irc
+2010-02-09 19:28:22,171 - [+] Room : irc 72 users
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3759) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3751) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client : l'utilisateur ('127.0.0.1', 3741) a rejoin le channel : irc
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3831) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3763) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3837) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3767) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3841) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3777) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client : le client ('127.0.0.1', 3845) est a present master sur le serveur
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3773) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Client ('127.0.0.1', 3781) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,171 - [+] Room : client ('127.0.0.1', 3745) joined Room irc
+2010-02-09 19:28:22,171 - [+] Room : irc 73 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3745) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3785) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3755) joined Room irc
+2010-02-09 19:28:22,187 - [+] Room : irc 74 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3755) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3751) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3789) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 75 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3751) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3793) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3759) joined Room irc
+2010-02-09 19:28:22,187 - [+] Room : irc 76 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3759) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3763) joined Room irc
+2010-02-09 19:28:22,187 - [+] Room : irc 77 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3763) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3799) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3767) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3803) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 78 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3767) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3777) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3807) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 79 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3777) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3773) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3813) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 80 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3773) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3781) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3817) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 81 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3781) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3785) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3821) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 82 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3785) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3789) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3825) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 83 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3789) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3793) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3827) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 84 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3793) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3799) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3831) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 85 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3799) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3803) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3837) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 86 users
+2010-02-09 19:28:22,187 - [+] Client : l'utilisateur ('127.0.0.1', 3803) a rejoin le channel : irc
+2010-02-09 19:28:22,187 - [+] Room : client ('127.0.0.1', 3807) joined Room irc
+2010-02-09 19:28:22,187 - [+] Client ('127.0.0.1', 3841) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,187 - [+] Room : irc 87 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3807) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3813) joined Room irc
+2010-02-09 19:28:22,203 - [+] Client ('127.0.0.1', 3845) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:28:22,203 - [+] Room : irc 88 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3813) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3817) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 89 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3817) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3821) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 90 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3821) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3825) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 91 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3825) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3827) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 92 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3827) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3831) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 93 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3831) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3837) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 94 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3837) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3841) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 95 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3841) a rejoin le channel : irc
+2010-02-09 19:28:22,203 - [+] Room : client ('127.0.0.1', 3845) joined Room irc
+2010-02-09 19:28:22,203 - [+] Room : irc 96 users
+2010-02-09 19:28:22,203 - [+] Client : l'utilisateur ('127.0.0.1', 3845) a rejoin le channel : irc
+2010-02-09 19:28:53,280 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:29:00,062 - [+] Client connected ('127.0.0.1', 3849)
+2010-02-09 19:29:00,062 - [+] Room : client ('127.0.0.1', 3849) joined Room irc
+2010-02-09 19:29:00,078 - [+] Client connected ('127.0.0.1', 3851)
+2010-02-09 19:29:00,078 - [+] Room : irc 1 users
+2010-02-09 19:29:00,092 - [+] Client : l'utilisateur ('127.0.0.1', 3849) a rejoin le channel : irc
+2010-02-09 19:29:00,092 - [+] Room : client ('127.0.0.1', 3851) joined Room irc
+2010-02-09 19:29:00,092 - [+] Room : irc 2 users
+2010-02-09 19:29:00,092 - [+] Client : l'utilisateur ('127.0.0.1', 3851) a rejoin le channel : irc
+2010-02-09 19:29:00,092 - [+] Client ('127.0.0.1', 3849) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:29:00,092 - [+] Client connected ('127.0.0.1', 3853)
+2010-02-09 19:29:00,092 - [+] Room : client ('127.0.0.1', 3849) joined Room irc
+2010-02-09 19:29:00,092 - [+] Room : irc 3 users
+2010-02-09 19:29:00,092 - [+] Client ('127.0.0.1', 3851) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:29:00,092 - [+] Client ('127.0.0.1', 3851) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:29:00,092 - [+] Room : client ('127.0.0.1', 3853) joined Room irc
+2010-02-09 19:29:00,092 - [+] Client connected ('127.0.0.1', 3857)
+2010-02-09 19:29:00,092 - [+] Client : l'utilisateur ('127.0.0.1', 3849) a rejoin le channel : irc
+2010-02-09 19:29:00,092 - [+] Room : irc 4 users
+2010-02-09 19:29:00,092 - [+] Room : client ('127.0.0.1', 3857) joined Room irc
+2010-02-09 19:29:00,092 - [+] Client : le client ('127.0.0.1', 3851) est a present master sur le serveur
+2010-02-09 19:29:00,108 - [+] Client : l'utilisateur ('127.0.0.1', 3853) a rejoin le channel : irc
+2010-02-09 19:29:00,108 - [+] Client ('127.0.0.1', 3853) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:29:00,108 - [+] Room : client ('127.0.0.1', 3851) joined Room irc
+2010-02-09 19:29:00,108 - [+] Client ('127.0.0.1', 3853) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:29:00,108 - [+] Room : irc 5 users
+2010-02-09 19:29:00,108 - [+] Room : irc 6 users
+2010-02-09 19:29:00,108 - [+] Client : l'utilisateur ('127.0.0.1', 3857) a rejoin le channel : irc
+2010-02-09 19:29:00,108 - [+] Client ('127.0.0.1', 3857) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:29:00,108 - [+] Client ('127.0.0.1', 3857) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:29:00,108 - [+] Client : l'utilisateur ('127.0.0.1', 3851) a rejoin le channel : irc
+2010-02-09 19:29:00,108 - [+] Client : le client ('127.0.0.1', 3853) est a present master sur le serveur
+2010-02-09 19:29:00,108 - [+] Room : client ('127.0.0.1', 3853) joined Room irc
+2010-02-09 19:29:00,108 - [+] Room : irc 7 users
+2010-02-09 19:29:00,108 - [+] Client : l'utilisateur ('127.0.0.1', 3853) a rejoin le channel : irc
+2010-02-09 19:29:00,108 - [+] Client : le client ('127.0.0.1', 3857) est a present master sur le serveur
+2010-02-09 19:29:00,108 - [+] Room : client ('127.0.0.1', 3857) joined Room irc
+2010-02-09 19:29:00,108 - [+] Room : irc 8 users
+2010-02-09 19:29:00,108 - [+] Client : l'utilisateur ('127.0.0.1', 3857) a rejoin le channel : irc
+2010-02-09 19:30:22,890 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:30:25,296 - [+] Client connected ('127.0.0.1', 3863)
+2010-02-09 19:30:25,328 - [+] Room : client ('127.0.0.1', 3863) joined Room irc
+2010-02-09 19:30:25,328 - [+] Client connected ('127.0.0.1', 3865)
+2010-02-09 19:30:25,342 - [+] Room : irc 1 users
+2010-02-09 19:30:25,342 - [+] Client : l'utilisateur ('127.0.0.1', 3863) a rejoin le channel : irc
+2010-02-09 19:30:25,342 - [+] Room : client ('127.0.0.1', 3865) joined Room irc
+2010-02-09 19:30:25,342 - [+] Room : irc 2 users
+2010-02-09 19:30:25,342 - [+] Client ('127.0.0.1', 3863) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:30:25,342 - [+] Client : l'utilisateur ('127.0.0.1', 3865) a rejoin le channel : irc
+2010-02-09 19:30:25,342 - [+] Client : le client ('127.0.0.1', 3863) est a present master sur le serveur
+2010-02-09 19:30:25,342 - [+] Client ('127.0.0.1', 3865) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:30:25,342 - [+] Client ('127.0.0.1', 3863) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:30:25,342 - [+] Client connected ('127.0.0.1', 3867)
+2010-02-09 19:30:25,342 - [+] Room : client ('127.0.0.1', 3863) joined Room irc
+2010-02-09 19:30:25,342 - [+] Client ('127.0.0.1', 3865) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:30:25,342 - [+] Client ('127.0.0.1', 3863) send : {"cmd":"forward", "args":"hello"}
+2010-02-09 19:30:25,342 - [+] Client connected ('127.0.0.1', 3869)
+2010-02-09 19:30:25,358 - [+] Room : client ('127.0.0.1', 3867) joined Room irc
+2010-02-09 19:30:25,358 - [+] Room : irc 4 users
+2010-02-09 19:30:25,358 - [+] Room : irc 4 users
+2010-02-09 19:30:25,358 - [+] Room : client ('127.0.0.1', 3869) joined Room irc
+2010-02-09 19:30:25,358 - [+] Client : l'utilisateur ('127.0.0.1', 3867) a rejoin le channel : irc
+2010-02-09 19:30:25,358 - [+] Client : l'utilisateur ('127.0.0.1', 3863) a rejoin le channel : irc
+2010-02-09 19:30:25,358 - [+] Room : irc 5 users
+2010-02-09 19:30:25,358 - [+] Client : le client ('127.0.0.1', 3865) est a present master sur le serveur
+2010-02-09 19:30:25,358 - [+] Client : l'utilisateur ('127.0.0.1', 3869) a rejoin le channel : irc
+2010-02-09 19:30:25,358 - [+] Client ('127.0.0.1', 3867) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:30:25,358 - [+] Room : client ('127.0.0.1', 3865) joined Room irc
+2010-02-09 19:30:25,358 - [+] Client ('127.0.0.1', 3865) send : {"cmd":"forward", "args":"hello"}
+2010-02-09 19:30:25,375 - [+] Client ('127.0.0.1', 3869) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:30:25,375 - [+] Client ('127.0.0.1', 3867) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:30:25,375 - [+] Client ('127.0.0.1', 3869) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:30:25,375 - [+] Room : irc 6 users
+2010-02-09 19:30:25,375 - [+] Client : l'utilisateur ('127.0.0.1', 3865) a rejoin le channel : irc
+2010-02-09 19:30:25,375 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:30:25,375 - [+] Client ('127.0.0.1', 3869) send : {"cmd":"forward", "args":"hello"}
+2010-02-09 19:30:25,375 - [+] Client ('127.0.0.1', 3867) send : {"cmd":"forward", "args":"hello"}
+2010-02-09 19:30:25,375 - [+] Client : le client ('127.0.0.1', 3867) est a present master sur le serveur
+2010-02-09 19:30:25,375 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:30:25,375 - [+] Client : le client ('127.0.0.1', 3869) est a present master sur le serveur
+2010-02-09 19:30:25,375 - [+] Room : client ('127.0.0.1', 3867) joined Room irc
+2010-02-09 19:30:25,375 - [+] Room : irc 7 users
+2010-02-09 19:30:25,375 - [+] Client : l'utilisateur ('127.0.0.1', 3867) a rejoin le channel : irc
+2010-02-09 19:30:25,375 - [+] Room : client ('127.0.0.1', 3869) joined Room irc
+2010-02-09 19:30:25,390 - [+] Room : irc 8 users
+2010-02-09 19:30:25,390 - [+] Client : l'utilisateur ('127.0.0.1', 3869) a rejoin le channel : irc
+2010-02-09 19:30:25,390 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:30:25,390 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:31:41,953 - [+] TCP Server launched on localhost:9999
+2010-02-09 19:31:44,592 - [+] Client connected ('127.0.0.1', 3889)
+2010-02-09 19:31:44,592 - [+] Room : client ('127.0.0.1', 3889) joined Room irc
+2010-02-09 19:31:44,592 - [+] Room : irc 1 users
+2010-02-09 19:31:44,608 - [+] Client : l'utilisateur ('127.0.0.1', 3889) a rejoin le channel : irc
+2010-02-09 19:31:44,608 - [+] Client ('127.0.0.1', 3889) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:31:44,608 - [+] Client : le client ('127.0.0.1', 3889) est a present master sur le serveur
+2010-02-09 19:31:44,608 - [+] Client ('127.0.0.1', 3889) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:31:44,625 - [+] Room : client ('127.0.0.1', 3889) joined Room irc
+2010-02-09 19:31:44,625 - [+] Room : irc 2 users
+2010-02-09 19:31:44,625 - [+] Client : l'utilisateur ('127.0.0.1', 3889) a rejoin le channel : irc
+2010-02-09 19:31:44,625 - [+] Client ('127.0.0.1', 3889) send : {"cmd":"forward", "args":"hello"}
+2010-02-09 19:31:44,640 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:31:44,640 - [+] Client connected ('127.0.0.1', 3891)
+2010-02-09 19:31:44,640 - [+] Client connected ('127.0.0.1', 3893)
+2010-02-09 19:31:44,640 - [+] Room : client ('127.0.0.1', 3891) joined Room irc
+2010-02-09 19:31:44,640 - [+] Room : irc 3 users
+2010-02-09 19:31:44,640 - [+] Client : l'utilisateur ('127.0.0.1', 3891) a rejoin le channel : irc
+2010-02-09 19:31:44,640 - [+] Room : client ('127.0.0.1', 3893) joined Room irc
+2010-02-09 19:31:44,640 - [+] Client connected ('127.0.0.1', 3895)
+2010-02-09 19:31:44,640 - [+] Room : irc 4 users
+2010-02-09 19:31:44,640 - [+] Client ('127.0.0.1', 3891) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:31:44,640 - [+] Client : le client ('127.0.0.1', 3891) est a present master sur le serveur
+2010-02-09 19:31:44,640 - [+] Room : client ('127.0.0.1', 3895) joined Room irc
+2010-02-09 19:31:44,640 - [+] Client connected ('127.0.0.1', 3897)
+2010-02-09 19:31:44,640 - [+] Client : l'utilisateur ('127.0.0.1', 3893) a rejoin le channel : irc
+2010-02-09 19:31:44,640 - [+] Client ('127.0.0.1', 3891) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:31:44,655 - [+] Room : client ('127.0.0.1', 3891) joined Room irc
+2010-02-09 19:31:44,655 - [+] Room : irc 6 users
+2010-02-09 19:31:44,655 - [+] Room : client ('127.0.0.1', 3897) joined Room irc
+2010-02-09 19:31:44,655 - [+] Client ('127.0.0.1', 3893) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:31:44,655 - [+] Client ('127.0.0.1', 3891) send : {"cmd":"forward", "args":"hello"}
+2010-02-09 19:31:44,655 - [+] Room : irc 7 users
+2010-02-09 19:31:44,655 - [+] Client : l'utilisateur ('127.0.0.1', 3891) a rejoin le channel : irc
+2010-02-09 19:31:44,671 - [+] Room : irc 7 users
+2010-02-09 19:31:44,671 - [+] Client ('127.0.0.1', 3893) send : {"cmd":"join", "args":"irc"}
+2010-02-09 19:31:44,687 - [+] Client : le client ('127.0.0.1', 3893) est a present master sur le serveur
+2010-02-09 19:31:44,687 - [+] Client : l'utilisateur ('127.0.0.1', 3895) a rejoin le channel : irc
+2010-02-09 19:31:44,687 - [+] Client : l'utilisateur ('127.0.0.1', 3897) a rejoin le channel : irc
+2010-02-09 19:31:44,687 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:31:44,687 - [+] Client ('127.0.0.1', 3893) send : {"cmd":"forward", "args":"hello"}
+2010-02-09 19:31:44,687 - [+] Client ('127.0.0.1', 3895) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:31:44,687 - [+] Client ('127.0.0.1', 3897) send : {"cmd":"auth", "args":"admin"}
+2010-02-09 19:31:44,687 - [+] Room : client ('127.0.0.1', 3893) joined Room irc
+2010-02-09 19:31:44,687 - [+] Client ('127.0.0.1', 3895) send : {"cmd":"join", "args":"irc"}
+{"cmd":"forward", "args":"hello"}
+2010-02-09 19:31:44,687 - [+] Client ('127.0.0.1', 3897) send : {"cmd":"join", "args":"irc"}
+{"cmd":"forward", "args":"hello"}
+2010-02-09 19:31:44,687 - [+] Room : irc 8 users
+2010-02-09 19:31:44,687 - [+] Client : l'utilisateur ('127.0.0.1', 3893) a rejoin le channel : irc
+2010-02-09 19:31:44,687 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:31:44,687 - [+] Client : le client ('127.0.0.1', 3895) est a present master sur le serveur
+2010-02-09 19:31:44,703 - [+] Client : le client ('127.0.0.1', 3897) est a present master sur le serveur
+2010-02-09 19:31:44,703 - [+] Room : client ('127.0.0.1', 3895) joined Room irc
+2010-02-09 19:31:44,703 - [+] Room : irc 9 users
+2010-02-09 19:31:44,703 - [+] Client : l'utilisateur ('127.0.0.1', 3895) a rejoin le channel : irc
+2010-02-09 19:31:44,703 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-09 19:31:44,703 - [+] Room : client ('127.0.0.1', 3897) joined Room irc
+2010-02-09 19:31:44,703 - [+] Room : irc 10 users
+2010-02-09 19:31:44,703 - [+] Client : l'utilisateur ('127.0.0.1', 3897) a rejoin le channel : irc
+2010-02-09 19:31:44,703 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
