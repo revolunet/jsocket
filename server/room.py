@@ -36,7 +36,7 @@ class Room():
 			return True
 		return False
 		
-	def delete(self, channelName):
+	def remove(self, channelName):
 		"""Return : Supprime un channel de la liste des rooms -> bool """
 		
 		if self.__channelExists(channelName):

@@ -29,7 +29,7 @@ class Client(threading.Thread):
 			'join' : self.__cmd_join,
 			'part' : self.__cmd_part,
 			'auth' : self.__cmd_auth,
-			'delete' : self.__cmd_delete
+			'remove' : self.__cmd_remove
 		}
 	
 	def run(self):
@@ -67,10 +67,10 @@ class Client(threading.Thread):
 			Log().add("[+] Command error : " + cmd + " , n'est pas une chaine json valide", 'ired')
 	
 	# {"cmd": "delete", "args": "irc"}
-	def __cmd_delete(self, args):
+	def __cmd_remove(self, args):
 		"""On supprimet un channel, si celui si existe et que Client est Master"""
 		
-		if self.master and self.__room.delete(args):
+		if self.master and self.__room.remove(args):
 			self.__squeue.put([self, "True"])
 			Log().add("[+] Le channel " + args + " a ete supprime par : " + str(self.client_address))
 		else:
