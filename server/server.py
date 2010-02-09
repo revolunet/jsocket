@@ -1,0 +1,66 @@
+##
+# server.py
+##
+
+import socket
+import sys
+import select
+import os
+import Queue
+from client import Client
+from room import Room
+from log import Log
+from worker import Worker
+
+class Server(object):
+	"""docstring for Server"""
+	def __init__(self):
+		self.__host = 'localhost'
+		self.__port = 9999
+		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.__socket.bind((self.__host, self.__port))
+		self.__socket.listen(1)
+		Log().add("[+] TCP Server launched on %s:%d" % (self.__host, self.__port), "green")
+		self.__room = Room()
+		self.__init_queues()
+		#windows define
+		if os.name != 'nt':
+			self.__input = [self.__socket, sys.stdin]
+		else:
+			self.__input = [self.__socket]
+
+	def __init_queues(self):
+		""" Initialise les queues d'envoie et reception (parsing) de message client """
+
+		self.__squeue = Queue.Queue(8)
+		Worker(self.__squeue, 'send').start()
+		self.__rqueue = Queue.Queue(8)
+		Worker(self.__rqueue, 'recv').start()
+
+	def start(self):
+		while 1:
+			try:
+				inputready,outputready,exceptready = select.select(self.__input,[],[], 5) 
+				for s in inputready:
+					if s == self.__socket: 
+						# handle the server socket 
+						client_socket, client_addr = self.__socket.accept()
+						Log().add("[+] Client connected " + (str(client_addr)))
+						current_client = Client(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
+						current_client.start()
+					elif s == sys.stdin: 
+						# handle standard input 
+						junk = sys.stdin.readline() 
+						running = 0 
+						
+					else: 
+						# handle all other sockets 
+						data = s.recv(size) 
+						if data: 
+							s.send(data) 
+						else: 
+							s.close() 
+							input.remove(s)
+			except KeyboardInterrupt:
+				self.__socket.close()
+				exit()
