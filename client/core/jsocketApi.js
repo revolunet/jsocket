@@ -63,6 +63,14 @@ var jsocketApi = {
 	},
 	
 	/**
+	* Callback lorsque la connection avec le serveur est etablie.
+	* @code : true ou false
+	**/
+	onConnect : function (code) {
+		//implement onConnect code here.
+	},
+	
+	/**
 	* Callback utilise pour recevoir les donnees sortantes du serveur.
 	* @message : le message retourne par le serveur -> Json string
 	**/
@@ -153,7 +161,7 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "remove", "args": "channelName"}
 	**/
 	remove : function(channel) {
-		this.core.send('{"cmd": "remove", "args": "'+this.core.addslashes(channel)+'"}');
+		this.core.send('{"cmd": "remove", "args": "'+channel+'"}');
 	},
 	
 	/**
@@ -162,7 +170,7 @@ var jsocketApi = {
 	* @command : la commande a forwarder
 	**/
 	forward : function(command) {
-		this.core.send('{"cmd": "forward", "args": "'+this.core.addslashes(command)+'"}');
+		this.core.send('{"cmd": "forward", "args": "'+command+'"}');
 	},
 	
 	/**
