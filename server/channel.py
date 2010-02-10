@@ -30,3 +30,11 @@ class Channel():
 		"""Return : La liste des utilisateurs de la room : -> list(Client)"""
 		
 		return self.client_list
+
+	def get_master(self):
+		""" Retourne le user master du channel """
+		
+		for client in self.client_list:
+			if client.master == True:
+				return client
+		return None

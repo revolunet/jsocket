@@ -26,7 +26,7 @@ class Worker(threading.Thread):
 		from client import Client
 		while True:
 			item = self.__queue.get()
-			item[0].client_socket.send(item[1])
+			item[0].client_socket.send(item[1] + "\0")
 		
 	def type_recv(self):
 		""" Parcours la Queue pour parser la string correspondante """

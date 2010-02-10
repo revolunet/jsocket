@@ -8,9 +8,16 @@
    <script type="text/javascript">
    <!--
     jsocketApi.init('localhost', 9999);
-    jsocketApi.onAuth = function (code) {
-      document.getElementById('outputtest').innerHTML = code;
-    }
+    jsocketApi.join('irc');
+    jsocketApi.onJoin = function (code) {
+      if (code == true)
+      	document.getElementById('outputtest').innerHTML += "Vous avez rejoind le chan<br />";
+      else
+        document.getElementById('outputtest').innerHTML += "Vous n'avez pas rejoind le chan<br />";
+    };
+    jsocketApi.onForward = function (info) {
+      document.getElementById('outputtest').innerHTML += (info[0] + ": " + info[1] + "<br />");
+    };
    // -->
    </script>
   </body>

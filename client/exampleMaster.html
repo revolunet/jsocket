@@ -1,1 +1,29 @@
-.
+<html>
+  <head>
+    <title>Revolunet jsocket Master example</title>
+  </head>
+  <body>
+   <div id="outputtest"></div>
+   <script type="text/javascript" src="jsocket.js"></script>
+   <script type="text/javascript">
+   <!--
+    jsocketApi.init('localhost', 9999);
+    jsocketApi.auth('admin');
+    jsocketApi.join('irc');
+    jsocketApi.onAuth = function (code) {
+    	if (code == true)
+    	  document.getElementById('outputtest').innerHTML += ("Welcome " + jsocketApi.key + "<br />");
+    	else
+    	  document.getElementById('outputtest').innerHTML += "Wrong password<br />";
+    };
+    jsocketApi.onJoin = function (code) {
+      if (code == true)
+      	document.getElementById('outputtest').innerHTML += "Vous avez rejoind le chan<br />";
+      else
+        document.getElementById('outputtest').innerHTML += "Vous n'avez pas rejoind le chan<br />";
+    };
+   // -->
+   </script>
+   <input type="button" onclick="javascript:jsocketApi.forward('SALUT !');" value="Forward" />
+  </body>
+</html>

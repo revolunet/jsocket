@@ -80,7 +80,7 @@ class Room():
 			if len(list_users) >= 1:
 				for user in list_users:
 					if user.master == False:
-						user.queue_cmd(commande)
+						user.queue_cmd('{"from": "forward", "value": ["' + self.channel(channelName).get_master().get_name() + '", "' + commande + '"]}')
 				return True
 		return False
 		

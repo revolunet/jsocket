@@ -27,14 +27,23 @@ var jsocketApi = {
 	parser : function(text) {
 		var data = [];
 		var j = json_parse(text);
-		if (j.cmd != null && j.args != null) {
-			func_name = j.cmd.substring(0,1).toUpperCase() + j.cmd.substring(1, j.cmd.length)
+		if (j.from != null && j.value != null) {
+			func_name = j.from.substring(0,1).toUpperCase() + j.from.substring(1, j.from.length)
 			try {
-				eval('jsocketApi.on'+func_name+"('"+j.args+"')");
+				eval('jsocketApi.on'+func_name+"(j.value)");
 			} catch(e) {
 				jsocketApi.onError(e);
 			}
 		}
+	},
+	
+	/**
+	* Callback utilise pour recevoir un identifiant par defaut lors de
+	* la connection au serveur.
+	* @key : identifiant unique de l'utilisateur
+	**/
+	onConnected : function (key) {
+		this.key = key;
 	},
 	
 	/**
@@ -52,7 +61,6 @@ var jsocketApi = {
 	**/
 	onAuth : function(code) {
 		//implement onAuth code here.
-		alert(code);
 	},
 	
 	/**
@@ -129,7 +137,25 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "remove", "args": "channelName"}
 	**/
 	remove : function(channel) {
-		this.core.send('{"cmd": "remove", "args": "'+channel+'"}');
+		this.core.send('{"cmd": "remove", "args": "'+this.core.addslashes(channel)+'"}');
+	},
+	
+	/**
+	* Cette fonction permet a un master de forwarder une commande
+	* sur tous les clients connectes a son channel
+	* @command : la commande a forwarder
+	**/
+	forward : function(command) {
+		this.core.send('{"cmd": "forward", "args": "'+this.core.addslashes(command)+'"}');
+	},
+	
+	/**
+	* Callback appeler lorsque un client recoie un message d'un master
+	* @info : [0] = master's username
+	*         [1] = commande
+	**/
+	onForward : function(info) {
+		//implement onForward code here.
 	},
 	
 	/**
