@@ -72,7 +72,7 @@ class Client(threading.Thread):
 		"""Le client est connecte, sa cle unique lui est send"""
 		
 		self.__cmd_join("irc");
-		self.__squeue.put([self, self.__unique_key])
+		self.__squeue.put([self, '{"from": "connected", "value": "' + self.__unique_key + '"}'])
 
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):
@@ -83,14 +83,14 @@ class Client(threading.Thread):
 		"""On supprimet un channel, si celui si existe et que Client est Master"""
 		
 		if self.master and self.__room.remove(args):
-			self.__squeue.put([self, "True"])
+			self.__squeue.put([self, '{"from": "remove", "value": "True"}'])
 			Log().add("[+] Le channel " + args + " a ete supprime par : " + str(self.client_address))
 		else:
 			if self.master:
 				Log().add("[+] Command error : la commande delete a echoue ( le channel " + args + " n'existe pas )", 'yellow')
 			else:
 				Log().add("[+] Command error : la commande delete a echoue ( le Client n'est pas master )", 'yellow')
-			self.__squeue.put([self, "False"])
+			self.__squeue.put([self, '{"from": "remove", "value": "False"}'])
 			
 	# {"cmd": "create", "args": "irc"}
 	def __cmd_create(self, args):
@@ -98,13 +98,13 @@ class Client(threading.Thread):
 		
 		if self.master and self.__room.create(args):
 			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client_address))
-			self.__squeue.put([self, "True"])
+			self.__squeue.put([self, '{"from": "create", "value": "True"}'])
 		else:
 			if self.master:
 				Log().add("[+] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
 			else:
 				Log().add("[+] Command error : la commande create a echoue ( le Client n'est pas master )", 'yellow')
-			self.__squeue.put([self, "False"])
+			self.__squeue.put([self, '{"from": "create", "value": "False"}'])
 
 	# {"cmd": "join", "args": "irc"}
 	def __cmd_join(self, args):
@@ -113,10 +113,10 @@ class Client(threading.Thread):
 		if self.__room.join(args, self):
 			self.__room_name = args
 			Log().add("[+] Client : l'utilisateur " + str(self.client_address) + " a rejoin le channel : " + args, 'yellow')
-			self.__squeue.put([self, "True"])
+			self.__squeue.put([self, '{"from": "join", "value": "True"}'])
 		else:
 			Log().add("[+] Command error : le channel " + args + " n'existe pas ", 'yellow')
-			self.__squeue.put([self, "False"])
+			self.__squeue.put([self, '{"from": "join", "value": "False"}'])
 			
 	
 	# {"cmd": "part", "args": "irc"}
@@ -126,10 +126,10 @@ class Client(threading.Thread):
 		if self.__room_name and self.__room.part(self.__room_name, self):
 			self.__room_name = None
 			Log().add("[+] Client : le client " + str(self.client_address) + " a quitte le channel : " + args)
-			self.__squeue.put([self, "True"])
+			self.__squeue.put([self, '{"from": "part", "value": "True"}'])
 		else:
 			Log().add("Command error : l'utilisateur n'est pas dans le channel : " + args)
-			self.__squeue.put([self, "False"])
+			self.__squeue.put([self, '{"from": "part", "value": "False"}'])
 	
 	# {"cmd": "auth", "args": "passphrase"}
 	def __cmd_auth(self, args):
@@ -138,9 +138,9 @@ class Client(threading.Thread):
 		if args == self.__master_password:
 			self.master = True
 			Log().add("[+] Client : le client " + str(self.client_address) + " est a present master sur le serveur")
-			self.__squeue.put([self, "True"])
+			self.__squeue.put([self, '{"from": "auth", "value": "True"}'])
 		else:
-			self.__squeue.put([self, "False"])
+			self.__squeue.put([self, '{"from": "auth", "value": "False"}'])
 	
 	# {"cmd": "forward", "args": "message"}
 	def __cmd_forward(self, args):
@@ -148,7 +148,7 @@ class Client(threading.Thread):
 		
 		if self.master and self.__room_name and self.__room.forward(self.__room_name, args):
 			Log().add("[+] La commande : "+ args + " a ete envoye a tous les utilisateurs du channel : " + str(self.__room_name))
-			self.__squeue.put([self, "True"])
+			self.__squeue.put([self, '{"from": "forward", "value": "True"}'])
 		else:
 			if self.master == False:
 				Log().add("[+] Command error : la commande forward a echoue ( le Client n'est pas master )", 'yellow')
@@ -156,7 +156,7 @@ class Client(threading.Thread):
 				Log().add("[+] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
 			else:
 				Log().add("[+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
-			self.__squeue.put([self, "False"])
+			self.__squeue.put([self, '{"from": "forward", "value": "False"}'])
 			
 	def queue_cmd(self, command):
 		"""Ajoute une commande a la Queue en cours"""

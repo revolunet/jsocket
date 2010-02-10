@@ -3,10 +3,14 @@
     <title>Revolunet jsocket Client example</title>
   </head>
   <body>
+   <div id="outputtest"></div>
    <script type="text/javascript" src="jsocket.js"></script>
    <script type="text/javascript">
    <!--
     jsocketApi.init('localhost', 9999);
+    jsocketApi.onAuth = function (code) {
+      document.getElementById('outputtest').innerHTML = code;
+    }
    // -->
    </script>
   </body>

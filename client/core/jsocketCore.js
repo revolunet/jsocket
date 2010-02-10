@@ -38,7 +38,7 @@ var jsocketCore = {
      {
        if (typeof this.api != 'object')
      	 return (false);
-       setTimeout("jsocketCore.send('" + msg + "');", 1000);
+       setTimeout("jsocketCore.send('" + msg + "');", 500);
        //this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
        return (false);
      }
