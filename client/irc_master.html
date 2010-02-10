@@ -25,6 +25,10 @@
 				height: 500px;
 				background-color: #57595B;
 				border: 1px solid black;
+				overflow:scroll;
+				overflow-x:hidden;
+				font-weight:bold;
+				color:#eee;
 			}
 			
 			#roomUsers {
@@ -48,7 +52,7 @@
 			}
 			
 			#input_message {
-				width: 95%;
+				width: 90%;
 			}
 			
 			#btn_send {
@@ -147,6 +151,9 @@
 			function forward() {
 				var text = document.getElementById('input_message').value;
 				document.getElementById('chatRoom').innerHTML += text + "<br />";
+				document.getElementById('server_debug').innerHTML += text;
+				document.getElementById('chatRoom').innerHTML += (jsocketApi.key + ": " + text + "<br />");
+				document.getElementById('chatRoom').scrollTop = document.getElementById('chatRoom').scrollHeight;
 				jsocketApi.forward(text);
 			}
 			

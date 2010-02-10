@@ -112,7 +112,7 @@ var jsocketCore = {
 			return (false);
 		}
 		this.connectedToServer = true;
-		//this.api.onConnect('{"from": "connect", "value": "true"}');
+		this.api.onConnect('{"from": "connect", "value": true}');
 		return (true);
 	},
  
