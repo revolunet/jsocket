@@ -38,6 +38,10 @@
 				width:20%;
 				height: 500px;
 				border: 1px solid black;
+				overflow:scroll;
+				overflow-x:hidden;
+				font-weight:normal;
+				color:#fff;
 			}
 			
 			#container_input {
@@ -132,10 +136,23 @@
 					document.getElementById('server_debug').innerHTML += "Vous n'avez pas rejoind le chan<br />";
 				}
 			};
-			
+			jsocketApi.onList = function (tab) {
+				document.getElementById('roomUsers').innerHTML = "User(s): " + tab.length + "<br />";
+				for (var i = 0; tab[i]; ++i) {
+					document.getElementById('roomUsers').innerHTML += (tab[i] + "<br />");
+				}
+			};
+
+			function list() {
+				var channel = document.getElementById('channel').value;
+				jsocketApi.list(channel);
+				setTimeout('list();', 500);
+			}
+
 			function join() {
 				var channel = document.getElementById('channel').value;
 				jsocketApi.join(channel);
+				list();
 			}
 			
 			function forward() {
@@ -144,11 +161,13 @@
 				document.getElementById('chatRoom').innerHTML += (jsocketApi.key + ": " + text + "<br />");
 				document.getElementById('chatRoom').scrollTop = document.getElementById('chatRoom').scrollHeight;
 				jsocketApi.forward(text);
+				list();
 			}
 			
 			function create() {
 				var channel = document.getElementById('channel').value;
 				jsocketApi.create(channel);
+				list();
 			}
 		// -->
 	   </script>

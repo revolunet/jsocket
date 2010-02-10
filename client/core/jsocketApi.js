@@ -183,6 +183,22 @@ var jsocketApi = {
 	},
 
 	/**
+	* Permet de lister tous les utilisateurs connecte au channel
+	* @channel : nom du channel
+	**/
+	list : function(channel) {
+		this.core.send('{"cmd": "list", "args": "'+this.core.addslashes(channel)+'"}')
+	},
+
+	/**
+	* Callback appeler contenant la liste des utilisateurs connectes a un channel
+	* @tab : liste des utilisateurs
+	**/
+	onList : function(tab) {
+		//implement onList code here.
+	},
+
+	/**
 	* Envoie un message a un ou plusieurs clients
 	* @tab : [0] = message a envoyer
 	*        [1] = [ '*' ] pour tous les clients du channel
@@ -190,9 +206,9 @@ var jsocketApi = {
 	*              [ 'username1', 'username2', ... ] pour une liste de clients
 	**/
 	message : function(tab) {
-		str = '[ "' + this.core.addslashes(tab[0]) +
+		var str = '[ "' + this.core.addslashes(tab[0]) +
 			'", [ "' + (tab[1][0] ? this.core.addslashes(tab[1][0]) : '') + '"';
-		for (i = 1; tab[1][i]; ++i) {
+		for (var i = 1; tab[1][i]; ++i) {
 			str += (', "' + this.core.addslashes(tab[1][i]) + '"');
 		}
 		str += ' ]';
