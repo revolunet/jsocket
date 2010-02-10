@@ -6,6 +6,7 @@ import threading
 import json
 import random
 from log import Log
+from settings import *
 
 class Client(threading.Thread):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
@@ -13,7 +14,7 @@ class Client(threading.Thread):
 		self.client_address = client_address
 		self.master = False
 		self.__room = room
-		self.__master_password = "admin"
+		self.__master_password = SETTINGS.MASTER_PASSWORD
 		self.__init_cmd()
 		self.__unique_key = hex(random.getrandbits(64))
 		self.__rqueue = rqueue
@@ -29,13 +30,10 @@ class Client(threading.Thread):
 			'join' : self.__cmd_join,
 			'part' : self.__cmd_part,
 			'auth' : self.__cmd_auth,
-<<<<<<< HEAD
 			'remove' : self.__cmd_remove,
-			'forward' : self.__cmd_forward
-=======
+			'forward' : self.__cmd_forward,
 			'policy-file-request' : self.__cmd_policy,
 			'remove' : self.__cmd_remove
->>>>>>> bd042acf4a2c4eee39bfb6976efd408b0d6eaef1
 		}
 	
 	def run(self):

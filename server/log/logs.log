@@ -868,3 +868,51 @@
 2010-02-09 19:31:44,703 - [+] Room : irc 10 users
 2010-02-09 19:31:44,703 - [+] Client : l'utilisateur ('127.0.0.1', 3897) a rejoin le channel : irc
 2010-02-09 19:31:44,703 - [+] La commande : hello a ete envoye a tous les utilisateurs du channel : irc
+2010-02-10 11:03:21,250 - [+] TCP Server launched on localhost:9999
+2010-02-10 11:03:51,515 - [+] Client connected ('127.0.0.1', 1056)
+2010-02-10 11:03:51,530 - [+] Room : client ('127.0.0.1', 1056) joined Room irc
+2010-02-10 11:03:51,530 - [+] Room : irc 1 users
+2010-02-10 11:03:51,530 - [+] Client : l'utilisateur ('127.0.0.1', 1056) a rejoin le channel : irc
+2010-02-10 11:03:54,437 - [+] Command error : d , n'est pas une chaine json valide
+2010-02-10 11:03:54,453 - [+] Client ('127.0.0.1', 1056) send : d
+2010-02-10 11:03:54,453 - [+] Room : client ('127.0.0.1', 1056) left Room irc
+2010-02-10 11:03:54,453 - [+] Room : irc 0 users
+2010-02-10 11:03:54,453 - [-] Client disconnected
+2010-02-10 12:19:10,296 - [+] TCP Server launched on localhost:9999
+2010-02-10 12:20:08,171 - [+] TCP Server launched on localhost:9999
+2010-02-10 12:22:27,671 - [+] TCP Server launched on localhost:9999
+2010-02-10 12:24:58,983 - [+] TCP Server launched on localhost:9999
+2010-02-10 12:25:03,296 - [+] Client connected ('127.0.0.1', 2144)
+2010-02-10 12:25:03,312 - [+] Room : client ('127.0.0.1', 2144) joined Room irc
+2010-02-10 12:25:03,312 - [+] Room : irc 1 users
+2010-02-10 12:25:03,312 - [+] Client : l'utilisateur ('127.0.0.1', 2144) a rejoin le channel : irc
+2010-02-10 12:25:05,530 - [+] Client ('127.0.0.1', 2144) send : d
+2010-02-10 12:25:05,530 - [+] Command error : d , n'est pas une chaine json valide
+2010-02-10 12:25:08,421 - [+] Client ('127.0.0.1', 2144) send : {
+2010-02-10 12:25:08,421 - [+] Command error : { , n'est pas une chaine json valide
+2010-02-10 12:25:12,890 - [+] Room : client ('127.0.0.1', 2144) left Room irc
+2010-02-10 12:25:12,890 - [+] Room : irc 0 users
+2010-02-10 12:25:12,905 - [-] Client disconnected
+2010-02-10 12:25:59,983 - [+] TCP Server launched on localhost:9999
+2010-02-10 12:26:02,858 - [+] Client connected ('127.0.0.1', 2145)
+2010-02-10 12:26:02,858 - [+] Room : client ('127.0.0.1', 2145) joined Room irc
+2010-02-10 12:26:02,858 - [+] Room : irc 1 users
+2010-02-10 12:26:02,858 - [+] Client : l'utilisateur ('127.0.0.1', 2145) a rejoin le channel : irc
+2010-02-10 12:26:04,125 - [+] Client ('127.0.0.1', 2145) send : d
+2010-02-10 12:26:04,140 - [+] Command error : d , n'est pas une chaine json valide
+2010-02-10 12:26:04,780 - [+] Client ('127.0.0.1', 2145) send : d
+2010-02-10 12:26:04,780 - [+] Command error : d , n'est pas une chaine json valide
+2010-02-10 12:26:05,000 - [+] Client ('127.0.0.1', 2145) send : d
+2010-02-10 12:26:05,000 - [+] Command error : d , n'est pas une chaine json valide
+2010-02-10 12:26:06,187 - [+] Room : client ('127.0.0.1', 2145) left Room irc
+2010-02-10 12:26:06,203 - [+] Room : irc 0 users
+2010-02-10 12:26:06,203 - [-] Client disconnected
+2010-02-10 12:26:59,390 - [+] TCP Server launched on localhost:9999
+2010-02-10 12:27:36,000 - [+] TCP Server launched on localhost:9999
+2010-02-10 12:27:40,500 - [+] Client connected ('127.0.0.1', 2148)
+2010-02-10 12:27:40,500 - [+] Room : client ('127.0.0.1', 2148) joined Room irc
+2010-02-10 12:27:40,500 - [+] Room : irc 1 users
+2010-02-10 12:27:40,500 - [+] Client : l'utilisateur ('127.0.0.1', 2148) a rejoin le channel : irc
+2010-02-10 12:27:42,390 - [+] Room : client ('127.0.0.1', 2148) left Room irc
+2010-02-10 12:27:42,390 - [+] Room : irc 0 users
+2010-02-10 12:27:42,390 - [-] Client disconnected
