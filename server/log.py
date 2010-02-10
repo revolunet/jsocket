@@ -8,6 +8,7 @@ import logging
 import threading
 import Queue
 from worker import Worker
+from settings import *
 
 class Log(object):
 	"""docstring for Log"""
@@ -45,10 +46,11 @@ class Log(object):
 		def dprint(self, str, color = 'white'):
 			""" Affiche un message sur le sortie standard et le log dans un fichier """
 
-			if 'nt' not in os.name:
-				print self.get_color(color).replace('$msg$', str)
-			else:
-				print str
+			if SETTINGS.IS_DEBUG:
+				if 'nt' not in os.name:
+					print self.get_color(color).replace('$msg$', str)
+				else:
+					print str
 			self.__logs.debug(str)
 
 		def __logTraceback(self):

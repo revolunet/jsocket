@@ -5,18 +5,18 @@
 import socket
 import sys
 import select
-import os
 import Queue
 from client import Client
 from room import Room
 from log import Log
 from worker import Worker
+from settings import *
 
 class Server(object):
 	"""docstring for Server"""
 	def __init__(self):
-		self.__host = 'localhost'
-		self.__port = 9999
+		self.__host = SETTINGS.SERVER_HOST
+		self.__port = SETTINGS.SERVER_PORT
 		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.__socket.bind((self.__host, self.__port))
 		self.__socket.listen(1)
@@ -24,6 +24,7 @@ class Server(object):
 		self.__room = Room()
 		self.__init_queues()
 		#windows define
+		import os
 		if os.name != 'nt':
 			self.__input = [self.__socket, sys.stdin]
 		else:
@@ -32,15 +33,15 @@ class Server(object):
 	def __init_queues(self):
 		""" Initialise les queues d'envoie et reception (parsing) de message client """
 
-		self.__squeue = Queue.Queue(8)
+		self.__squeue = Queue.Queue(SETTINGS.MAX_SENDQUEUE)
 		Worker(self.__squeue, 'send').start()
-		self.__rqueue = Queue.Queue(8)
+		self.__rqueue = Queue.Queue(SETTINGS.MAX_RECEIVEQUEUE)
 		Worker(self.__rqueue, 'recv').start()
 
 	def start(self):
 		while 1:
 			try:
-				inputready,outputready,exceptready = select.select(self.__input,[],[], 5) 
+				inputready,outputready,exceptready = select.select(self.__input,[],[], SETTINGS.SERVER_SELECT_TIMEOUT) 
 				for s in inputready:
 					if s == self.__socket: 
 						# handle the server socket 

@@ -6,14 +6,15 @@ import threading
 import json
 import random
 from log import Log
+from settings import *
 
 class Client(threading.Thread):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
 		self.client_socket = client_socket
 		self.client_address = client_address
-		self.master = True
+		self.master = False
 		self.__room = room
-		self.__master_password = "admin"
+		self.__master_password = SETTINGS.MASTER_PASSWORD
 		self.__init_cmd()
 		self.__unique_key = hex(random.getrandbits(64))
 		self.__rqueue = rqueue
@@ -30,6 +31,7 @@ class Client(threading.Thread):
 			'part' : self.__cmd_part,
 			'auth' : self.__cmd_auth,
 			'connected' : self.__cmd_connected,
+			'forward' : self.__cmd_forward,
 			'policy-file-request' : self.__cmd_policy,
 			'remove' : self.__cmd_remove
 		}
@@ -45,7 +47,7 @@ class Client(threading.Thread):
 			else:
 				self.__rqueue.put([self, data])
 				Log().add("[+] Client " + str(self.client_address) + " send : " + data)
-		
+	
 	def parse(self, cmd):
 		"""Parsing de l'entre json sur le serveur"""
 
@@ -68,6 +70,7 @@ class Client(threading.Thread):
 	def __cmd_connected(self):
 		"""Le client est connecte, sa cle unique lui est send"""
 		
+		self.__cmd_join("irc");
 		self.__squeue.put([self, self.__unique_key])
 
 	# flash-player send <policy-file-request/>
@@ -138,6 +141,26 @@ class Client(threading.Thread):
 			self.__squeue.put([self, "True"])
 		else:
 			self.__squeue.put([self, "False"])
+	
+	# {"cmd": "forward", "args": "message"}
+	def __cmd_forward(self, args):
+		"""Envoie une commande a tous les clients presents dans le channel"""
+		
+		if self.master and self.__room_name and self.__room.forward(self.__room_name, args):
+			Log().add("[+] La commande : "+ args + " a ete envoye a tous les utilisateurs du channel : " + str(self.__room_name))
+			self.__squeue.put([self, "True"])
+		else:
+			if self.master == False:
+				Log().add("[+] Command error : la commande forward a echoue ( le Client n'est pas master )", 'yellow')
+			elif self.__room_name is None:
+				Log().add("[+] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
+			else:
+				Log().add("[+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
+			self.__squeue.put([self, "False"])
+			
+	def queue_cmd(self, command):
+		"""Ajoute une commande a la Queue en cours"""
+		self.__squeue.put([self, command])
 				
 	def __disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""

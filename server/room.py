@@ -20,13 +20,16 @@ class Room():
 		
 		return self.rooms[channelName].list_users()
 	
-	def list_users(self):
+	def list_users(self, channelName = None):
 		"""Return : la liste de tous les utilisateurs du serveur -> list(Client) """
 		
-		users = []
-		for room in self.rooms:
-			users.append(self.rooms[room].list_users())
-		return users
+		if channelName and self.__channelExists(channelName):
+			return self.rooms[channelName].list_users()
+		else:
+			users = []
+			for room in self.rooms:
+				users.append(self.rooms[room].list_users())
+			return users
 	
 	def create(self, channelName):
 		"""Return Ajoute un channel a la liste des rooms  -> bool"""
@@ -68,6 +71,18 @@ class Room():
 		if self.__channelExists(channelName):
 			return self.rooms[channelName]
 		return None
+	
+	def forward(self, channelName, commande):
+		"""Return : Envoie une commande a tous les utilisateurs d'un channel -> bool """
+		
+		if self.__channelExists(channelName):
+			list_users = self.list_users(channelName)
+			if len(list_users) >= 1:
+				for user in list_users:
+					if user.master == False:
+						user.queue_cmd(commande)
+				return True
+		return False
 		
 	def total_users(self):
 		"""Return : le nombre d'utilisateurs connectes -> int """
