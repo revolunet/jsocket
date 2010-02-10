@@ -10,6 +10,8 @@ import os
 
 def create_tcp_client(aim = 'default'):
 	tcpclient = TCPClient('localhost', 9999)
+	#tcpclient.handle()
+	tcpclient.write('<policy-file-request/>')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"auth", "args":"admin"}\n')
 	tcpclient.handle()

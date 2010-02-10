@@ -52,31 +52,31 @@ class Client(threading.Thread):
 		"""Parsing de l'entre json sur le serveur"""
 
 		if 'policy-file-request' in cmd:
-			return self.__cmd_list['policy-file-request'](cmd)
-		try:
-			json_cmd = json.loads(cmd)
-			if json_cmd['cmd'] and json_cmd['cmd'] in self.__cmd_list:
-				try :
-					if json_cmd['args']:
-						self.__cmd_list [json_cmd['cmd']](json_cmd['args'])
-				except KeyError:
-					Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' prends deux arguments", 'ired')
-			else:
-				Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' n'est pas une commande valide", 'yellow')
-		except ValueError:
-			Log().add("[+] Command error : " + cmd + " , n'est pas une chaine json valide", 'ired')
+			self.__cmd_list['policy-file-request']()
+		else:
+			try:
+				json_cmd = json.loads(cmd)
+				if json_cmd['cmd'] and json_cmd['cmd'] in self.__cmd_list:
+					try :
+						if json_cmd['args']:
+							self.__cmd_list [json_cmd['cmd']](json_cmd['args'])
+					except KeyError:
+						Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' prends deux arguments", 'ired')
+				else:
+					Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' n'est pas une commande valide", 'yellow')
+			except ValueError:
+				Log().add("[+] Command error : " + cmd + " , n'est pas une chaine json valide", 'ired')
 
 	# {"cmd" : "connected", "args": "null"}
-	def __cmd_connected(self):
+	def __cmd_connected(self, args = None):
 		"""Le client est connecte, sa cle unique lui est send"""
 		
 		self.__cmd_join("irc");
 		self.__squeue.put([self, self.__unique_key])
 
 	# flash-player send <policy-file-request/>
-	def __cmd_policy(self, args):
-		self.__squeue.put([self, "<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>"])
-		return True
+	def __cmd_policy(self):
+		self.__squeue.put([self, "<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>\0"])
 
 	# {"cmd": "delete", "args": "irc"}
 	def __cmd_remove(self, args):

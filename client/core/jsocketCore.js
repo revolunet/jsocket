@@ -17,12 +17,10 @@ var jsocketCore = {
  
  connect : function(server, port)
  {
-   if (this.initialized == true)
-   {
+   if (this.initialized == true && this.connectedToServer == false)
    	 this.socket.connect(server, port);
-     return (true);
-   }
-   return (false);
+   else
+     setTimeout("jsocketCore.reconnect();", 500);
  },
 
  send : function(msg)
@@ -40,6 +38,7 @@ var jsocketCore = {
      {
        if (typeof this.api != 'object')
      	 return (false);
+       setTimeout("jsocketCore.send('" + msg + "');", 1000);
        //this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
        return (false);
      }
@@ -103,12 +102,7 @@ var jsocketCore = {
  reconnect : function()
  {
    this.connect(this.api.host, this.api.port);
-   if (this.connectedToServer == false)
-   {
-     setTimeout("jsocketCore.reconnect();", 1000);
-     return (false);
-   }
-   else
-     return (true);
+   /*if (this.connectedToServer == false)
+     setTimeout("jsocketCore.reconnect();", 1000);*/
  }
 };
