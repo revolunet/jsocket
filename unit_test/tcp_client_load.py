@@ -9,24 +9,27 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('localhost', 9999)
+	tcpclient = TCPClient('192.168.1.30', 9999)
 	#tcpclient.handle()
-	tcpclient.write('<policy-file-request/>')
-	tcpclient.handle()
-	tcpclient.write('{"cmd":"auth", "args":"admin"}\n')
-	tcpclient.handle()
+	#tcpclient.write('<policy-file-request/>')
+	#tcpclient.handle()
+	#tcpclient.write('{"cmd":"auth", "args":"admin"}\n')
+	#tcpclient.handle()
 	tcpclient.write('{"cmd":"join", "args":"irc"}\n')
 	tcpclient.handle()
-	tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*\']]"}\n')
+	tcpclient.write('{"cmd":"message", "args":[ "Coucou ! Tu veux voir ma bite ?", [ "*" ] ]}\n')
 	tcpclient.handle()
+	#tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*\']]"}\n')
+	#tcpclient.handle()
 	time.sleep(5)
 	tcpclient.disconnect()
 	
 def create_tcp_client_(aim = 'default'):
-	tcpclient = TCPClient('localhost', 9999)
+	tcpclient = TCPClient('192.168.1.30', 9999)
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"join", "args":"irc"}\n')
 	tcpclient.handle()
+	tcpclient.write('{"cmd":"message", "args":[ "Coucou !", [ "master" ] ]}\n')
 	time.sleep(5)
 	tcpclient.disconnect()
  

@@ -187,15 +187,15 @@ class Client(threading.Thread):
 			if len(message[0]) != 0:
 				if len(message[1]) > 0:
 					if len(message[1][0]) == 0:
-						ret = self.__room.message(self.__room_name, ['master'], message[0])
+						ret = self.__room.message(self.__room_name, self.get_name(), ['master'], message[0])
 					elif message[1][0] == '*':
-						ret = self.__room.message(self.__room_name, ['all'], message[0])
+						ret = self.__room.message(self.__room_name, self.get_name(), ['all'], message[0])
 					elif message[1][0] == 'master':
-						ret = self.__room.message(self.__room_name, ['master'], message[0])
+						ret = self.__room.message(self.__room_name, self.get_name(), ['master'], message[0])
 					else:
-						ret = self.__room.message(self.__room_name, message[1], message[0])
+						ret = self.__room.message(self.__room_name, self.get_name(), message[1], message[0])
 				else:
-					ret = self.__room.message(self.__room_name, ['master'], message[0])
+					ret = self.__room.message(self.__room_name, self.get_name(), ['master'], message[0])
 			if ret:
 				self.__squeue.put([self, '{"from": "message", "value": true}'])	
 			else:

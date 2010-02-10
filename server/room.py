@@ -3,6 +3,7 @@
 ##
 
 from channel import Channel
+from log import Log
 
 class Room():
 	"""docstring for Room"""
@@ -79,7 +80,7 @@ class Room():
 				return True
 		return False
 		
-	def message(self, channelName, users, message):
+	def message(self, channelName, sender, users, message):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
 		
 		if self.__channelExists(channelName):
@@ -87,19 +88,19 @@ class Room():
 			if len(users) > 0:
 				list_users = self.list_users(channelName)
 				if users[0] == 'master' and master:
-					master.queue_cmd('{"from": "message", "value": ["' + master.get_name() + '", "' + message + '"]}')
+					master.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')
 					return True
 				elif users[0] == '*':
 					if len(list_users) >= 1:
 						for user in list_users:
-							user.queue_cmd('{"from": "message", "value": ["' + self.channel(channelName).get_master().get_name() + '", "' + commande + '"]}')
+							user.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')
 						return True
 					return False
 				else:
 					if len(list_users) >= 1:
 						for user in list_users:
 							if user.get_name() in users:
-								user.queue_cmd('{"from": "message", "value": ["' + self.channel(channelName).get_master().get_name() + '", "' + commande + '"]}')
+								user.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')
 						return True
 					return False
 		return False

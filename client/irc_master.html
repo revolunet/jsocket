@@ -149,12 +149,19 @@
 					document.getElementById('roomUsers').innerHTML += (tab[i] + "<br />");
 				}
 			};
+			jsocketApi.onMessage = function (code) {
+				if (code == true || code == false) {
+					return (code);
+				}
+				document.getElementById('chatRoom').innerHTML += ('<span style="color:red;">' + code[0] + ': ' + code[1] + "</span><br />");
+			};
 
 			jsocketApi.init('192.168.1.30', 9999);
 
 			function list() {
 				var channel = document.getElementById('channel').value;
 				jsocketApi.list(channel);
+				setTimeout("list();", 500);
 			}
 
 			function join() {
@@ -169,7 +176,6 @@
 				document.getElementById('chatRoom').innerHTML += (jsocketApi.key + ": " + text + "<br />");
 				document.getElementById('chatRoom').scrollTop = document.getElementById('chatRoom').scrollHeight;
 				jsocketApi.forward(text);
-				list();
 			}
 			
 			function create() {
