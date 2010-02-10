@@ -33,7 +33,8 @@ class Client(threading.Thread):
 			'connected' : self.__cmd_connected,
 			'forward' : self.__cmd_forward,
 			'policy-file-request' : self.__cmd_policy,
-			'remove' : self.__cmd_remove
+			'remove' : self.__cmd_remove,
+			'message' : self.__cmd_message
 		}
 	
 	def run(self):
@@ -163,6 +164,31 @@ class Client(threading.Thread):
 	def queue_cmd(self, command):
 		"""Ajoute une commande a la Queue en cours"""
 		self.__squeue.put([self, command])
+		
+	# {"cmd": "message", "args": "['mon message', ['*']]"}
+	def __cmd_message(self, message):
+		"""Envoie un message a une liste d'utilisateurs"""
+		
+		if len(message) == 0:
+			self.__squeue.put([self, '{"from": "message", "value": false}'])
+		else:
+			ret = False
+			if len(message[0]) != 0:
+				if len(message[1]) > 0:
+					if len(message[1][0]) == 0:
+						ret = self.__room.message(self.__room_name, ['master'], message[0])
+					elif message[1][0] == '*':
+						ret = self.__room.message(self.__room_name, ['all'], message[0])
+					elif message[1][0] == 'master':
+						ret = self.__room.message(self.__room_name, ['master'], message[0])
+					else:
+						ret = self.__room.message(self.__room_name, message[1], message[0])
+				else:
+					ret = self.__room.message(self.__room_name, ['master'], message[0])
+			if ret:
+				self.__squeue.put([self, '{"from": "message", "value": true}'])	
+			else:
+				self.__squeue.put([self, '{"from": "message", "value": false}'])	
 				
 	def __disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""

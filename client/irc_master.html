@@ -108,6 +108,16 @@
 			jsocketApi.init('192.168.1.30', 9999);
 			//jsocketApi.auth('admin');
 			//jsocketApi.join('irc');
+			jsocketApi.onConnect = function(code) {
+				if (code == true) {
+					document.getElementById('server_debug').innerHTML += ("Welcome " + jsocketApi.key + "<br />");
+					document.getElementById('auth').disabled = false;
+					
+				} else {
+					document.getElementById('server_debug').innerHTML += "Wrong password<br />";
+				}
+			};
+			
 			jsocketApi.onAuth = function (code) {
 				if (code == true) {
 					document.getElementById('server_debug').innerHTML += ("Welcome " + jsocketApi.key + "<br />");
@@ -136,8 +146,8 @@
 			
 			function forward() {
 				var text = document.getElementById('input_message').value;
-				document.getElementById('server_debug').innerHTML += text;
-				jsocketApi.forward(chatRoom);
+				document.getElementById('chatRoom').innerHTML += text + "<br />";
+				jsocketApi.forward(text);
 			}
 			
 			function create() {
