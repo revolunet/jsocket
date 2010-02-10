@@ -6,6 +6,7 @@ var jsocketApi = {
 	core : jsocketCore,
 	host : '',
 	port : 0,
+	debug : false,
 
 	/**
 	* Connect to the server via jsocketCore
@@ -18,6 +19,21 @@ var jsocketApi = {
 		this.core.api = this;
 		this.core.connect(this.host, this.port);
 		this.core.send('{"cmd": "connected", "args": "null"}');
+	},
+
+	/**
+	* Enable flash console based on debug flag
+	* @enable : true or false
+	**/
+	debug : function(enable) {
+		if (enable == true) {
+			this.debug = true;
+			document.getElementById('flashcontent').style.visibility = 'visible';
+		}
+		else {
+			this.debug = false;
+			document.getElementById('flashcontent').style.visibility = 'hidden';
+		}
 	},
 
 	/**
