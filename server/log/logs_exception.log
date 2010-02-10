@@ -1,0 +1,12 @@
+Exception in thread Thread-2:
+Traceback (most recent call last):
+  File "C:\Python26\lib\threading.py", line 525, in __bootstrap_inner
+    self.run()
+  File "C:\Users\bydooweedoo\Documents\Revolunet\jusdechaussette\server\worker.py", line 49, in run
+    method()
+  File "C:\Users\bydooweedoo\Documents\Revolunet\jusdechaussette\server\worker.py", line 29, in type_send
+    item[0].client_socket.send(item[1])
+  File "C:\Python26\lib\socket.py", line 165, in _dummy
+    raise error(EBADF, 'Bad file descriptor')
+error: [Errno 9] Bad file descriptor
+

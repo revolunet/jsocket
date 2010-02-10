@@ -29,14 +29,14 @@ class Client(threading.Thread):
 			'join' : self.__cmd_join,
 			'part' : self.__cmd_part,
 			'auth' : self.__cmd_auth,
+			'connected' : self.__cmd_connected,
 			'policy-file-request' : self.__cmd_policy,
 			'remove' : self.__cmd_remove
 		}
 	
 	def run(self):
 		"""Boucle de lecture du client"""
-		
-		self.__connected()
+
 		while 1:
 			data = self.client_socket.recv(1024).strip()
 			if len(data) == 0:
@@ -45,11 +45,6 @@ class Client(threading.Thread):
 			else:
 				self.__rqueue.put([self, data])
 				Log().add("[+] Client " + str(self.client_address) + " send : " + data)
-	
-	def __connected(self):
-		"""Le client est connecte, sa cle unique lui est send"""
-		
-		self.__squeue.put([self, self.__unique_key])
 		
 	def parse(self, cmd):
 		"""Parsing de l'entre json sur le serveur"""
@@ -69,10 +64,15 @@ class Client(threading.Thread):
 		except ValueError:
 			Log().add("[+] Command error : " + cmd + " , n'est pas une chaine json valide", 'ired')
 
+	# {"cmd" : "connected", "args": "null"}
+	def __cmd_connected(self):
+		"""Le client est connecte, sa cle unique lui est send"""
+		
+		self.__squeue.put([self, self.__unique_key])
+
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self, args):
-		self.__squeue.put([self, "<cross-domain-policy><allow-access-from domain='*'" +
-			" to-ports='*' secure='false' /></cross-domain-policy>\0"])
+		self.__squeue.put([self, "<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>"])
 		return True
 
 	# {"cmd": "delete", "args": "irc"}

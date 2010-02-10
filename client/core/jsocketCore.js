@@ -2,34 +2,45 @@
  * Javascript event's interface for flash swf socket bridge
  */
 var jsocketCore = {
- api = null;
- host = '';
- port = 0;
+ api : null,
+ initialized : false,
+ connectedToServer : false,
 
  loaded : function()
  {
+   this.initialized = true;
    this.connectedToServer = false;
    this.socket = document.getElementById("socketBridge");
+   this.output = document.getElementById("jsocketBridgeOutput");
    return (true);
  },
  
  connect : function(server, port)
  {
-   this.socket.connect(server, port);
-   return (true);
+   if (this.initialized == true)
+   {
+   	 this.socket.connect(server, port);
+     return (true);
+   }
+   return (false);
  },
- 
+
+ send : function(msg)
+ {
+   return (this.write(msg));
+ },
+
  write : function(msg)
  {
    if (this.connectedToServer == false)
-     this.connect(this.host, this.port);
+     this.reconnect();
    if (this.connectedToServer)
      this.socket.write(msg);
    else
      {
        if (typeof this.api != 'object')
      	 return (false);
-       this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
+       //this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
        return (false);
      }
    return (true);
@@ -40,7 +51,7 @@ var jsocketCore = {
    if (typeof this.api != 'object')
      return (false);
    this.connectedToServer = true;
-   this.api.onConnect('{"from": "connect", "value": "true"}');
+   //this.api.onConnect('{"from": "connect", "value": "true"}');
    return (true);
  },
  
@@ -54,7 +65,7 @@ var jsocketCore = {
  {
    if (typeof this.api != 'object')
      return (false);
-   this.api.onDisconnect('{"form": "disconnect", "value": "true"}');
+   //this.api.onDisconnect('{"from": "disconnect", "value": "true"}');
    this.connectedToServer = false;
    this.reconnect();
    return (true);
@@ -64,7 +75,7 @@ var jsocketCore = {
  {
    if (typeof this.api != 'object')
      return (false);
-   this.api.onIOError('{"form": "ioError", "value": "' + msg + '"}');
+   this.api.onError('{"from": "ioError", "value": "' + msg + '"}');
    if (this.connectedToServer == false)
      this.reconnect();
    return (true);
@@ -74,7 +85,7 @@ var jsocketCore = {
  {
    if (typeof this.api != 'object')
      return (false);
-   this.api.onSecurityError('{"form": "securityError", "value": "' + msg + '"}');
+   this.api.onError('{"from": "securityError", "value": "' + msg + '"}');
    if (this.connectedToServer == false)
      this.reconnect();
    return (true);
@@ -84,16 +95,17 @@ var jsocketCore = {
  {
    if (typeof this.api != 'object')
      return (false);
+   alert(msg);
    this.api.onReceive(msg);
    return (true);
  },
  
  reconnect : function()
  {
-   this.connect(this.host, this.port);
+   this.connect(this.api.host, this.api.port);
    if (this.connectedToServer == false)
    {
-     setTimeout("this.reconnect();", 1000);
+     setTimeout("jsocketCore.reconnect();", 1000);
      return (false);
    }
    else

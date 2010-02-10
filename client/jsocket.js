@@ -13,9 +13,9 @@ function create(type, id)
   document.write('<div id="' + id + '">&nbsp;</div>');
 }
 
-create('div', 'jsocketFlashContent');
+create('div', 'flashcontent');
 create('div', 'jsocketBridgeOutput');
-include_js('lib/json-pack.js');
-include_js('core/jsocketCore.js');
-include_js('core/jsocketFlash.js');
-include_js('core/jsocketAPI.js');
+includeScript('lib/json-pack.js');
+includeScript('core/jsocketCore.js');
+includeScript('core/jsocketApi.js');
+includeScript('core/jsocketFlash.js');

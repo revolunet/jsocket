@@ -3,8 +3,22 @@
 */
 var jsocketApi = {
 	// jsocketCore Object
-	core : "",
-	
+	core : jsocketCore,
+	host : '',
+	port : 0,
+
+	/**
+	* Connect to the server via jsocketCore
+	* @host : hostname or ip destination
+	* @port : port destination
+	**/
+	init : function(host, port) {
+		this.host = host;
+		this.port = port;
+		this.core.api = this;
+		this.core.connect(this.host, this.port);
+	},
+
 	/**
 	* Callback utilise pour transformer du texte en un objet Json
 	* @text : le texte a transformer -> string

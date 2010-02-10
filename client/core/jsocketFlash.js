@@ -1,10 +1,5 @@
 /**
  * Includes swf for flash socket bridge
  */
-var jsocketFlashContent = '<object width="400" height="300">' +
-'<param name="movie" value="ext/jsocketBridge.swf"></param>' +
-'<param name="flashvars" value="scope=jsocketCore"></param>' +
-'<param name="allowScriptAccess" value="always"></param>' +
-'<embed src="ext/jsocketBridge.swf" type="application/x-shockwave-flash" allowScriptAccess="always" name="socketBridge" flashvars="scope=jsocketCore" id="socketBridge"></embed>' +
-'</object>';
-document.getElementById('jsocketFlashContent').innerHTML = jsocketFlashContent;
+var jsocketFlashHtml = '<embed height="300" width="400" flashvars="scope=jsocketCore" allowscriptaccess="always" quality="low" bgcolor="#ffffff" name="socketBridge" id="socketBridge" style="" src="ext/socket_bridge.swf" type="application/x-shockwave-flash">';
+document.getElementById('flashcontent').innerHTML = jsocketFlashHtml;
