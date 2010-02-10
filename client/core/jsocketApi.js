@@ -93,7 +93,7 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "auth", "args": "passphrase"}
 	**/
 	auth : function (password) {
-		this.core.send('{"cmd": "auth", "args": "'+password+'"}');
+		this.core.send('{"cmd": "auth", "args": "'+this.core.addslashes(password)+'"}');
 	},
 	
 	/**
@@ -110,7 +110,7 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "join", "args": "channelName"}
 	**/
 	join : function(channel) {
-		this.core.send('{"cmd": "join", "args": "'+channel+'"}');
+		this.core.send('{"cmd": "join", "args": "'+this.core.addslashes(channel)+'"}');
 	},
 	
 	/**
@@ -127,7 +127,7 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "part", "args": "channelName"}
 	**/
 	part : function(channel) {
-		this.core.send('{"cmd": "part", "args": "'+channel+'"}');
+		this.core.send('{"cmd": "part", "args": "'+this.core.addslashes(channel)+'"}');
 	},
 	
 	/**
@@ -144,7 +144,7 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "create", "args": "channelName"}
 	**/
 	create : function(channel) {
-		this.core.send('{"cmd": "create", "args": "'+channel+'"}');
+		this.core.send('{"cmd": "create", "args": "'+this.core.addslashes(channel)+'"}');
 	},
 	
 	/**
@@ -161,7 +161,7 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "remove", "args": "channelName"}
 	**/
 	remove : function(channel) {
-		this.core.send('{"cmd": "remove", "args": "'+channel+'"}');
+		this.core.send('{"cmd": "remove", "args": "'+this.core.addslashes(channel)+'"}');
 	},
 	
 	/**
@@ -170,7 +170,7 @@ var jsocketApi = {
 	* @command : la commande a forwarder
 	**/
 	forward : function(command) {
-		this.core.send('{"cmd": "forward", "args": "'+command+'"}');
+		this.core.send('{"cmd": "forward", "args": "'+this.core.addslashes(command)+'"}');
 	},
 	
 	/**
@@ -181,7 +181,33 @@ var jsocketApi = {
 	onForward : function(info) {
 		//implement onForward code here.
 	},
-	
+
+	/**
+	* Envoie un message a un ou plusieurs clients
+	* @tab : [0] = message a envoyer
+	*        [1] = [ '*' ] pour tous les clients du channel
+	*              [ '' ] ou [ 'master' ] pour le master du channel
+	*              [ 'username1', 'username2', ... ] pour une liste de clients
+	**/
+	message : function(tab) {
+		str = '[ "' + this.core.addslashes(tab[0]) +
+			'", [ "' + (tab[1][0] ? this.core.addslashes(tab[1][0]) : '') + '"';
+		for (i = 1; tab[1][i]; ++i) {
+			str += (', "' + this.core.addslashes(tab[1][i]) + '"');
+		}
+		str += ' ]';
+		this.core.send('{"cmd": "message", "args": ' + str + '}');
+	},
+
+	/**
+	* Callback reception d'un message
+	* @command : [0] = l'emmeteur du message
+	*            [1] = le message
+	**/
+	onMessage : function(command) {
+		//implement onMessage code here.
+	},
+
 	/**
 	* Callback sur l'erreur d'execution d'une des methodes de l'api
 	* @error : le message d'erreur -> string

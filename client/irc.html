@@ -25,6 +25,10 @@
 				height: 500px;
 				background-color: #57595B;
 				border: 1px solid black;
+				overflow:scroll;
+				overflow-x:hidden;
+				font-weight:bold;
+				color:#eee;
 			}
 			
 			#roomUsers {
@@ -48,7 +52,7 @@
 			}
 			
 			#input_message {
-				width: 95%;
+				width: 90%;
 			}
 			
 			#btn_send {
@@ -108,6 +112,7 @@
 			
 			jsocketApi.onForward = function (tab) {
 				document.getElementById('chatRoom').innerHTML += (tab[0] + ": " + tab[1] + "<br />");
+				document.getElementById('chatRoom').scrollTop = document.getElementById('chatRoom').scrollHeight;
 			};
 
 			jsocketApi.onConnected = function (key) {
