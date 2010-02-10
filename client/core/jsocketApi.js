@@ -206,12 +206,16 @@ var jsocketApi = {
 	*              [ 'username1', 'username2', ... ] pour une liste de clients
 	**/
 	message : function(tab) {
-		var str = '[ "' + this.core.addslashes(tab[0]) +
-			'", [ "' + (tab[1][0] ? this.core.addslashes(tab[1][0]) : '') + '"';
-		for (var i = 1; tab[1][i]; ++i) {
-			str += (', "' + this.core.addslashes(tab[1][i]) + '"');
+		if (typeof(tab) == 'string') {
+			str = tab;
+		} else {
+			var str = '[ "' + this.core.addslashes(tab[0]) +
+				'", [ "' + (tab[1][0] ? this.core.addslashes(tab[1][0]) : '') + '"';
+			for (var i = 1; tab[1][i]; ++i) {
+				str += (', "' + this.core.addslashes(tab[1][i]) + '"');
+			}
+			str += ' ]';
 		}
-		str += ' ]';
 		this.core.send('{"cmd": "message", "args": ' + str + '}');
 	},
 

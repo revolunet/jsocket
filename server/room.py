@@ -90,7 +90,7 @@ class Room():
 				if users[0] == 'master' and master:
 					master.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')
 					return True
-				elif users[0] == '*':
+				elif users[0] == 'all':
 					if len(list_users) >= 1:
 						for user in list_users:
 							user.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')

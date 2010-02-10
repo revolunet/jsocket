@@ -100,9 +100,10 @@
 			</div>
 			
 			<div id="container_input">
-				<input type="text" name="message" disabled id="input_message" />
+				<input type="text" name="message" disabled id="input_message" value='["Votre message", [ "*" ] ]' />
 				
 				<input type="button" name="send" id="btn_send" onclick="forward();" disabled value="Forward" />
+				<input type="button" name="message" id="btn_message" onclick="message();" disabled value="Message" />
 			</div>
 		</div>
 		<div id="server_debug">
@@ -139,6 +140,7 @@
 					document.getElementById('server_debug').innerHTML += "Vous avez rejoind le chan<br />";
 					document.getElementById('input_message').disabled = false;
 					document.getElementById('btn_send').disabled = false;
+					document.getElementById('btn_message').disabled = false;
 				} else {
 					document.getElementById('server_debug').innerHTML += "Vous n'avez pas rejoind le chan<br />";
 				}
@@ -157,6 +159,14 @@
 			};
 
 			jsocketApi.init('192.168.1.30', 9999);
+
+			function message() {
+				var text = document.getElementById('input_message').value;
+				document.getElementById('server_debug').innerHTML += text;
+				document.getElementById('chatRoom').innerHTML += (jsocketApi.key + ": " + text + "<br />");
+				document.getElementById('chatRoom').scrollTop = document.getElementById('chatRoom').scrollHeight;
+				jsocketApi.message(text);
+			}
 
 			function list() {
 				var channel = document.getElementById('channel').value;
