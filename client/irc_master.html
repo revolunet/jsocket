@@ -113,9 +113,6 @@
 		<script type="text/javascript" src="jsocket.js"></script>
 		<script type="text/javascript">
 		<!--
-			jsocketApi.init('192.168.1.30', 9999);
-			//jsocketApi.auth('admin');
-			//jsocketApi.join('irc');
 			jsocketApi.onConnect = function(code) {
 				if (code == true) {
 					document.getElementById('server_debug').innerHTML += ("Welcome " + jsocketApi.key + "<br />");
@@ -153,10 +150,11 @@
 				}
 			};
 
+			jsocketApi.init('192.168.1.30', 9999);
+
 			function list() {
 				var channel = document.getElementById('channel').value;
 				jsocketApi.list(channel);
-				setTimeout('list();', 500);
 			}
 
 			function join() {
@@ -167,7 +165,6 @@
 			
 			function forward() {
 				var text = document.getElementById('input_message').value;
-				document.getElementById('chatRoom').innerHTML += text + "<br />";
 				document.getElementById('server_debug').innerHTML += text;
 				document.getElementById('chatRoom').innerHTML += (jsocketApi.key + ": " + text + "<br />");
 				document.getElementById('chatRoom').scrollTop = document.getElementById('chatRoom').scrollHeight;

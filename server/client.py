@@ -5,6 +5,7 @@
 import threading
 import json
 import random
+from json import JSONEncoder
 from log import Log
 from settings import *
 
@@ -34,9 +35,10 @@ class Client(threading.Thread):
 			'forward' : self.__cmd_forward,
 			'policy-file-request' : self.__cmd_policy,
 			'remove' : self.__cmd_remove,
-			'message' : self.__cmd_message
+			'message' : self.__cmd_message,
+			'list' : self.__cmd_list
 		}
-	
+		
 	def run(self):
 		"""Boucle de lecture du client"""
 
@@ -76,6 +78,15 @@ class Client(threading.Thread):
 		"""Le client est connecte, sa cle unique lui est send"""
 		
 		self.__squeue.put([self, '{"from": "connected", "value": "' + str(self.__unique_key) + '"}'])
+
+	def __cmd_list(self, args):
+		""" Retourne la liste d'utilisateurs d'un channel """
+		
+		users = self.__room.list_users(args)
+		str = [ ]
+		for user in users:
+			str.append(user.get_name())
+		self.__squeue.put([self, '{"from": "list", "value": ' + JSONEncoder().encode(str) + '}'])
 
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):

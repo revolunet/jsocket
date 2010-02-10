@@ -14,11 +14,6 @@ class Room():
 	def init_rooms(self):
 		self.rooms['irc'] = Channel('irc')
 		self.rooms['tcp'] = Channel('tcp')
-		
-	def list_users(self, channelName):
-		"""Return : la liste de tous les utilisateurs de la room -> list(Client) """
-		
-		return self.rooms[channelName].list_users()
 	
 	def list_users(self, channelName = None):
 		"""Return : la liste de tous les utilisateurs du serveur -> list(Client) """
