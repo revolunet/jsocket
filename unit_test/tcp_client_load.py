@@ -17,6 +17,8 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"join", "args":"irc"}\n')
 	tcpclient.handle()
+	tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*\']]"}\n')
+	tcpclient.handle()
 	time.sleep(5)
 	tcpclient.disconnect()
 	
