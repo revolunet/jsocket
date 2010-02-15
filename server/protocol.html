@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Jsocket API :: Protocol</title>
+		<style>
+			body, html {
+				font-family : verdana;
+			}
+			h1 {
+				font-size:200%;
+				margin-top:0;
+				background-color:#F2F2F2;
+				border-bottom:1px solid #CCCCCC;
+				color:#20435C;
+				font-family:'Trebuchet MS',sans-serif;
+				font-weight:normal;
+				padding:3px 0 3px 10px;
+			}
+			
+			.server-side {
+				background-color:#EEFFCC;
+				border-color:#AACC99 -moz-use-text-color;
+				border-style:solid none;
+				border-width:1px medium;
+				color:#007020;
+				line-height:120%;
+				padding:5px;
+				font-weight: bold;
+			}
+			
+			.server-side-false {
+				background-color:#FF7373;
+				border-color:#AACC99 -moz-use-text-color;
+				border-style:solid none;
+				border-width:1px medium;
+				color:#007020;
+				line-height:120%;
+				padding:5px;
+				font-weight: bold;
+			}
+			
+			p {
+				margin-top: 30px;
+				font-size : 12px;
+				text-decoration: underline;
+				color:#0E84B5;
+				font-weight:bold;
+				background-color:#EEEEEE;
+				border:1px solid #CCCCCC;
+			}
+		</style>
+	</head>
+	<body id="protocol" onload="">
+		<H1>Protocol::</H1>
+		
+		<div class="server-side">
+			<a href="#connected">Connected</a> | <a href="#auth">Auth</a> | <a href="#create">Create</a> | <a href="#remove">Remove</a> | <a href="#chanAuth">ChanAuth</a> | <a href="#join">Join</a> |  <a href="#part">Part</a> | <a href="#nick">Nick</a> | <a href="#message">Message</a> | <a href="#forward">Forward</a>
+		</div>
+		
+		<p id="connected">Connection au serveur</p>
+		<div class="server-side">
+			{"cmd" : "connected", "args": "null"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "connected", "value": "HASH_UNIQUE_DE_CONNECTION"}
+		</div>
+		
+		<p id="auth">Auth niveau server</p>
+		<div class="server-side">
+			{"cmd":"auth", "args":"admin", "app": "server"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "auth", "value": true}
+		</div>
+		<div class="server-side-false">
+			{"from": "auth", "value": false}
+		</div>
+		
+		<p id="create">Creer un salon ( Commande Master )</p>
+		<div class="server-side">
+			{"cmd": "create", "args": ["appName", "(optionnal|appPassword)"], "app" : "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "create", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "create", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="remove">Effacer un salon ( Commande Master )</p>
+		<div class="server-side">
+			{"cmd": "remove", "args": "appName", "app" : "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "remove", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "remove", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="chanAuth">Auth niveau channel</p>
+		<div class="server-side">
+			{"cmd": "chanAuth", "args": "passphrase", "app" : "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "chanAuth", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "chanAuth", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="join">Rejoindre une application</p>
+		<div class="server-side">
+			{"cmd": "join", "args": ["appName", "(optionnal|appPassword)"], "app" : "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "join", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "join", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="part">Quitter une application</p>
+		<div class="server-side">
+			{"cmd": "part", "args": "appName", "app" : "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "part", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "part", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="nick">Changer de nickname</p>
+		<div class="server-side">
+			{"cmd": "nick", "args": "nickName", "app" : "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "nick", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "nick", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="message">Envoyer un message a un ou plusieurs utilisateur(s)</p>
+		<div class="server-side">
+			{"cmd": "message", "args": "['mon message', ['@KEY']], "app" : "appName"}
+			<br />
+			@KEY : master | * | all | username
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "message", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "message", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="forward">Envoyer un message a tous les utilisateurs du channel</p>
+		<div class="server-side">
+			{"cmd": "forward", "args": "message", "app": "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "forward", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "forward", "value": false, "app" : "appName"}
+		</div>
+		
+	</body>
+</html>

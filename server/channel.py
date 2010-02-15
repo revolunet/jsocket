@@ -9,6 +9,9 @@ class Channel():
 	"""docstring for Channel"""
 	def __init__(self, name):
 		self.name = name
+		self.master = None
+		self.masterPwd = "admin"
+		self.channelPwd = None
 		self.client_list = []
 		
 	def add(self, client):
@@ -25,6 +28,15 @@ class Channel():
 			Log().add("[+] Room : client " + str(client.client_address) + " left Room " + self.name)
 			self.client_list.remove(client)
 			Log().add("[+] Room : "  + self.name + " " + str(len(self.client_list)) + " users")
+			
+	def auth(self, masterPwd, client):
+		if masterPwd == self.masterPwd:
+			self.master = client
+			return True
+		return False
+		
+	def isProtected(self):
+		return self.channelPwd != None
 		
 	def list_users(self):
 		"""Return : La liste des utilisateurs de la room : -> list(Client)"""
@@ -34,7 +46,4 @@ class Channel():
 	def get_master(self):
 		""" Retourne le user master du channel """
 		
-		for client in self.client_list:
-			if client.master == True:
-				return client
-		return None
+		return self.master
