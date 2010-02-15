@@ -115,6 +115,8 @@ class Room():
 		return False
 	
 	def chanAuth(self, appName, adminPwd, client):
+		"""Return : Auth un utilisateur sur un channel -> bool """
+		
 		if self.__channelExists(appName):
 			return self.channel(appName).auth(adminPwd, client)
 		return False

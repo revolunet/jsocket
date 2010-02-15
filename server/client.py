@@ -84,6 +84,7 @@ class Client(threading.Thread):
 		
 		self.__squeue.put([self, '{"from": "connected", "value": "' + str(self.__unique_key) + '"}'])
 
+	# {"cmd" : "auth", "args": "masterpassword", "app" : ""}
 	def __cmd_auth(self, args, app = None):
 		
 		if args == self.__master_password:
@@ -93,6 +94,7 @@ class Client(threading.Thread):
 		else:
 			self.__squeue.put([self, '{"from": "auth", "value": false}'])
 
+	# {"cmd": "list", "args": "appName", "app": "appName"}
 	def __cmd_list(self, args, app = None):
 		""" Retourne la liste d'utilisateurs d'un channel """
 		
@@ -187,6 +189,7 @@ class Client(threading.Thread):
 			
 	def queue_cmd(self, command):
 		"""Ajoute une commande a la Queue en cours"""
+		
 		self.__squeue.put([self, command])
 		
 	# {"cmd": "message", "args": "['mon message', ['*']]"}
@@ -213,7 +216,8 @@ class Client(threading.Thread):
 				self.__squeue.put([self, '{"from": "message", "value": true, "app" : "'+app+'"}'])	
 			else:
 				self.__squeue.put([self, '{"from": "message", "value": false, "app" : "'+app+'"}'])
-				
+	
+	# {"cmd": "nick", "args": "nickName", "app": "appName"}
 	def __cmd_nick(self, args, app = None):
 		"""Permet au client de change de pseudo"""
 		
