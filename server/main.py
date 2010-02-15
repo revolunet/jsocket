@@ -9,6 +9,7 @@ import threading
 from server import Server
 
 def main():
+	"""Lance un serveur TCP"""
 	server = Server()
 	try:
 		server.start()

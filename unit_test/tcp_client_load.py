@@ -9,15 +9,16 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('192.168.1.30', 9999)
+	tcpclient = TCPClient('localhost', 9999)
 	#tcpclient.handle()
 	#tcpclient.write('<policy-file-request/>')
-	#tcpclient.handle()
-	#tcpclient.write('{"cmd":"auth", "args":"admin"}\n')
-	#tcpclient.handle()
-	tcpclient.write('{"cmd":"join", "args":"irc"}\n')
+	tcpclient.write('{"cmd":"auth", "args":"admin", "app": "server"}\n')
 	tcpclient.handle()
-	tcpclient.write('{"cmd":"message", "args":[ "Coucou ! Tu veux voir ma bite ?", [ "*" ] ]}\n')
+	tcpclient.write('{"cmd":"chanAuth", "args":"admin", "app": "irc"}\n')
+	tcpclient.handle()
+	tcpclient.write('{"cmd":"create", "args": ["toto", "hey"], "app": "toto"}\n')
+	tcpclient.handle()
+	tcpclient.write('{"cmd":"join", "args":["toto", "hey"], "app": "toto"}\n')
 	tcpclient.handle()
 	#tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*\']]"}\n')
 	#tcpclient.handle()
@@ -27,19 +28,19 @@ def create_tcp_client(aim = 'default'):
 def create_tcp_client_(aim = 'default'):
 	tcpclient = TCPClient('192.168.1.30', 9999)
 	#tcpclient.handle()
-	tcpclient.write('{"cmd":"join", "args":"irc"}\n')
+	tcpclient.write('{"cmd":"join", "args":"irc", "app": "irc"}\n')
 	tcpclient.handle()
-	tcpclient.write('{"cmd":"message", "args":[ "Coucou !", [ "master" ] ]}\n')
+	tcpclient.write('{"cmd":"message", "args":[ "Coucou !", [ "master" ] ], "app": "irc"}\n')
 	tcpclient.handle()
 	time.sleep(5)
 	tcpclient.disconnect()
  
 def main():
-	client_thread = threading.Thread(target=create_tcp_client_, args=())
+	client_thread = threading.Thread(target=create_tcp_client, args=())
 	client_thread.start()
-	for i in range(0,100):
-		client_thread = threading.Thread(target=create_tcp_client, args=())
-		client_thread.start()
+	#for i in range(0,100):
+	#	client_thread = threading.Thread(target=create_tcp_client, args=())
+	#	client_thread.start()
 	print '[i] Press ^C to exit'
 	while True:
 		try:
