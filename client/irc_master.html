@@ -158,7 +158,10 @@
 				document.getElementById('chatRoom').innerHTML += ('<span style="color:red;">' + code[0] + ': ' + code[1] + "</span><br />");
 			};
 
-			jsocketApi.init('192.168.1.34', 9999);
+			
+
+			jsocketApi.init('localhost', 9999);
+			jsocketApi.debug(true);
 
 			function message() {
 				var text = document.getElementById('input_message').value;

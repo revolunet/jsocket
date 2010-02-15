@@ -19,7 +19,7 @@ var jsocketApi = {
 		this.port = port;
 		this.core.api = this;
 		this.core.connect(this.host, this.port);
-		this.core.send('{"cmd": "connected", "args": "null"}');
+		this.core.send('{"cmd": "connected", "args": "null", "app": ""}');
 	},
 
 	/**

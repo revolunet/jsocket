@@ -69,6 +69,8 @@ class Client(threading.Thread):
 				json_cmd = json.loads(cmd)
 				if json_cmd['cmd'] and json_cmd['cmd'] in self.__cmd_list:
 					try :
+						if json_cmd.get('app', None) == None:
+							json_cmd['app'] = "None"
 						if json_cmd['args'] and json_cmd['app']:
 							self.__cmd_list [json_cmd['cmd']](json_cmd['args'], json_cmd['app'])
 					except KeyError:
