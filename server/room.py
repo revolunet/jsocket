@@ -5,6 +5,9 @@
 from channel import Channel
 from log import Log
 
+def addslashes(str):
+	return str.replace('"', '$$')
+
 class Room():
 	"""docstring for Room"""
 	def __init__(self):
@@ -84,7 +87,7 @@ class Room():
 			if len(list_users) >= 1:
 				for user in list_users:
 					if user.master == False:
-						user.queue_cmd('{"from": "forward", "value": ["' + self.channel(appName).get_master().get_name() + '", "' + commande + '"], "app" : "' + appName + '"}')
+						user.queue_cmd('{"from": "forward", "value": ["' + self.channel(appName).get_master().get_name() + '", "' + addslashes(commande) + '"], "app" : "' + appName + '"}')
 				return True
 		return False
 		

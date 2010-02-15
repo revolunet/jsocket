@@ -49,10 +49,9 @@ var jsocketCore = {
 	**/
 	addslashes : function(str)
 	{
-		str = str.replace(/\\/g, '\\\\');
-		str = str.replace(/\'/g, '\\\'');
-		str = str.replace(/\"/g, '\\"');
-		str = str.replace(/\0/g, '\\0');
+		if (typeof(str) == 'string') {
+			str = str.replace(/\"/g, '\\"');
+		}
 		return (str);
 	},
  
@@ -62,10 +61,10 @@ var jsocketCore = {
 	**/
 	stripslashes : function (str)
 	{
-		str = str.replace(/\\'/g, '\'');
-		str = str.replace(/\\"/g, '"');
-		str = str.replace(/\\0/g, '\0');
-		str = str.replace(/\\\\/g, '\\');
+		if (typeof(str) == 'string') {
+			str = str.replace(/\\"/g, '"');
+			str = str.replace(/\$\$/g, '"');
+		}
 		return (str);
 	},
 
@@ -80,13 +79,13 @@ var jsocketCore = {
 			this.reconnect();
 		}
 		if (this.connectedToServer) {
-			this.socket.write(msg);
+			this.socket.write(msg + "\n");
 		}
 		else {
 			if (typeof this.api != 'object') {
 				return (false);
 			}
-			setTimeout("jsocketCore.send('" + msg + "');", 500);
+			setTimeout("jsocketCore.send('" + this.addslashes(msg) + "');", 500);
 			//this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
 			return (false);
 		}

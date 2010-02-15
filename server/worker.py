@@ -44,6 +44,7 @@ class Worker(threading.Thread):
 		try:
 			method = getattr(self, 'type_' + self.__type, None)
 		except AttributeError:
+			from log import Log
 			Log().add("[!] Method %s of worker does not exists", 'ired')
 		if callable(method):
 			method()

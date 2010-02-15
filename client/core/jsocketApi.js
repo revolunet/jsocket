@@ -46,7 +46,7 @@ var jsocketApi = {
 		if (j.from != null && j.value != null) {
 			func_name = j.from.substring(0,1).toUpperCase() + j.from.substring(1, j.from.length)
 			try {
-				eval('jsocketApi.on'+func_name+"(j.value)");
+				eval('jsocketApi.on'+func_name+"(jsocketApi.core.stripslashes(j.value))");
 			} catch(e) {
 				jsocketApi.onError(e);
 			}
