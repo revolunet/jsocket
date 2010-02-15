@@ -39,7 +39,7 @@ var jsocketApi = {
 	* @args : arguments a passer au callback
 	**/
 	appCallback : function(appName, callName, args) {
-		if (typeof(eval('jsocketApi.app["' + appName + '"].' + callName + '(args);')) != 'undefined') {
+		if (typeof(eval('jsocketApi.app["' + appName + '"].' + callName)) != 'undefined') {
 			eval('jsocketApi.app["' + appName + '"].' + callName + '(args);');
 			return (true);
 		}
@@ -81,9 +81,9 @@ var jsocketApi = {
 		var j = json_parse(text);
 		if (j.from != null && j.value != null) {
 			func_name = j.from.substring(0,1).toUpperCase() + j.from.substring(1, j.from.length);
-			if (j.app != null && this.app[j.app] != null) {
+			if (j.app != null) {
 				try {
-					this.appCallback('on' + func_name, j.value);
+					this.appCallback(j.app, 'on' + func_name, j.value);
 				} catch(e) { }
 			}
 			else {
@@ -142,6 +142,23 @@ var jsocketApi = {
 	},
 	
 	/**
+	* Authentifie un utilisateur (comme master) sur un channel
+	* @appName : le nom de l'application/channel -> string
+	* @password : le mot de passe du channel
+	**/
+	chanAuth : function (appName, password) {
+		this.core.send('{"cmd": "chanAuth", "args": "'+password+'", "app": "'+appName+'"}');
+	},
+	
+	/**
+	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction chanAuth
+	* @code : true ou false
+	**/
+	onChanAuth : function (code) {
+		//implement onChanAuth code here.
+	},
+	
+	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction join
 	* @code : le retour de l'appel a la methode join -> bool
 	**/
@@ -156,7 +173,7 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "join", "args": "channelName"}
 	**/
 	join : function(appName, channel) {
-		this.core.send('{"cmd": "join", "args": "'+this.core.addslashes(channel)+'", "app": "'+appName+'"}');
+		this.core.send('{"cmd": "join", "args": [ "'+this.core.addslashes(channel)+'" ], "app": "'+appName+'"}');
 	},
 	
 	/**
