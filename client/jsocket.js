@@ -10,7 +10,10 @@ function includeScript(filename)
 
 function create(type, id)
 {
-  document.write('<div id="' + id + '">&nbsp;</div>');
+  var docType = document.createElement(type);
+  docType.id = id;
+  docType.innerHTML = '&nbsp;';
+  document.body.appendChild(docType);
 }
 
 function getURLBase(url)
@@ -23,7 +26,6 @@ function getJsocketDomain()
 	var scripts = document.getElementsByTagName("script");
 	for (var i = 0; scripts[i]; ++i) {
 		if (scripts[i].src.match(/jsocket.js/i)) {
-			alert(scripts[i].src);
 			return getURLBase(scripts[i].src);
 		}
 	}

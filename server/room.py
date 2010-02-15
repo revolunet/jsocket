@@ -5,6 +5,9 @@
 from channel import Channel
 from log import Log
 
+def addslashes(str):
+	return str.replace('"', '$$')
+
 class Room():
 	"""docstring for Room"""
 	def __init__(self):
@@ -76,7 +79,7 @@ class Room():
 			if len(list_users) >= 1:
 				for user in list_users:
 					if user.master == False:
-						user.queue_cmd('{"from": "forward", "value": ["' + self.channel(channelName).get_master().get_name() + '", "' + commande + '"]}')
+						user.queue_cmd('{"from": "forward", "value": ["' + self.channel(channelName).get_master().get_name() + '", "' + addslashes(commande) + '"]}')
 				return True
 		return False
 		
@@ -88,19 +91,19 @@ class Room():
 			if len(users) > 0:
 				list_users = self.list_users(channelName)
 				if users[0] == 'master' and master:
-					master.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')
+					master.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + addslashes(message) + '"]}')
 					return True
 				elif users[0] == 'all':
 					if len(list_users) >= 1:
 						for user in list_users:
-							user.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')
+							user.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + addslashes(message) + '"]}')
 						return True
 					return False
 				else:
 					if len(list_users) >= 1:
 						for user in list_users:
 							if user.get_name() in users:
-								user.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + message + '"]}')
+								user.queue_cmd('{"from": "message", "value": ["' + sender + '", "' + addslashes(message) + '"]}')
 						return True
 					return False
 		return False
