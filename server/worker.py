@@ -34,7 +34,7 @@ class Worker(threading.Thread):
 		from client import Client
 		while True:
 			item = self.__queue.get()
-			commands = item[1].split('\n')
+			commands = item[1].split("\n")
 			for cmd in commands:
 				item[0].protocol.parse(cmd)
 
