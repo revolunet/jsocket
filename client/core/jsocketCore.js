@@ -53,6 +53,11 @@ var jsocketCore = {
 			str = encodeURIComponent(str);
 			str = str.replace(/'/g, "%27");
 		}
+		else {
+			for (var i = 0; str[i]; ++i) {
+				str[i] = this.addslashes(str[i]);
+			}
+		}
 		return (str);
 	},
  
@@ -65,6 +70,11 @@ var jsocketCore = {
 		if (typeof(str) == 'string') {
 			str = str.replace(/\%27/g, "'");
 			str = decodeURIComponent(str);
+		}
+		else {
+			for (var i = 0; str[i]; ++i) {
+				str[i] = this.stripslashes(str[i]);
+			}
 		}
 		return (str);
 	},
@@ -112,7 +122,7 @@ var jsocketCore = {
 			return (false);
 		}
 		this.connectedToServer = true;
-		this.api.onConnect('{"from": "connect", "value": true}');
+		this.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
  
@@ -182,6 +192,7 @@ var jsocketCore = {
 		if (typeof this.api != 'object') {
 			return (false);
 		}
+		console.log('onReceive: ' + msg);
 		this.api.onReceive(msg);
 		return (true);
 	},

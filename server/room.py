@@ -51,7 +51,7 @@ class Room():
 	def join(self, args, client):
 		"""Return Ajoute un utilisateur dans la room specifie  -> bool """
 		
-		if self.__channelExists(args[0]):
+		if self.channelExists(args[0]):
 			if self.rooms[args[0]].isProtected() and len(args) > 1:
 				if self.rooms[args[0]].channelPwd == args[1]:
 					self.rooms[args[0]].add(client)
@@ -95,7 +95,7 @@ class Room():
 		
 	def message(self, appName, sender, users, message):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
-		
+
 		if self.channelExists(appName):
 			if sender in self.channel(appName).list_users():
 				master = self.channel(appName).get_master()
