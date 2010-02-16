@@ -5,9 +5,6 @@
 from channel import Channel
 from log import Log
 
-def addslashes(str):
-	return str.replace('"', '$$')
-
 class Room():
 	"""docstring for Room"""
 	def __init__(self):
@@ -37,7 +34,7 @@ class Room():
 			import random
 			self.rooms[args[0]] = Channel(args[0])
 			self.rooms[args[0]].masterPwd = random.getrandbits(16)
-			if args[1]:
+			if len(args) > 1:
 				self.rooms[args[0]].channelPwd = args[1]
 			return True
 		return False
@@ -53,8 +50,8 @@ class Room():
 	def join(self, args, client):
 		"""Return Ajoute un utilisateur dans la room specifie  -> bool """
 		
-		if self.channelExists(args[0]):
-			if self.rooms[args[0]].isProtected() and args[1]:
+		if self.__channelExists(args[0]):
+			if self.rooms[args[0]].isProtected() and len(args) > 1:
 				if self.rooms[args[0]].channelPwd == args[1]:
 					self.rooms[args[0]].add(client)
 				else:
@@ -91,7 +88,7 @@ class Room():
 				if len(list_users) >= 1:
 					for user in list_users:
 						if user.master == False:
-							user.queue_cmd('{"from": "forward", "value": ["' + master.get_name() + '", "' + addslashes(commande) + '"], "app" : "' + appName + '"}')
+							user.queue_cmd('{"from": "forward", "value": ["' + master.get_name() + '", "' + commande + '"], "app" : "' + appName + '"}')
 					return True
 		return False
 		
