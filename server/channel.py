@@ -10,7 +10,7 @@ class Channel():
 	def __init__(self, name):
 		self.name = name
 		self.master = None
-		self.masterPwd = "admin"
+		self.masterPwd = None
 		self.channelPwd = None
 		self.client_list = []
 		
