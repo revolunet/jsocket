@@ -7,7 +7,7 @@ class SETTINGS(object):
 	def __init__(self):
 		pass
 	
-	IS_DEBUG = True
+	IS_DEBUG = False
 	
 	SERVER_PORT = 9999
 	SERVER_HOST = '192.168.1.34'

@@ -122,7 +122,7 @@ var jsocketCore = {
 			return (false);
 		}
 		this.connectedToServer = true;
-		this.api.onConnect('{"from": "connect", "value": true}');
+		this.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
  
@@ -192,6 +192,7 @@ var jsocketCore = {
 		if (typeof this.api != 'object') {
 			return (false);
 		}
+		console.log('onReceive: ' + msg);
 		this.api.onReceive(msg);
 		return (true);
 	},

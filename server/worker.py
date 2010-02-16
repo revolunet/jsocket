@@ -24,8 +24,10 @@ class Worker(threading.Thread):
 		""" Parcours la Queue pour envoyer la string correspondante a l'objet client """
 		
 		from client import Client
+		from log import Log
 		while True:
 			item = self.__queue.get()
+			Log().add("[-] On envoie a (%s): %s" % (str(item[0].client.get_name()), str(item[1])))
 			item[0].client.client_socket.send(item[1] + "\0")
 		
 	def type_recv(self):

@@ -241,6 +241,23 @@ var jsocketApi = {
 	},
 	
 	/**
+	* Change le nom d'utilisateur
+	* @appName : le nom de l'application -> string
+	* @nickname : le nom d'utilisateur
+	**/
+	nick : function(appName, nickname) {
+		this.core.send('{"cmd": "nick", "args": "'+this.core.addslashes(nickname)+'", "app": "'+appName+'"}');
+	},
+	
+	/**
+	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction nick
+	* @code : le retour de l'appel a la methode nick -> bool
+	**/
+	onNick : function(code) {
+		//implement onNick code here.
+	},
+	
+	/**
 	* Cette fonction permet a un master de forwarder une commande
 	* sur tous les clients connectes a son channel
 	* @appName : le nom de l'application -> string

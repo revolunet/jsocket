@@ -195,7 +195,7 @@ class Protocol(object):
 		
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a change son nickname en : " + args)
 		self.client.nickName = args
-		self.client.__squeue.put([self, '{"from": "nick", "value": true}'])
+		self.client.squeue.put([self, '{"from": "nick", "value": true}'])
 	
 	# {"cmd": "getStatus", "args": "null"}
 	def __cmd_getStatus(self, args, app = None):
