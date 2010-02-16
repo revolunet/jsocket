@@ -94,7 +94,7 @@ class Room():
 		
 	def message(self, appName, sender, users, message):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
-		
+
 		if self.channelExists(appName):
 			if sender in self.channel(appName).list_users():
 				master = self.channel(appName).get_master()
