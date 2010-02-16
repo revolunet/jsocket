@@ -27,13 +27,14 @@ class Room():
 				users.append(self.rooms[room].list_users())
 			return users
 	
-	def create(self, args):
+	def create(self, args, master):
 		"""Return Ajoute un channel a la liste des rooms  -> bool"""
 		
 		if self.channelExists(args[0]) == False:
 			import random
 			self.rooms[args[0]] = Channel(args[0])
 			self.rooms[args[0]].masterPwd = random.getrandbits(16)
+			self.rooms[args[0]].master = master
 			if len(args) > 1:
 				self.rooms[args[0]].channelPwd = args[1]
 			return True
