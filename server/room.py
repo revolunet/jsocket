@@ -86,11 +86,12 @@ class Room():
 		
 		if self.channelExists(appName):
 			if client.master or client == self.channel(appName).get_master():
+				master = (client.master == True ? client : self.channel(appName).get_master())
 				list_users = self.list_users(appName)
 				if len(list_users) >= 1:
 					for user in list_users:
 						if user.master == False:
-							user.queue_cmd('{"from": "forward", "value": ["' + self.channel(appName).get_master().get_name() + '", "' + addslashes(commande) + '"], "app" : "' + appName + '"}')
+							user.queue_cmd('{"from": "forward", "value": ["' + master.get_name() + '", "' + addslashes(commande) + '"], "app" : "' + appName + '"}')
 					return True
 		return False
 		

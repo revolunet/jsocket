@@ -164,7 +164,7 @@ class Protocol(object):
 				Log().add("[+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
 			self.client.squeue.put([self, '{"from": "forward", "value": false, "app": "'+app+'"}'])
 			
-	# {"cmd": "message", "args": "['mon message', ['*']]"}
+	# {"cmd": "message", "args": ['mon message', ['*']], "app": "" }
 	def __cmd_message(self, message, app):
 		"""Envoie un message a une liste d'utilisateurs"""
 		
