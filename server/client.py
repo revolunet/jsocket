@@ -7,7 +7,7 @@ import json
 from protocol import Protocol
 from json import JSONEncoder
 from log import Log
-from settings import *
+from settings import SETTINGS
 
 class Client(threading.Thread):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):

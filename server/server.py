@@ -10,7 +10,7 @@ from client import Client
 from room import Room
 from log import Log
 from worker import Worker
-from settings import *
+from settings import SETTINGS
 
 class Server(object):
 	"""docstring for Server"""
