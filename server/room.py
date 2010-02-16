@@ -19,7 +19,7 @@ class Room():
 	def list_users(self, channelName = None):
 		"""Return : la liste de tous les utilisateurs du serveur -> list(Client) """
 		
-		if channelName and self.__channelExists(channelName):
+		if channelName and self.channelExists(channelName):
 			return self.rooms[channelName].list_users()
 		else:
 			users = []
@@ -30,8 +30,10 @@ class Room():
 	def create(self, args):
 		"""Return Ajoute un channel a la liste des rooms  -> bool"""
 		
-		if self.__channelExists(args[0]) == False:
+		if self.channelExists(args[0]) == False:
+			import random
 			self.rooms[args[0]] = Channel(args[0])
+			self.rooms[args[0]].masterPwd = random.getrandbits(16)
 			if len(args) > 1:
 				self.rooms[args[0]].channelPwd = args[1]
 			return True
@@ -40,7 +42,7 @@ class Room():
 	def remove(self, channelName):
 		"""Return : Supprime un channel de la liste des rooms -> bool """
 		
-		if self.__channelExists(channelName):
+		if self.channelExists(channelName):
 			self.rooms.pop(channelName)
 			return True
 		return False
@@ -63,7 +65,7 @@ class Room():
 	def part(self, channelName, client):
 		"""Return Supprime un utilisateur d'une room  -> bool """
 		
-		if self.__channelExists(channelName):
+		if self.channelExists(channelName):
 			self.rooms[channelName].delete(client)
 			self.count_users = self.count_users - 1
 			return True
@@ -72,14 +74,14 @@ class Room():
 	def channel(self, channelName):
 		"""Return : le Channel specifie -> Channel """
 		
-		if self.__channelExists(channelName):
+		if self.channelExists(channelName):
 			return self.rooms[channelName]
 		return None
 	
 	def forward(self, appName, commande, client):
 		"""Return : Envoie une commande a tous les utilisateurs d'un channel -> bool """
 		
-		if self.__channelExists(appName):
+		if self.channelExists(appName):
 			if client.master or client == self.channel(appName).get_master():
 				list_users = self.list_users(appName)
 				if len(list_users) >= 1:
@@ -92,7 +94,7 @@ class Room():
 	def message(self, appName, sender, users, message):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
 		
-		if self.__channelExists(appName):
+		if self.channelExists(appName):
 			if sender in self.channel(appName).list_users():
 				master = self.channel(appName).get_master()
 				if len(users) > 0:
@@ -118,16 +120,24 @@ class Room():
 	def chanAuth(self, appName, adminPwd, client):
 		"""Return : Auth un utilisateur sur un channel -> bool """
 		
-		if self.__channelExists(appName):
+		if self.channelExists(appName):
 			return self.channel(appName).auth(adminPwd, client)
 		return False
 		
+	def changeChanMasterPwd(self, adminPwd, appName):
+		"""Return : change le mot de passe admin d'un channel -> bool """
+		
+		if self.channelExists(appName):
+			self.channel(appName).masterPwd = adminPwd
+			return True
+		return False
+
 	def total_users(self):
 		"""Return : le nombre d'utilisateurs connectes -> int """
 		
 		return self.count_users
 		
-	def __channelExists(self, channelName):
+	def channelExists(self, channelName):
 		"""Return : si le channel existe ou non -> bool """
 		
 		return channelName in self.rooms

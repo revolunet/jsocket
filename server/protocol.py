@@ -29,7 +29,9 @@ class Protocol(object):
 			'list' : self.__cmd_list,
 			'nick' : self.__cmd_nick,
 			'getStatus' : self.__cmd_getStatus,
-			'setStatus' : self.__cmd_setStatus
+			'setStatus' : self.__cmd_setStatus,
+			'timeConnect' : self.__cmd_timeConnect,
+			'chanMasterPwd' : self.__cmd_chanMasterPwd
 		}
 		
 	def parse(self, cmd):
@@ -103,7 +105,7 @@ class Protocol(object):
 		
 		if self.client.master and self.client.room.create(args):
 			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.client_address))
-			self.client.squeue.put([self, '{"from": "create", "value": true, "app": "'+args[0]+'"}'])
+			self.client.squeue.put([self, '{"from": "create", "value": "'+str(self.client.room.channel(args[0]).masterPwd)+'", "app": "'+args[0]+'"}'])
 		else:
 			if self.client.master:
 				Log().add("[+] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
@@ -195,11 +197,11 @@ class Protocol(object):
 		self.client.nickName = args
 		self.client.__squeue.put([self, '{"from": "nick", "value": true}'])
 	
-	# {"cmd": "getStatus", "args": ""}
+	# {"cmd": "getStatus", "args": "null"}
 	def __cmd_getStatus(self, args, app = None):
 		"""Retourne le status de l'utilisateur"""
 		
-		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande son status : ")
+		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande son status")
 		self.client.squeue.put([self, '{"from": "getStatus", "value": "' + self.client.status + '"}'])
 		
 	# {"cmd": "setStatus", "args": "newStatus"}
@@ -209,3 +211,27 @@ class Protocol(object):
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a change son status en : " + args)
 		self.client.status = args
 		self.client.squeue.put([self, '{"from": "setStatus", "value": true}'])
+
+	# {"cmd": "timeConnect", "args": "null"}
+	def __cmd_timeConnect(self, args, app = None):
+		"""Retourne l'heure a laquelle c'est connecte le client"""
+		
+		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande l'heure de connection")
+		self.client.squeue.put([self, '{"from": "timeConnect", "value": "' + self.client.connection_time + '"}'])
+	
+	# {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "app", "channelName"}
+	def __cmd_chanMasterPwd(self, args, app = None):
+		"""Change le mot de passe master d'un channel"""
+		
+		if self.client.master and self.client.room.changeChanMasterPwd(args, app):
+			Log().add("[+] Client : le client " + str(self.client.get_name()) + " a changer le mot de passe master du channel : " + app)
+			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": true}'])
+		else:
+			if self.client.master == False:
+				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
+			elif self.client.room.channelExists(args[0]) == False:
+				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')	
+			else:
+				Log().add("[+] Command error : la commande chanMasterPwd a echoue", 'yellow')
+			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": false}'])
+			

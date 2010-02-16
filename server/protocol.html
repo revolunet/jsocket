@@ -56,7 +56,7 @@
 		<H1>Protocol::</H1>
 		
 		<div class="server-side">
-			<a href="#connected">Connected</a> | <a href="#auth">Auth</a> | <a href="#create">Create</a> | <a href="#remove">Remove</a> | <a href="#chanAuth">ChanAuth</a> | <a href="#join">Join</a> |  <a href="#part">Part</a> | <a href="#nick">Nick</a> | <a href="#message">Message</a> | <a href="#forward">Forward</a>
+			<a href="#connected">Connected</a> | <a href="#auth">Auth</a> | <a href="#create">Create</a> | <a href="#chanMasterPwd">ChanMasterPwd</a> | <a href="#remove">Remove</a> | <a href="#chanAuth">ChanAuth</a> | <a href="#join">Join</a> |  <a href="#part">Part</a> | <a href="#nick">Nick</a> | <a href="#message">Message</a> | <a href="#forward">Forward</a> | <a href="#getStatus">GetStatus</a> | <a href="#setStatus">SetStatus</a>
 		</div>
 		
 		<p id="connected">Connection au serveur</p>
@@ -86,10 +86,22 @@
 		</div>
 		<span>Code retour::</span>
 		<div class="server-side">
-			{"from": "create", "value": true, "app" : "appName"}
+			{"from": "create", "value": "MASTERPWD", "app" : "appName"}
 		</div>
 		<div class="server-side-false">
 			{"from": "create", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="chanMasterPwd">Changer le mot de passe ADMIN d'un salon ( Commande Master )</p>
+		<div class="server-side">
+			{"cmd": "chanMasterPwd", "args": "newPassword", "app" : "appName"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "chanMasterPwd", "value": true, "app" : "appName"}
+		</div>
+		<div class="server-side-false">
+			{"from": "chanMasterPwd", "value": false, "app" : "appName"}
 		</div>
 		
 		<p id="remove">Effacer un salon ( Commande Master )</p>
@@ -176,6 +188,24 @@
 		</div>
 		<div class="server-side-false">
 			{"from": "forward", "value": false, "app" : "appName"}
+		</div>
+		
+		<p id="getStatus">Connaitre le status de l'utilisateur</p>
+		<div class="server-side">
+			{"cmd": "getStatus", "args": "null"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "getStatus", "value": "connected", "app" : "appName"}
+		</div>
+		
+		<p id="setStatus">Changer le status de l'utilisateur</p>
+		<div class="server-side">
+			{"cmd": "setStatus", "args": "alive"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "setStatus", "value": true}
 		</div>
 		
 	</body>
