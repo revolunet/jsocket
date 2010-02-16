@@ -177,7 +177,7 @@ class Client(threading.Thread):
 	def __cmd_forward(self, args, app = None):
 		"""Envoie une commande a tous les clients presents dans le channel"""
 		
-		if self.master and app and self.__room.forward(app, args):
+		if app and self.__room.forward(app, args, self):
 			Log().add("[+] La commande : "+ args + " a ete envoye a tous les utilisateurs du channel : " + str(app))
 			self.__squeue.put([self, '{"from": "forward", "value": true, "app": "'+app+'"}'])
 		else:
