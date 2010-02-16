@@ -83,7 +83,7 @@ class Room():
 		
 		if self.channelExists(appName):
 			if client.master or client == self.channel(appName).get_master():
-				master = (client.master == True ? client : self.channel(appName).get_master())
+				master = (client.master and client or self.channel(appName).get_master())
 				list_users = self.list_users(appName)
 				if len(list_users) >= 1:
 					for user in list_users:
