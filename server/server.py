@@ -33,9 +33,9 @@ class Server(object):
 	def __init_queues(self):
 		""" Initialise les queues d'envoie et reception (parsing) de message client """
 
-		self.__squeue = Queue.Queue(SETTINGS.MAX_SENDQUEUE)
+		self.__squeue = Queue.Queue(0)
 		Worker(self.__squeue, 'send').start()
-		self.__rqueue = Queue.Queue(SETTINGS.MAX_RECEIVEQUEUE)
+		self.__rqueue = Queue.Queue(0)
 		Worker(self.__rqueue, 'recv').start()
 
 	def start(self):
