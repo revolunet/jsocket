@@ -50,7 +50,8 @@ var jsocketCore = {
 	addslashes : function(str)
 	{
 		if (typeof(str) == 'string') {
-			str = str.replace(/\"/g, '\\"');
+			str = encodeURIComponent(str);
+			str = str.replace(/'/g, "%27");
 		}
 		return (str);
 	},
@@ -62,8 +63,8 @@ var jsocketCore = {
 	stripslashes : function (str)
 	{
 		if (typeof(str) == 'string') {
-			str = str.replace(/\\"/g, '"');
-			str = str.replace(/\$\$/g, '"');
+			str = str.replace(/\%27/g, "'");
+			str = decodeURIComponent(str);
 		}
 		return (str);
 	},
@@ -85,7 +86,7 @@ var jsocketCore = {
 			if (typeof this.api != 'object') {
 				return (false);
 			}
-			setTimeout("jsocketCore.send('" + this.addslashes(msg) + "');", 500);
+			setTimeout("jsocketCore.send('" + msg + "');", 500);
 			//this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
 			return (false);
 		}

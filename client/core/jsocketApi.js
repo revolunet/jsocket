@@ -30,6 +30,7 @@ var jsocketApi = {
 	register : function(appName, appObject) {
 		var newApp = appObject || { };
 		this.app[appName] = newApp;
+		this.app[appName].master = false;
 	},
 
 	/**
@@ -83,12 +84,12 @@ var jsocketApi = {
 			func_name = j.from.substring(0,1).toUpperCase() + j.from.substring(1, j.from.length);
 			if (j.app != null) {
 				try {
-					this.appCallback(j.app, 'on' + func_name, j.value);
+					this.appCallback(j.app, 'on' + func_name, this.core.stripslashes(j.value));
 				} catch(e) { }
 			}
 			else {
 				try {
-					this.appCallbacks('on' + func_name, j.value);
+					this.appCallbacks('on' + func_name, this.core.stripslashes(j.value));
 					eval('jsocketApi.on'+func_name+"(jsocketApi.core.stripslashes(j.value))");
 				} catch(e) {
 					jsocketApi.onError(e);
@@ -139,6 +140,9 @@ var jsocketApi = {
 	**/
 	auth : function (appName, password) {
 		this.core.send('{"cmd": "auth", "args": "'+this.core.addslashes(password)+'", "app": "'+appName+'"}');
+		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
+			jsocketApi.app[appName].master = true;
+		}
 	},
 	
 	/**
@@ -148,6 +152,9 @@ var jsocketApi = {
 	**/
 	chanAuth : function (appName, password) {
 		this.core.send('{"cmd": "chanAuth", "args": "'+password+'", "app": "'+appName+'"}');
+		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
+			jsocketApi.app[appName].master = true;
+		}
 	},
 	
 	/**
@@ -209,7 +216,10 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "create", "args": "channelName"}
 	**/
 	create : function(appName, channel) {
-		this.core.send('{"cmd": "create", "args": "'+this.core.addslashes(channel)+'", "app": "'+appName+'"}');
+		this.core.send('{"cmd": "create", "args": [ "'+this.core.addslashes(channel)+'" ], "app": "'+appName+'"}');
+		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
+			jsocketApi.app[appName].master = true;
+		}
 	},
 	
 	/**
@@ -282,7 +292,7 @@ var jsocketApi = {
 			for (var i = 1; tab[1][i]; ++i) {
 				str += (', "' + this.core.addslashes(tab[1][i]) + '"');
 			}
-			str += ' ]';
+			str += ' ] ]';
 		}
 		this.core.send('{"cmd": "message", "app": "'+appName+'", "args": ' + str + '}');
 	},
