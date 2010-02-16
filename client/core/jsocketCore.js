@@ -192,7 +192,6 @@ var jsocketCore = {
 		if (typeof this.api != 'object') {
 			return (false);
 		}
-		console.log('onReceive: ' + msg);
 		this.api.onReceive(msg);
 		return (true);
 	},
