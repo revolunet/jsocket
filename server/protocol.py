@@ -234,4 +234,4 @@ class Protocol(object):
 			else:
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue", 'yellow')
 			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": false}'])
-			
+		
