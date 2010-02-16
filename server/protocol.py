@@ -103,7 +103,7 @@ class Protocol(object):
 	def __cmd_create(self, args, app = None):
 		"""Creation d'un nouveau channel si le Client est Master"""
 		
-		if self.client.master and self.client.room.create(args):
+		if self.client.master and self.client.room.create(args, self.client):
 			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.client_address))
 			self.client.squeue.put([self, '{"from": "create", "value": "'+str(self.client.room.channel(args[0]).masterPwd)+'", "app": "'+args[0]+'"}'])
 		else:
