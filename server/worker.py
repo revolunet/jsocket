@@ -26,7 +26,7 @@ class Worker(threading.Thread):
 		from client import Client
 		while True:
 			item = self.__queue.get()
-			item[0].client_socket.send(item[1] + "\0")
+			item[0].client.client_socket.send(item[1] + "\0")
 		
 	def type_recv(self):
 		""" Parcours la Queue pour parser la string correspondante """
@@ -36,7 +36,7 @@ class Worker(threading.Thread):
 			item = self.__queue.get()
 			commands = item[1].split('\n')
 			for cmd in commands:
-				item[0].parse(cmd)
+				item[0].protocol.parse(cmd)
 
 	def run(self):
 		""" Redirection vers la methode approprie pour le traitement de la Queue """
