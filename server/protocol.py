@@ -29,7 +29,8 @@ class Protocol(object):
 			'list' : self.__cmd_list,
 			'nick' : self.__cmd_nick,
 			'getStatus' : self.__cmd_getStatus,
-			'setStatus' : self.__cmd_setStatus
+			'setStatus' : self.__cmd_setStatus,
+			'timeConnect' : self.__cmd_timeConnect
 		}
 		
 	def parse(self, cmd):
@@ -195,11 +196,11 @@ class Protocol(object):
 		self.client.nickName = args
 		self.client.__squeue.put([self, '{"from": "nick", "value": true}'])
 	
-	# {"cmd": "getStatus", "args": ""}
+	# {"cmd": "getStatus", "args": "null"}
 	def __cmd_getStatus(self, args, app = None):
 		"""Retourne le status de l'utilisateur"""
 		
-		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande son status : ")
+		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande son status")
 		self.client.squeue.put([self, '{"from": "getStatus", "value": "' + self.client.status + '"}'])
 		
 	# {"cmd": "setStatus", "args": "newStatus"}
@@ -209,3 +210,10 @@ class Protocol(object):
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a change son status en : " + args)
 		self.client.status = args
 		self.client.squeue.put([self, '{"from": "setStatus", "value": true}'])
+
+	# {"cmd": "timeConnect", "args": "null"}
+	def __cmd_timeConnect(self, args, app = None):
+		"""Retourne l'heure a laquelle c'est connecte le client"""
+		
+		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande l'heure de connection")
+		self.client.squeue.put([self, '{"from": "timeConnect", "value": "' + self.client.connection_time + '"}'])

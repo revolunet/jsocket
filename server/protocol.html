@@ -178,5 +178,23 @@
 			{"from": "forward", "value": false, "app" : "appName"}
 		</div>
 		
+		<p id="forward">Connaitre le status de l'utilisateur</p>
+		<div class="server-side">
+			{"cmd": "getStatus", "args": "null"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "getStatus", "value": "connected", "app" : "appName"}
+		</div>
+		
+		<p id="forward">Changer le status de l'utilisateur</p>
+		<div class="server-side">
+			{"cmd": "setStatus", "args": "alive"}
+		</div>
+		<span>Code retour::</span>
+		<div class="server-side">
+			{"from": "setStatus", "value": true}
+		</div>
+		
 	</body>
 </html>

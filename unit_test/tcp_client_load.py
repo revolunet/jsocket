@@ -35,6 +35,8 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"chanAuth", "args": "admin", "app" : "irc"}\n')
 	tcpclient.handle()
+	tcpclient.write('{"cmd":"timeConnect", "args": "null"}\n')
+	tcpclient.handle()
 	time.sleep(5)
 	tcpclient.disconnect()
 	
