@@ -22,6 +22,7 @@ class Client(threading.Thread):
 		self.__rqueue = rqueue
 		self.__squeue = squeue
 		self.__room_name = None
+		self.__status = "connected"
 		threading.Thread.__init__(self)
 		
 	def __init_cmd(self):
@@ -39,7 +40,9 @@ class Client(threading.Thread):
 			'remove' : self.__cmd_remove,
 			'message' : self.__cmd_message,
 			'list' : self.__cmd_list,
-			'nick' : self.__cmd_nick
+			'nick' : self.__cmd_nick,
+			'getStatus' : self.__cmd_getStatus,
+			'setStatus' : self.__cmd_setStatus
 		}
 		
 	def run(self):
@@ -226,6 +229,21 @@ class Client(threading.Thread):
 		Log().add("[+] Client : le client " + str(self.get_name()) + " a change son nickname en : " + args)
 		self.__nickName = args
 		self.__squeue.put([self, '{"from": "nick", "value": true}'])
+	
+	# {"cmd": "getStatus", "args": ""}
+	def __cmd_getStatus(self, args, app = None):
+		"""Retourne le status de l'utilisateur"""
+		
+		Log().add("[+] Client : le client " + str(self.get_name()) + " a demande son status : ")
+		self.__squeue.put([self, '{"from": "getStatus", "value": "' + self.__status + '"}'])
+		
+	# {"cmd": "setStatus", "args": "newStatus"}
+	def __cmd_setStatus(self, args, app = None):
+		"""Change le status de l'utilisateur"""
+		
+		Log().add("[+] Client : le client " + str(self.get_name()) + " a change son status en : " + args)
+		self.__status = args
+		self.__squeue.put([self, '{"from": "setStatus", "value": true}'])
 				
 	def __disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
