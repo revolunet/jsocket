@@ -125,6 +125,16 @@ var jsocketApi = {
 	},
 	
 	/**
+	* Callback appele pour le master d'un channel lorsqu'un utilisateur
+	* quit ou rejoind le channel.
+	* @tab : [0] Nom du client
+	*        [1] Status (online, offline)
+	**/
+	onStatus : function (tab) {
+		//implement onStatus code here.
+	},
+	
+	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction auth
 	* @code : le retour de l'appel a la methode auth -> bool
 	**/
