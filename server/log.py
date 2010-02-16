@@ -8,7 +8,7 @@ import logging
 import threading
 import Queue
 from worker import Worker
-from settings import *
+from settings import SETTINGS
 
 class Log(object):
 	"""docstring for Log"""

@@ -8,7 +8,7 @@ import random
 from protocol import Protocol
 from json import JSONEncoder
 from log import Log
-from settings import *
+from settings import SETTINGS
 
 class Client(threading.Thread):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
@@ -47,7 +47,7 @@ class Client(threading.Thread):
 	def queue_cmd(self, command):
 		"""Ajoute une commande a la Queue en cours"""
 		
-		self.squeue.put([self, command])
+		self.squeue.put([self.protocol, command])
 				
 	def __disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
