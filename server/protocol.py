@@ -161,7 +161,7 @@ class Protocol(object):
 	def __cmd_forward(self, args, channel = None, app = None):
 		"""Envoie une commande a tous les clients presents dans le channel"""
 		
-		if channel and self.client.room.forward(channel, args, self.client):
+		if channel and app and self.client.room.forward(channel, args, self.client, app):
 			Log().add("[+] La commande : "+ args + " a ete envoye a tous les utilisateurs du channel : " + str(channel))
 			self.client.squeue.put([self, '{"from": "forward", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
