@@ -79,17 +79,17 @@ class Room():
 			return self.rooms[channelName]
 		return None
 	
-	def forward(self, appName, commande, client):
+	def forward(self, channelName, commande, client, appName):
 		"""Return : Envoie une commande a tous les utilisateurs d'un channel -> bool """
 		
-		if self.channelExists(appName):
-			if client.master or client == self.channel(appName).get_master():
-				master = (client.master and client or self.channel(appName).get_master())
-				list_users = self.list_users(appName)
+		if self.channelExists(channelName):
+			if client.master or client == self.channel(channelName).get_master():
+				master = (client.master and client or self.channel(channelName).get_master())
+				list_users = self.list_users(channelName)
 				if len(list_users) >= 1:
 					for user in list_users:
 						if user.master == False:
-							user.queue_cmd('{"from": "forward", "value": ["' + master.get_name() + '", "' + commande + '"], "app" : "' + appName + '"}')
+							user.queue_cmd('{"from": "forward", "value": ["' + master.get_name() + '", "' + commande + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 					return True
 		return False
 		
