@@ -37,7 +37,7 @@ class Client(threading.Thread):
 			try:
 				data = self.client_socket.recv(1024).strip()
 			except Exception:
-				__disconnection()
+				self.__disconnection()
 			if len(data) == 0:
 				self.__disconnection()
 				return
@@ -62,8 +62,5 @@ class Client(threading.Thread):
 			self.room.part(self.room_name, self)
 			self.status = "offline"
 			self.protocol.status()
-		try :
-			self.client_socket.close(self)
-		except Exception:
-			pass
+		self.client_socket.close()
 		Log().add("[-] Client disconnected", 'blue')

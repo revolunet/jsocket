@@ -44,10 +44,13 @@ class Protocol(object):
 				json_cmd = json.loads(cmd)
 				if json_cmd['cmd'] and json_cmd['cmd'] in self.__cmd_list:
 					try :
-						if json_cmd.get('app', None) == None:
-							json_cmd['app'] = "None"
-						if json_cmd['args'] and json_cmd['app']:
-							self.__cmd_list [json_cmd['cmd']](json_cmd['args'], json_cmd['app'])
+						if json_cmd.get('app', None) == None or len(json_cmd.get('app', None)) == 0:
+							json_cmd['app'] = "null"
+						if json_cmd.get('channel', None) == None or len(json_cmd.get('channel', None)) == 0:
+							Log().add("CHANNEL NONE")
+							json_cmd['channel'] = "null"
+						if json_cmd['args'] and json_cmd['channel'] and json_cmd['app']:
+							self.__cmd_list [json_cmd['cmd']](json_cmd['args'], json_cmd['channel'], json_cmd['app'])
 					except KeyError:
 						Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' prends deux arguments", 'ired')
 				else:
@@ -56,110 +59,110 @@ class Protocol(object):
 				Log().add("[+] Command error : " + cmd + " , n'est pas une chaine json valide", 'ired')
 	
 	# {"cmd" : "connected", "args": "null"}
-	def __cmd_connected(self, args = None, app = None):
+	def __cmd_connected(self, args = None, channel = None, app = None):
 		"""Le client est connecte, sa cle unique lui est send"""
 		
 		self.client.squeue.put([self, '{"from": "connected", "value": "' + str(self.client.unique_key) + '"}'])
 
-	# {"cmd" : "auth", "args": "masterpassword", "app" : ""}
-	def __cmd_auth(self, args, app = None):
+	# {"cmd" : "auth", "args": "masterpassword", "channel": "", "app" : ""}
+	def __cmd_auth(self, args, channel = None, app = None):
 		
 		if args == self.client.master_password:
 			self.client.master = True
 			Log().add("[+] Client : le client " + str(self.client.client_address) + " est a present master du serveur")
-			self.client.squeue.put([self, '{"from": "auth", "value": true}'])
+			self.client.squeue.put([self, '{"from": "auth", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
-			self.client.squeue.put([self, '{"from": "auth", "value": false}'])
+			self.client.squeue.put([self, '{"from": "auth", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 
-	# {"cmd": "list", "args": "appName", "app": "appName"}
-	def __cmd_list(self, args, app = None):
+	# {"cmd": "list", "args": "channelName", "channel": "", "app" : ""}
+	def __cmd_list(self, args, channel = None, app = None):
 		""" Retourne la liste d'utilisateurs d'un channel """
 		
 		users = self.client.room.list_users(args)
 		str = [ ]
 		for user in users:
 			str.append(user.get_name())
-		self.client.squeue.put([self, '{"from": "list", "value": ' + JSONEncoder().encode(str) + '}'])
+		self.client.squeue.put([self, '{"from": "list", "value": ' + JSONEncoder().encode(str) + ', "channel": "'+channel+'", "app": "'+app+'"}'])
 
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):
 		self.client.squeue.put([self, "<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>\0"])
 
-	# {"cmd": "delete", "args": "irc"}
-	def __cmd_remove(self, args, app = None):
+	# {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
+	def __cmd_remove(self, args, channel = None, app = None):
 		"""On supprimet un channel, si celui si existe et que Client est Master"""
 		
 		if self.client.master and self.client.room.remove(args):
-			self.client.squeue.put([self, '{"from": "remove", "value": true}'])
+			self.client.squeue.put([self, '{"from": "remove", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 			Log().add("[+] Le channel " + args + " a ete supprime par : " + str(self.client.client_address))
 		else:
 			if self.client.master:
 				Log().add("[+] Command error : la commande delete a echoue ( le channel " + args + " n'existe pas )", 'yellow')
 			else:
 				Log().add("[+] Command error : la commande delete a echoue ( le Client n'est pas master )", 'yellow')
-			self.client.squeue.put([self, '{"from": "remove", "value": false}'])
+			self.client.squeue.put([self, '{"from": "remove", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 			
-	# {"cmd": "create", "args": ["irc", "appPwd"]}
-	def __cmd_create(self, args, app = None):
+	# {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
+	def __cmd_create(self, args, channel = None, app = None):
 		"""Creation d'un nouveau channel si le Client est Master"""
 		
 		if self.client.master and self.client.room.create(args, self.client):
 			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.client_address))
-			self.client.squeue.put([self, '{"from": "create", "value": "'+str(self.client.room.channel(args[0]).masterPwd)+'", "app": "'+args[0]+'"}'])
+			self.client.squeue.put([self, '{"from": "create", "value": "'+str(self.client.room.channel(args[0]).masterPwd)+'", "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
 			if self.client.master:
 				Log().add("[+] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
 			else:
 				Log().add("[+] Command error : la commande create a echoue ( le Client n'est pas master )", 'yellow')
-			self.client.squeue.put([self, '{"from": "create", "value": false}'])
+			self.client.squeue.put([self, '{"from": "create", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 
 	# {"cmd": "join", "args": ["irc", ""]}
-	def __cmd_join(self, args, app = None):
+	def __cmd_join(self, args, channel = None, app = None):
 		"""Ajoute un client dans le salon specifie"""
 		
 		if self.client.room.join(args, self.client):
 			self.client.room_name = args[0]
 			Log().add("[+] Client : l'utilisateur " + str(self.client.client_address) + " a rejoin le channel : " + args[0], 'yellow')
-			self.client.squeue.put([self, '{"from": "join", "value": true, "app": "'+args[0]+'"}'])
+			self.client.squeue.put([self, '{"from": "join", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 			if self.client.master == False:
 				self.status(self.client)
 		else:
 			Log().add("[+] Command error : le channel " + args[0] + " n'existe pas ", 'yellow')
-			self.client.squeue.put([self, '{"from": "join", "value": false, "app": "'+args[0]+'"}'])
+			self.client.squeue.put([self, '{"from": "join", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 			
 	
 	# {"cmd": "part", "args": "irc"}
-	def __cmd_part(self, args, app = None):
+	def __cmd_part(self, args, channel = None, app = None):
 		"""Supprime un client du salon specifie"""
 		
-		if self.client.room_name and self.client.room.part(self.client.room_name, self.client):
+		if self.client.room_name and self.client.room.part(args, self.client):
 			self.client.room_name = None
 			self.client.status = "offline"
 			Log().add("[+] Client : le client " + str(self.client.client_address) + " a quitte le channel : " + args)
-			self.client.squeue.put([self, '{"from": "part", "value": true, "app": "'+args+'"}'])
+			self.client.squeue.put([self, '{"from": "part", "value": true, "channel": "'+args+'", "app": "'+app+'"}'])
 			if self.client.master == False:
 				self.status(self.client)
 		else:
 			Log().add("Command error : l'utilisateur n'est pas dans le channel : " + args)
-			self.client.squeue.put([self, '{"from": "part", "value": false, "app": "'+args+'}'])
+			self.client.squeue.put([self, '{"from": "part", "value": false, "channel": "'+args+'", "app": "'+app+'"}'])
 	
-	# {"cmd": "chanAuth", "args": "passphrase", "app" : "irc"}
-	def __cmd_chanAuth(self, args, app):
+	# {"cmd": "chanAuth", "args": "passphrase", "channel": "channelName", "app" : ""}
+	def __cmd_chanAuth(self, args, channel = None, app = None):
 		"""Auth pour definir si le Client est desormais master ou non d'une application"""
 		
-		if self.client.room.chanAuth(app, args, self.client):
-			Log().add("[+] Client : le client " + str(self.client.client_address) + " est a present master du channel : " + app)
-			self.client.squeue.put([self, '{"from": "chanAuth", "value": true, "app" : "'+app+'"}'])
+		if self.client.room.chanAuth(channel, args, self.client):
+			Log().add("[+] Client : le client " + str(self.client.client_address) + " est a present master du channel : " + channel)
+			self.client.squeue.put([self, '{"from": "chanAuth", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
-			self.client.squeue.put([self, '{"from": "chanAuth", "value": false, "app" : "'+app+'"}'])
+			self.client.squeue.put([self, '{"from": "chanAuth", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 	
-	# {"cmd": "forward", "args": "message", "app": "irc"}
-	def __cmd_forward(self, args, app = None):
+	# {"cmd": "forward", "args": "message", "channel": "channelName", "app" : ""}
+	def __cmd_forward(self, args, channel = None, app = None):
 		"""Envoie une commande a tous les clients presents dans le channel"""
 		
-		if app and self.client.room.forward(app, args, self.client):
-			Log().add("[+] La commande : "+ args + " a ete envoye a tous les utilisateurs du channel : " + str(app))
-			self.client.squeue.put([self, '{"from": "forward", "value": true, "app": "'+app+'"}'])
+		if app and self.client.room.forward(channel, args, self.client):
+			Log().add("[+] La commande : "+ args + " a ete envoye a tous les utilisateurs du channel : " + str(channel))
+			self.client.squeue.put([self, '{"from": "forward", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
 			if self.client.master == False:
 				Log().add("[+] Command error : la commande forward a echoue ( le Client n'est pas master )", 'yellow')
@@ -167,70 +170,70 @@ class Protocol(object):
 				Log().add("[+] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
 			else:
 				Log().add("[+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
-			self.client.squeue.put([self, '{"from": "forward", "value": false, "app": "'+app+'"}'])
+			self.client.squeue.put([self, '{"from": "forward", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 			
-	# {"cmd": "message", "args": ['mon message', ['*']], "app": "" }
-	def __cmd_message(self, message, app):
+	# {"cmd": "message", "args": ['mon message', ['*']], "channel": "channelName", "app" : "" }
+	def __cmd_message(self, message, channel = None, app = None):
 		"""Envoie un message a une liste d'utilisateurs"""
 		
 		if len(message) == 0:
-			self.client.squeue.put([self, '{"from": "message", "value": false, "app" : "'+app+'"}'])
+			self.client.squeue.put([self, '{"from": "message", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
 			ret = False
 			if len(message[0]) != 0:
 				if len(message[1]) > 0:
 					if len(message[1][0]) == 0:
-						ret = self.client.room.message(app, self.client, ['master'], message[0])
+						ret = self.client.room.message(channel, self.client, ['master'], message[0])
 					elif message[1][0] == '*':
-						ret = self.client.room.message(app, self.client, ['all'], message[0])
+						ret = self.client.room.message(channel, self.client, ['all'], message[0])
 					elif message[1][0] == 'master':
-						ret = self.client.room.message(app, self.client, ['master'], message[0])
+						ret = self.client.room.message(channel, self.client, ['master'], message[0])
 					else:
-						ret = self.client.room.message(app, self.client, message[1], message[0])
+						ret = self.client.room.message(channel, self.client, message[1], message[0])
 				else:
-					ret = self.client.room.message(app, self.client, ['master'], message[0])
+					ret = self.client.room.message(channel, self.client, ['master'], message[0])
 			if ret:
-				self.client.squeue.put([self, '{"from": "message", "value": true, "app" : "'+app+'"}'])	
+				self.client.squeue.put([self, '{"from": "message", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])	
 			else:
-				self.client.squeue.put([self, '{"from": "message", "value": false, "app" : "'+app+'"}'])
+				self.client.squeue.put([self, '{"from": "message", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 	
 	# {"cmd": "nick", "args": "nickName", "app": "appName"}
-	def __cmd_nick(self, args, app = None):
+	def __cmd_nick(self, args, channel = None, app = None):
 		"""Permet au client de change de pseudo"""
 		
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a change son nickname en : " + args)
 		self.client.nickName = args
-		self.client.squeue.put([self, '{"from": "nick", "value": true}'])
+		self.client.squeue.put([self, '{"from": "nick", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 	
 	# {"cmd": "getStatus", "args": "null"}
-	def __cmd_getStatus(self, args, app = None):
+	def __cmd_getStatus(self, args, channel = None, app = None):
 		"""Retourne le status de l'utilisateur"""
 		
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande son status")
-		self.client.squeue.put([self, '{"from": "getStatus", "value": "' + self.client.status + '"}'])
+		self.client.squeue.put([self, '{"from": "getStatus", "value": "' + self.client.status + '", "channel": "'+channel+'", "app": "'+app+'"}'])
 		
 	# {"cmd": "setStatus", "args": "newStatus"}
-	def __cmd_setStatus(self, args, app = None):
+	def __cmd_setStatus(self, args, channel = None, app = None):
 		"""Change le status de l'utilisateur"""
 		
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a change son status en : " + args)
 		self.client.status = args
-		self.client.squeue.put([self, '{"from": "setStatus", "value": true}'])
+		self.client.squeue.put([self, '{"from": "setStatus", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 
 	# {"cmd": "timeConnect", "args": "null"}
-	def __cmd_timeConnect(self, args, app = None):
+	def __cmd_timeConnect(self, args, channel = None, app = None):
 		"""Retourne l'heure a laquelle c'est connecte le client"""
 		
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande l'heure de connection")
-		self.client.squeue.put([self, '{"from": "timeConnect", "value": "' + self.client.connection_time + '"}'])
+		self.client.squeue.put([self, '{"from": "timeConnect", "value": "' + self.client.connection_time + '", "channel": "'+channel+'", "app": "'+app+'"}'])
 	
 	# {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "app", "channelName"}
-	def __cmd_chanMasterPwd(self, args, app = None):
+	def __cmd_chanMasterPwd(self, args, channel = None, app = None):
 		"""Change le mot de passe master d'un channel"""
 		
 		if self.client.master and self.client.room.changeChanMasterPwd(args, app):
 			Log().add("[+] Client : le client " + str(self.client.get_name()) + " a changer le mot de passe master du channel : " + app)
-			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": true}'])
+			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
 			if self.client.master == False:
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
@@ -238,7 +241,7 @@ class Protocol(object):
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')	
 			else:
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue", 'yellow')
-			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": false}'])
+			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 		
 	def status(self, client):
 		
@@ -247,4 +250,4 @@ class Protocol(object):
 			if channel:
 				master = channel.get_master()
 				if master:
-					master.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "app", "'+client.room_name+'"}')
+					master.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "channel": "'+client.room_name+'", "app": "'+app+'"}')
