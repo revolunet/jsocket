@@ -91,9 +91,7 @@ var jsocketApi = {
 			else {
 				try {
 					this.appCallbacks('on' + func_name, this.core.stripslashes(j.value));
-					//alert('apres this');
 					eval('jsocketApi.on'+func_name+"(jsocketApi.core.stripslashes(j.value))");
-					//alert('apres eval');
 				} catch(e) {
 					jsocketApi.onError(e);
 				}
@@ -179,7 +177,7 @@ var jsocketApi = {
 	
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction chanAuth
-	* @code : true ou false
+	* @code : channel password or false
 	**/
 	onChanAuth : function (code) {
 		//implement onChanAuth code here.
@@ -398,7 +396,7 @@ var jsocketApi = {
 		appName = this.core.addslashes(appName);
 		channel = this.core.addslashes(channel);
 		status = this.core.addslashes(status);
-		this.core.send('{"cmd": "getStatus", "args": "'+status+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		this.core.send('{"cmd": "setStatus", "args": "'+status+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 
 	/**
@@ -438,7 +436,7 @@ var jsocketApi = {
 		appName = this.core.addslashes(appName);
 		channel = this.core.addslashes(channel);
 		password = this.core.addslashes(password);
-		this.core.send('{"cmd": "timeConnect", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		this.core.send('{"cmd": "chanMasterPwd", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 
 	/**
