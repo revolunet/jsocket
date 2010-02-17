@@ -122,7 +122,7 @@ class Protocol(object):
 			Log().add("[+] Client : l'utilisateur " + str(self.client.client_address) + " a rejoin le channel : " + args[0], 'yellow')
 			self.client.squeue.put([self, '{"from": "join", "value": true, "app": "'+args[0]+'"}'])
 			if self.client.master == False:
-				self.__status(self.client)
+				self.status(self.client)
 		else:
 			Log().add("[+] Command error : le channel " + args[0] + " n'existe pas ", 'yellow')
 			self.client.squeue.put([self, '{"from": "join", "value": false, "app": "'+args[0]+'"}'])
@@ -138,7 +138,7 @@ class Protocol(object):
 			Log().add("[+] Client : le client " + str(self.client.client_address) + " a quitte le channel : " + args)
 			self.client.squeue.put([self, '{"from": "part", "value": true, "app": "'+args+'"}'])
 			if self.client.master == False:
-				self.__status(self.client)
+				self.status(self.client)
 		else:
 			Log().add("Command error : l'utilisateur n'est pas dans le channel : " + args)
 			self.client.squeue.put([self, '{"from": "part", "value": false, "app": "'+args+'}'])
@@ -240,7 +240,7 @@ class Protocol(object):
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue", 'yellow')
 			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": false}'])
 		
-	def __status(self, client):
+	def status(self, client):
 		
 		if client.room_name:
 			channel = client.room.channel(client.room_name)

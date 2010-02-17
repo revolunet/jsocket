@@ -56,6 +56,8 @@ class Client(threading.Thread):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
 
 		if self.room_name:
-			self.room.part(self.room_name, self)			
+			self.room.part(self.room_name, self)
+			self.status = "offline"
+			self.protocol.status()	
 		self.client_socket.close()
 		Log().add("[-] Client disconnected", 'blue')
