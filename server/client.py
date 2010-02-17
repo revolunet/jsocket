@@ -3,7 +3,6 @@
 ##
 
 import threading
-import json
 from protocol import Protocol
 from log import Log
 from settings import SETTINGS

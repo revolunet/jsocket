@@ -44,7 +44,7 @@ class Worker(threading.Thread):
 				item[0].protocol.parse(item[1])
 			else:
 				for cmd in commands:
-					item[0].queue_cmd(cmd)
+					item[0].rqueue.put([ item[0], cmd ])
 			self.__queue.task_done()
 
 	def run(self):
