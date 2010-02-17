@@ -34,7 +34,10 @@ class Client(threading.Thread):
 		"""Boucle de lecture du client """
 
 		while 1:
-			data = self.client_socket.recv(1024).strip()
+			try:
+				data = self.client_socket.recv(1024).strip()
+			except Exception:
+				__disconnection()
 			if len(data) == 0:
 				self.__disconnection()
 				return
@@ -58,6 +61,9 @@ class Client(threading.Thread):
 		if self.room_name:
 			self.room.part(self.room_name, self)
 			self.status = "offline"
-			self.protocol.status()	
-		self.client_socket.close()
+			self.protocol.status()
+		try :
+			self.client_socket.close()
+		except Exception:
+			pass
 		Log().add("[-] Client disconnected", 'blue')
