@@ -2,8 +2,8 @@
 # Protocol.py
 ##
 
-import json
-from simplejson import JSONEncoder
+import simplejson
+#from simplejson import JSONEncoder
 from log import Log
 
 class Protocol(object):
@@ -41,7 +41,7 @@ class Protocol(object):
 			self.__cmd_list['policy-file-request']()
 		else:
 			try:
-				json_cmd = json.loads(cmd)
+				json_cmd = simplejson.loads(cmd)
 				if json_cmd.get('cmd', None) is not None and json_cmd['cmd'] in self.__cmd_list:
 					try :
 						if json_cmd.get('app', None) == None or len(json_cmd.get('app', None)) == 0:
@@ -81,7 +81,7 @@ class Protocol(object):
 		str = [ ]
 		for user in users:
 			str.append(user.get_name())
-		self.client.squeue.put([self, '{"from": "list", "value": ' + JSONEncoder().encode(str) + ', "channel": "'+channel+'", "app": "'+app+'"}'])
+		self.client.squeue.put([self, '{"from": "list", "value": ' + simplejson.JSONEncoder().encode(str) + ', "channel": "'+channel+'", "app": "'+app+'"}'])
 
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):

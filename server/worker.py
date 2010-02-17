@@ -39,7 +39,7 @@ class Worker(threading.Thread):
 			item = self.__queue.get()
 			commands = item[1].split("\n")
 			if len(commands) == 1:
-				item[0].protocol.parse(cmd)
+				item[0].protocol.parse(commands[0])
 			else:
 				for cmd in commands:
 					item[0].queue_cmd(cmd)
