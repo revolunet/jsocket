@@ -63,7 +63,7 @@ class Client(threading.Thread):
 			self.status = "offline"
 			self.protocol.status()
 		try :
-			self.client_socket.close()
+			self.client_socket.close(self)
 		except Exception:
 			pass
 		Log().add("[-] Client disconnected", 'blue')
