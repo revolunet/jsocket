@@ -183,15 +183,15 @@ class Protocol(object):
 			if len(message[0]) != 0:
 				if len(message[1]) > 0:
 					if len(message[1][0]) == 0:
-						ret = self.client.room.message(channel, self.client, ['master'], message[0])
+						ret = self.client.room.message(channel, self.client, ['master'], message[0], app)
 					elif message[1][0] == '*':
-						ret = self.client.room.message(channel, self.client, ['all'], message[0])
+						ret = self.client.room.message(channel, self.client, ['all'], message[0], app)
 					elif message[1][0] == 'master':
-						ret = self.client.room.message(channel, self.client, ['master'], message[0])
+						ret = self.client.room.message(channel, self.client, ['master'], message[0], app)
 					else:
-						ret = self.client.room.message(channel, self.client, message[1], message[0])
+						ret = self.client.room.message(channel, self.client, message[1], message[0], app)
 				else:
-					ret = self.client.room.message(channel, self.client, ['master'], message[0])
+					ret = self.client.room.message(channel, self.client, ['master'], message[0], app)
 			if ret:
 				self.client.squeue.put([self, '{"from": "message", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])	
 			else:
