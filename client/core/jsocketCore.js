@@ -29,7 +29,7 @@ var jsocketCore = {
 		if (this.initialized == true && this.connectedToServer == false) {
 			this.socket.connect(server, port);
 		}
-		else {
+		else if (this.connectedToServer == false) {
 			setTimeout("jsocketCore.reconnect();", 500);
 		}
 	},
