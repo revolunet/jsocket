@@ -5,7 +5,6 @@
 import threading
 import json
 from protocol import Protocol
-from json import JSONEncoder
 from log import Log
 from settings import SETTINGS
 

@@ -3,7 +3,7 @@
 ##
 
 import json
-from json import JSONEncoder
+from simplejson import JSONEncoder
 from log import Log
 
 class Protocol(object):
