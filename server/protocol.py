@@ -228,11 +228,11 @@ class Protocol(object):
 		Log().add("[+] Client : le client " + str(self.client.get_name()) + " a demande l'heure de connection")
 		self.client.squeue.put([self, '{"from": "timeConnect", "value": "' + self.client.connection_time + '", "channel": "'+channel+'", "app": "'+app+'"}'])
 	
-	# {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "app", "channelName"}
+	# {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "channel": "channelName", "app" : ""}
 	def __cmd_chanMasterPwd(self, args, channel = None, app = None):
 		"""Change le mot de passe master d'un channel"""
 		
-		if self.client.master and self.client.room.changeChanMasterPwd(args, app):
+		if self.client.master and self.client.room.changeChanMasterPwd(args, channel):
 			Log().add("[+] Client : le client " + str(self.client.get_name()) + " a changer le mot de passe master du channel : " + app)
 			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": true, "channel": "'+channel+'", "app": "'+app+'"}'])
 		else:
