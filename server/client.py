@@ -37,6 +37,7 @@ class Client(threading.Thread):
 			try:
 				data = self.client_socket.recv(1024).strip()
 			except Exception:
+				Log().add("[!] Exception from socket.recv of " + str(self.client_address))
 				__disconnection()
 			if len(data) == 0:
 				self.__disconnection()
