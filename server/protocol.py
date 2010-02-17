@@ -47,7 +47,6 @@ class Protocol(object):
 						if json_cmd.get('app', None) == None or len(json_cmd.get('app', None)) == 0:
 							json_cmd['app'] = "null"
 						if json_cmd.get('channel', None) == None or len(json_cmd.get('channel', None)) == 0:
-							Log().add("CHANNEL NONE")
 							json_cmd['channel'] = "null"
 						if json_cmd.get('args', None) is not None and json_cmd.get('channel', None) is not None and json_cmd.get('app', None) is not None:
 							self.__cmd_list [json_cmd['cmd']](json_cmd['args'], json_cmd['channel'], json_cmd['app'])
@@ -251,4 +250,4 @@ class Protocol(object):
 			if channel:
 				master = channel.get_master()
 				if master:
-					master.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "channel": "'+client.room_name+'", "app": "'+app+'"}')
+					master.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "channel": "'+client.room_name+'" }')
