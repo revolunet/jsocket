@@ -26,7 +26,7 @@ class Client(threading.Thread):
 		self.rqueue = rqueue
 		self.squeue = squeue
 		self.room_name = None
-		self.status = "connected"
+		self.status = "online"
 		self.connection_time = time.strftime('%x %X')
 		threading.Thread.__init__(self)
 

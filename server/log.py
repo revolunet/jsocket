@@ -13,7 +13,7 @@ from settings import SETTINGS
 class Log(object):
 	"""docstring for Log"""
 	class __Log:
-		def __init__(self, nb_thread = 8):
+		def __init__(self, nb_thread = 0):
 			""" Creation du fichier de log et initialisation du Queue worker """
 
 			import os.path
