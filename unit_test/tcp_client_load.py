@@ -9,7 +9,7 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('192.168.1.35', 9999)
+	tcpclient = TCPClient('192.168.1.34', 9999)
 	#tcpclient.handle()
 	#tcpclient.write('<policy-file-request/>')
 	tcpclient.write('{"cmd":"getStatus", "args": "null", "channel": "null", "app" : "null"}\n')
@@ -59,11 +59,11 @@ def create_tcp_client_(aim = 'default'):
 	tcpclient.disconnect()
  
 def main():
-	#client_thread = threading.Thread(target=create_tcp_client, args=())
-	#client_thread.start()
-	for i in range(0,1000):
-		client_thread = threading.Thread(target=create_tcp_client, args=())
-		client_thread.start()
+	client_thread = threading.Thread(target=create_tcp_client, args=())
+	client_thread.start()
+	#for i in range(0,1000):
+	#	client_thread = threading.Thread(target=create_tcp_client, args=())
+	#	client_thread.start()
 	print '[i] Press ^C to exit'
 	while True:
 		try:
