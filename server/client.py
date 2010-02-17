@@ -61,6 +61,6 @@ class Client(threading.Thread):
 		if self.room_name:
 			self.room.part(self.room_name, self)
 			self.status = "offline"
-			self.protocol.status()
+			self.protocol.status(self)
 		self.client_socket.close()
 		Log().add("[-] Client disconnected", 'blue')
