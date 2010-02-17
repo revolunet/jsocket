@@ -91,7 +91,9 @@ var jsocketApi = {
 			else {
 				try {
 					this.appCallbacks('on' + func_name, this.core.stripslashes(j.value));
+					//alert('apres this');
 					eval('jsocketApi.on'+func_name+"(jsocketApi.core.stripslashes(j.value))");
+					//alert('apres eval');
 				} catch(e) {
 					jsocketApi.onError(e);
 				}
@@ -195,12 +197,14 @@ var jsocketApi = {
 	* Cette fonction permet d'associé le client a un channel sur le serveur.
 	* @appName : le nom de l'application -> string
 	* @channel : le nom d'un salon -> string
+	* @password : le mot de passe du salon -> string
 	* @serveur_syntax : {"cmd": "join", "args": "channelName"}
 	**/
-	join : function(appName, channel) {
+	join : function(appName, channel, password) {
 		appName = this.core.addslashes(appName);
 		channel = this.core.addslashes(channel);
-		this.core.send('{"cmd": "join", "args": [ "'+channel+'" ], "channel": "'+channel+'", "app": "'+appName+'"}');
+		password = this.core.addslashes(password);
+		this.core.send('{"cmd": "join", "args": [ "'+channel+'", "'+password+'" ], "channel": "'+channel+'", "app": "'+appName+'"}');
 	},
 	
 	/**

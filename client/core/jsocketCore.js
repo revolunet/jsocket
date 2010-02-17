@@ -53,7 +53,7 @@ var jsocketCore = {
 			str = encodeURIComponent(str);
 			str = str.replace(/'/g, "%27");
 		}
-		else {
+		else if (typeof(str) == 'object') {
 			for (var i = 0; str[i]; ++i) {
 				str[i] = this.addslashes(str[i]);
 			}
@@ -71,7 +71,7 @@ var jsocketCore = {
 			str = str.replace(/\%27/g, "'");
 			str = decodeURIComponent(str);
 		}
-		else {
+		else if (typeof(str) == 'object') {
 			for (var i = 0; str[i]; ++i) {
 				str[i] = this.stripslashes(str[i]);
 			}
