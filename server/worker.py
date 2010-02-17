@@ -38,8 +38,11 @@ class Worker(threading.Thread):
 		while True:
 			item = self.__queue.get()
 			commands = item[1].split("\n")
-			for cmd in commands:
+			if len(commands) == 1:
 				item[0].protocol.parse(cmd)
+			else:
+				for cmd in commands:
+					item[0].queue_cmd(cmd)
 
 	def run(self):
 		""" Redirection vers la methode approprie pour le traitement de la Queue """
