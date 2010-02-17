@@ -84,7 +84,8 @@ var jsocketApi = {
 			func_name = j.from.substring(0,1).toUpperCase() + j.from.substring(1, j.from.length);
 			if (j.app != null) {
 				try {
-					this.appCallback(j.app, 'on' + func_name, this.core.stripslashes(j.value));
+					this.appCallback(this.core.stripslashes(j.app),
+						'on' + func_name, this.core.stripslashes(j.value));
 				} catch(e) { }
 			}
 			else {
@@ -146,25 +147,32 @@ var jsocketApi = {
 	* Cette fonction permet d'obtenir des droits supplementaire sur le serveur.
 	* @appName : le nom de l'application -> string
 	* @channel : le nom d'un salon -> string
-	* @serveur_syntax : {"cmd": "auth", "args": "passphrase"}
+	* @password : mot de passe pour passer admin sur le serveur -> string
 	**/
-	auth : function (appName, password) {
-		this.core.send('{"cmd": "auth", "args": "'+this.core.addslashes(password)+'", "app": "'+appName+'"}');
+	auth : function (appName, channel, password) {
 		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
 			jsocketApi.app[appName].master = true;
 		}
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		password = this.core.addslashes(password);
+		this.core.send('{"cmd": "auth", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 	
 	/**
 	* Authentifie un utilisateur (comme master) sur un channel
 	* @appName : le nom de l'application/channel -> string
-	* @password : le mot de passe du channel
+	* @channel : le nom d'un salon -> string
+	* @password : le mot de passe du channel -> string
 	**/
-	chanAuth : function (appName, password) {
-		this.core.send('{"cmd": "chanAuth", "args": "'+password+'", "app": "'+appName+'"}');
+	chanAuth : function (appName, channel, password) {
 		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
 			jsocketApi.app[appName].master = true;
 		}
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		password = this.core.addslashes(password);
+		this.core.send('{"cmd": "chanAuth", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 	
 	/**
@@ -190,7 +198,9 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "join", "args": "channelName"}
 	**/
 	join : function(appName, channel) {
-		this.core.send('{"cmd": "join", "args": [ "'+this.core.addslashes(channel)+'" ], "app": "'+appName+'"}');
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		this.core.send('{"cmd": "join", "args": [ "'+channel+'" ], "channel": "'+channel+'", "app": "'+appName+'"}');
 	},
 	
 	/**
@@ -208,7 +218,9 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "part", "args": "channelName"}
 	**/
 	part : function(appName, channel) {
-		this.core.send('{"cmd": "part", "args": "'+this.core.addslashes(channel)+'", "app": "'+appName+'"}');
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		this.core.send('{"cmd": "part", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 	
 	/**
@@ -223,13 +235,17 @@ var jsocketApi = {
 	* Cette fonction permet d'ajouter un nouveau channel sur le serveur.
 	* @appName : le nom de l'application -> string
 	* @channel : le nom d'un salon -> string
+	* @password : mot de passe du salon -> string
 	* @serveur_syntax : {"cmd": "create", "args": "channelName"}
 	**/
-	create : function(appName, channel) {
-		this.core.send('{"cmd": "create", "args": [ "'+this.core.addslashes(channel)+'" ], "app": "'+appName+'"}');
+	create : function(appName, channel, password) {
 		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
 			jsocketApi.app[appName].master = true;
 		}
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		password = this.core.addslashes(password);
+		this.core.send('{"cmd": "create", "args": [ "'+channel+'", "'+password+'" ], "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 	
 	/**
@@ -247,16 +263,22 @@ var jsocketApi = {
 	* @serveur_syntax : {"cmd": "remove", "args": "channelName"}
 	**/
 	remove : function(appName, channel) {
-		this.core.send('{"cmd": "remove", "args": "'+this.core.addslashes(channel)+'", "app": "'+appName+'"}');
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		this.core.send('{"cmd": "remove", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 	
 	/**
 	* Change le nom d'utilisateur
 	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
 	* @nickname : le nom d'utilisateur
 	**/
-	nick : function(appName, nickname) {
-		this.core.send('{"cmd": "nick", "args": "'+this.core.addslashes(nickname)+'", "app": "'+appName+'"}');
+	nick : function(appName, channel, nickname) {
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		nickname = this.core.addslashes(nickname);
+		this.core.send('{"cmd": "nick", "args": "'+nickname+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 	
 	/**
@@ -271,10 +293,14 @@ var jsocketApi = {
 	* Cette fonction permet a un master de forwarder une commande
 	* sur tous les clients connectes a son channel
 	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
 	* @command : la commande a forwarder
 	**/
-	forward : function(appName, command) {
-		this.core.send('{"cmd": "forward", "args": "'+this.core.addslashes(command)+'", "app": "'+appName+'"}');
+	forward : function(appName, channel, command) {
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		command = this.core.addslashes(command);
+		this.core.send('{"cmd": "forward", "args": "'+command+'", "app": "'+appName+'", "channel": "'+channel+'"}');
 	},
 	
 	/**
@@ -288,10 +314,13 @@ var jsocketApi = {
 
 	/**
 	* Permet de lister tous les utilisateurs connecte au channel
-	* @channel : nom du channel
+	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
 	**/
-	list : function(channel) {
-		this.core.send('{"cmd": "list", "args": "'+this.core.addslashes(channel)+'"}')
+	list : function(appName, channel) {
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		this.core.send('{"cmd": "list", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}')
 	},
 
 	/**
@@ -305,14 +334,15 @@ var jsocketApi = {
 	/**
 	* Envoie un message a un ou plusieurs clients
 	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
 	* @tab : [0] = message a envoyer
 	*        [1] = [ '*' ] pour tous les clients du channel
 	*              [ '' ] ou [ 'master' ] pour le master du channel
 	*              [ 'username1', 'username2', ... ] pour une liste de clients
 	**/
-	message : function(appName, tab) {
+	message : function(appName, channel, tab) {
 		if (typeof(tab) == 'string') {
-			str = tab;
+			str = this.core.addslashes(tab);
 		} else {
 			var str = '[ "' + this.core.addslashes(tab[0]) +
 				'", [ "' + (tab[1][0] ? this.core.addslashes(tab[1][0]) : '') + '"';
@@ -321,7 +351,9 @@ var jsocketApi = {
 			}
 			str += ' ] ]';
 		}
-		this.core.send('{"cmd": "message", "app": "'+appName+'", "args": ' + str + '}');
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		this.core.send('{"cmd": "message", "app": "'+appName+'", "args": ' + str + ', "channel": "'+channel+'"}');
 	},
 
 	/**
@@ -331,6 +363,86 @@ var jsocketApi = {
 	**/
 	onMessage : function(command) {
 		//implement onMessage code here.
+	},
+
+	/**
+	* Renvoie le statut de l'utilisateur courant
+	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
+	**/
+	getStatus : function(appName, channel) {
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		this.core.send('{"cmd": "getStatus", "args": "null", "app": "'+appName+'", "channel": "'+channel+'"}');
+	},
+
+	/**
+	* Callback reception status
+	* @status : status de l'utilisateur courant
+	**/
+	onGetStatus : function(status) {
+		//implement onGetStatus code here.
+	},
+	
+	/**
+	* Set le status d'un utilisateur
+	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
+	* @status : le status de l'utilisateur
+	**/
+	setStatus : function(appName, channel, status) {
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		status = this.core.addslashes(status);
+		this.core.send('{"cmd": "getStatus", "args": "'+status+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+	},
+
+	/**
+	* Callback setStatus
+	* @code : true or false
+	**/
+	onSetStatus : function(code) {
+		//implement onSetStatus code here.
+	},
+
+	/**
+	* Renvoie l'heure a laquelle l'utilisateur courant s'est connecte
+	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
+	**/
+	timeConnect : function(appName, channel) {
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		this.core.send('{"cmd": "timeConnect", "args": "null", "app": "'+appName+'", "channel": "'+channel+'"}');
+	},
+
+	/**
+	* Callback timeConnect
+	* @code : true or false
+	**/
+	onTimeConnect : function(code) {
+		//implement onSetStatus code here.
+	},
+
+	/**
+	* Change le mot de passe d'un salon
+	* @appName : le nom de l'application -> string
+	* @channel : le nom d'un salon -> string
+	* @password : mot de passe -> string
+	**/
+	chanMasterPwd : function(appName, channel, password) {
+		appName = this.core.addslashes(appName);
+		channel = this.core.addslashes(channel);
+		password = this.core.addslashes(password);
+		this.core.send('{"cmd": "timeConnect", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+	},
+
+	/**
+	* Callback chanMasterPwd
+	* @code : true or false
+	**/
+	onChanMasterPwd : function(code) {
+		//implement onSetStatus code here.
 	},
 
 	/**

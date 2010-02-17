@@ -42,14 +42,14 @@ class Protocol(object):
 		else:
 			try:
 				json_cmd = json.loads(cmd)
-				if json_cmd['cmd'] and json_cmd['cmd'] in self.__cmd_list:
+				if json_cmd.get('cmd', None) is not None and json_cmd['cmd'] in self.__cmd_list:
 					try :
 						if json_cmd.get('app', None) == None or len(json_cmd.get('app', None)) == 0:
 							json_cmd['app'] = "null"
 						if json_cmd.get('channel', None) == None or len(json_cmd.get('channel', None)) == 0:
 							Log().add("CHANNEL NONE")
 							json_cmd['channel'] = "null"
-						if json_cmd['args'] and json_cmd['channel'] and json_cmd['app']:
+						if json_cmd.get('args', None) is not None and json_cmd.get('channel', None) is not None and json_cmd.get('app', None) is not None:
 							self.__cmd_list [json_cmd['cmd']](json_cmd['args'], json_cmd['channel'], json_cmd['app'])
 					except KeyError:
 						Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' prends deux arguments", 'ired')
