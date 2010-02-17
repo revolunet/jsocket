@@ -93,28 +93,28 @@ class Room():
 					return True
 		return False
 		
-	def message(self, appName, sender, users, message):
+	def message(self, channelName, sender, users, message, appName):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
 
-		if self.channelExists(appName):
-			if sender in self.channel(appName).list_users():
-				master = self.channel(appName).get_master()
+		if self.channelExists(channelName):
+			if sender in self.channel(channelName).list_users():
+				master = self.channel(channelName).get_master()
 				if len(users) > 0:
-					list_users = self.list_users(appName)
+					list_users = self.list_users(channelName)
 					if users[0] == 'master' and master:
-						master.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "app" : "' + appName + '"}')
+						master.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 						return True
 					elif users[0] == 'all':
 						if len(list_users) >= 1:
 							for user in list_users:
-								user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "app" : "' + appName + '"}')
+								user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 							return True
 						return False
 					else:
 						if len(list_users) >= 1:
 							for user in list_users:
 								if user.get_name() in users:
-									user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "app" : "' + appName + '"}')
+									user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 							return True
 						return False
 		return False
