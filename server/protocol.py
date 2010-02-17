@@ -250,4 +250,8 @@ class Protocol(object):
 			if channel:
 				master = channel.get_master()
 				if master:
-					master.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "channel": "'+client.room_name+'" }')
+					if client.room_name:
+						channel = client.room_name
+					else:
+						channel = "none"
+					master.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "channel": "'+channel+'"}')
