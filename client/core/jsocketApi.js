@@ -1,6 +1,16 @@
 /**
 * Api de dialogue avec JsocketCore.
-*/
+*  Callback return args:
+*   - tab['value']: value JSON field (empty string '' if not exists)
+*   - tab['app'] : app JSON field (empty string '' if not exists)
+*   - tab['channel'] : channel JSON field (empty string '' if not exists)
+*  Example:
+*   jsocketApi.app['myapp'].onJoin(args) {
+*		//args['value'] = true
+*		//args['app'] = 'myapp'
+*		//args['channel'] = 'myapp_channel'
+*	};
+**/
 var jsocketApi = {
 	// jsocketCore Object
 	core : jsocketCore,
@@ -78,20 +88,24 @@ var jsocketApi = {
 	* @text : le texte a transformer -> string
 	**/
 	parser : function(text) {
-		var data = [];
 		var j = json_parse(text);
 		if (j.from != null && j.value != null) {
 			func_name = j.from.substring(0,1).toUpperCase() + j.from.substring(1, j.from.length);
+			var args = [];
+			args['value'] = (j.value != null ? j.value : '');
+			args['channel'] = (j.channel != null ? j.channel : '');
+			args['app'] = (j.app != null ? j.app : '');
+			args = jsocketApi.core.stripslashes(args);
 			if (j.app != null) {
 				try {
 					this.appCallback(this.core.stripslashes(j.app),
-						'on' + func_name, this.core.stripslashes(j.value));
+						'on' + func_name, args);
 				} catch(e) { }
 			}
 			else {
 				try {
-					this.appCallbacks('on' + func_name, this.core.stripslashes(j.value));
-					eval('jsocketApi.on'+func_name+"(jsocketApi.core.stripslashes(j.value))");
+					this.appCallbacks('on' + func_name, args);
+					eval('jsocketApi.on'+func_name+"(args)");
 				} catch(e) {
 					jsocketApi.onError(e);
 				}
