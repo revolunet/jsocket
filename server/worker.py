@@ -19,6 +19,7 @@ class Worker(threading.Thread):
 		while True:
 			item = self.__queue.get()
 			Log().dprint(item[0], item[1])
+			self.__queue.task_done()
 
 	def type_send(self):
 		""" Parcours la Queue pour envoyer la string correspondante a l'objet client """
@@ -30,6 +31,7 @@ class Worker(threading.Thread):
 				item[0].client.client_socket.send(item[1] + "\0")
 			except Exception:
 				pass
+			self.__queue.task_done()
 		
 	def type_recv(self):
 		""" Parcours la Queue pour parser la string correspondante """
@@ -38,8 +40,12 @@ class Worker(threading.Thread):
 		while True:
 			item = self.__queue.get()
 			commands = item[1].split("\n")
-			for cmd in commands:
-				item[0].protocol.parse(cmd)
+			if len(commands) == 1:
+				item[0].protocol.parse(item[1])
+			else:
+				for cmd in commands:
+					item[0].queue_cmd(cmd)
+			self.__queue.task_done()
 
 	def run(self):
 		""" Redirection vers la methode approprie pour le traitement de la Queue """
