@@ -59,9 +59,9 @@ def create_tcp_client_(aim = 'default'):
 def main():
 	client_thread = threading.Thread(target=create_tcp_client, args=())
 	client_thread.start()
-	#for i in range(0,1000):
-	#	client_thread = threading.Thread(target=create_tcp_client, args=())
-	#	client_thread.start()
+	for i in range(0,2):
+		client_thread = threading.Thread(target=create_tcp_client_, args=())
+		client_thread.start()
 	print '[i] Press ^C to exit'
 	while True:
 		try:
