@@ -9,17 +9,17 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('192.168.1.34', 9999)
+	tcpclient = TCPClient('localhost', 9999)
 	#tcpclient.handle()
 	#tcpclient.write('<policy-file-request/>')
-	tcpclient.write('{"cmd":"getStatus", "args": "null", "channel": "null", "app" : "null"}\n')
-	tcpclient.handle()
+	#tcpclient.write('{"cmd":"getStatus", "args": "null", "channel": "null", "app" : "null"}\n')
+	#tcpclient.handle()
 	
-	tcpclient.write('{"cmd":"setStatus", "app" : "null"}\n')
-	tcpclient.handle()
-	tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
-	tcpclient.handle()
-	tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*\']]", "channel": "irc", "app" : "whiteboard"}\n')
+	#tcpclient.write('{"cmd":"setStatus", "app" : "null"}\n')
+	#tcpclient.handle()
+	#tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
+	#tcpclient.handle()
+	tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\']]", "channel": "irc", "app" : "whiteboard"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"forward", "args":"[\'HELLO\', [\'*\']]", "channel": "irc", "app" : "whiteboard"}\n')
 	tcpclient.handle()

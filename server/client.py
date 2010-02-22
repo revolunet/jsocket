@@ -33,9 +33,13 @@ class Client(threading.Thread):
 
 		while 1:
 			try:
-				data = self.client_socket.recv(1024).strip()
+				data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+				while len(buffer) == SETTINGS.SERVER_MAX_READ:
+					buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+					data = data + buffer
 			except Exception:
 				self.__disconnection()
+				return
 			if len(data) == 0:
 				self.__disconnection()
 				return
