@@ -78,7 +78,7 @@ class Room():
 		
 	def part(self, channelName, client):
 		"""Return Supprime un utilisateur d'une room  -> bool """
-		
+			
 		if self.channelExists(channelName):
 			self.rooms[channelName].delete(client)
 			self.count_users = self.count_users - 1
