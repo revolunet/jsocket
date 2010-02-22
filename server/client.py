@@ -59,12 +59,13 @@ class Client(threading.Thread):
 				
 	def __master_logout(self):
 		
-		for channel in self.room:
-			if channel.master == self:
-				for user in channel.client_list:
+		rooms = self.room.rooms
+		for channel in rooms:
+			if rooms[channel].master == self:
+				for user in rooms[channel].client_list:
 					if user.master == False:
 						Log().add("[+] Envoie du status master au client : " + user.get_name(), 'blue')
-						user.queue_cmd([user.protocol, '{"from": "status", "args": ["master", "offline"]}'])
+						self.squeue.put([user.protocol, '{"from": "status", "value": ["master", "offline"]}'])
 		
 	def __disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""

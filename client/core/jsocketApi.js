@@ -98,8 +98,7 @@ var jsocketApi = {
 			args = jsocketApi.core.stripslashes(args);
 			if (j.app != null) {
 				try {
-					this.appCallback(this.core.stripslashes(j.app),
-						'on' + func_name, args);
+					this.appCallback(args['app'], 'on' + func_name, args);
 				} catch(e) { }
 			}
 			else {
