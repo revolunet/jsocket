@@ -4,6 +4,7 @@
 
 from channel import Channel
 from log import Log
+from settings import SETTINGS
 
 class Room():
 	"""docstring for Room"""
@@ -48,12 +49,24 @@ class Room():
 			return True
 		return False
 		
+	def canJoin(self, channelName, client):
+		if SETTINGS.CHANNEL_MAX_USERS == 0 or client.master:
+			return True
+		channel = self.rooms[channelName]
+		users = 0
+		for client in channel.client_list:
+			if client.master == False:
+				users = users + 1
+		if users == 0:
+			return True
+		return users <= SETTINGS.CHANNEL_MAX_USERS - 1
+		
 	def join(self, args, client):
 		"""Return Ajoute un utilisateur dans la room specifie  -> bool """
 		
-		if self.channelExists(args[0]):
+		if self.channelExists(args[0]) and self.canJoin(args[0], client):
 			if self.rooms[args[0]].isProtected() and len(args) > 1:
-				if self.rooms[args[0]].channelPwd == args[1]:
+				if self.rooms[args[0]].channelPwd == args[1] or client.master == True:
 					self.rooms[args[0]].add(client)
 				else:
 					return False

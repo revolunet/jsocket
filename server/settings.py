@@ -14,6 +14,9 @@ class SETTINGS(object):
 	SERVER_SELECT_TIMEOUT = 5
 	SERVER_MAX_READ = 1024
 	
+	# Ne prends pas en compte le/les master/s
+	CHANNEL_MAX_USERS = 1
+	
 	MAX_SENDQUEUE = 8
 	MAX_RECEIVEQUEUE = 8
 	
