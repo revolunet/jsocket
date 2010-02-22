@@ -193,5 +193,5 @@ var jsocketCore = {
 		}
 		this.api.onReceive(msg);
 		return (true);
-	},
+	}
 };
