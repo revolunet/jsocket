@@ -72,10 +72,14 @@ class Client(threading.Thread):
 
 		if self.master == True:
 			self.__master_logout()
-
-		if self.room_name:
-			self.room.part(self.room_name, self)
-			self.status = "offline"
-			self.protocol.status(self)
+		
+		rooms = self.room.rooms
+		for channel in rooms:
+			for user in rooms[channel].client_list:
+				if user == self:
+					self.room.part(channel, self)
+					
+		self.status = "offline"
+		self.protocol.status(self)
 		self.client_socket.close()
 		Log().add("[-] Client disconnected", 'blue')
