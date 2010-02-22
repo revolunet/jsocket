@@ -109,6 +109,14 @@ var jsocketApi = {
 	},
 	
 	/**
+	* Callback appele via flash quand la connection avec le serveur echoue
+	* @code : true or false
+	**/
+	onDisconnect : function (code) {
+		//implement onDisconnect code here.
+	},
+	
+	/**
 	* Callback lorsque la connection avec le serveur est etablie.
 	* @code : true ou false
 	**/

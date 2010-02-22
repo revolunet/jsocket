@@ -97,7 +97,6 @@ var jsocketCore = {
 				return (false);
 			}
 			setTimeout("jsocketCore.send('" + msg + "');", 500);
-			//this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
 			return (false);
 		}
 		return (true);
@@ -145,7 +144,7 @@ var jsocketCore = {
 		if (typeof this.api != 'object') {
 			return (false);
 		}
-		//this.api.onDisconnect('{"from": "disconnect", "value": "true"}');
+		this.api.onDisconnect('{"from": "disconnect", "value": "true"}');
 		this.connectedToServer = false;
 		this.reconnect();
 		return (true);
