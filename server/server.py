@@ -53,8 +53,7 @@ class Server(object):
 					elif s == sys.stdin: 
 						# handle standard input 
 						junk = sys.stdin.readline() 
-						running = 0 
-						
+						running = 0
 					else: 
 						# handle all other sockets 
 						data = s.recv(size) 

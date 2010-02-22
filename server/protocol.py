@@ -2,6 +2,7 @@
 # Protocol.py
 ##
 
+
 import simplejson
 #from simplejson import JSONEncoder
 from log import Log
@@ -50,6 +51,8 @@ class Protocol(object):
 							json_cmd['channel'] = "null"
 						if json_cmd.get('args', None) is not None and json_cmd.get('channel', None) is not None and json_cmd.get('app', None) is not None:
 							self.__cmd_list [json_cmd['cmd']](json_cmd['args'], json_cmd['channel'], json_cmd['app'])
+						else:
+							Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' arguments invalides", 'ired')
 					except KeyError:
 						Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' prends deux arguments", 'ired')
 				else:

@@ -54,7 +54,7 @@ var jsocketCore = {
 			str = str.replace(/'/g, "%27");
 		}
 		else if (typeof(str) == 'object') {
-			for (var i = 0; str[i]; ++i) {
+			for (var i in str) {
 				str[i] = this.addslashes(str[i]);
 			}
 		}
@@ -72,7 +72,7 @@ var jsocketCore = {
 			str = decodeURIComponent(str);
 		}
 		else if (typeof(str) == 'object') {
-			for (var i = 0; str[i]; ++i) {
+			for (var i in str) {
 				str[i] = this.stripslashes(str[i]);
 			}
 		}
@@ -97,7 +97,6 @@ var jsocketCore = {
 				return (false);
 			}
 			setTimeout("jsocketCore.send('" + msg + "');", 500);
-			//this.api.onDisconnect('{"from": "disconnect", "value": "True"}');
 			return (false);
 		}
 		return (true);
@@ -145,7 +144,7 @@ var jsocketCore = {
 		if (typeof this.api != 'object') {
 			return (false);
 		}
-		//this.api.onDisconnect('{"from": "disconnect", "value": "true"}');
+		this.api.parser('{"from": "disconnect", "value": true}');
 		this.connectedToServer = false;
 		this.reconnect();
 		return (true);
@@ -160,7 +159,7 @@ var jsocketCore = {
 		if (typeof this.api != 'object') {
 			return (false);
 		}
-		this.api.onError('{"from": "ioError", "value": "' + msg + '"}');
+		this.api.parser('{"from": "error", "value": "' + msg + '"}');
 		if (this.connectedToServer == false) {
 			this.reconnect();
 		}
@@ -176,7 +175,7 @@ var jsocketCore = {
 		if (typeof this.api != 'object') {
 			return (false);
 		}
-		this.api.onError('{"from": "securityError", "value": "' + msg + '"}');
+		this.api.parser('{"from": "error", "value": "' + msg + '"}');
 		if (this.connectedToServer == false) {
 			this.reconnect();
 		}
@@ -194,5 +193,5 @@ var jsocketCore = {
 		}
 		this.api.onReceive(msg);
 		return (true);
-	},
+	}
 };

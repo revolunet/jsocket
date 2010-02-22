@@ -9,17 +9,19 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('192.168.1.35', 9999)
+	tcpclient = TCPClient('localhost', 9999)
 	#tcpclient.handle()
 	#tcpclient.write('<policy-file-request/>')
-	tcpclient.write('{"cmd":"getStatus", "args": "null", "channel": "null", "app" : "null"}\n')
-	tcpclient.handle()
+	#tcpclient.write('{"cmd":"getStatus", "args": "null", "channel": "null", "app" : "null"}\n')
+	#tcpclient.handle()
 	
 	tcpclient.write('{"cmd":"setStatus", "app" : "null"}\n')
+	#tcpclient.handle()
+	tcpclient.write('{"cmd":"setStatus", "args" : "hello"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
 	tcpclient.handle()
-	tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*\']]", "channel": "irc", "app" : "whiteboard"}\n')
+	tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\']]", "channel": "irc", "app" : "whiteboard"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"forward", "args":"[\'HELLO\', [\'*\']]", "channel": "irc", "app" : "whiteboard"}\n')
 	tcpclient.handle()
@@ -28,10 +30,6 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.write('{"cmd":"part", "args": "CHANNELQUIEXISTEPAS", "channel": "null", "app" : "whiteboard"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"join", "args": ["irc"], "channel": "irc", "app" : "whiteboard"}\n')
-	tcpclient.handle()
-	tcpclient.write('{"cmd":"auth", "args": "master", "channel": "null", "app" : "whiteboard"}\n')
-	tcpclient.handle()
-	tcpclient.write('{"cmd":"auth", "args": "admin", "channel": "null", "app" : "whiteboard"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"chanAuth", "args": "admin", "channel": "irc", "app" : "whiteboard"}\n')
 	tcpclient.handle()
@@ -59,10 +57,10 @@ def create_tcp_client_(aim = 'default'):
 	tcpclient.disconnect()
  
 def main():
-	#client_thread = threading.Thread(target=create_tcp_client, args=())
-	#client_thread.start()
-	for i in range(0,1000):
-		client_thread = threading.Thread(target=create_tcp_client, args=())
+	client_thread = threading.Thread(target=create_tcp_client, args=())
+	client_thread.start()
+	for i in range(0,2):
+		client_thread = threading.Thread(target=create_tcp_client_, args=())
 		client_thread.start()
 	print '[i] Press ^C to exit'
 	while True:
