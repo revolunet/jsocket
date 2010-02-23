@@ -3,11 +3,11 @@
 ##
 
 import threading
-from protocol import Protocol
-from log import Log
-from settings import SETTINGS
+from commons.protocol import Protocol
+from log.logger import Log
+from config.settings import SETTINGS
 
-class Client(threading.Thread):
+class ClientTCP(threading.Thread):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
 		import time
 		import random

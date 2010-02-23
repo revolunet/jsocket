@@ -6,11 +6,11 @@ import socket
 import SocketServer
 import threading
 
-from server import Server
+from server.tcp import ServerTCP
 
 def main():
 	"""Lance un serveur TCP"""
-	server = Server()
+	server = ServerTCP()
 	try:
 		server.start()
 	except KeyboardInterrupt:

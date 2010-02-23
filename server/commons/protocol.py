@@ -4,8 +4,7 @@
 
 
 import simplejson
-#from simplejson import JSONEncoder
-from log import Log
+from log.logger import Log
 
 class Protocol(object):
 	"""docstring for Protocol"""

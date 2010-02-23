@@ -6,13 +6,13 @@ import socket
 import sys
 import select
 import Queue
-from client import Client
-from room import Room
-from log import Log
-from worker import Worker
-from settings import SETTINGS
+from client.tcp import ClientTCP
+from commons.room import Room
+from log.logger import Log
+from commons.worker import Worker
+from config.settings import SETTINGS
 
-class Server(object):
+class ServerTCP(object):
 	"""docstring for Server"""
 	def __init__(self):
 		self.__host = SETTINGS.SERVER_HOST
@@ -48,7 +48,7 @@ class Server(object):
 						# handle the server socket 
 						client_socket, client_addr = self.__socket.accept()
 						Log().add("[+] Client connected " + (str(client_addr)))
-						current_client = Client(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
+						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
 						current_client.start()
 					elif s == sys.stdin: 
 						# handle standard input 

@@ -3,7 +3,7 @@
 # channel.py
 ##
 
-from log import Log
+from log.logger import Log
 
 class Channel():
 	"""docstring for Channel"""

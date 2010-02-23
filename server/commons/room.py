@@ -2,9 +2,9 @@
 # room.py
 ##
 
-from channel import Channel
-from log import Log
-from settings import SETTINGS
+from commons.channel import Channel
+from log.logger import Log
+from config.settings import SETTINGS
 
 class Room():
 	"""docstring for Room"""

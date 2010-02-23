@@ -15,7 +15,7 @@ class Worker(threading.Thread):
 	def type_log(self):
 		""" Parcours la Queue pour y logger tous ces elements via Log """
 
-		from log import Log
+		from log.logger import Log
 		while True:
 			item = self.__queue.get()
 			Log().dprint(item[0], item[1])
@@ -24,7 +24,7 @@ class Worker(threading.Thread):
 	def type_send(self):
 		""" Parcours la Queue pour envoyer la string correspondante a l'objet client """
 		
-		from client import Client
+		from client.tcp import ClientTCP
 		while True:
 			item = self.__queue.get()
 			try:
@@ -36,7 +36,7 @@ class Worker(threading.Thread):
 	def type_recv(self):
 		""" Parcours la Queue pour parser la string correspondante """
 		
-		from client import Client
+		from client.tcp import ClientTCP
 		while True:
 			item = self.__queue.get()
 			commands = item[1].split("\n")
