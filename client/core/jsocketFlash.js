@@ -1,7 +1,5 @@
 /**
- * Includes swf for flash socket bridge
- */
-var jsocketFlashHtml = '<embed height="300" width="1000" flashvars="scope=jsocketCore" allowscriptaccess="always" quality="low" bgcolor="#ffffff" name="socketBridge" id="socketBridge" style="" src="' + jsocketBridgeDomain + '" type="application/x-shockwave-flash">';
-document.getElementById('flashcontent').innerHTML = jsocketFlashHtml;
-document.getElementById('flashcontent').style.visibility = 'hidden';
-document.getElementById('flashcontent').style.position = 'absolute';
+* Includes swf for flash socket bridge
+**/
+swfobject.embedSWF(jsocketBridgeDomain, "flashcontent", "900", "200", "8.0.0", "expressInstall.swf",
+	{scope: 'jsocketCore'}, {menu: false}, {id:'socketBridge', name:'socketBridge', style:'position:absolute;top:-1000px;'});
