@@ -20,7 +20,8 @@ def main():
 #	main()	
 
 if __name__ == '__main__':
-	from server.http import ServerHTTP
+	main()
+#	from server.http import ServerHTTP
 	
-	server_http = ServerHTTP([], [], [])
-	server_http.start()
+#	server_http = ServerHTTP([], [], [])
+#	server_http.start()

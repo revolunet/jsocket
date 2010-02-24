@@ -9,7 +9,7 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('localhost', 9999)
+	tcpclient = TCPClient('192.168.1.35', 9999)
 	#tcpclient.handle()
 	#tcpclient.write('<policy-file-request/>')
 	#tcpclient.write('{"cmd":"getStatus", "args": "null", "channel": "null", "app" : "null"}\n')
@@ -33,6 +33,8 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"chanAuth", "args": "admin", "channel": "irc", "app" : "whiteboard"}\n')
 	tcpclient.handle()
+	tcpclient.write('{"cmd":"list", "args": "irc", "channel":"irc", "app":"whiteboard"}\n')
+	tcpclient.handle()
 	tcpclient.write('{"cmd":"timeConnect", "args": "null", "channel": "null", "app" : "whiteboard"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"create", "args": ["toto", "tata"], "channel": "null", "app" : "whiteboard"}\n')
@@ -47,7 +49,7 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.disconnect()
 	
 def create_tcp_client_(aim = 'default'):
-	tcpclient = TCPClient('localhost', 9999)
+	tcpclient = TCPClient('192.168.1.35', 9999)
 	#tcpclient.handle()
 	tcpclient.write('{"cmd":"join", "args":"irc", "app": "irc"}\n')
 	tcpclient.handle()
