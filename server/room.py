@@ -25,7 +25,7 @@ class Room():
 		else:
 			users = []
 			for room in self.rooms:
-				users.append(self.rooms[room].list_users())
+				users |= self.rooms[room].list_users()
 			return users
 	
 	def create(self, args, master):

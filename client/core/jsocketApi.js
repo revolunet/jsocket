@@ -40,7 +40,7 @@ var jsocketApi = {
 	register : function(appName, appObject) {
 		var newApp = appObject || { };
 		jsocketApi.app[appName] = newApp;
-		jsocketApi.app[appName].master = false;
+		jsocketApi.app[appName].isMaster = false;
 	},
 
 	/**
@@ -176,7 +176,7 @@ var jsocketApi = {
 	**/
 	auth : function (appName, channel, password) {
 		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
-			jsocketApi.app[appName].master = true;
+			jsocketApi.app[appName].isMaster = true;
 		}
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
@@ -192,7 +192,7 @@ var jsocketApi = {
 	**/
 	chanAuth : function (appName, channel, password) {
 		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
-			jsocketApi.app[appName].master = true;
+			jsocketApi.app[appName].isMaster = true;
 		}
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
@@ -267,7 +267,7 @@ var jsocketApi = {
 	**/
 	create : function(appName, channel, password) {
 		if (typeof(eval('jsocketApi.app["' + appName + '"]')) != 'undefined') {
-			jsocketApi.app[appName].master = true;
+			jsocketApi.app[appName].isMaster = true;
 		}
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
