@@ -24,8 +24,9 @@ class Room():
 			return self.rooms[channelName].list_users()
 		else:
 			users = []
+			from heapq import merge
 			for room in self.rooms:
-				users |= self.rooms[room].list_users()
+				users = list(merge(users, self.rooms[room].list_users()))
 			return users
 	
 	def create(self, args, master):
