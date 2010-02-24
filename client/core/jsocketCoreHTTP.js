@@ -125,13 +125,7 @@ var jsocketCoreHTTP = {
 	**/
 	write : function(msg)
 	{
-		if (jsocketCoreHTTP.connectedToServer == false) {
-			jsocketCoreHTTP.reconnect();
-		}
-		if (jsocketCoreHTTP.connectedToServer) {
-			jsocketCoreHTTP.socket.write(msg + "\n");
-		}
-		else {
+		jsocketCoreHTTP.socket.write(msg + "\n");
 			if (typeof jsocketCoreHTTP.api != 'object') {
 				return (false);
 			}
@@ -161,16 +155,6 @@ var jsocketCoreHTTP = {
 		}
 		jsocketCoreHTTP.connectedToServer = true;
 		jsocketCoreHTTP.api.onReceive('{"from": "connect", "value": true}');
-		return (true);
-	},
- 
-	/**
-	* Ferme la connection au serveur
-	* @void
-	**/
-	close : function()
-	{
-		jsocketCoreHTTP.socket.close();
 		return (true);
 	},
  
