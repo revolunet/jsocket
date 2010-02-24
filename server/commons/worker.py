@@ -25,12 +25,14 @@ class Worker(threading.Thread):
 		""" Parcours la Queue pour envoyer la string correspondante a l'objet client """
 		
 		from client.tcp import ClientTCP
+		from log.logger import Log
 		while True:
 			item = self.__queue.get()
 			try:
 				item[0].client.client_socket.send(item[1] + "\0")
+				Log().add("[DEBUG] (%s) send: %s" % (str(item[0]), item[1]))
 			except Exception:
-				pass
+				Log().add("[DEBUG] failed to send %s" % item[1])
 			self.__queue.task_done()
 		
 	def type_recv(self):

@@ -1,7 +1,7 @@
 /**
  * Javascript event's interface for flash swf socket bridge
  */
-var jsocketCore = {
+var jsocketCoreTCP = {
 	api : null,
 	initialized : false,
 	connectedToServer : false,
@@ -12,10 +12,10 @@ var jsocketCore = {
 	**/
 	loaded : function()
 	{
-		jsocketCore.initialized = true;
-		jsocketCore.connectedToServer = false;
-		jsocketCore.socket = document.getElementById("socketBridge");
-		jsocketCore.output = document.getElementById("jsocketBridgeOutput");
+		jsocketCoreTCP.initialized = true;
+		jsocketCoreTCP.connectedToServer = false;
+		jsocketCoreTCP.socket = document.getElementById("socketBridge");
+		jsocketCoreTCP.output = document.getElementById("jsocketBridgeOutput");
 		return (true);
 	},
  
@@ -26,11 +26,11 @@ var jsocketCore = {
 	**/
 	connect : function(server, port)
 	{
-		if (jsocketCore.initialized == true && jsocketCore.connectedToServer == false) {
-			jsocketCore.socket.connect(server, port);
+		if (jsocketCoreTCP.initialized == true && jsocketCoreTCP.connectedToServer == false) {
+			jsocketCoreTCP.socket.connect(server, port);
 		}
-		else if (jsocketCore.connectedToServer == false) {
-			setTimeout("jsocketCore.reconnect();", 500);
+		else if (jsocketCoreTCP.connectedToServer == false) {
+			setTimeout("jsocketCoreTCP.reconnect();", 500);
 		}
 	},
  
@@ -40,7 +40,7 @@ var jsocketCore = {
 	**/
 	reconnect : function()
 	{
-		jsocketCore.connect(jsocketCore.api.host, jsocketCore.api.port);
+		jsocketCoreTCP.connect(jsocketCoreTCP.api.host, jsocketCoreTCP.api.port);
 	},
 
 	/**
@@ -55,7 +55,7 @@ var jsocketCore = {
 		}
 		else if (typeof(str) == 'object') {
 			for (var i in str) {
-				str[i] = jsocketCore.addslashes(str[i]);
+				str[i] = jsocketCoreTCP.addslashes(str[i]);
 			}
 		}
 		return (str);
@@ -73,7 +73,7 @@ var jsocketCore = {
 		}
 		else if (typeof(str) == 'object') {
 			for (var i in str) {
-				str[i] = jsocketCore.stripslashes(str[i]);
+				str[i] = jsocketCoreTCP.stripslashes(str[i]);
 			}
 		}
 		return (str);
@@ -86,17 +86,17 @@ var jsocketCore = {
 	**/
 	write : function(msg)
 	{
-		if (jsocketCore.connectedToServer == false) {
-			jsocketCore.reconnect();
+		if (jsocketCoreTCP.connectedToServer == false) {
+			jsocketCoreTCP.reconnect();
 		}
-		if (jsocketCore.connectedToServer) {
-			jsocketCore.socket.write(msg + "\n");
+		if (jsocketCoreTCP.connectedToServer) {
+			jsocketCoreTCP.socket.write(msg + "\n");
 		}
 		else {
-			if (typeof jsocketCore.api != 'object') {
+			if (typeof jsocketCoreTCP.api != 'object') {
 				return (false);
 			}
-			setTimeout("jsocketCore.send('" + msg + "');", 500);
+			setTimeout("jsocketCoreTCP.send('" + msg + "');", 500);
 			return (false);
 		}
 		return (true);
@@ -108,7 +108,7 @@ var jsocketCore = {
 	**/
 	send : function(msg)
 	{
-		return (jsocketCore.write(msg));
+		return (jsocketCoreTCP.write(msg));
 	},
  
 	/**
@@ -117,11 +117,11 @@ var jsocketCore = {
 	**/
 	connected : function()
 	{
-		if (typeof jsocketCore.api != 'object') {
+		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
-		jsocketCore.connectedToServer = true;
-		jsocketCore.api.onReceive('{"from": "connect", "value": true}');
+		jsocketCoreTCP.connectedToServer = true;
+		jsocketCoreTCP.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
  
@@ -131,7 +131,7 @@ var jsocketCore = {
 	**/
 	close : function()
 	{
-		jsocketCore.socket.close();
+		jsocketCoreTCP.socket.close();
 		return (true);
 	},
  
@@ -141,12 +141,12 @@ var jsocketCore = {
 	**/
 	disconnected : function()
 	{
-		if (typeof jsocketCore.api != 'object') {
+		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
-		jsocketCore.api.parser('{"from": "disconnect", "value": true}');
-		jsocketCore.connectedToServer = false;
-		jsocketCore.reconnect();
+		jsocketCoreTCP.api.parser('{"from": "disconnect", "value": true}');
+		jsocketCoreTCP.connectedToServer = false;
+		jsocketCoreTCP.reconnect();
 		return (true);
 	},
  
@@ -156,12 +156,12 @@ var jsocketCore = {
 	**/
 	ioError: function(msg)
 	{
-		if (typeof jsocketCore.api != 'object') {
+		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
-		jsocketCore.api.parser('{"from": "error", "value": "' + msg + '"}');
-		if (jsocketCore.connectedToServer == false) {
-			jsocketCore.reconnect();
+		jsocketCoreTCP.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (jsocketCoreTCP.connectedToServer == false) {
+			jsocketCoreTCP.reconnect();
 		}
 		return (true);
 	},
@@ -172,12 +172,12 @@ var jsocketCore = {
 	**/
 	securityError: function(msg)
 	{
-		if (typeof jsocketCore.api != 'object') {
+		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
-		jsocketCore.api.parser('{"from": "error", "value": "' + msg + '"}');
-		if (jsocketCore.connectedToServer == false) {
-			jsocketCore.reconnect();
+		jsocketCoreTCP.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (jsocketCoreTCP.connectedToServer == false) {
+			jsocketCoreTCP.reconnect();
 		}
 		return (true);
 	},
@@ -188,10 +188,10 @@ var jsocketCore = {
 	**/
 	receive: function(msg)
 	{
-		if (typeof jsocketCore.api != 'object') {
+		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
-		jsocketCore.api.onReceive(msg);
+		jsocketCoreTCP.api.onReceive(msg);
 		return (true);
 	}
 };
