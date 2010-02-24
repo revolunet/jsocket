@@ -79,11 +79,13 @@ var jsocketApi = {
 		}
 		if (enable == true) {
 			jsocketApi.debug = true;
-			document.getElementById('socketBridge').style.top = '0px';
+			document.getElementById('socketBridge').style.width = '900px';
+			document.getElementById('socketBridge').style.height = '250px';
 		}
 		else {
 			jsocketApi.debug = false;
-			document.getElementById('socketBridge').style.top = '-1000px';
+			document.getElementById('socketBridge').style.width = '1px';
+			document.getElementById('socketBridge').style.height = '1px';
 		}
 	},
 
