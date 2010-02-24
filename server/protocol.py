@@ -82,8 +82,10 @@ class Protocol(object):
 		
 		users = self.client.room.list_users(args)
 		str = [ ]
-		for user in users:
-			str.append(user.get_name())
+		if len(users) > 0:
+			for user in users:
+				if user is not None:
+					str.append(user.get_name())
 		self.client.squeue.put([self, '{"from": "list", "value": ' + simplejson.JSONEncoder().encode(str) + ', "channel": "'+channel+'", "app": "'+app+'"}'])
 
 	# flash-player send <policy-file-request/>
