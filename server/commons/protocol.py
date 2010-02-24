@@ -79,12 +79,13 @@ class Protocol(object):
 	def __cmd_list(self, args, channel = None, app = None):
 		""" Retourne la liste d'utilisateurs d'un channel """
 		
-		users = self.client.room.list_users(args)
 		str = [ ]
-		if len(users) > 0:
-			for user in users:
-				if user is not None:
-					str.append(user.get_name())
+		if channel is None:
+			users = self.client.room.list_users(args)
+		else:
+			users = self.client.room.list_users(channel)
+		for user in users:
+			str.append(user.get_name())
 		self.client.squeue.put([self, '{"from": "list", "value": ' + simplejson.JSONEncoder().encode(str) + ', "channel": "'+channel+'", "app": "'+app+'"}'])
 
 	# flash-player send <policy-file-request/>
