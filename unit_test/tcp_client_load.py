@@ -10,13 +10,6 @@ import os
 
 def create_tcp_client(aim = 'default'):
 	tcpclient = TCPClient('192.168.1.35', 9999)
-	#tcpclient.handle()
-	#tcpclient.write('<policy-file-request/>')
-	#tcpclient.write('{"cmd":"getStatus", "args": "null", "channel": "null", "app" : "null"}\n')
-	#tcpclient.handle()
-	
-	tcpclient.write('{"cmd":"setStatus", "app" : "null"}\n')
-	#tcpclient.handle()
 	tcpclient.write('{"cmd":"setStatus", "args" : "hello"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
