@@ -127,7 +127,7 @@ class Room():
 					else:
 						if len(list_users) >= 1:
 							for user in list_users:
-								if user.get_name() in users:
+								if user.get_name() in users or user.unique_key in users:
 									user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 							return True
 						return False
