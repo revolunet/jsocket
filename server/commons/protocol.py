@@ -85,7 +85,11 @@ class Protocol(object):
 		else:
 			users = self.client.room.list_users(channel)
 		for user in users:
-			str.append(user.get_name())
+			status = user.status
+			key = user.unique_key
+			name = user.get_name()
+			to_send = {"name": name, "key": key, "status": status}
+			str.append(to_send)
 		self.client.squeue.put([self, '{"from": "list", "value": ' + simplejson.JSONEncoder().encode(str) + ', "channel": "'+channel+'", "app": "'+app+'"}'])
 
 	# flash-player send <policy-file-request/>
