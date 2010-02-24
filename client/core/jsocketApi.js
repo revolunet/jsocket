@@ -74,7 +74,7 @@ var jsocketApi = {
 	**/
 	debug : function(enable) {
 		if (jsocketApi.core.initialized == false) {
-			setTimeout("jsocketApi.debug(enable);", 1000);
+			setTimeout("jsocketApi.debug(" + enable + ");", 1000);
 			return (false);
 		}
 		if (enable == true) {
