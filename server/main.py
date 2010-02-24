@@ -16,5 +16,11 @@ def main():
 	except KeyboardInterrupt:
 		exit()
 
+#if __name__ == '__main__':
+#	main()	
+
 if __name__ == '__main__':
-	main()
+	from server.http import ServerHTTP
+	
+	server_http = ServerHTTP([], [], [])
+	server_http.start()
