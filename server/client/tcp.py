@@ -2,6 +2,8 @@
 # client.py
 ##
 
+import time
+import random
 import threading
 from commons.protocol import Protocol
 from log.logger import Log
@@ -9,11 +11,7 @@ from config.settings import SETTINGS
 
 class ClientTCP(threading.Thread):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
-		import time
-		import random
-		
 		self.protocol = Protocol(self)
-		
 		self.client_socket = client_socket
 		self.client_address = client_address
 		self.master = False
