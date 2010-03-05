@@ -16,18 +16,18 @@ var jsocketCoreHTTP = {
 		jsocketCoreHTTP.initialized = true;
 		jsocketCoreHTTP.connectedToServer = false;
 		jsocketCoreHTTP.socket = null;
-		jsocketCoreHTTP.url = jsocketCoreHTTP.api.host
+		jsocketCoreHTTP.url = jsocketCoreHTTP.api.host;
 		return (true);
 	},
 
 	/**
 	* Permet d'effectuer une requete HTTP POST sur le serveur (host, port)
-	* @parameters : ?json={"cmd": "toto", "app": "tata", "channel": "titi"}
+	* @parameters : {"cmd": "toto", "app": "tata", "channel": "titi"}
 	**/
 	_post : function(parameters)
 	{
 		jsocketCoreHTTP.socket = false;
-		parameters = encodeURI(parameters);
+		parameters = encodeURI('?json=' + parameters);
 		if (window.XMLHttpRequest) {
 			jsocketCoreHTTP.socket = new XMLHttpRequest();
 			if (jsocketCoreHTTP.socket.overrideMimeType) {
@@ -125,13 +125,11 @@ var jsocketCoreHTTP = {
 	**/
 	write : function(msg)
 	{
-		jsocketCoreHTTP.socket.write(msg + "\n");
-			if (typeof jsocketCoreHTTP.api != 'object') {
-				return (false);
-			}
-			setTimeout("jsocketCoreHTTP.send('" + msg + "');", 500);
+		jsocketCoreHTTP._post(msg + "\n");
+		if (typeof jsocketCoreHTTP.api != 'object') {
 			return (false);
 		}
+		setTimeout("jsocketCoreHTTP.send('" + msg + "');", 500);
 		return (true);
 	},
  
@@ -222,6 +220,7 @@ var jsocketCoreHTTP = {
 				jsocketCoreHTTP.api.parser('{"from": "error", "value": "No response from HTTP Server"}');
 			}
 		}
+		setTimeout("jsocketCoreHTTP.receive();", 2000);
 		return (true);
 	}
 };
