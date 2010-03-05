@@ -22,7 +22,7 @@ class Log(object):
 			logging.basicConfig(filename=sys.path[0] + os.sep + 'log/logs.log', format="%(asctime)s - %(message)s")
 			self.__logs = logging.getLogger("server")
 			self.__logs.setLevel(logging.DEBUG)
-			self.__logfile = open(sys.path[0] + os.sep + 'log/logs_exception.log', 'w+', 0)
+			self.__logfile = open(sys.path[0] + os.sep + 'log/logs_exception.log', 'w', 0)
 			self.__logTraceback()
 			self.__queue = Queue.Queue(nb_thread)
 			Worker(self.__queue, 'log').start()
