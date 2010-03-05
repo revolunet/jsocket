@@ -14,11 +14,11 @@ class Response(object):
 		#self.date.strftime("%a, %d %B %Y %H:%M:%S")
 		self.content_type = "text/HTML"
 		self.content_length = 0
-		self.__code_status = { 	200:"OK",
-								404:"NOT FOUND",
-								403:"FORBIDDEN",
-								401:"UNAUTHORIZED",
-								500:"INTERNAL ERROR"
+		self.__code_status = { 	200: "OK",
+								404: "NOT FOUND",
+								403: "FORBIDDEN",
+								401: "UNAUTHORIZED",
+								500: "INTERNAL ERROR"
 		}
 		self.response_header = None
 		self.response_data = None
@@ -47,9 +47,3 @@ class Response(object):
 			self.response_header += "Content-Length: " + str(self.content_length) + "\r\n"
 			self.response_header += self.response_data
 		return self.response_header
-#HTTP/1.0 200 OK 
-#Date : Sat, 15 Jan 2000 14:37:12 GMT Server : Microsoft-IIS/2.0 
-#Content-Type : text/HTML 
-#Content-Length : 1245 
-#Last-Modified : Fri, 14 Jan 2000 08:25:13 GMT
-

@@ -28,11 +28,16 @@ class Worker(threading.Thread):
 		from log.logger import Log
 		while True:
 			item = self.__queue.get()
-			try:
-				item[0].client.client_socket.send(item[1] + "\0")
-				Log().add("[DEBUG] (%s) send: %s" % (str(item[0]), item[1]))
-			except Exception:
-				Log().add("[DEBUG] failed to send %s" % item[1])
+			if item['type'] == 'tcp':
+				try:
+					item['client'].client_socket.send(item['data'] + "\0")
+					#Log().add("[DEBUG] (%s) send: %s" % (str(item[0]), item[1]))
+				except Exception:
+					Log().add("[DEBUG] failed to send %s" % item['data'])
+			elif item['type'] == 'http':
+				pass
+			else:
+				pass
 			self.__queue.task_done()
 		
 	def type_recv(self):
@@ -41,12 +46,17 @@ class Worker(threading.Thread):
 		from client.tcp import ClientTCP
 		while True:
 			item = self.__queue.get()
-			commands = item[1].split("\n")
-			if len(commands) == 1:
-				item[0].protocol.parse(item[1])
+			commands = item['data'].split("\n")
+			if item['type'] == 'tcp':
+				if len(commands) == 1:
+					item['client'].protocol.parse(item['data'])
+				else:
+					for cmd in commands:
+						item['client'].rput(cmd)
+			elif item['type'] == 'http':
+				pass
 			else:
-				for cmd in commands:
-					item[0].rqueue.put([ item[0], cmd ])
+				pass
 			self.__queue.task_done()
 
 	def run(self):
