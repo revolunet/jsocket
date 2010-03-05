@@ -110,7 +110,7 @@
 			&nbsp;
 		</div>
 		
-		
+		<script language="javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject_src.js"></script>
 		<script type="text/javascript" src="jsocket.js"></script>
 		<script type="text/javascript">
 		<!--
@@ -160,8 +160,8 @@
 
 			
 
-			jsocketApi.init('localhost', 9999);
-			jsocketApi.debug(true);
+			jsocketApi.init('192.168.1.34', 9999);
+			//jsocketApi.debug(true);
 
 			function message() {
 				var text = document.getElementById('input_message').value;
