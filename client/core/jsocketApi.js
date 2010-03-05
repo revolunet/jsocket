@@ -13,11 +13,12 @@
 **/
 var jsocketApi = {
 	// jsocketCore Object
-	core : jsocketCoreTCP,
+	core : jsocketCoreHTTP,
 	host : '',
 	port : 0,
 	debug : false,
 	app : [ ],
+	uid : '',
 
 	/**
 	* Connect to the server via jsocketCore
@@ -29,7 +30,8 @@ var jsocketApi = {
 		jsocketApi.port = port;
 		jsocketApi.core.api = this;
 		jsocketApi.core.connect(jsocketApi.host, jsocketApi.port);
-		jsocketApi.core.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocketApi.core.send('{"cmd": "connected", "args": "null", "app": "' +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 
 	/**
@@ -119,10 +121,12 @@ var jsocketApi = {
 	/**
 	* Callback utilise pour recevoir un identifiant par defaut lors de
 	* la connection au serveur.
-	* @key : identifiant unique de l'utilisateur
+	* @uid : identifiant unique de l'utilisateur
 	**/
-	onConnected : function (key) {
-		jsocketApi.key = key;
+	onConnected : function (uid) {
+		if (jsocketApi.uid == '') {
+			jsocketApi.uid = uid;
+		}
 	},
 	
 	/**
@@ -181,7 +185,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "auth", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "auth", "args": "' + password +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -197,7 +203,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "chanAuth", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "chanAuth", "args": "' + password +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -227,7 +235,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "join", "args": [ "'+channel+'", "'+password+'" ], "channel": "'+channel+'", "app": "'+appName+'"}');
+		jsocketApi.core.send('{"cmd": "join", "args": [ "' + channel +
+			'", "' + password + '" ], "channel": "' + channel +
+			'", "app": "' + appName + '", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -247,7 +257,9 @@ var jsocketApi = {
 	part : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "part", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "part", "args": "' + channel +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -272,7 +284,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "create", "args": [ "'+channel+'", "'+password+'" ], "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "create", "args": [ "' + channel +
+			'", "' + password + '" ], "app": "' + appName +
+			'", "channel": "' + channel + '", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -292,7 +306,9 @@ var jsocketApi = {
 	remove : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "remove", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "remove", "args": "' + channel +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -305,7 +321,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		nickname = jsocketApi.core.addslashes(nickname);
-		jsocketApi.core.send('{"cmd": "nick", "args": "'+nickname+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "nick", "args": "' + nickname +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -327,7 +345,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		command = jsocketApi.core.addslashes(command);
-		jsocketApi.core.send('{"cmd": "forward", "args": "'+command+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "forward", "args": "' + command +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 	
 	/**
@@ -347,7 +367,9 @@ var jsocketApi = {
 	list : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "list", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}')
+		jsocketApi.core.send('{"cmd": "list", "args": "' + channel +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 
 	/**
@@ -380,7 +402,9 @@ var jsocketApi = {
 		}
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "message", "app": "'+appName+'", "args": ' + str + ', "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "message", "app": "' + appName +
+			'", "args": ' + str + ', "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 
 	/**
@@ -400,7 +424,8 @@ var jsocketApi = {
 	getStatus : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "getStatus", "args": "null", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "getStatus", "args": "null", "app": "' + appName +
+			'", "channel": "' + channel + '", "uid": "' + jsocketApi.uid + '"}');
 	},
 
 	/**
@@ -421,7 +446,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		status = jsocketApi.core.addslashes(status);
-		jsocketApi.core.send('{"cmd": "setStatus", "args": "'+status+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "setStatus", "args": "' + status +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 
 	/**
@@ -440,7 +467,8 @@ var jsocketApi = {
 	timeConnect : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "timeConnect", "args": "null", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "timeConnect", "args": "null", "app": "' + appName +
+			'", "channel": "' + channel + '", "uid": "' + jsocketApi.uid + '"}');
 	},
 
 	/**
@@ -461,7 +489,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "chanMasterPwd", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.core.send('{"cmd": "chanMasterPwd", "args": "' + password +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "' + jsocketApi.uid + '"}');
 	},
 
 	/**
