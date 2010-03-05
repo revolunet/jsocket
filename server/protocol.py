@@ -256,7 +256,6 @@ class Protocol(object):
 			self.client.squeue.put([self, '{"from": "chanMasterPwd", "value": false, "channel": "'+channel+'", "app": "'+app+'"}'])
 		
 	def status(self, client, master = False):
-		
 		if client.room_name:
 			channel = client.room.channel(client.room_name)
 			if channel and master == False:
