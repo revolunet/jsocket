@@ -507,6 +507,7 @@ var jsocketApi = {
 	* @error : le message d'erreur -> string
 	**/
 	onError : function(error) {
-		alert(error);
+		//alert(error);
+		console.log(error);
 	}
 };

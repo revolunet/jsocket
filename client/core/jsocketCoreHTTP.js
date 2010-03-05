@@ -7,6 +7,7 @@ var jsocketCoreHTTP = {
 	connectedToServer : false,
 	url : '',
 	commands : [ ],
+	socket : null,
 
 	/**
 	* Initialisation du core HTTP
@@ -15,9 +16,7 @@ var jsocketCoreHTTP = {
 	loaded : function()
 	{
 		jsocketCoreHTTP.initialized = true;
-		jsocketCoreHTTP.connectedToServer = false;
-		jsocketCoreHTTP.socket = null;
-		jsocketCoreHTTP.url = jsocketCoreHTTP.api.host;
+		jsocketCoreHTTP.url = 'http://127.0.0.1/jsockethttp/';
 		return (true);
 	},
 
@@ -27,37 +26,19 @@ var jsocketCoreHTTP = {
 	**/
 	_post : function(parameters)
 	{
-		jsocketCoreHTTP.socket = false;
-		//parameters = encodeURI('?json=' + parameters);
-		parameters = encodeURI('?json={"test": "test"}');
+		parameters = encodeURI('?json=' + parameters);
 		if (window.XMLHttpRequest) {
 			jsocketCoreHTTP.socket = new XMLHttpRequest();
-			if (jsocketCoreHTTP.socket.overrideMimeType) {
-				jsocketCoreHTTP.socket.overrideMimeType('text/html');
-			}
 		}
-		else if (window.ActiveXObject) {
-			try {
-				jsocketCoreHTTP.socket = new ActiveXObject("Msxml2.XMLHTTP");
-			}
-			catch (e) {
-				try {
-					jsocketCoreHTTP.socket = new ActiveXObject("Microsoft.XMLHTTP");
-				}
-				catch (e) { }
-			}
+		else {
+			jsocketCoreHTTP.socket = new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		if (!jsocketCoreHTTP.socket) {
 			alert('Cannot create XMLHTTP instance');
 			return (false);
 		}
 		jsocketCoreHTTP.socket.onreadystatechange = jsocketCoreHTTP.receive;
-		jsocketCoreHTTP.socket.open('POST', 'http://' + jsocketCoreHTTP.api.host +
-			':80/' + jsocketCoreHTTP.api.uid, true);
-		jsocketCoreHTTP.socket.setRequestHeader("Content-type",
-			"application/x-www-form-urlencoded");
-		jsocketCoreHTTP.socket.setRequestHeader("Content-length", parameters.length);
-		jsocketCoreHTTP.socket.setRequestHeader("Connection", "close");
+		jsocketCoreHTTP.socket.open('POST', jsocketCoreHTTP.url, false);
 		jsocketCoreHTTP.socket.send(parameters);
 		return (true);
 	},
@@ -144,8 +125,8 @@ var jsocketCoreHTTP = {
 		}
 		msg = '';
 		if (jsocketCoreHTTP.commands.length > 0) {
-			msg = jsocketCoreHTTP.commands.join("\n")
-			jsocketCoreHTTP.commands = [ ]
+			msg = jsocketCoreHTTP.commands.join("\n");
+			jsocketCoreHTTP.commands = [ ];
 		}
 		jsocketCoreHTTP._post(msg + "\n");
 		return (true);
@@ -204,6 +185,8 @@ var jsocketCoreHTTP = {
 				if (jsocketCoreHTTP.connectedToServer == false) {
 					jsocketCoreHTTP.connected();
 				}
+				alert(msg);
+				return (true);
 				if (msg != '') {
 					res = msg.split("\n");
 					for (var i = 0; res[i]; ++i) {
@@ -212,7 +195,7 @@ var jsocketCoreHTTP = {
 				}
 			} else {
 				jsocketCoreHTTP.api.parser('{"from": "error", "value": "HTTP request error: ' +
-					jsocketCoreHTTP.addslashes(jsocketCoreHTTP.socket.statusText) + '"}');
+					jsocketCoreHTTP.socket.status + '"}');
 			}
 		}
 		return (true);
