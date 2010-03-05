@@ -80,4 +80,4 @@ class ClientTCP(threading.Thread):
 		self.status = "offline"
 		self.protocol.status(self)
 		self.client_socket.close()
-		Log().add("[-] Client disconnected", 'blue')
+		Log().add("[-] TCP Client disconnected", 'blue')

@@ -11,10 +11,11 @@ from commons.room import Room
 from log.logger import Log
 from commons.worker import Worker
 from config.settings import SETTINGS
+import threading
 
-class ServerTCP(object):
+class ServerTCP(threading.Thread):
 	"""docstring for Server"""
-	def __init__(self):
+	def __init__(self, room, squeue, rqueue):
 		self.__host = SETTINGS.SERVER_HOST
 		self.__port = SETTINGS.SERVER_PORT
 		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,24 +23,27 @@ class ServerTCP(object):
 		self.__socket.bind((self.__host, self.__port))
 		self.__socket.listen(5)
 		Log().add("[+] TCP Server launched on %s:%d" % (self.__host, self.__port), "green")
-		self.__room = Room()
-		self.__init_queues()
+		self.__room = room
+		self.__init_queues(squeue, rqueue)
 		#windows define
 		import os
 		if os.name != 'nt':
 			self.__input = [self.__socket, sys.stdin]
 		else:
 			self.__input = [self.__socket]
+		threading.Thread.__init__(self)
 
-	def __init_queues(self):
+	def __init_queues(self, squeue, rqueue):
 		""" Initialise les queues d'envoie et reception (parsing) de message client """
 
-		self.__squeue = Queue.Queue(0)
-		Worker(self.__squeue, 'send').start()
-		self.__rqueue = Queue.Queue(0)
-		Worker(self.__rqueue, 'recv').start()
+		self.__squeue = squeue
+		self.__rqueue = rqueue
+		#self.__squeue = Queue.Queue(0)
+		#Worker(self.__squeue, 'send').start()
+		#self.__rqueue = Queue.Queue(0)
+		#Worker(self.__rqueue, 'recv').start()
 
-	def start(self):
+	def run(self):
 		while 1:
 			try:
 				inputready,outputready,exceptready = select.select(self.__input,[],[], SETTINGS.SERVER_SELECT_TIMEOUT) 
@@ -47,7 +51,7 @@ class ServerTCP(object):
 					if s == self.__socket: 
 						# handle the server socket 
 						client_socket, client_addr = self.__socket.accept()
-						Log().add("[+] Client connected " + (str(client_addr)))
+						Log().add("[+] TCP Client connected " + (str(client_addr)))
 						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
 						current_client.start()
 					elif s == sys.stdin: 
@@ -64,4 +68,6 @@ class ServerTCP(object):
 							input.remove(s)
 			except KeyboardInterrupt:
 				self.__socket.close()
+				Log().add("[-] TCP Server Killed", 'ired')
 				exit()
+				return

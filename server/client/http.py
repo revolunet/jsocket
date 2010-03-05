@@ -18,8 +18,22 @@ class ClientHTTP(threading.Thread):
 		threading.Thread.__init__(self)
 		
 	def run(self):
-		data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-		while len(buffer) == SETTINGS.SERVER_MAX_READ:
-			buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-			data = data + buffer
-		self.request.handle(data)
+		"""lecture du client """
+		
+		try:
+			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+			while len(buffer) == SETTINGS.SERVER_MAX_READ:
+				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+				data = data + buffer
+			self.request.handle(data)
+			if self.request.post_Ket_Exists("json"):
+				self.rqueue.put([self, self.request.post_DATA("json")])
+		except Exception:
+			self.__disconnection()
+			return
+				
+	def __disconnection(self):
+		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
+		
+		self.client_socket.close()
+		Log().add("[-] HTTP Client disconnected", 'blue')

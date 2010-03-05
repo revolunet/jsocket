@@ -12,6 +12,11 @@ class Request(object):
 		self.path = None
 		self.method = None
 		self.protocol = None
+		self.__blackList = []
+		self.__BlackList()
+	
+	def __BlackList(self):
+		self.__blackList.append("favicon.ico")
 
 	def handle(self, data):
 		"""
@@ -30,7 +35,6 @@ class Request(object):
 					self.__handle_POST(line)
 		self.__handle_METHOD()
 	
-	#
 	def header_DATA(self, key):
 		"""
 		Recupere les donnees contenus dans le header de la requete
@@ -43,6 +47,14 @@ class Request(object):
 		except KeyError:
 			Log().add("[-] Erreur dans la methode header_DATA, la key : " + key + " n'existe pas", "ired")
 			return None
+	
+	def post_Ket_Exists(self, key):
+		"""
+		Verifie que la key existe dans le dictionnaire POST
+		"""
+		if len(key) == 0:
+			return False
+		return key.lower() in self.__post
 	
 	def post_DATA(self, key):
 		"""
@@ -77,8 +89,9 @@ class Request(object):
 		post_data = post.split('&')
 		for data in post_data:
 			try:
-				(var_name, var_content) = data.split('=')
-				self.__post[var_name.lower()] = var_content
+				if len(data):
+					(var_name, var_content) = data.split('=')
+					self.__post[var_name.lower()] = var_content
 			except ValueError:
 				Log().add("[-] Erreur dans la methode __handle_POST data : " + data, "ired")
 			
@@ -102,7 +115,10 @@ class Request(object):
 			path_data = self.path[index + 1:].replace('/', '').split('&')
 			for data in path_data:
 				try:
-					(var_name, var_content) = data.split('=')
-					self.__get[var_name.lower()] = var_content
+					if data in self.__blackList:
+						return
+					if len(data):
+						(var_name, var_content) = data.split('=')
+						self.__get[var_name.lower()] = var_content
 				except ValueError:
 					Log().add("[-] Erreur dans la methode __handle_PATH_DATA data : " + data, "ired")
