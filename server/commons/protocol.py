@@ -265,8 +265,16 @@ class Protocol(object):
 						channel = client.room_name
 					else:
 						channel = "none"
-					master.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "channel": "'+channel+'"}')
+					status = client.status
+					key = client.unique_key
+					name = client.get_name()
+					to_send = {"name": name, "key": key, "status": status}
+					master.queue_cmd('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+channel+'"}')
 			else:
 				for user in channel.client_list:
-					if user.master == False:
-						user.queue_cmd('{"from": "status", "value": ["'+client.get_name()+'", "'+client.status+'"], "channel": "'+client.room_name+'"}')
+					if user.master != client:
+						status = client.status
+						key = client.unique_key
+						name = client.get_name()
+						to_send = {"name": name, "key": key, "status": status}
+						user.queue_cmd('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+client.room_name+'"}')

@@ -24,11 +24,12 @@ class Request(object):
 		Le header est parse, les variables en get et en post
 		"""
 		
+		print data
 		request_lines = data.replace('\r', '').split('\n')
 		for line in request_lines:
 			head_key = line.split(' ')[0].replace(':', '').lower()
 			if len(head_key) > 0:
-				if head_key == 'get' or head_key == 'post':
+				if head_key == 'get' or head_key == 'post' or head_key == 'options':
 					self.method = head_key
 				self.__header[head_key] = line[len(head_key) + 1:].strip()
 				if self.method == 'post' and len(line.split(' ')) == 1:
