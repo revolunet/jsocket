@@ -7,9 +7,12 @@ from commons.protocol import Protocol
 from log.logger import Log
 from config.settings import SETTINGS
 from request import Request
+import simplejson
+import urllib
 
 class ClientHTTP(threading.Thread):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
+		self.protocol = Protocol(self)
 		self.client_socket = client_socket
 		self.client_address = client_address
 		self.rqueue = rqueue
@@ -26,8 +29,8 @@ class ClientHTTP(threading.Thread):
 				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
 				data = data + buffer
 			self.request.handle(data)
-			if self.request.post_Ket_Exists("json"):
-				self.rqueue.put([self, self.request.post_DATA("json")])
+			if self.request.post_Ket_Exists("json") and len(self.request.post_DATA("json")) > 0:
+				self.rqueue.put([self, urllib.unquote_plus(self.request.post_DATA("json"))])
 		except Exception:
 			self.__disconnection()
 			return
