@@ -34,7 +34,8 @@ class Worker(threading.Thread):
 					try:
 						if item.get('data', None) is not None and len(item.get('data')) > 0:
 							if item['client'].client_socket is not None:
-								item['client'].client_socket.send(item.get('data') + "\0")
+								Log().add(">> %s" % (item.get('data')))
+								item['client'].client_socket.send(item.get('data') + "\n\0")
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])

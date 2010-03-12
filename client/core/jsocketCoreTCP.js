@@ -190,10 +190,15 @@ var jsocketCoreTCP = {
 	**/
 	receive: function(msg)
 	{
+		console.log('msg: ' + msg);
 		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
-		jsocketCoreTCP.api.onReceive(msg);
+		var tab = msg.split("\n");
+		for (var i = 0; i < tab.length; ++i) {
+			jsocketCoreTCP.api.onReceive(tab[i]);
+		}
+		//jsocketCoreTCP.api.onReceive(msg);
 		return (true);
 	}
 };

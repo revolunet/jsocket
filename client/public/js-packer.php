@@ -23,4 +23,4 @@ foreach ($files as $key => $file) {
 $packer = new JavaScriptPacker(implode(chr(10), $src));
 $script = $packer->pack();
 
-file_put_contents($out, $script, FILE_APPEND);
+file_put_contents($out, $script);
