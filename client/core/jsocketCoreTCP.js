@@ -121,6 +121,7 @@ var jsocketCoreTCP = {
 			return (false);
 		}
 		jsocketCoreTCP.connectedToServer = true;
+		jsocketCoreTCP.send('{"cmd": "connected", "args": "null", "app": ""}');
 		jsocketCoreTCP.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
@@ -144,6 +145,7 @@ var jsocketCoreTCP = {
 		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
+		jsocketCoreTCP.api.uid = '';
 		jsocketCoreTCP.api.parser('{"from": "disconnect", "value": true}');
 		jsocketCoreTCP.connectedToServer = false;
 		jsocketCoreTCP.reconnect();
