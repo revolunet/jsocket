@@ -80,11 +80,11 @@ var jsocketApi = {
 		}
 		if (enable == true) {
 			jsocketApi.debug = true;
-			document.getElementById('socketBridge').style.top = '0px';
+			document.getElementById('socketBridge').style.visibility = 'visible';
 		}
 		else {
 			jsocketApi.debug = false;
-			document.getElementById('socketBridge').style.top = '-1000px';
+			document.getElementById('socketBridge').style.visibility = 'hidden';
 		}
 	},
 

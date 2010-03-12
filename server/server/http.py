@@ -15,7 +15,7 @@ from client.http import ClientHTTP
 
 class ServerHTTP(threading.Thread):
 	"""docstring for ServerHTTP"""
-	def __init__(self, room, rqueue, squeue):
+	def __init__(self, room, squeue, rqueue):
 		self.__host = SETTINGS.SERVER_HOST
 		self.__room = room
 		self.__rqueue = rqueue

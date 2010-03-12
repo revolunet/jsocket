@@ -63,7 +63,11 @@ class Worker(threading.Thread):
 					for cmd in commands:
 						item['client'].rput(cmd)
 			elif item['type'] == 'http':
-				pass
+				if len(commands) == 1:
+					item['client'].protocol.parse(item['data'])
+				else:
+					for cmd in commands:
+						item['client'].rput(cmd)
 			else:
 				pass
 			self.__queue.task_done()

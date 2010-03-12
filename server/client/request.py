@@ -23,8 +23,7 @@ class Request(object):
 		Traite une requete HTTP sur le server.
 		Le header est parse, les variables en get et en post
 		"""
-		
-		print data
+
 		request_lines = data.replace('\r', '').split('\n')
 		for line in request_lines:
 			head_key = line.split(' ')[0].replace(':', '').lower()
@@ -90,7 +89,7 @@ class Request(object):
 		"""
 		Parse une requete post et la transforme en un objet [key]=value
 		"""
-		
+
 		post_data = post.split('&')
 		for data in post_data:
 			try:

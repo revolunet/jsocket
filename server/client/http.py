@@ -2,8 +2,9 @@
 # http.py
 ##
 
-import threading
-from commons.protocol import Protocol
+#import threading
+#from commons.protocol import Protocol
+from client.iClient import IClient
 from log.logger import Log
 from config.settings import SETTINGS
 from request import Request
@@ -11,38 +12,38 @@ from response import Response
 import simplejson
 import urllib
 
-class ClientHTTP(threading.Thread):
+class ClientHTTP(IClient):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
-		self.protocol = Protocol(self)
+		#self.protocol = Protocol(self)
 		self.client_socket = client_socket
 		self.client_address = client_address
-		self.rqueue = rqueue
-		self.squeue = squeue
+		#self.rqueue = rqueue
+		#self.squeue = squeue
 		self.request = Request()
 		self.response = Response()
-		threading.Thread.__init__(self)
+		IClient.__init__(self, room, rqueue, squeue, 'http')
+		#threading.Thread.__init__(self)
 		
 	def run(self):
 		"""lecture du client """
 		
-		while True:
-			try:
-				data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-				while len(buffer) == SETTINGS.SERVER_MAX_READ:
-					buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-					data = data + buffer
-				self.request.handle(data)
-				
-				print self.request.post_DATA()
-				
-				#self.response.ResponseData("aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa<u>iiii</u>")
-				self.client_socket.send(self.response.Get(self.request, 200))
-				
-			except Exception as e:
-				self.__disconnection()
-				break;
-				return
+		try:
+			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+			while len(buffer) == SETTINGS.SERVER_MAX_READ:
+				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+				data = data + buffer
+			self.request.handle(data)
 			
+			if self.request.post_DATA('json') is not None:
+				self.rput(urllib.unquote_plus(self.request.post_DATA('json')))
+			self.__disconnection()
+			#self.client_socket.send(self.response.Get(self.request, 200))
+			
+		except Exception as e:
+			self.__disconnection()
+			return
+	
+	# outdated
 	def handleMethod(self):
 		if self.request.method == 'options':
 			pass
