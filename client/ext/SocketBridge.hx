@@ -37,22 +37,10 @@ class SocketBridge
 	  });
 	// SOCKET DATA
 	socket.addEventListener(flash.events.ProgressEvent.SOCKET_DATA, function(e) : Void {
-		var msg:Array<String> = (socket.readUTFBytes(socket.bytesAvailable)).split("\n");
-		for (key in msg) {
-			trace("Received : " + key);
-			try {
-				if (key.length > 10) {
-					flash.external.ExternalInterface.call("setTimeout", jsScope + "receive('" + key + "')", 0);
-				}
-			} catch (error:String) {
-				trace("error: " + error);
-			}
-		}
-		/*
-		var msg:String = socket.readUTFBytes(socket.bytesAvailable);
+		var msg = socket.readUTFBytes(socket.bytesAvailable);
 		trace("Received: " + msg);
 		flash.external.ExternalInterface.call("setTimeout", jsScope + "receive('" + msg + "')", 0);
-		*/
+		
 	  });
 
 	/* Set External Interface Callbacks */

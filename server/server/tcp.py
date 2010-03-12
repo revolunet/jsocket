@@ -20,6 +20,7 @@ class ServerTCP(threading.Thread):
 		self.__port = SETTINGS.SERVER_PORT
 		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.__socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.__socket.setsockopt(socket.SOL_SOCKET, socket.TCP_NODELAY, 1)
 		self.__socket.bind((self.__host, self.__port))
 		self.__socket.listen(5)
 		Log().add("[+] TCP Server launched on %s:%d" % (self.__host, self.__port), "green")
