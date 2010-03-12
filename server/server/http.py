@@ -23,7 +23,7 @@ class ServerHTTP(threading.Thread):
 		
 		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.__socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self.__socket.bind((self.__host, 8001))
+		self.__socket.bind((self.__host, 81))
 		self.__socket.listen(5)
 		Log().add("[+] HTTP Server launched on %s:%d" % (self.__host, 80), "green")
 		self.__input = [self.__socket]

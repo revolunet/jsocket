@@ -25,21 +25,23 @@ class ClientHTTP(threading.Thread):
 	def run(self):
 		"""lecture du client """
 		
-		try:
-			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-			while len(buffer) == SETTINGS.SERVER_MAX_READ:
-				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-				data = data + buffer
-			self.request.handle(data)
-			#self.handleMethod()
-			
-			self.response.ResponseData("aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa<u>iiii</u>")
-			self.client_socket.send(self.response.Get(self.request, 200))
-			self.__disconnection()
-			
-		except Exception as e:
-			self.__disconnection()
-			return
+		while True:
+			try:
+				data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+				while len(buffer) == SETTINGS.SERVER_MAX_READ:
+					buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+					data = data + buffer
+				self.request.handle(data)
+				
+				print self.request.post_DATA()
+				
+				#self.response.ResponseData("aaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa<u>iiii</u>")
+				self.client_socket.send(self.response.Get(self.request, 200))
+				
+			except Exception as e:
+				self.__disconnection()
+				break;
+				return
 			
 	def handleMethod(self):
 		if self.request.method == 'options':

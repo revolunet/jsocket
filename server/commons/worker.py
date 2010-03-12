@@ -27,6 +27,8 @@ class Worker(threading.Thread):
 		
 		from client.tcp import ClientTCP
 		from log.logger import Log
+		
+		i = 0
 		while True:
 			item = self.__queue.get()
 			if item.get('client', None) is not None:
@@ -34,8 +36,8 @@ class Worker(threading.Thread):
 					try:
 						if item.get('data', None) is not None and len(item.get('data')) > 0:
 							if item['client'].client_socket is not None:
-								Log().add(">> %s" % (item.get('data')))
-								item['client'].client_socket.send(item.get('data') + "\n\0")
+								print str(i) + " " + item['data']
+								item['client'].client_socket.send(item.get('data') + "\0\n")
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
@@ -44,11 +46,13 @@ class Worker(threading.Thread):
 				else:
 					pass
 				self.__queue.task_done()
+			i += 1
 		
 	def type_recv(self):
 		""" Parcours la Queue pour parser la string correspondante """
 		
 		from client.tcp import ClientTCP
+		from log.logger import Log
 		while True:
 			item = self.__queue.get()
 			commands = item['data'].split("\n")
@@ -67,10 +71,11 @@ class Worker(threading.Thread):
 	def run(self):
 		""" Redirection vers la methode approprie pour le traitement de la Queue """
 
+		from log.logger import Log
 		try:
 			method = getattr(self, 'type_' + self.__type, None)
 		except AttributeError:
-			from log import Log
+			Log().add(JException().formatExceptionInfo())
 			Log().add("[!] Method %s of worker does not exists", 'ired')
 		if callable(method):
 			method()
