@@ -9,6 +9,7 @@ from client.iClient import IClient
 from commons.protocol import Protocol
 from log.logger import Log
 from config.settings import SETTINGS
+import simplejson
 
 class ClientTCP(IClient):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
@@ -54,8 +55,10 @@ class ClientTCP(IClient):
 			if rooms[channel].master == self:
 				for user in rooms[channel].client_list:
 					if user.master == False:
+						to_send = {"name": "Master", "key": "null", "status": "offline"}
 						Log().add("[+] Envoie du status master au client : " + user.get_name(), 'blue')
-						self.sput('{"from": "status", "value": ["master", "offline"]}')
+						user.sput('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+user.room_name+'"}')
+						#user.sput('{"from": "status", "value": ["master", "offline"]}')
 						#self.squeue.put([user.protocol, '{"from": "status", "value": ["master", "offline"]}'])
 		
 	def __disconnection(self):
@@ -73,4 +76,5 @@ class ClientTCP(IClient):
 		self.status = "offline"
 		self.protocol.status(self)
 		self.client_socket.close()
+		self.client_socket = None
 		Log().add("[-] TCP Client disconnected", 'blue')
