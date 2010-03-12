@@ -39,10 +39,6 @@ class ServerTCP(threading.Thread):
 
 		self.__squeue = squeue
 		self.__rqueue = rqueue
-		#self.__squeue = Queue.Queue(0)
-		#Worker(self.__squeue, 'send').start()
-		#self.__rqueue = Queue.Queue(0)
-		#Worker(self.__rqueue, 'recv').start()
 
 	def run(self):
 		while 1:
