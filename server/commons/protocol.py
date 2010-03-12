@@ -95,7 +95,7 @@ class Protocol(object):
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):
 		Log().add("[+] Send policy file request to " + str(self.client.client_address))
-		self.client.sput("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>\0")
+		self.client.sput("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
 
 	# {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
 	def __cmd_remove(self, args, channel = None, app = None):
