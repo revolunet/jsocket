@@ -57,27 +57,31 @@ class Request(object):
 			return False
 		return key.lower() in self.__post
 	
-	def post_DATA(self, key):
+	def post_DATA(self, key = None):
 		"""
 		Recupere les donnees contenus dans le post de la requete
 		"""
 		
-		try:
-			return self.__post[key.lower()]
-		except KeyError:
-			Log().add("[-] Erreur dans la methode post_DATA, la key : " + key + " n'existe pas", "ired")
-			return None
+		if key is not None:
+			try:
+				return self.__post[key.lower()]
+			except KeyError:
+				Log().add("[-] Erreur dans la methode post_DATA, la key : " + key + " n'existe pas", "ired")
+				return None
+		return self.__post
 			
-	def get_DATA(self, key):
+	def get_DATA(self, key = None):
 		"""
 		Recupere les donnees contenus dans le get de la requete
 		"""
 		
-		try:
-			return self.__get[key.lower()]
-		except KeyError:
-			Log().add("[-] Erreur dans la methode get_DATA, la key : " + key + " n'existe pas", "ired")
-			return None
+		if key is not None:
+			try:
+				return self.__get[key.lower()]
+			except KeyError:
+				Log().add("[-] Erreur dans la methode get_DATA, la key : " + key + " n'existe pas", "ired")
+				return None
+		return self.__get
 
 	def hasPost(self):
 		return len(self.__post) > 0

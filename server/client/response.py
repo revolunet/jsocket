@@ -37,13 +37,13 @@ class Response(object):
 			self.response_header = str(request.protocol) + " " + str(self.code) + " " + str(self.__code_status[self.code]) + "\r\n"
 		else:
 			self.response_header = "HTTP/1.1 204 NO RESPONSE\r\n"
-		self.response_header += "Date: " + str(self.date.strftime("%a, %d %B %Y %H:%M:%S")) + " " + SETTINGS.HTTP_SERVER_NAME +  "\r\n"
-		self.response_header += "Content-Type: " + str(self.content_type) + "\r\n"
+		#self.response_header += "Date: " + str(self.date.strftime("%a, %d %B %Y %H:%M:%S")) + " " + SETTINGS.HTTP_SERVER_NAME +  "\r\n"
+		#self.response_header += "Content-Type: " + str(self.content_type) + "\r\n"
 		
 	def Get(self, request, code):
 		self.code = code
 		self.__createHeader(request)
-		if self.response_data:
+		if self.response_data is not None:
 			self.response_header += "Content-Length: " + str(self.content_length) + "\r\n"
 			self.response_header += self.response_data
 		return self.response_header

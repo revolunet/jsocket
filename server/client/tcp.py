@@ -5,11 +5,12 @@
 import time
 import random
 import threading
+import simplejson
 from client.iClient import IClient
 from commons.protocol import Protocol
 from log.logger import Log
 from config.settings import SETTINGS
-import simplejson
+from commons.jexception import JException
 
 class ClientTCP(IClient):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue):
@@ -34,7 +35,6 @@ class ClientTCP(IClient):
 				return
 			else:
 				self.rput(data)
-				#self.rqueue.put([self, data])
 				Log().add("[+] Client " + str(self.client_address) + " send : " + data)
 
 	def get_name(self):
@@ -46,7 +46,6 @@ class ClientTCP(IClient):
 		"""Ajoute une commande a la Queue en cours"""
 		
 		self.sput(command)
-		#self.squeue.put([self.protocol, command])
 				
 	def __master_logout(self):
 		
@@ -58,8 +57,6 @@ class ClientTCP(IClient):
 						to_send = {"name": "Master", "key": "null", "status": "offline"}
 						Log().add("[+] Envoie du status master au client : " + user.get_name(), 'blue')
 						user.sput('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+user.room_name+'"}')
-						#user.sput('{"from": "status", "value": ["master", "offline"]}')
-						#self.squeue.put([user.protocol, '{"from": "status", "value": ["master", "offline"]}'])
 		
 	def __disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""

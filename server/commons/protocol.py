@@ -95,7 +95,7 @@ class Protocol(object):
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):
 		Log().add("[+] Send policy file request to " + str(self.client.client_address))
-		self.client.sput("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
+		self.client.sput("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>\0")
 
 	# {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
 	def __cmd_remove(self, args, channel = None, app = None):
@@ -140,7 +140,6 @@ class Protocol(object):
 		else:
 			Log().add("[+] Command error : le channel " + args[0] + " n'existe pas ", 'yellow')
 			self.client.sput('{"from": "join", "value": false, "channel": "'+channel+'", "app": "'+app+'"}')
-			
 	
 	# {"cmd": "part", "args": "irc"}
 	def __cmd_part(self, args, channel = None, app = None):
@@ -255,7 +254,6 @@ class Protocol(object):
 			self.client.sput('{"from": "chanMasterPwd", "value": false, "channel": "'+channel+'", "app": "'+app+'"}')
 		
 	def status(self, client, master = False):
-		
 		if client.room_name:
 			channel = client.room.channel(client.room_name)
 			if channel and master == False:
@@ -269,6 +267,7 @@ class Protocol(object):
 					key = client.unique_key
 					name = client.get_name()
 					to_send = {"name": name, "key": key, "status": status}
+					Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.get_name())
 					master.queue_cmd('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+channel+'"}')
 			else:
 				for user in channel.client_list:
@@ -277,4 +276,5 @@ class Protocol(object):
 						key = client.unique_key
 						name = client.get_name()
 						to_send = {"name": name, "key": key, "status": status}
+						Log().add("[+] Client : envoie du status master vers l'utilisateur : " + name)
 						user.queue_cmd('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+client.room_name+'"}')
