@@ -4,6 +4,7 @@
 
 import threading
 import Queue
+from jexception import JException
 
 class Worker(threading.Thread):
 	"""docstring for Worker"""
@@ -28,17 +29,20 @@ class Worker(threading.Thread):
 		from log.logger import Log
 		while True:
 			item = self.__queue.get()
-			if item['type'] == 'tcp':
-				try:
-					item['client'].client_socket.send(item['data'] + "\0")
-					#Log().add("[DEBUG] (%s) send: %s" % (str(item[0]), item[1]))
-				except Exception:
-					Log().add("[DEBUG] failed to send %s" % item['data'])
-			elif item['type'] == 'http':
-				pass
-			else:
-				pass
-			self.__queue.task_done()
+			if item.get('client', None) is not None:
+				if item['type'] == 'tcp':
+					try:
+						if item.get('data', None) is not None and len(item.get('data')) > 0:
+							if item['client'].client_socket is not None:
+								item['client'].client_socket.send(item.get('data') + "\0")
+					except Exception:
+						Log().add(JException().formatExceptionInfo())
+						Log().add("[DEBUG] failed to send %s" % item['data'])
+				elif item['type'] == 'http':
+					pass
+				else:
+					pass
+				self.__queue.task_done()
 		
 	def type_recv(self):
 		""" Parcours la Queue pour parser la string correspondante """
