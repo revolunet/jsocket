@@ -15,7 +15,7 @@ import threading
 
 class ServerTCP(threading.Thread):
 	"""docstring for Server"""
-	def __init__(self, room, squeue, rqueue):
+	def __init__(self, room, squeue, rqueue, client_list):
 		self.__host = SETTINGS.SERVER_HOST
 		self.__port = SETTINGS.SERVER_PORT
 		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,6 +32,9 @@ class ServerTCP(threading.Thread):
 			self.__input = [self.__socket, sys.stdin]
 		else:
 			self.__input = [self.__socket]
+			
+		self.client_list = client_list
+		
 		threading.Thread.__init__(self)
 
 	def __init_queues(self, squeue, rqueue):
@@ -51,6 +54,7 @@ class ServerTCP(threading.Thread):
 						Log().add("[+] TCP Client connected " + (str(client_addr)))
 						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
 						current_client.start()
+						self.client_list['tcp'].append(current_client)
 					elif s == sys.stdin: 
 						# handle standard input 
 						junk = sys.stdin.readline() 
