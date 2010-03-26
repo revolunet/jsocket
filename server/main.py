@@ -36,7 +36,7 @@ def mainHTTP(room, squeue, rqueue, client_list):
 #	main()	
 
 if __name__ == '__main__':
-	client_list = {'http': [], 'tcp': []}
+	client_list = {'http': {}, 'tcp': {}}
 	room = Room()
 	squeue = Queue.Queue(0)
 	Worker(squeue, 'send').start()

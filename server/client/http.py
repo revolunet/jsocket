@@ -22,12 +22,12 @@ class ClientHTTP(IClient):
 		#self.squeue = squeue
 		self.request = Request()
 		self.response = Response()
+		self.validJson = False
 		IClient.__init__(self, room, rqueue, squeue, 'http')
 		#threading.Thread.__init__(self)
 		
 	def run(self):
 		"""lecture du client """
-		
 		try:
 			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
 			while len(buffer) == SETTINGS.SERVER_MAX_READ:
@@ -36,7 +36,10 @@ class ClientHTTP(IClient):
 			self.request.handle(data)
 			
 			if self.request.post_DATA('json') is not None:
-				self.rput(urllib.unquote_plus(self.request.post_DATA('json')))
+				if len(self.request.post_DATA('json')) != 0:
+					self.validJson = True
+					self.rput(urllib.unquote_plus(self.request.post_DATA('json')))
+				
 			self.__disconnection()
 			#self.client_socket.send(self.response.Get(self.request, 200))
 			
