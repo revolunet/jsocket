@@ -41,7 +41,7 @@ class ServerHTTP(threading.Thread):
 						current_client = ClientHTTP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
 						current_client.setDaemon(True)
 						current_client.start()
-						self.client_list['http'].append(current_client)
+						self.client_list['http'][current_client.unique_key] = current_client
 			except KeyboardInterrupt:
 				self.__socket.close()
 				Log().add("[-] HTTP Server Killed", 'ired')
