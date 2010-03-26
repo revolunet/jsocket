@@ -13,7 +13,7 @@
 **/
 var jsocketApi = {
 	// jsocketCore Object
-	core : jsocketCoreHTTP,
+	core : jsocketCoreTCP,
 	host : '',
 	port : 0,
 	debug : false,
@@ -538,7 +538,7 @@ var jsocketApi = {
 	send : function(msg) {
 		if (jsocketApi.uid != '') {
 			jsocketApi.core.send(msg.replace(/jsocketApi\.uid/, jsocketApi.uid));
-		} else {
+		} else if (jsocketApi.commands.length < 10) {
 			jsocketApi.commands.push(msg);
 		}
 	}

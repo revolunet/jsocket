@@ -9,6 +9,7 @@ from log.logger import Log
 from config.settings import SETTINGS
 from request import Request
 from response import Response
+from server.watchdog import WatchDog
 import simplejson
 import urllib
 
