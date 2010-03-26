@@ -26,6 +26,7 @@ class Request(object):
 
 		request_lines = data.replace('\r', '').split('\n')
 		for line in request_lines:
+			print line
 			head_key = line.split(' ')[0].replace(':', '').lower()
 			if len(head_key) > 0:
 				if head_key == 'get' or head_key == 'post' or head_key == 'options':
@@ -90,7 +91,8 @@ class Request(object):
 		Parse une requete post et la transforme en un objet [key]=value
 		"""
 
-		post_data = post.split('&')
+		post_data = post.replace('?', '')
+		post_data = post_data.split('&')
 		for data in post_data:
 			try:
 				if len(data):

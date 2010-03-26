@@ -25,15 +25,22 @@ class WatchDog(threading.Thread):
 			client_to_delete = []
 			for key in self.client_list['http']:
 				client = self.client_list['http'][key]
-				if client.validJson == False or int(current_time.strftime("%S")) - int(client.last_action.strftime("%S")) > self.maxIdleTime:
-					client_to_delete.append(key)
-			for k in client_to_delete:
-				self.pop(k)
+				if client.validJson == False:
+					client_to_delete.append({'key':key, 'reason':'json'})
+				elif int(current_time.strftime("%S")) - int(client.last_action.strftime("%S")) > self.maxIdleTime:
+					client_to_delete.append({'key':key, 'reason':'time'})
+			for d in client_to_delete:
+				self.pop(d)
 			time.sleep(self.sleepTime)
 	
-	def pop(self, key):
-		client = self.client_list['http'][key]
-		Log().add("[+] WatchDog deleted http client : "+client.unique_key+", last action: "+client.last_action.ctime())
+	def pop(self, d):
+		client = self.client_list['http'][d['key']]
+		if d['reason'] == 'time':
+			Log().add("[+] WatchDog deleted (inactif) http client : "+client.unique_key+", last action: "+client.last_action.ctime())
+		elif d['reason'] == 'json':
+			Log().add("[+] WatchDog deleted (invalid json) http client : "+client.unique_key+", last action: "+client.last_action.ctime())
 		self.lock.acquire()
-		self.client_list['http'].pop(key)
+		if client.client_socket != None:
+			client.client_socket.close()
+		self.client_list['http'].pop(d['key'])
 		self.lock.release()

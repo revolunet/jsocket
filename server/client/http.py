@@ -35,11 +35,21 @@ class ClientHTTP(IClient):
 				data = data + buffer
 			self.request.handle(data)
 			
+			print self.request.handle(data)
 			if self.request.post_DATA('json') is not None:
 				if len(self.request.post_DATA('json')) != 0:
-					self.validJson = True
-					self.rput(urllib.unquote_plus(self.request.post_DATA('json')))
-				
+					try:
+						print urllib.unquote_plus(self.request.post_DATA('json'))
+						json_cmd = simplejson.loads(urllib.unquote_plus(self.request.post_DATA('json')))
+						
+						if json_cmd['cmd'] == 'connected':
+							self.client_socket.send('{"from": "connected", "value": "'+self.unique_key+'", "app": ""}')
+						else:
+							self.validJson = True
+							self.rput(urllib.unquote_plus(self.request.post_DATA('json')))
+					except:
+						print e
+			
 			self.__disconnection()
 			#self.client_socket.send(self.response.Get(self.request, 200))
 			
@@ -60,4 +70,5 @@ class ClientHTTP(IClient):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
 		
 		self.client_socket.close()
+		self.client_socket = None
 		Log().add("[-] HTTP Client disconnected", 'blue')
