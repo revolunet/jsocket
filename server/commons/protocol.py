@@ -52,14 +52,19 @@ class Protocol(object):
 							json_cmd['channel'] = "null"
 						if json_cmd.get('args', None) is not None and json_cmd.get('channel', None) is not None and json_cmd.get('app', None) is not None:
 							self.__cmd_list [json_cmd['cmd']](json_cmd['args'], json_cmd['channel'], json_cmd['app'])
+							self.client.validJson = True
 						else:
 							Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' arguments invalides", 'ired')
+							self.client.validJson = False
 					except KeyError:
 						Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' prends deux arguments", 'ired')
+						self.client.validJson = False
 				else:
 					Log().add("[+] Command error : " + cmd + " , '" + json_cmd['cmd'] + "' n'est pas une commande valide", 'yellow')
+					self.client.validJson = False
 			except ValueError:
 				Log().add("[+] Command error : " + cmd + " , n'est pas une chaine json valide", 'ired')
+				self.client.validJson = False
 	
 	# {"cmd" : "connected", "args": "null"}
 	def __cmd_connected(self, args = None, channel = None, app = None):
