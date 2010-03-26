@@ -13,7 +13,7 @@
 **/
 var jsocketApi = {
 	// jsocketCore Object
-	core : jsocketCoreTCP,
+	core : jsocketCoreHTTP,
 	host : '',
 	port : 0,
 	debug : false,
@@ -50,6 +50,17 @@ var jsocketApi = {
 		var newApp = appObject || { };
 		jsocketApi.app[appName] = newApp;
 		jsocketApi.app[appName].isMaster = false;
+	},
+
+	/**
+	* Renvoie true si l'application existe, false sinon
+	* @appName : application name
+	**/
+	appExists : function(appName) {
+		if (typeof(eval('jsocketApi.app[' + appName + ']')) != 'undefined') {
+			return (true);
+		}
+		return (false);
 	},
 
 	/**
@@ -109,7 +120,7 @@ var jsocketApi = {
 			args.channel = (j.channel != null ? j.channel : '');
 			args.app = (j.app != null ? j.app : '');
 			args = jsocketApi.core.stripslashes(args);
-			if (j.app != null) {
+			if (j.app != null && jsocketApi.appExists(j.app) == true) {
 				try {
 					jsocketApi.appCallback(args['app'], 'on' + func_name, args);
 				} catch(e) { }
@@ -117,7 +128,7 @@ var jsocketApi = {
 			else {
 				try {
 					jsocketApi.appCallbacks('on' + func_name, args);
-					eval('jsocketApi.on'+func_name+"(args)");
+					eval('jsocketApi.on' + func_name + "(args)");
 				} catch(e) {
 					jsocketApi.onError(e);
 				}
@@ -131,7 +142,8 @@ var jsocketApi = {
 	* @info : identifiant unique de l'utilisateur
 	**/
 	onConnected : function (info) {
-		jsocketApi.uid = info['value'];
+		console.log('onConnected with ' + info.value);
+		jsocketApi.uid = info.value;
 		jsocketApi.sendPool();
 	},
 	
@@ -156,7 +168,7 @@ var jsocketApi = {
 	* @message : le message retourne par le serveur -> Json string
 	**/
 	onReceive : function (message) {
-		//implement onReceive code here.
+		// DOT NOT ERASE
 		jsocketApi.parser(message);
 	},
 	

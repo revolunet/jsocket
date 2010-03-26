@@ -16,7 +16,7 @@ var jsocketCoreHTTP = {
 	loaded : function()
 	{
 		jsocketCoreHTTP.initialized = true;
-		jsocketCoreHTTP.url = 'http://127.0.0.1/json_test.php';
+		jsocketCoreHTTP.url = 'http://127.0.0.1:8000/json-post/';
 		return (true);
 	},
 
@@ -26,7 +26,7 @@ var jsocketCoreHTTP = {
 	**/
 	_post : function(parameters)
 	{
-		parameters = encodeURI('?json=' + parameters);
+		parameters = encodeURI('json=' + parameters);
 		if (window.XMLHttpRequest) {
 			jsocketCoreHTTP.socket = new XMLHttpRequest();
 		}
@@ -38,7 +38,7 @@ var jsocketCoreHTTP = {
 			return (false);
 		}
 		jsocketCoreHTTP.socket.onreadystatechange = jsocketCoreHTTP.receive;
-		jsocketCoreHTTP.socket.open('POST', jsocketCoreHTTP.url, false);
+		jsocketCoreHTTP.socket.open('POST', jsocketCoreHTTP.url, true);
 		jsocketCoreHTTP.socket.send(parameters);
 		return (true);
 	},
@@ -127,10 +127,12 @@ var jsocketCoreHTTP = {
 		msg = '';
 		if (jsocketCoreHTTP.commands.length > 0) {
 			msg = jsocketCoreHTTP.commands.join("\n");
-			console.log(msg);
 			jsocketCoreHTTP.commands = [ ];
-		}
-		jsocketCoreHTTP._post(msg + "\n");
+			jsocketCoreHTTP._post(msg + "\n");
+		}/* else {
+			jsocketCoreHTTP._post('{cmd: "refresh", args: "null", app: "", uid: "' +
+				jsocketCoreHTTP.api.uid + '"}\n');
+		}*/
 		return (true);
 	},
  
@@ -140,7 +142,11 @@ var jsocketCoreHTTP = {
 	**/
 	send : function(msg)
 	{
-		return (jsocketCoreHTTP.commands.push(msg));
+		console.log(msg);
+		if (msg.length > 0) {
+			return (jsocketCoreHTTP.commands.push(msg));
+		}
+		return (false);
 	},
  
 	/**
@@ -183,12 +189,10 @@ var jsocketCoreHTTP = {
 		}
 		if (jsocketCoreHTTP.socket.readyState == 4) {
 			if (jsocketCoreHTTP.socket.status == 200) {
-				msg = jsocketCoreHTTP.socket.responseText;
 				if (jsocketCoreHTTP.connectedToServer == false) {
 					jsocketCoreHTTP.connected();
 				}
-				alert(msg);
-				return (true);
+				msg = jsocketCoreHTTP.socket.responseText;
 				if (msg != '') {
 					res = msg.split("\n");
 					for (var i = 0; res[i]; ++i) {
