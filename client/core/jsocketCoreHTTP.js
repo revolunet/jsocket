@@ -16,7 +16,7 @@ var jsocketCoreHTTP = {
 	loaded : function()
 	{
 		jsocketCoreHTTP.initialized = true;
-		jsocketCoreHTTP.url = 'http://127.0.0.1/jsockethttp/';
+		jsocketCoreHTTP.url = 'http://127.0.0.1/json_test.php';
 		return (true);
 	},
 
@@ -51,6 +51,7 @@ var jsocketCoreHTTP = {
 	connect : function(server, port)
 	{
 		jsocketCoreHTTP.loaded();
+		jsocketCoreHTTP.send('{"cmd": "connected", "args": "null", "app": ""}');
 		jsocketCoreHTTP.pool();
 	},
  
@@ -111,7 +112,7 @@ var jsocketCoreHTTP = {
 			return (false);
 		}
 		jsocketCoreHTTP.write();
-		//setTimeout("jsocketCoreHTTP.pool();", 2000);
+		setTimeout("jsocketCoreHTTP.pool();", 2000);
 	},
 
 	/**
@@ -126,6 +127,7 @@ var jsocketCoreHTTP = {
 		msg = '';
 		if (jsocketCoreHTTP.commands.length > 0) {
 			msg = jsocketCoreHTTP.commands.join("\n");
+			console.log(msg);
 			jsocketCoreHTTP.commands = [ ];
 		}
 		jsocketCoreHTTP._post(msg + "\n");
