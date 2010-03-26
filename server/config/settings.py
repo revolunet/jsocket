@@ -10,7 +10,7 @@ class SETTINGS(object):
 	IS_DEBUG = True
 	
 	SERVER_PORT = 9999
-	SERVER_HOST = '127.0.0.1'
+	SERVER_HOST = '192.168.0.34'
 	
 	HTTP_SERVER_NAME = 'Jsocket Server 1.0'
 
