@@ -44,6 +44,8 @@ class Protocol(object):
 				json_cmd = simplejson.loads(cmd)
 				if json_cmd.get('cmd', None) is not None and json_cmd['cmd'] in self.__cmd_list:
 					try :
+						if json_cmd.get('uid', None) is not None:
+							self.client.unique_key = json_cmd.get('uid')
 						if json_cmd.get('app', None) == None or len(json_cmd.get('app', None)) == 0:
 							json_cmd['app'] = "null"
 						if json_cmd.get('channel', None) == None or len(json_cmd.get('channel', None)) == 0:

@@ -11,6 +11,7 @@ class Worker(threading.Thread):
 	def __init__(self, queue, type = 'log'):
 		self.__queue = queue
 		self.__type = type
+		self.__http_list = { }
 		threading.Thread.__init__(self)
 
 	def type_log(self):
@@ -27,26 +28,24 @@ class Worker(threading.Thread):
 		
 		from client.tcp import ClientTCP
 		from log.logger import Log
-		
-		i = 0
+
 		while True:
 			item = self.__queue.get()
 			if item.get('client', None) is not None:
 				if item['type'] == 'tcp':
 					try:
 						if item.get('data', None) is not None and len(item.get('data')) > 0:
-							if item['client'].client_socket is not None:
-								print str(i) + " " + item['data']
-								item['client'].client_socket.send(item.get('data') + "\0")
+							if item.get('client').client_socket is not None:
+								item.get('client').client_socket.send(item.get('data') + "\0")
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
 				elif item['type'] == 'http':
-					pass
+					if item.get('data', None) is not None and len(item.get('data')) > 0:
+						self.__http_list[item.get('client').unique_key].append(item.get('data'))
 				else:
 					pass
 				self.__queue.task_done()
-			i += 1
 		
 	def type_recv(self):
 		""" Parcours la Queue pour parser la string correspondante """
@@ -68,6 +67,10 @@ class Worker(threading.Thread):
 				else:
 					for cmd in commands:
 						item['client'].rput(cmd)
+				if len(self.__http_list[item.get('client').unique_key]) > 0:
+					for cmd in self.__http_list[item.get('client').unique_key]:
+						item.get('client').client_socket.send(cmd + "\n")
+					self.__http_list[item.get('client').unique_key] = { }
 			else:
 				pass
 			self.__queue.task_done()

@@ -54,7 +54,7 @@ class ServerTCP(threading.Thread):
 						Log().add("[+] TCP Client connected " + (str(client_addr)))
 						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
 						current_client.start()
-						self.client_list['tcp'].append(current_client)
+						self.client_list['tcp'][current_client.unique_key] = current_client
 					elif s == sys.stdin: 
 						# handle standard input 
 						junk = sys.stdin.readline() 
