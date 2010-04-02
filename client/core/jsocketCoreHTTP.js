@@ -17,6 +17,7 @@ var jsocketCoreHTTP = {
 	url : '',
 	commands : [ ],
 	socket : null,
+	isWorking: false,
 
 	/**
 	* Initialisation du core HTTP

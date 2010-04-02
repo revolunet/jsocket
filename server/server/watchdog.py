@@ -3,7 +3,6 @@
 ##
 
 import threading
-import datetime
 import time
 from log.logger import Log
 from threading import Lock
@@ -22,18 +21,17 @@ class WatchDog(threading.Thread):
 	
 	def run(self):
 		while self.isRunning:
-			current_time = datetime.datetime.now()
+			current_time = int(time.time())
 			client_to_delete = []
 			for key in self.client_list['http']:
 				client = self.client_list['http'][key]
 				if client.validJson == False:
 					client_to_delete.append({'key':key, 'reason':'json'})
-				elif int(current_time.strftime("%S")) - int(client.last_action.strftime("%S")) > self.maxIdleTime:
+				elif int(current_time - client.last_action) > self.maxIdleTime:
 					client_to_delete.append({'key':key, 'reason':'time'})
 			for d in client_to_delete:
-				#self.sessionPop(d)
-				#self.pop(d)
-				pass
+				self.sessionPop(d)
+				self.pop(d)
 			time.sleep(self.sleepTime)
 	
 	def pop(self, d):
@@ -50,10 +48,13 @@ class WatchDog(threading.Thread):
 		self.lock.release()
 	
 	def sessionPop(self, d):
+		current_time = int(time.time())
 		client = self.client_list['http'][d['key']]
-		success = self.session.pop(client.unique_key)
-		if success:
-			if d['reason'] == 'time':
-				Log().add("[+] WatchDog deleted (inactif) session : "+client.unique_key+", last action: "+client.last_action.ctime())
-			elif d['reason'] == 'json':
-				Log().add("[+] WatchDog deleted (invalid json) session : "+client.unique_key+", last action: "+client.last_action.ctime())
+		clientSession = self.session.get(client.unique_key)
+		if int(current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
+			success = self.session.pop(client.unique_key)
+			if success:
+				if d['reason'] == 'time':
+					Log().add("[+] WatchDog deleted (inactif) session : "+client.unique_key+", last action: "+client.last_action.ctime())
+				elif d['reason'] == 'json':
+					Log().add("[+] WatchDog deleted (invalid json) session : "+client.unique_key+", last action: "+client.last_action.ctime())

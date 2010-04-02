@@ -1,6 +1,6 @@
 
 import threading
-import datetime
+import time
 import random
 from config.settings import SETTINGS
 from commons.protocol import Protocol
@@ -32,7 +32,7 @@ class IClient(threading.Thread):
 		self.rqueue = rqueue
 		self.squeue = squeue
 		self.status = 'online'
-		self.connection_time = datetime.datetime.now()
+		self.connection_time = int(time.time())
 		self.last_action = self.connection_time
 		self.room_name = None
 		self.http_list = http_list

@@ -4,6 +4,7 @@
 
 import threading
 import Queue
+import time
 from jexception import JException
 
 class Worker(threading.Thread):
@@ -66,6 +67,7 @@ class Worker(threading.Thread):
 			if item['type'] == 'tcp':
 				if len(commands) == 1:
 					item['client'].protocol.parse(item['data'])
+					item['client'].last_action = int(time.time())
 				else:
 					for cmd in commands:
 						item['client'].rput(cmd)
@@ -74,6 +76,7 @@ class Worker(threading.Thread):
 					http_buffer = ""
 					if len(commands) == 1:
 						item.get('client').protocol.parse(commands[0])
+						item.get('client').last_action = int(time.time())
 						item.get('client').updateSession(item.get('client').unique_key)
 					else:
 						for cmd in commands:
