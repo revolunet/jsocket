@@ -13,7 +13,7 @@
 **/
 var jsocketApi = {
 	// jsocketCore Object
-	core : jsocketCoreHTTP,
+	core : jsocketCoreTCP,
 	host : '',
 	port : 0,
 	debug : false,
@@ -38,6 +38,7 @@ var jsocketApi = {
 	* @newCore : variable contenant le nouveau jsocketCore (TCP ou HTTP)
 	**/
 	method : function(newCore) {
+		newCore.isWorking = true;
 		jsocketApi.core = newCore;
 	},
 
@@ -143,7 +144,6 @@ var jsocketApi = {
 	* @info : identifiant unique de l'utilisateur
 	**/
 	onConnected : function (info) {
-		console.log('onConnected with ' + info.value);
 		jsocketApi.uid = info.value;
 		jsocketApi.sendPool();
 	},
@@ -526,8 +526,20 @@ var jsocketApi = {
 	* @error : le message d'erreur -> string
 	**/
 	onError : function(error) {
-		//alert(error);
-		console.log(error);
+		//implement onError code here.
+	},
+	
+	/**
+	* Callback sur l'erreur venant du core TCP. On change alors
+	* la methode de dialogue avec le serveur par HTTP.
+	* @error : le message d'erreur -> string
+	**/
+	onTCPError : function(error) {
+		jsocketCoreTCP.isWorking = false;
+		if (jsocketCoreHTTP.isWorking == false) {
+			jsocketApi.method(jsocketCoreHTTP);
+			jsocketApi.init(jsocketApi.host, jsocketApi.port);
+		}
 	},
 
 	/**

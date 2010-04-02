@@ -2,6 +2,15 @@
  * Javascript event's interface fail over HTTP
  */
 var jsocketCoreHTTP = {
+	/**
+	 * Settings:
+	 *  - refreshTimer: Temps de rafraichissement entre chaque requetes
+	 *  - url: URL pour le _POST[json] (default: api.server:81)
+	 */
+	settings: {
+		refreshTimer: 2000,
+		url: 'http://127.0.0.1:8000/json-post/'
+	},
 	api : null,
 	initialized : false,
 	connectedToServer : false,
@@ -16,7 +25,7 @@ var jsocketCoreHTTP = {
 	loaded : function()
 	{
 		jsocketCoreHTTP.initialized = true;
-		jsocketCoreHTTP.url = 'http://127.0.0.1:8000/json-post/';
+		jsocketCoreHTTP.url = jsocketCoreHTTP.settings.url;
 		return (true);
 	},
 
@@ -112,7 +121,7 @@ var jsocketCoreHTTP = {
 			return (false);
 		}
 		jsocketCoreHTTP.write();
-		setTimeout("jsocketCoreHTTP.pool();", 4000);
+		setTimeout("jsocketCoreHTTP.pool();", jsocketCoreHTTP.settings.refreshTimer);
 	},
 
 	/**
@@ -142,7 +151,6 @@ var jsocketCoreHTTP = {
 	**/
 	send : function(msg)
 	{
-		console.log(msg);
 		if (msg.length > 0) {
 			return (jsocketCoreHTTP.commands.push(msg));
 		}
