@@ -14,42 +14,40 @@ from commons.room import Room
 from log.logger import Log
 import Queue
 
-def mainTCP(room, squeue, rqueue, client_list):
+def mainTCP(room, squeue, rqueue, client_list, http_list):
 	"""Lance un serveur TCP"""
-	serverTCP = ServerTCP(room, squeue, rqueue, client_list)
+	serverTCP = ServerTCP(room, squeue, rqueue, client_list, http_list)
 	try:
 		serverTCP.start()
 	except KeyboardInterrupt:
 		Log().add("[-] TCP Server Killed", 'ired')
 		exit()
+		return
 
-def mainHTTP(room, squeue, rqueue, client_list):
+def mainHTTP(room, squeue, rqueue, client_list, http_list):
 	"""Lance un serveur HTTP"""
-	serverHTTP = ServerHTTP(room, squeue, rqueue, client_list)
+	serverHTTP = ServerHTTP(room, squeue, rqueue, client_list, http_list)
 	try:
 		serverHTTP.start()
 	except KeyboardInterrupt:
 		Log().add("[-] HTTP Server Killed", 'ired')
 		exit()
+		return
 
 #if __name__ == '__main__':
 #	main()	
 
 if __name__ == '__main__':
 	client_list = {'http': {}, 'tcp': {}}
+	http_list = { }
 	room = Room()
 	squeue = Queue.Queue(0)
 	Worker(squeue, 'send').start()
 	rqueue = Queue.Queue(0)
 	Worker(rqueue, 'recv').start()
 	
-	mainTCP(room, squeue, rqueue, client_list)
-	mainHTTP(room, squeue, rqueue, client_list)
+	mainTCP(room, squeue, rqueue, client_list, http_list)
+	mainHTTP(room, squeue, rqueue, client_list, http_list)
 	
 	watchdog = WatchDog(client_list)
 	watchdog.start()
-	
-#	from server.http import ServerHTTP
-	
-#	server_http = ServerHTTP([], [], [])
-#	server_http.start()

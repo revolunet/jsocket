@@ -7,7 +7,7 @@ from commons.protocol import Protocol
 
 class IClient(threading.Thread):
 
-	def __init__(self, room, rqueue, squeue, Ctype):
+	def __init__(self, room, rqueue, squeue, Ctype, http_list):
 		self.protocol = Protocol(self)
 		self.type = Ctype
 		self.room = room
@@ -21,6 +21,7 @@ class IClient(threading.Thread):
 		self.connection_time = datetime.datetime.now()
 		self.last_action = self.connection_time
 		self.room_name = None
+		self.http_list = http_list
 		threading.Thread.__init__(self)
 
 	def sput(self, data):
