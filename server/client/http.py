@@ -11,6 +11,7 @@ from server.watchdog import WatchDog
 from commons.jexception import JException
 import simplejson
 import urllib
+import time
 
 
 
@@ -116,6 +117,14 @@ class ClientHTTP(IClient):
 											if json_uid is None:
 												self.client_socket.send('{"form": "error", "value": "No uid given"')
 											else:
+												try:
+													clientSession = self.session.get(json_uid)
+													if clientSession is not None:
+														clientSession['last_action'] = int(time.time())
+														self.last_action = int(time.time())
+														#self.session.update(json_uid, clientSession)
+												except:
+													Log().add(JException().formatExceptionInfo())
 												if json_uid is not None and self.http_list.get(json_cmd.get('uid'), None) is not None:
 													if self.isUrlLib:
 														self.client_socket.send(protocol + " 200 0K\r\n")
