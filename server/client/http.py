@@ -15,7 +15,7 @@ import simplejson
 import urllib
 
 class ClientHTTP(IClient):
-	def __init__(self, client_socket, client_address, room, rqueue, squeue, http_list):
+	def __init__(self, client_socket, client_address, room, rqueue, squeue, http_list, session):
 		#self.protocol = Protocol(self)
 		self.client_socket = client_socket
 		self.client_address = client_address
@@ -24,7 +24,7 @@ class ClientHTTP(IClient):
 		self.request = Request()
 		self.response = Response()
 		self.validJson = False
-		IClient.__init__(self, room, rqueue, squeue, 'http', http_list)
+		IClient.__init__(self, room, rqueue, squeue, 'http', http_list, session)
 		#threading.Thread.__init__(self)
 		
 	def get_name(self):
@@ -49,19 +49,29 @@ class ClientHTTP(IClient):
 							data = data.strip()
 							if len(data) > 0:
 								json_cmd = simplejson.loads(data)
+								json_uid = json_cmd.get('uid', None)
 								if json_cmd['cmd'] == 'connected':
 									self.validJson = True
+									self.setSession(self.unique_key)
 									self.client_socket.send('{"from": "connected", "value": "'+self.unique_key+'", "app": ""}')
 									self.disconnection()
 								elif json_cmd['cmd'] == 'refresh':
-									for s in self.http_list.get(json_cmd.get('uid')):
-										if len(s) > 0:
-											self.client_socket.send(s + '\n')
-									self.http_list[json_cmd['uid']] = [ ]
+									if json_uid is None:
+										self.client_socket.send('{"form": "error", "value": "No uid given"')
+									else:
+										for s in self.http_list.get(json_cmd.get('uid')):
+											if len(s) > 0:
+												self.client_socket.send(s + '\n')
+										self.http_list[json_cmd['uid']] = [ ]
 									self.disconnection()
 								else:
-									self.validJson = True
-									self.rput(data)
+									if json_uid is None:
+										self.client_socket.send('{"form": "error", "value": "No uid given"')
+										self.disconnection()
+									else:
+										self.restoreSession(json_uid)
+										self.validJson = True
+										self.rput(data)
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 			#self.client_socket.send(self.response.Get(self.request, 200))

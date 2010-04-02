@@ -72,6 +72,7 @@ class Worker(threading.Thread):
 					http_buffer = ""
 					if len(commands) == 1:
 						item.get('client').protocol.parse(commands[0])
+						item.get('client').updateSession(item.get('client').unique_key)
 						#item.get('client').http_list[item.get('client').unique_key].append(commands[0])
 					else:
 						for cmd in commands:

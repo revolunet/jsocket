@@ -9,6 +9,7 @@ import threading
 from log.logger import Log
 from config.settings import SETTINGS
 from client.http import ClientHTTP
+from commons.session import Session
 
 class ServerHTTP(threading.Thread):
 	"""docstring for ServerHTTP"""
@@ -27,6 +28,7 @@ class ServerHTTP(threading.Thread):
 
 		self.client_list = client_list
 		self.http_list = http_list
+		self.session = Session()
 
 		threading.Thread.__init__(self)
 
@@ -39,7 +41,7 @@ class ServerHTTP(threading.Thread):
 						client_socket, client_addr = self.__socket.accept()
 						client_socket.settimeout(2)
 						Log().add("[+] HTTP Client connected " + (str(client_addr)))
-						current_client = ClientHTTP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue, self.http_list)
+						current_client = ClientHTTP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue, self.http_list, self.session)
 						current_client.setDaemon(True)
 						current_client.start()
 						#self.client_list['http'][current_client.unique_key] = current_client
