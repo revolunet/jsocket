@@ -26,7 +26,6 @@ class Request(object):
 
 		request_lines = data.replace('\r', '').split('\n')
 		for line in request_lines:
-			print line
 			head_key = line.split(' ')[0].replace(':', '').lower()
 			if len(head_key) > 0:
 				if head_key == 'get' or head_key == 'post' or head_key == 'options':
@@ -40,7 +39,7 @@ class Request(object):
 		"""
 		Recupere les donnees contenus dans le header de la requete
 		get, host, connection, user-agent, cache-control, accept,
-		accept-encoding, accept-language, accept-charset
+		accept-encoding, accept-language, accept-charset...
 		"""
 		
 		try:

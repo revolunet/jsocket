@@ -10,11 +10,12 @@ from config.settings import SETTINGS
 from request import Request
 from response import Response
 from server.watchdog import WatchDog
+from commons.jexception import JException
 import simplejson
 import urllib
 
 class ClientHTTP(IClient):
-	def __init__(self, client_socket, client_address, room, rqueue, squeue):
+	def __init__(self, client_socket, client_address, room, rqueue, squeue, http_list):
 		#self.protocol = Protocol(self)
 		self.client_socket = client_socket
 		self.client_address = client_address
@@ -23,9 +24,14 @@ class ClientHTTP(IClient):
 		self.request = Request()
 		self.response = Response()
 		self.validJson = False
-		IClient.__init__(self, room, rqueue, squeue, 'http')
+		IClient.__init__(self, room, rqueue, squeue, 'http', http_list)
 		#threading.Thread.__init__(self)
 		
+	def get_name(self):
+		if self.nickName == None:
+			return self.unique_key
+		return self.nickName
+
 	def run(self):
 		"""lecture du client """
 		try:
@@ -35,26 +41,34 @@ class ClientHTTP(IClient):
 				data = data + buffer
 			self.request.handle(data)
 			
-			print self.request.handle(data)
 			if self.request.post_DATA('json') is not None:
 				if len(self.request.post_DATA('json')) != 0:
 					try:
-						print urllib.unquote_plus(self.request.post_DATA('json'))
-						json_cmd = simplejson.loads(urllib.unquote_plus(self.request.post_DATA('json')))
-						
-						if json_cmd['cmd'] == 'connected':
-							self.client_socket.send('{"from": "connected", "value": "'+self.unique_key+'", "app": ""}')
-						else:
-							self.validJson = True
-							self.rput(urllib.unquote_plus(self.request.post_DATA('json')))
-					except:
-						print e
-			
-			self.__disconnection()
+						json_data = urllib.unquote_plus(self.request.post_DATA('json')).split('\n')
+						for data in json_data:
+							data = data.strip()
+							if len(data) > 0:
+								json_cmd = simplejson.loads(data)
+								if json_cmd['cmd'] == 'connected':
+									self.validJson = True
+									self.client_socket.send('{"from": "connected", "value": "'+self.unique_key+'", "app": ""}')
+									self.disconnection()
+								elif json_cmd['cmd'] == 'refresh':
+									for s in self.http_list.get(json_cmd.get('uid')):
+										if len(s) > 0:
+											self.client_socket.send(s + '\n')
+									self.http_list[json_cmd['uid']] = [ ]
+									self.disconnection()
+								else:
+									self.validJson = True
+									self.rput(data)
+					except Exception:
+						Log().add(JException().formatExceptionInfo())
 			#self.client_socket.send(self.response.Get(self.request, 200))
 			
 		except Exception as e:
-			self.__disconnection()
+			Log().add(JException().formatExceptionInfo())
+			self.disconnection()
 			return
 	
 	# outdated
@@ -64,11 +78,16 @@ class ClientHTTP(IClient):
 		else:
 			if self.request.post_Ket_Exists("json") and len(self.request.post_DATA("json")) > 0:
 				self.rqueue.put([self, urllib.unquote_plus(self.request.post_DATA("json"))])
-				print urllib.unquote_plus(self.request.post_DATA("json"))
-				
-	def __disconnection(self):
+	
+	def queue_cmd(self, command):
+		"""Ajoute une commande a la Queue en cours"""
+		
+		self.sput(command)
+	
+	def disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
 		
-		self.client_socket.close()
-		self.client_socket = None
-		Log().add("[-] HTTP Client disconnected", 'blue')
+		if self.client_socket is not None:
+			self.client_socket.close()
+			self.client_socket = None
+			Log().add("[-] HTTP Client disconnected", 'blue')

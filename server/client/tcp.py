@@ -13,10 +13,10 @@ from config.settings import SETTINGS
 from commons.jexception import JException
 
 class ClientTCP(IClient):
-	def __init__(self, client_socket, client_address, room, rqueue, squeue):
+	def __init__(self, client_socket, client_address, room, rqueue, squeue, http_list):
 		self.client_socket = client_socket
 		self.client_address = client_address
-		IClient.__init__(self, room, rqueue, squeue, 'tcp')
+		IClient.__init__(self, room, rqueue, squeue, 'tcp', http_list)
 
 	def run(self):
 		"""Boucle de lecture du client """

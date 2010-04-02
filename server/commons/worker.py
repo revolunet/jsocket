@@ -11,7 +11,6 @@ class Worker(threading.Thread):
 	def __init__(self, queue, type = 'log'):
 		self.__queue = queue
 		self.__type = type
-		self.__http_list = { }
 		threading.Thread.__init__(self)
 
 	def type_log(self):
@@ -41,8 +40,15 @@ class Worker(threading.Thread):
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
 				elif item['type'] == 'http':
-					if item.get('data', None) is not None and len(item.get('data')) > 0:
-						self.__http_list[item.get('client').unique_key].append(item.get('data'))
+					try:
+						if item.get('data', None) is not None and len(item.get('data')) > 0:
+							if item.get('client').unique_key not in item.get('client').http_list:
+								item.get('client').http_list[item.get('client').unique_key] = [ ]
+							item.get('client').http_list[item.get('client').unique_key].append(item.get('data'))
+							print "Added data %s for client %s" % (item.get('data'), item.get('client').unique_key)
+					except Exception:
+						Log().add(JException().formatExceptionInfo())
+						Log().add("[DEBUG] failed to send %s" % item['data'])
 				else:
 					pass
 				self.__queue.task_done()
@@ -62,15 +68,32 @@ class Worker(threading.Thread):
 					for cmd in commands:
 						item['client'].rput(cmd)
 			elif item['type'] == 'http':
-				if len(commands) == 1:
-					item['client'].protocol.parse(item['data'])
-				else:
-					for cmd in commands:
-						item['client'].rput(cmd)
-				if len(self.__http_list[item.get('client').unique_key]) > 0:
-					for cmd in self.__http_list[item.get('client').unique_key]:
-						item.get('client').client_socket.send(cmd + "\n")
-					self.__http_list[item.get('client').unique_key] = { }
+				try:
+					http_buffer = ""
+					if len(commands) == 1:
+						item.get('client').protocol.parse(commands[0])
+						#item.get('client').http_list[item.get('client').unique_key].append(commands[0])
+					else:
+						for cmd in commands:
+							item['client'].rput(cmd)
+							#item.get('client').http_list[item.get('client').unique_key].append(cmd)
+					#if item.get('client').unique_key in item.get('client').http_list:
+					#	if len(item.get('client').http_list[item.get('client').unique_key]) > 0:
+					#		for cmd in item.get('client').http_list[item.get('client').unique_key]:
+					#			if item.get('client').client_socket is None:
+					#				print "Client deco ! socket is None"
+					#				item.get('client').disconnection()
+					#			else:
+					#				http_buffer += cmd + "\n"
+					#		if item.get('client').client_socket is not None:
+					#			print "SENDING %s" % http_buffer
+					#			item.get('client').client_socket.send(http_buffer)
+					#			item.get('client').http_list[item.get('client').unique_key] = [ ]
+								
+					item.get('client').disconnection()
+				except Exception as e:
+					Log().add(e)
+					Log().add("[DEBUG] failed to send %s" % item['data'])
 			else:
 				pass
 			self.__queue.task_done()

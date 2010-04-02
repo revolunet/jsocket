@@ -15,7 +15,7 @@ import threading
 
 class ServerTCP(threading.Thread):
 	"""docstring for Server"""
-	def __init__(self, room, squeue, rqueue, client_list):
+	def __init__(self, room, squeue, rqueue, client_list, http_list):
 		self.__host = SETTINGS.SERVER_HOST
 		self.__port = SETTINGS.SERVER_PORT
 		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -34,6 +34,7 @@ class ServerTCP(threading.Thread):
 			self.__input = [self.__socket]
 			
 		self.client_list = client_list
+		self.http_list = http_list
 		
 		threading.Thread.__init__(self)
 
@@ -52,7 +53,7 @@ class ServerTCP(threading.Thread):
 						# handle the server socket 
 						client_socket, client_addr = self.__socket.accept()
 						Log().add("[+] TCP Client connected " + (str(client_addr)))
-						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
+						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue, self.http_list)
 						current_client.start()
 						self.client_list['tcp'][current_client.unique_key] = current_client
 					elif s == sys.stdin: 

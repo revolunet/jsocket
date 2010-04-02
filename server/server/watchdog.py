@@ -13,7 +13,7 @@ class WatchDog(threading.Thread):
 		self.client_list = client_list
 		self.isRunning = True
 		self.sleepTime = 2
-		self.maxIdleTime = 5
+		self.maxIdleTime = 60
 		self.lock = Lock()
 		Log().add("[+] WatchDog launched")
 		
@@ -30,7 +30,8 @@ class WatchDog(threading.Thread):
 				elif int(current_time.strftime("%S")) - int(client.last_action.strftime("%S")) > self.maxIdleTime:
 					client_to_delete.append({'key':key, 'reason':'time'})
 			for d in client_to_delete:
-				self.pop(d)
+				#self.pop(d)
+				pass
 			time.sleep(self.sleepTime)
 	
 	def pop(self, d):
