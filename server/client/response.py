@@ -4,7 +4,11 @@ from config.settings import SETTINGS
 import datetime
 
 class Response(object):
-	"""docstring for Response"""
+	"""
+	Formatage d'une reponse HTTP.
+	Cet objet n'est pas utiliser par le server.
+	"""
+	
 	def __init__(self):
 		self.request = None
 		self.http_version = "HTTP/1.0 "
@@ -19,15 +23,27 @@ class Response(object):
 		self.initHTTPCode()
 
 	def HandleRequest(self, request):
+		"""
+		Recupere la version HTTP utilise par le client lors de la Request
+		"""
+		
 		self.http_version = request.protocol
 	
 	def ResponseData(self, data):
+		"""
+		Set les datas renvoye au client apres une request
+		"""
+		
 		self.response_data = "\r\n"
 		self.response_data += data
 		self.response_data += "\r\n"
 		self.content_length = len(data)
 	
 	def __createHeader(self, request):
+		"""
+		Definie les headers de reponse a send au client.
+		"""
+		
 		if request.protocol:
 			self.response_header = str(request.protocol) + " " + str(self.code) + " " + str(self.__code_status[self.code]) + "\r\n"
 		else:
@@ -36,6 +52,10 @@ class Response(object):
 		self.response_header += "Content-Type: " + str(self.content_type) + "\r\n"
 		
 	def Get(self, request, code):
+		"""
+		Retourne le message associe a un code d'erreur -> string
+		"""
+		
 		self.code = code
 		self.__createHeader(request)
 		if self.response_data is not None:
@@ -44,6 +64,10 @@ class Response(object):
 		return self.response_header
 	
 	def initHTTPCode(self):
+		"""
+		Liste de tous les codes retour HTTP
+		"""
+		
 		self.__code_status = {
 			100: "Continue",
 			101: "Switching Protocols",

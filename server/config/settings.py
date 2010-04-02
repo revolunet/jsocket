@@ -5,7 +5,10 @@
 import socket
 
 class SETTINGS(object):
-	"""docstring for SETTINGS"""
+	"""
+	Settings du / des servers 
+	"""
+	
 	def __init__(self):
 		pass
 	

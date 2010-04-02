@@ -5,7 +5,23 @@
 from log.logger import Log
 
 class Request(object):
+	"""
+	Handle sur une request de type HTTP.
+	Cette class va segmente la requete afin de la transformer en un objet facilement utilisable.
+	"""
+	
 	def __init__(self):
+		"""
+		Request Constructeur :
+			__header: les header de la requete, sous forme de [key] = value
+			__post: les data postes sur le server, sous forme de [key] = value
+			__get: les data contenues en get lors de la request sur le server, sous la fome de [KEY] = value
+			__blackList: liste de mot clef a ignorer lors d'une requete, sous la forme d'une liste de mot clef.
+			path: chemin de la requete.
+			method: post/get..
+			protocol: HTTP/1.1 ...
+		"""
+		
 		self.__header = {}
 		self.__post = {}
 		self.__get = {}
@@ -16,6 +32,10 @@ class Request(object):
 		self.__BlackList()
 	
 	def __BlackList(self):
+		"""
+		Liste de mots clef a ignorer lors d une requete.
+		"""
+		
 		self.__blackList.append("favicon.ico")
 
 	def handle(self, data):
@@ -52,6 +72,7 @@ class Request(object):
 		"""
 		Verifie que la key existe dans le dictionnaire POST
 		"""
+		
 		if len(key) == 0:
 			return False
 		return key.lower() in self.__post
@@ -83,6 +104,10 @@ class Request(object):
 		return self.__get
 
 	def hasPost(self):
+		"""
+		Return: Si des datas ont etes postes ou non -> bool
+		"""
+		
 		return len(self.__post) > 0
 			
 	def __handle_POST(self, post):

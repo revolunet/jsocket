@@ -6,8 +6,19 @@
 from log.logger import Log
 
 class Channel():
-	"""docstring for Channel"""
+	"""
+	Stock les informations relative aux clients presents dans des salons.
+	"""
+	
 	def __init__(self, name):
+		"""
+		name: Le nom du channel
+		master: l'objet client master
+		masterPwd: le mot de passe admin du channel
+		channelPwd: le mot de passe pour rejoindre le channel
+		client_list: la liste des clients presents dans le channel.
+		"""
+		
 		self.name = name
 		self.master = None
 		self.masterPwd = None
@@ -30,20 +41,28 @@ class Channel():
 			Log().add("[+] Room : "  + self.name + " " + str(len(self.client_list)) + " users")
 			
 	def auth(self, masterPwd, client):
+		"""
+		Return: Authentifie un client en tant que master du channel -> bool
+		"""
+		
 		if masterPwd == self.masterPwd:
 			self.master = client
 			return True
 		return False
 		
 	def isProtected(self):
+		"""
+		Return: Si le channel est protege ou non -> bool.
+		"""
+		
 		return self.channelPwd != None
 		
 	def list_users(self):
-		"""Return : La liste des utilisateurs de la room : -> list(Client)"""
+		"""Return : La liste des utilisateurs de la room : -> list(iClient)"""
 		
 		return self.client_list
 
 	def get_master(self):
-		""" Retourne le user master du channel """
+		""" Retourne le user master du channel -> iClient """
 		
 		return self.master

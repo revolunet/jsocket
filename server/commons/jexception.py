@@ -3,7 +3,10 @@ import traceback
 
 class JException(object):
 	class JException_:
-		"""docstring for JException_"""
+		"""
+		Static method, handle sur les Exceptions avec plus de detail.
+		"""
+		
 		def __init__(self):
 			pass
 

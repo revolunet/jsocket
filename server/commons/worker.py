@@ -7,7 +7,10 @@ import Queue
 from jexception import JException
 
 class Worker(threading.Thread):
-	"""docstring for Worker"""
+	"""
+	Gere de facon thread-safe les envoie/receptions de commandes clientes.
+	"""
+	
 	def __init__(self, queue, type = 'log'):
 		self.__queue = queue
 		self.__type = type

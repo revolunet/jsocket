@@ -6,8 +6,22 @@ from config.settings import SETTINGS
 from commons.protocol import Protocol
 
 class IClient(threading.Thread):
+	"""
+	Interface commune aux clients TCP et HTTP.
+	Regroupe les informations qui caracterise un client.
+	"""
 
 	def __init__(self, room, rqueue, squeue, Ctype, http_list, session = None):
+		"""
+		HTTP/TCP Client constructeur.
+		room: la liste des salons disponnible sur le serveur.
+		rqueue: la queue de lecture.
+		squeue: la queue d'envoie.
+		Ctype: HTTP/TCP definie le type de client.
+		http_list: Liste des retours de commandes.
+		session: Session manager qui permet de restorer l'objet via un uid.
+		"""
+
 		self.protocol = Protocol(self)
 		self.type = Ctype
 		self.room = room
@@ -26,9 +40,17 @@ class IClient(threading.Thread):
 		threading.Thread.__init__(self)
 
 	def sput(self, data):
+		"""
+		On ajoute des data dans la squeue du client.
+		"""
+		
 		self.squeue.put( { 'type': self.type, 'data': data, 'client': self } )
 	
 	def rput(self, data):
+		"""
+		On ajoute des data dans la rqueue du client.
+		"""
+		
 		self.rqueue.put( { 'type': self.type, 'data': data, 'client': self } )
 
 	def setSession(self, uid):
