@@ -27,7 +27,7 @@ class WatchDog(threading.Thread):
 				client = self.client_list['http'][key]
 				if client.validJson == False:
 					client_to_delete.append({'key':key, 'reason':'json'})
-				elif (current_time - client.last_action) > self.maxIdleTime:
+				elif int(current_time - client.last_action) > self.maxIdleTime:
 					client_to_delete.append({'key':key, 'reason':'time'})
 			for d in client_to_delete:
 				self.sessionPop(d)
@@ -37,9 +37,9 @@ class WatchDog(threading.Thread):
 	def pop(self, d):
 		client = self.client_list['http'][d['key']]
 		if d['reason'] == 'time':
-			Log().add("[+] WatchDog deleted (inactif) http client : "+client.unique_key+", last action: "+client.last_action.ctime())
+			Log().add("[+] WatchDog deleted (inactif) http client : "+client.unique_key+", last action: "+ str(client.last_action))
 		elif d['reason'] == 'json':
-			Log().add("[+] WatchDog deleted (invalid json) http client : "+client.unique_key+", last action: "+client.last_action.ctime())
+			Log().add("[+] WatchDog deleted (invalid json) http client : "+client.unique_key+", last action: "+ str(client.last_action))
 		self.lock.acquire()
 		if client.client_socket != None:
 			client.client_socket.close()
@@ -51,10 +51,11 @@ class WatchDog(threading.Thread):
 		current_time = int(time.time())
 		client = self.client_list['http'][d['key']]
 		clientSession = self.session.get(client.unique_key)
-		if (current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
-			success = self.session.pop(client.unique_key)
-			if success:
-				if d['reason'] == 'time':
-					Log().add("[+] WatchDog deleted (inactif) session : "+client.unique_key+", last action: "+client.last_action.ctime())
-				elif d['reason'] == 'json':
-					Log().add("[+] WatchDog deleted (invalid json) session : "+client.unique_key+", last action: "+client.last_action.ctime())
+		if clientSession is not None:
+			if int(current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
+				success = self.session.pop(client.unique_key)
+				if success:
+					if d['reason'] == 'time':
+						Log().add("[+] WatchDog deleted (inactif) session : "+client.unique_key+", last action: "+ str(client.last_action))
+					elif d['reason'] == 'json':
+						Log().add("[+] WatchDog deleted (invalid json) session : "+client.unique_key+", last action: "+ str(client.last_action))
