@@ -14,6 +14,9 @@ from commons.jexception import JException
 import simplejson
 import urllib
 
+##
+# Handle HTTP Client WEBRequests
+##
 class ClientHTTP(IClient):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue, http_list):
 		#self.protocol = Protocol(self)
@@ -26,14 +29,17 @@ class ClientHTTP(IClient):
 		self.validJson = False
 		IClient.__init__(self, room, rqueue, squeue, 'http', http_list)
 		#threading.Thread.__init__(self)
-		
+	
 	def get_name(self):
+		"""Return : Si l utilisateur n a pas de nickname on retourne la unique_key sinon son nickmae -> string """
+		
 		if self.nickName == None:
 			return self.unique_key
 		return self.nickName
 
 	def run(self):
 		"""lecture du client """
+		
 		try:
 			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
 			while len(buffer) == SETTINGS.SERVER_MAX_READ:
@@ -73,6 +79,8 @@ class ClientHTTP(IClient):
 	
 	# outdated
 	def handleMethod(self):
+		"""Si la methode utilise dans la requette HTTP est de type option on ne fait rien, sinon on ajoute a rqueue le json."""
+		
 		if self.request.method == 'options':
 			pass
 		else:

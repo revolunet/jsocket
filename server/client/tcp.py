@@ -38,6 +38,8 @@ class ClientTCP(IClient):
 				Log().add("[+] Client " + str(self.client_address) + " send : " + data)
 
 	def get_name(self):
+		"""Return : Si l utilisateur n a pas de nickname on retourne la unique_key sinon son nickmae -> string """
+		
 		if self.nickName == None:
 			return self.unique_key
 		return self.nickName
@@ -48,6 +50,9 @@ class ClientTCP(IClient):
 		self.sput(command)
 				
 	def __master_logout(self):
+		"""
+		Lorsque le master se deconnecte on l'efface du server.
+		"""
 		
 		rooms = self.room.rooms
 		for channel in rooms:

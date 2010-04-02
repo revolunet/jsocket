@@ -74,6 +74,9 @@ class Protocol(object):
 
 	# {"cmd" : "auth", "args": "masterpassword", "channel": "", "app" : ""}
 	def __cmd_auth(self, args, channel = None, app = None):
+		"""
+		Authentifie un client en tant que master du server.
+		"""
 		
 		if args == self.client.master_password:
 			self.client.master = True
@@ -101,6 +104,10 @@ class Protocol(object):
 
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):
+		"""
+		Retourne la policy pour un client flash.
+		"""
+		
 		Log().add("[+] Send policy file request to " + str(self.client.client_address))
 		self.client.sput("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
 
@@ -261,6 +268,10 @@ class Protocol(object):
 			self.client.sput('{"from": "chanMasterPwd", "value": false, "channel": "'+channel+'", "app": "'+app+'"}')
 		
 	def status(self, client, master = False):
+		"""
+		Envoie le status aux clients lors d'une action ( join / part ... connect ...)
+		"""
+		
 		if client.room_name:
 			channel = client.room.channel(client.room_name)
 			if channel and master == False:

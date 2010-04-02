@@ -7,7 +7,10 @@ from log.logger import Log
 from config.settings import SETTINGS
 
 class Room():
-	"""docstring for Room"""
+	"""
+	Liste des channels disponnible sur le server.
+	"""
+	
 	def __init__(self):
 		self.rooms = {}
 		self.count_users = 0
@@ -51,6 +54,10 @@ class Room():
 		return False
 		
 	def canJoin(self, channelName, client):
+		"""
+		Return: Dzfinie une limite de connection sur les channels ->  bool
+		"""
+		
 		if SETTINGS.CHANNEL_MAX_USERS == 0 or client.master:
 			return True
 		channel = self.rooms[channelName]
