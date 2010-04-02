@@ -57,7 +57,7 @@ var jsocketApi = {
 	* @appName : application name
 	**/
 	appExists : function(appName) {
-		if (typeof(eval('jsocketApi.app[' + appName + ']')) != 'undefined') {
+		if (typeof(jsocketApi.app[appName]) != 'undefined') {
 			return (true);
 		}
 		return (false);
@@ -120,7 +120,8 @@ var jsocketApi = {
 			args.channel = (j.channel != null ? j.channel : '');
 			args.app = (j.app != null ? j.app : '');
 			args = jsocketApi.core.stripslashes(args);
-			if (j.app != null && jsocketApi.appExists(j.app) == true) {
+			if (j.app != null && j.app.length > 0 &&
+				jsocketApi.appExists(j.app) == true) {
 				try {
 					jsocketApi.appCallback(args['app'], 'on' + func_name, args);
 				} catch(e) { }

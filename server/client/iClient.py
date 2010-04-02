@@ -22,9 +22,9 @@ class IClient(threading.Thread):
 		self.last_action = self.connection_time
 		self.room_name = None
 		threading.Thread.__init__(self)
-	
+
 	def sput(self, data):
 		self.squeue.put( { 'type': self.type, 'data': data, 'client': self } )
-		
+	
 	def rput(self, data):
 		self.rqueue.put( { 'type': self.type, 'data': data, 'client': self } )

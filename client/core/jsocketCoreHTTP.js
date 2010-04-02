@@ -112,7 +112,7 @@ var jsocketCoreHTTP = {
 			return (false);
 		}
 		jsocketCoreHTTP.write();
-		setTimeout("jsocketCoreHTTP.pool();", 2000);
+		setTimeout("jsocketCoreHTTP.pool();", 4000);
 	},
 
 	/**
@@ -129,10 +129,10 @@ var jsocketCoreHTTP = {
 			msg = jsocketCoreHTTP.commands.join("\n");
 			jsocketCoreHTTP.commands = [ ];
 			jsocketCoreHTTP._post(msg + "\n");
-		}/* else {
-			jsocketCoreHTTP._post('{cmd: "refresh", args: "null", app: "", uid: "' +
+		} else {
+			jsocketCoreHTTP._post('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
 				jsocketCoreHTTP.api.uid + '"}\n');
-		}*/
+		}
 		return (true);
 	},
  
