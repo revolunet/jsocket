@@ -5,6 +5,7 @@ var jsocketCoreTCP = {
 	api : null,
 	initialized : false,
 	connectedToServer : false,
+	isWorking : false,
 
 	/**
 	* Callback appele par flash lorsque le swf est charge
@@ -30,7 +31,7 @@ var jsocketCoreTCP = {
 			jsocketCoreTCP.socket.connect(server, port);
 		}
 		else if (jsocketCoreTCP.connectedToServer == false) {
-			setTimeout("jsocketCoreTCP.reconnect();", 500);
+			jsocketCoreTCP.setTimeout("jsocketCoreTCP.reconnect();", 500);
 		}
 	},
  
@@ -41,6 +42,18 @@ var jsocketCoreTCP = {
 	reconnect : function()
 	{
 		jsocketCoreTCP.connect(jsocketCoreTCP.api.host, jsocketCoreTCP.api.port);
+	},
+
+	/**
+	* Lance un setTimeout sur cmd avec comme temps d'attente delay a
+	* condition que ce core est utilise par l'API
+	* @cmd : La commande a lancer
+	* @delay : Le temps d'attente
+	**/
+	setTimeout : function(cmd, delay) {
+		if (jsocketCoreTCP.isWorking == true) {
+			setTimeout(cmd, delay);
+		}
 	},
 
 	/**
@@ -96,7 +109,7 @@ var jsocketCoreTCP = {
 			if (typeof jsocketCoreTCP.api != 'object') {
 				return (false);
 			}
-			setTimeout("jsocketCoreTCP.send('" + msg + "');", 500);
+			jsocketCoreTCP.setTimeout("jsocketCoreTCP.send('" + msg + "');", 500);
 			return (false);
 		}
 		return (true);
@@ -163,7 +176,8 @@ var jsocketCoreTCP = {
 		}
 		jsocketCoreTCP.api.parser('{"from": "error", "value": "' + msg + '"}');
 		if (jsocketCoreTCP.connectedToServer == false) {
-			jsocketCoreTCP.reconnect();
+			//jsocketCoreTCP.reconnect();
+			jsocketCoreTCP.api.parser('{"from": "TCPError", "value": "Input/Output error"}');
 		}
 		return (true);
 	},
@@ -179,7 +193,8 @@ var jsocketCoreTCP = {
 		}
 		jsocketCoreTCP.api.parser('{"from": "error", "value": "' + msg + '"}');
 		if (jsocketCoreTCP.connectedToServer == false) {
-			jsocketCoreTCP.reconnect();
+			//jsocketCoreTCP.reconnect();
+			jsocketCoreTCP.api.parser('{"from": "TCPError", "value": "Security error"}');
 		}
 		return (true);
 	},
@@ -190,7 +205,6 @@ var jsocketCoreTCP = {
 	**/
 	receive: function(msg)
 	{
-		console.log('msg: ' + msg);
 		if (typeof jsocketCoreTCP.api != 'object') {
 			return (false);
 		}
@@ -198,7 +212,6 @@ var jsocketCoreTCP = {
 		for (var i = 0; i < tab.length; ++i) {
 			jsocketCoreTCP.api.onReceive(tab[i]);
 		}
-		//jsocketCoreTCP.api.onReceive(msg);
 		return (true);
 	}
 };
