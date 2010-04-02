@@ -27,7 +27,7 @@ class WatchDog(threading.Thread):
 				client = self.client_list['http'][key]
 				if client.validJson == False:
 					client_to_delete.append({'key':key, 'reason':'json'})
-				elif int(current_time - client.last_action) > self.maxIdleTime:
+				elif (current_time - client.last_action) > self.maxIdleTime:
 					client_to_delete.append({'key':key, 'reason':'time'})
 			for d in client_to_delete:
 				self.sessionPop(d)
@@ -51,7 +51,7 @@ class WatchDog(threading.Thread):
 		current_time = int(time.time())
 		client = self.client_list['http'][d['key']]
 		clientSession = self.session.get(client.unique_key)
-		if int(current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
+		if (current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
 			success = self.session.pop(client.unique_key)
 			if success:
 				if d['reason'] == 'time':
