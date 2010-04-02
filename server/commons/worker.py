@@ -48,7 +48,6 @@ class Worker(threading.Thread):
 							if item.get('client').unique_key not in item.get('client').http_list:
 								item.get('client').http_list[item.get('client').unique_key] = [ ]
 							item.get('client').http_list[item.get('client').unique_key].append(item.get('data'))
-							print "Added data %s for client %s" % (item.get('data'), item.get('client').unique_key)
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
@@ -76,23 +75,9 @@ class Worker(threading.Thread):
 					if len(commands) == 1:
 						item.get('client').protocol.parse(commands[0])
 						item.get('client').updateSession(item.get('client').unique_key)
-						#item.get('client').http_list[item.get('client').unique_key].append(commands[0])
 					else:
 						for cmd in commands:
 							item['client'].rput(cmd)
-							#item.get('client').http_list[item.get('client').unique_key].append(cmd)
-					#if item.get('client').unique_key in item.get('client').http_list:
-					#	if len(item.get('client').http_list[item.get('client').unique_key]) > 0:
-					#		for cmd in item.get('client').http_list[item.get('client').unique_key]:
-					#			if item.get('client').client_socket is None:
-					#				print "Client deco ! socket is None"
-					#				item.get('client').disconnection()
-					#			else:
-					#				http_buffer += cmd + "\n"
-					#		if item.get('client').client_socket is not None:
-					#			print "SENDING %s" % http_buffer
-					#			item.get('client').client_socket.send(http_buffer)
-					#			item.get('client').http_list[item.get('client').unique_key] = [ ]
 								
 					item.get('client').disconnection()
 				except Exception as e:

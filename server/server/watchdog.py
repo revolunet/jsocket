@@ -9,11 +9,12 @@ from log.logger import Log
 from threading import Lock
 
 class WatchDog(threading.Thread):
-	def __init__(self, client_list):
+	def __init__(self, client_list, session):
 		self.client_list = client_list
+		self.session = session
 		self.isRunning = True
 		self.sleepTime = 2
-		self.maxIdleTime = 60
+		self.maxIdleTime = 10
 		self.lock = Lock()
 		Log().add("[+] WatchDog launched")
 		
@@ -30,6 +31,7 @@ class WatchDog(threading.Thread):
 				elif int(current_time.strftime("%S")) - int(client.last_action.strftime("%S")) > self.maxIdleTime:
 					client_to_delete.append({'key':key, 'reason':'time'})
 			for d in client_to_delete:
+				#self.sessionPop(d)
 				#self.pop(d)
 				pass
 			time.sleep(self.sleepTime)
@@ -43,5 +45,15 @@ class WatchDog(threading.Thread):
 		self.lock.acquire()
 		if client.client_socket != None:
 			client.client_socket.close()
+		client.join()
 		self.client_list['http'].pop(d['key'])
 		self.lock.release()
+	
+	def sessionPop(self, d):
+		client = self.client_list['http'][d['key']]
+		success = self.session.pop(client.unique_key)
+		if success:
+			if d['reason'] == 'time':
+				Log().add("[+] WatchDog deleted (inactif) session : "+client.unique_key+", last action: "+client.last_action.ctime())
+			elif d['reason'] == 'json':
+				Log().add("[+] WatchDog deleted (invalid json) session : "+client.unique_key+", last action: "+client.last_action.ctime())

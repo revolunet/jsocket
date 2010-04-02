@@ -20,6 +20,7 @@ class Response(object):
 		self.content_length = 0
 		self.response_header = None
 		self.response_data = None
+		self.__add_header = ""
 		self.initHTTPCode()
 
 	def HandleRequest(self, request):
@@ -50,6 +51,17 @@ class Response(object):
 			self.response_header = "HTTP/1.1 204 NO RESPONSE\r\n"
 		self.response_header += "Date: " + str(self.date.strftime("%a, %d %B %Y %H:%M:%S")) + " " + SETTINGS.HTTP_SERVER_NAME +  "\r\n"
 		self.response_header += "Content-Type: " + str(self.content_type) + "\r\n"
+		if len(self.__add_header) > 0:
+			self.response_header += self.__add_header
+
+	def GetUrlLib(self, protocol, code, data):
+		if protocol is not None and code is not None:
+			self.response_header = str(protocol) + " " + str(code) + " " + str(self.__code_status[self.code]) + "\r\n"
+		else:
+			self.response_header = "HTTP/1.1 204 NO RESPONSE\r\n"
+		self.response_header += data
+		return self.response_header
+		
 		
 	def Get(self, request, code):
 		"""
@@ -62,6 +74,9 @@ class Response(object):
 			self.response_header += "Content-Length: " + str(self.content_length) + "\r\n"
 			self.response_header += self.response_data
 		return self.response_header
+	
+	def AddHeader(self, header, value):
+		self.__add_header += header + ': ' + value + "\r\n"
 	
 	def initHTTPCode(self):
 		"""

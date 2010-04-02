@@ -39,3 +39,9 @@ class Session(object):
 
 	def update(self, uid, clientObject):
 		client = self.set(uid, clientObject)
+		
+	def pop(self, uid):
+		if uid in self.__client_list:
+			del self.__client_list[uid]
+			return True
+		return False

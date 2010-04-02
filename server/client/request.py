@@ -65,7 +65,7 @@ class Request(object):
 		try:
 			return self.__header[key.lower()]
 		except KeyError:
-			if key != 'expect':
+			if key != 'expect' and key != 'connection':
 				Log().add("[-] Erreur dans la methode header_DATA, la key : " + key + " n'existe pas", "ired")
 			return None
 	
@@ -88,7 +88,6 @@ class Request(object):
 				return self.__post[key.lower()]
 			except KeyError:
 				Log().add("[-] Erreur dans la methode post_DATA, la key : " + key + " n'existe pas", "ired")
-				print self.__post
 				return None
 		return self.__post
 			

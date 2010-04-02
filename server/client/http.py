@@ -2,8 +2,6 @@
 # http.py
 ##
 
-#import threading
-#from commons.protocol import Protocol
 from client.iClient import IClient
 from log.logger import Log
 from config.settings import SETTINGS
@@ -14,11 +12,12 @@ from commons.jexception import JException
 import simplejson
 import urllib
 
-import hotshot, hotshot.stats
+
 
 def profileitdd(printlines=20):
 	def _my(func):
 		def _func(*args, **kargs):
+			import hotshot, hotshot.stats
 			prof = hotshot.Profile("profiling.data")
 			res = prof.runcall(func, *args, **kargs)
 			prof.close()
@@ -37,16 +36,13 @@ def profileitdd(printlines=20):
 ##
 class ClientHTTP(IClient):
 	def __init__(self, client_socket, client_address, room, rqueue, squeue, http_list, session):
-		#self.protocol = Protocol(self)
 		self.client_socket = client_socket
 		self.client_address = client_address
-		#self.rqueue = rqueue
-		#self.squeue = squeue
 		self.request = Request()
 		self.response = Response()
 		self.validJson = False
+		self.isUrlLib = False
 		IClient.__init__(self, room, rqueue, squeue, 'http', http_list, session)
-		#threading.Thread.__init__(self)
 	
 	def get_name(self):
 		"""Return : Si l utilisateur n a pas de nickname on retourne la unique_key sinon son nickmae -> string """
@@ -56,11 +52,16 @@ class ClientHTTP(IClient):
 		return self.nickName
 	
 	def sockRead(self):
-		data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-		while len(buffer) == SETTINGS.SERVER_MAX_READ:
-			buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-			data = data + buffer
-		return data
+		try:
+			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+			while len(buffer) == SETTINGS.SERVER_MAX_READ:
+				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+				data = data + buffer
+			return data
+		except:
+			self.client_socket = None
+			self.disconnection()
+		return None
 
 	#@profileitdd(40)
 	def run(self):
@@ -68,57 +69,84 @@ class ClientHTTP(IClient):
 		
 		try:
 			data = self.sockRead()
-			self.request.handle(data)
-			
-			if self.request.header_DATA('expect') is not None:
-				buff = self.response.Get(self.request, 100)
-				self.client_socket.send(buff)
-				data = self.sockRead()
+			if data is not None:
 				self.request.handle(data)
-			if self.request.post_DATA('json') is not None:
-				if len(self.request.post_DATA('json')) != 0:
-					#try:
-						json_data = urllib.unquote_plus(self.request.post_DATA('json')).split('\n')
-						for data in json_data:
-							data = data.strip()
-							if len(data) > 0:
-								try:
-									json_cmd = simplejson.loads(data)
-									json_uid = json_cmd.get('uid', None)
-									if json_cmd['cmd'] == 'connected':
-										self.validJson = True
-										self.setSession(self.unique_key)
-										self.client_socket.send('{"from": "connected", "value": "'+self.unique_key+'", "app": ""}')
-										self.disconnection()
-									elif json_cmd['cmd'] == 'refresh':
-										if json_uid is None:
-											self.client_socket.send('{"form": "error", "value": "No uid given"')
-										else:
-											if json_uid is not None and self.http_list.get(json_cmd.get('uid'), None) is not None:
-												for s in self.http_list.get(json_cmd.get('uid')):
-													if len(s) > 0:
-														self.client_socket.send(s + '\n')
-												self.http_list[json_cmd['uid']] = [ ]
-										self.disconnection()
-									else:
-										if json_uid is None:
-											self.client_socket.send('{"form": "error", "value": "No uid given"')
+				protocol = self.request.protocol
+			
+				if self.request.header_DATA('expect') is not None:
+					buff = self.response.Get(self.request, 100)
+					self.client_socket.send(buff)
+					data = self.sockRead()
+					if data is not None:
+						self.request.handle(data)
+				
+				#urllib
+				if self.request.header_DATA('connection') is not None and self.request.header_DATA('connection') == 'close':
+					self.isUrlLib = True
+					self.response.AddHeader('connection', 'close')
+					buff = self.response.Get(self.request, 200)
+					self.client_socket.send(buff)
+					data = self.sockRead()
+					if data is not None:
+						self.request.handle(data)
+	
+				if self.request.post_DATA('json') is not None:
+					if len(self.request.post_DATA('json')) != 0:
+						#try:
+							json_data = urllib.unquote_plus(self.request.post_DATA('json')).split('\n')
+							for data in json_data:
+								data = data.strip()
+								if len(data) > 0:
+									try:
+										json_cmd = simplejson.loads(data)
+										json_uid = json_cmd.get('uid', None)
+										if self.isUrlLib:
+											self.response = Response()
+										if json_cmd['cmd'] == 'connected':
+											self.validJson = True
+											self.setSession(self.unique_key)
+											rep = '{"from": "connected", "value": "'+self.unique_key+'", "app": ""}'
+											if self.isUrlLib:
+												self.client_socket.send(self.response.GetUrlLib(protocol, 200, rep))
+											else:
+												self.client_socket.send(rep)
+											self.disconnection()
+										elif json_cmd['cmd'] == 'refresh':
+											self.validJson = True
+											if json_uid is None:
+												self.client_socket.send('{"form": "error", "value": "No uid given"')
+											else:
+												if json_uid is not None and self.http_list.get(json_cmd.get('uid'), None) is not None:
+													if self.isUrlLib:
+														self.client_socket.send(protocol + " 200 0K\r\n")
+													for s in self.http_list.get(json_cmd.get('uid')):
+														if len(s) > 0:
+															self.client_socket.send(s + '\n')
+													self.http_list[json_cmd['uid']] = [ ]
 											self.disconnection()
 										else:
-											self.restoreSession(json_uid)
-											Log().add('[+] RESTORE -> %s' % self.nickName)
-											self.validJson = True
-											self.rput(data)
-								except Exception:
-									Log().add("[-] JSON error with simplejson.loads(data) data: %s" % data)
-									#self.disconnection()
-					#except Exception:
-					#	Log().add(JException().formatExceptionInfo())
-					#	self.disconnection() # NOT SURE !
-			else:
-				Log().add("[-] HTTP Request, no json data BYE ! ", 'red')
-				self.disconnection()
-			#self.client_socket.send(self.response.Get(self.request, 200))
+											if json_uid is None:
+												s = '{"form": "error", "value": "No uid given"'
+												if self.isUrlLib:
+													self.client_socket.send(self.response.GetUrlLib(protocol, 200, s))
+												else:
+													self.client_socket.send(s)
+												self.disconnection()
+											else:
+												self.restoreSession(json_uid)
+												self.validJson = True
+												self.rput(data)
+									except Exception:
+										Log().add("[-] JSON error with simplejson.loads(data) data: %s" % data)
+										if self.client_socket is not None:
+											self.client_socket.send(protocol + " 200 0K\r\n")
+										self.disconnection()
+						#except Exception:
+						#	Log().add(JException().formatExceptionInfo())
+						#	self.disconnection() # NOT SURE !
+				else:
+					Log().add("[-] HTTP Request, no json data BYE ! ", 'red')
+					self.disconnection()
 			
 		except Exception as e:
 			Log().add(JException().formatExceptionInfo())
