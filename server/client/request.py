@@ -65,7 +65,8 @@ class Request(object):
 		try:
 			return self.__header[key.lower()]
 		except KeyError:
-			Log().add("[-] Erreur dans la methode header_DATA, la key : " + key + " n'existe pas", "ired")
+			if key != 'expect':
+				Log().add("[-] Erreur dans la methode header_DATA, la key : " + key + " n'existe pas", "ired")
 			return None
 	
 	def post_Ket_Exists(self, key):
@@ -87,6 +88,7 @@ class Request(object):
 				return self.__post[key.lower()]
 			except KeyError:
 				Log().add("[-] Erreur dans la methode post_DATA, la key : " + key + " n'existe pas", "ired")
+				print self.__post
 				return None
 		return self.__post
 			

@@ -39,7 +39,7 @@ class ServerHTTP(threading.Thread):
 				for s in inputready:
 					if s == self.__socket:
 						client_socket, client_addr = self.__socket.accept()
-						client_socket.settimeout(2)
+						client_socket.settimeout(SETTINGS.SERVER_HTTP_CLIENT_TIMEOUT)
 						Log().add("[+] HTTP Client connected " + (str(client_addr)))
 						current_client = ClientHTTP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue, self.http_list, self.session)
 						current_client.setDaemon(True)

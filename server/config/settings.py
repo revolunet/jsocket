@@ -22,6 +22,7 @@ class SETTINGS(object):
 
 	SERVER_SELECT_TIMEOUT = 5
 	SERVER_MAX_READ = 1024
+	SERVER_HTTP_CLIENT_TIMEOUT = 30 # !important
 	
 	# Ne prends pas en compte le/les master/s
 	CHANNEL_MAX_USERS = 100

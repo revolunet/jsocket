@@ -11,7 +11,6 @@ class Session(object):
 			'room',
 			'master',
 			'nickName',
-			'master_password',
 			'status',
 			'connection_time',
 			'last_action',
@@ -23,6 +22,7 @@ class Session(object):
 		for var in self.__client_vars:
 			self.__client_list.get(uid)[var] = getattr(client, var)
 		Log().add('[+] Session: Add/Update client %s' % (uid))
+		
 		return True
 
 	def get(self, uid):

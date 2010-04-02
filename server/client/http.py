@@ -14,6 +14,24 @@ from commons.jexception import JException
 import simplejson
 import urllib
 
+import hotshot, hotshot.stats
+
+def profileitdd(printlines=20):
+	def _my(func):
+		def _func(*args, **kargs):
+			prof = hotshot.Profile("profiling.data")
+			res = prof.runcall(func, *args, **kargs)
+			prof.close()
+			stats = hotshot.stats.load("profiling.data")
+			stats.strip_dirs()
+			stats.sort_stats('time', 'calls')
+			print ">>>---- Begin profiling print"
+			stats.print_stats(printlines)
+			print ">>>---- End profiling print"
+			return res 
+		return _func
+	return _my
+
 ##
 # Handle HTTP Client WEBRequests
 ##
@@ -36,56 +54,78 @@ class ClientHTTP(IClient):
 		if self.nickName == None:
 			return self.unique_key
 		return self.nickName
+	
+	def sockRead(self):
+		data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+		while len(buffer) == SETTINGS.SERVER_MAX_READ:
+			buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+			data = data + buffer
+		return data
 
+	#@profileitdd(40)
 	def run(self):
 		"""lecture du client """
 		
 		try:
-			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-			while len(buffer) == SETTINGS.SERVER_MAX_READ:
-				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
-				data = data + buffer
+			data = self.sockRead()
 			self.request.handle(data)
 			
+			if self.request.header_DATA('expect') is not None:
+				buff = self.response.Get(self.request, 100)
+				self.client_socket.send(buff)
+				data = self.sockRead()
+				self.request.handle(data)
 			if self.request.post_DATA('json') is not None:
 				if len(self.request.post_DATA('json')) != 0:
-					try:
+					#try:
 						json_data = urllib.unquote_plus(self.request.post_DATA('json')).split('\n')
 						for data in json_data:
 							data = data.strip()
 							if len(data) > 0:
-								json_cmd = simplejson.loads(data)
-								json_uid = json_cmd.get('uid', None)
-								if json_cmd['cmd'] == 'connected':
-									self.validJson = True
-									self.setSession(self.unique_key)
-									self.client_socket.send('{"from": "connected", "value": "'+self.unique_key+'", "app": ""}')
-									self.disconnection()
-								elif json_cmd['cmd'] == 'refresh':
-									if json_uid is None:
-										self.client_socket.send('{"form": "error", "value": "No uid given"')
-									else:
-										for s in self.http_list.get(json_cmd.get('uid')):
-											if len(s) > 0:
-												self.client_socket.send(s + '\n')
-										self.http_list[json_cmd['uid']] = [ ]
-									self.disconnection()
-								else:
-									if json_uid is None:
-										self.client_socket.send('{"form": "error", "value": "No uid given"')
+								try:
+									json_cmd = simplejson.loads(data)
+									json_uid = json_cmd.get('uid', None)
+									if json_cmd['cmd'] == 'connected':
+										self.validJson = True
+										self.setSession(self.unique_key)
+										self.client_socket.send('{"from": "connected", "value": "'+self.unique_key+'", "app": ""}')
+										self.disconnection()
+									elif json_cmd['cmd'] == 'refresh':
+										if json_uid is None:
+											self.client_socket.send('{"form": "error", "value": "No uid given"')
+										else:
+											if json_uid is not None and self.http_list.get(json_cmd.get('uid'), None) is not None:
+												for s in self.http_list.get(json_cmd.get('uid')):
+													if len(s) > 0:
+														self.client_socket.send(s + '\n')
+												self.http_list[json_cmd['uid']] = [ ]
 										self.disconnection()
 									else:
-										self.restoreSession(json_uid)
-										self.validJson = True
-										self.rput(data)
-					except Exception:
-						Log().add(JException().formatExceptionInfo())
+										if json_uid is None:
+											self.client_socket.send('{"form": "error", "value": "No uid given"')
+											self.disconnection()
+										else:
+											self.restoreSession(json_uid)
+											Log().add('[+] RESTORE -> %s' % self.nickName)
+											self.validJson = True
+											self.rput(data)
+								except Exception:
+									Log().add("[-] JSON error with simplejson.loads(data) data: %s" % data)
+									#self.disconnection()
+					#except Exception:
+					#	Log().add(JException().formatExceptionInfo())
+					#	self.disconnection() # NOT SURE !
+			else:
+				Log().add("[-] HTTP Request, no json data BYE ! ", 'red')
+				self.disconnection()
 			#self.client_socket.send(self.response.Get(self.request, 200))
 			
 		except Exception as e:
 			Log().add(JException().formatExceptionInfo())
 			self.disconnection()
 			return
+		self.disconnection()
+		return
 	
 	# outdated
 	def handleMethod(self):
