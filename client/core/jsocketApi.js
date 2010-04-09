@@ -12,8 +12,7 @@
 *	};
 **/
 var jsocketApi = {
-	// jsocketCore Object
-	core : jsocketCoreTCP,
+	core : null,
 	host : '',
 	port : 0,
 	debug : false,
@@ -27,12 +26,15 @@ var jsocketApi = {
 	* @port : port destination
 	**/
 	init : function(host, port) {
+		if (jsocketApi.core == null) {
+			jsocketApi.core = jsocketCoreTCP;
+		}
 		jsocketApi.host = host;
 		jsocketApi.port = port;
 		jsocketApi.core.api = this;
 		jsocketApi.core.connect(jsocketApi.host, jsocketApi.port);
 	},
-	
+
 	/**
 	* Changement de la methode de contact pour le serveur (par defaut TCP)
 	* @newCore : variable contenant le nouveau jsocketCore (TCP ou HTTP)
