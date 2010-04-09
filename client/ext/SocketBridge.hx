@@ -6,7 +6,6 @@ class SocketBridge
   static function main()
   {
   	flash.system.Security.allowDomain("*");
-	flash.system.Security.loadPolicyFile("http://y-projects.com/crossdomain.xml");
 	if (flash.external.ExternalInterface.available)
 	  {
 	jsScope = flash.Lib.current.loaderInfo.parameters.scope;
