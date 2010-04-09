@@ -146,7 +146,7 @@ var jsocketCoreHTTP = {
 		var now = Math.floor(new Date().getTime() / 1000);
 		if (jsocketCoreHTTP.response.waiting == false) {
 			return (true);
-		} else if ((now - jsocketCoreHTTP.response.lastTime) > response.timeout) {
+		} else if ((now - jsocketCoreHTTP.response.lastTime) > jsocketCoreHTTP.response.timeout) {
 			jsocketCoreHTTP.response.lastTime = now;
 			return (true);
 		}
