@@ -9,3 +9,5 @@ function createSwf() {
 		setTimeout('createSwf()', 200);
 	}
 }
+
+createSwf();
