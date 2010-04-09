@@ -12,7 +12,7 @@
 *	};
 **/
 var jsocketApi = {
-	core : null,
+	core : jsocketCoreTCP,
 	host : '',
 	port : 0,
 	debug : false,
@@ -26,9 +26,6 @@ var jsocketApi = {
 	* @port : port destination
 	**/
 	init : function(host, port) {
-		if (jsocketApi.core == null) {
-			jsocketApi.core = jsocketCoreTCP;
-		}
 		jsocketApi.host = host;
 		jsocketApi.port = port;
 		jsocketApi.core.api = this;
