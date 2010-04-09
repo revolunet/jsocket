@@ -1,15 +1,27 @@
 /**
- * Javascript event's interface fail over HTTP
- */
+* Javascript event's interface fail over HTTP
+**/
 var jsocketCoreHTTP = {
 	/**
-	 * Settings:
-	 *  - refreshTimer: Temps de rafraichissement entre chaque requetes
-	 *  - url: URL pour le _POST[json] (default: api.server:81)
-	 */
+	* Settings:
+	*  - refreshTimer: Temps de rafraichissement entre chaque requetes
+	*  - url: URL pour le _POST[json] (default: api.server:81)
+	**/
 	settings: {
 		refreshTimer: 2000,
 		url: 'http://127.0.0.1:8000/json-post/'
+	},
+	/**
+	* Response:
+	*  - waiting: true si une requete est en attente de reponse sinon false
+	*  - lastTime: timestamp de la derniere reponse obtenue
+	*  - timeout: temps en seconde avant de relancer une requete si il n'y a pas
+	*             eu de reponse positive entre temps
+	**/
+	response: {
+		waiting: false,
+		lastTime: 0,
+		timeout: 5
 	},
 	api : null,
 	initialized : false,
@@ -50,6 +62,7 @@ var jsocketCoreHTTP = {
 		jsocketCoreHTTP.socket.onreadystatechange = jsocketCoreHTTP.receive;
 		jsocketCoreHTTP.socket.open('POST', jsocketCoreHTTP.url, true);
 		jsocketCoreHTTP.socket.send(parameters);
+		jsocketCoreHTTP.response.waiting = true;
 		return (true);
 	},
  
@@ -126,12 +139,28 @@ var jsocketCoreHTTP = {
 	},
 
 	/**
+	* Verifie si une commande peut etre envoye au serveur
+	* @void
+	**/
+	checkResponse: function() {
+		var now = Math.floor(new Date().getTime() / 1000);
+		if (jsocketCoreHTTP.response.waiting == false) {
+			return (true);
+		} else if ((now - jsocketCoreHTTP.response.lastTime) > response.timeout) {
+			jsocketCoreHTTP.response.lastTime = now;
+			return (true);
+		}
+		return (false);
+	},
+
+	/**
 	* Envoie les commandes stockees prealablement au serveur.
 	* @void
 	**/
 	write : function()
 	{
-		if (typeof jsocketCoreHTTP.api != 'object') {
+		if (typeof jsocketCoreHTTP.api != 'object' ||
+			 jsocketCoreHTTP.checkResponse() == false) {
 			return (false);
 		}
 		msg = '';
@@ -201,6 +230,8 @@ var jsocketCoreHTTP = {
 				if (jsocketCoreHTTP.connectedToServer == false) {
 					jsocketCoreHTTP.connected();
 				}
+				jsocketCoreHTTP.response.waiting = false;
+				jsocketCoreHTTP.response.lastTime = Math.floor(new Date().getTime() / 1000);
 				msg = jsocketCoreHTTP.socket.responseText;
 				if (msg != '') {
 					res = msg.split("\n");
