@@ -23,15 +23,23 @@ class WatchDog(threading.Thread):
 		while self.isRunning:
 			current_time = int(time.time())
 			client_to_delete = []
+			client_session_to_delete = []
 			for key in self.client_list['http']:
 				client = self.client_list['http'][key]
 				if client.validJson == False:
 					client_to_delete.append({'key':key, 'reason':'json'})
 				elif int(current_time - client.last_action) > self.maxIdleTime:
 					client_to_delete.append({'key':key, 'reason':'time'})
+			session_list = self.session.get()
+			for k in session_list:
+				clientSession = self.session.get(k)
+				if clientSession is not None:
+					if int(current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
+						client_session_to_delete.append({'key':k, 'reason':'time'})
 			for d in client_to_delete:
-				self.sessionPop(d)
 				self.pop(d)
+			for c in client_session_to_delete:
+				self.sessionPop(c)
 			time.sleep(self.sleepTime)
 	
 	def pop(self, d):
@@ -49,13 +57,13 @@ class WatchDog(threading.Thread):
 	
 	def sessionPop(self, d):
 		current_time = int(time.time())
-		client = self.client_list['http'][d['key']]
-		clientSession = self.session.get(client.unique_key)
+		clientSession = self.session.get(d['key'])
 		if clientSession is not None:
-			if int(current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
-				success = self.session.pop(client.unique_key)
+			last_action = clientSession.get('last_action', 0)
+			if int(current_time - last_action) > self.maxIdleTime:
+				success = self.session.pop(d['key'])
 				if success:
 					if d['reason'] == 'time':
-						Log().add("[+] WatchDog deleted (inactif) session : "+client.unique_key+", last action: "+ str(client.last_action))
+						Log().add("[+] WatchDog deleted (inactif) session : "+d['key']+", last action: "+ str(last_action))
 					elif d['reason'] == 'json':
-						Log().add("[+] WatchDog deleted (invalid json) session : "+client.unique_key+", last action: "+ str(client.last_action))
+						Log().add("[+] WatchDog deleted (invalid json) session : "+d['key']+", last action: "+ str(last_action))

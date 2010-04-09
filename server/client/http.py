@@ -122,6 +122,7 @@ class ClientHTTP(IClient):
 													if clientSession is not None:
 														clientSession['last_action'] = int(time.time())
 														self.last_action = int(time.time())
+														self.session.updateSessionDic(json_uid, clientSession)
 														#self.session.update(json_uid, clientSession)
 												except:
 													Log().add(JException().formatExceptionInfo())

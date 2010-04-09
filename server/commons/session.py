@@ -25,8 +25,10 @@ class Session(object):
 		
 		return True
 
-	def get(self, uid):
-		return self.__client_list.get(uid, None)
+	def get(self, uid = None):
+		if uid is not None:
+			return self.__client_list.get(uid, None)
+		return self.__client_list
 
 	def restore(self, uid, clientObject):
 		client = self.get(uid)
@@ -39,6 +41,11 @@ class Session(object):
 
 	def update(self, uid, clientObject):
 		client = self.set(uid, clientObject)
+		
+	def updateSessionDic(self, uid, clientObjectDic):
+		if uid in self.__client_list:
+			self.__client_list[uid] = clientObjectDic
+			Log().add('[+] Session: %s last_action updated!' % (uid))
 		
 	def pop(self, uid):
 		if uid in self.__client_list:
