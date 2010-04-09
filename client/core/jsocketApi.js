@@ -13,7 +13,7 @@
 **/
 var jsocketApi = {
 	// jsocketCore Object
-	core : jsocketCoreHTTP,
+	core : jsocketCoreTCP,
 	host : '',
 	port : 0,
 	debug : false,
