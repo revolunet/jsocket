@@ -38,6 +38,7 @@ function getJsocketDomain()
 create('div', 'flashcontent');
 create('div', 'jsocketBridgeOutput');
 includeScript('lib/json-pack.js');
-includeScript('core/jsocketCore.js');
+includeScript('core/jsocketCoreTCP.js');
+includeScript('core/jsocketCoreHTTP.js');
 includeScript('core/jsocketApi.js');
 includeScript('core/jsocketFlash.js');

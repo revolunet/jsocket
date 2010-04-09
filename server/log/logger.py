@@ -7,11 +7,14 @@ import sys
 import logging
 import threading
 import Queue
-from worker import Worker
-from settings import SETTINGS
+from commons.worker import Worker
+from config.settings import SETTINGS
 
 class Log(object):
-	"""docstring for Log"""
+	"""
+	Logger, enregistre les actions effectue sur le server dans des fichiers de logs et print les message.
+	"""
+	
 	class __Log:
 		def __init__(self, nb_thread = 0):
 			""" Creation du fichier de log et initialisation du Queue worker """

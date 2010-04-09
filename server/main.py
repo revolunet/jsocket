@@ -6,15 +6,50 @@ import socket
 import SocketServer
 import threading
 
-from server import Server
+from server.tcp import ServerTCP
+from server.http import ServerHTTP
+from server.watchdog import WatchDog
+from commons.worker import Worker
+from commons.room import Room
+from commons.session import Session
+from log.logger import Log
+import Queue
 
-def main():
+def mainTCP(room, squeue, rqueue, client_list, http_list):
 	"""Lance un serveur TCP"""
-	server = Server()
+	serverTCP = ServerTCP(room, squeue, rqueue, client_list, http_list)
 	try:
-		server.start()
+		serverTCP.start()
 	except KeyboardInterrupt:
+		Log().add("[-] TCP Server Killed", 'ired')
 		exit()
+		return
+
+def mainHTTP(room, squeue, rqueue, client_list, http_list, session):
+	"""Lance un serveur HTTP"""
+	serverHTTP = ServerHTTP(room, squeue, rqueue, client_list, http_list, session)
+	try:
+		serverHTTP.start()
+	except KeyboardInterrupt:
+		Log().add("[-] HTTP Server Killed", 'ired')
+		exit()
+		return
+
+#if __name__ == '__main__':
+#	main()	
 
 if __name__ == '__main__':
-	main()
+	client_list = {'http': {}, 'tcp': {}}
+	http_list = { }
+	room = Room()
+	squeue = Queue.Queue(0)
+	Worker(squeue, 'send').start()
+	rqueue = Queue.Queue(0)
+	Worker(rqueue, 'recv').start()
+	session = Session()
+	
+	#mainTCP(room, squeue, rqueue, client_list, http_list)
+	mainHTTP(room, squeue, rqueue, client_list, http_list, session)
+	
+	watchdog = WatchDog(client_list, session)
+	watchdog.start()

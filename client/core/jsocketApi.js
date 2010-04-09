@@ -13,11 +13,13 @@
 **/
 var jsocketApi = {
 	// jsocketCore Object
-	core : jsocketCore,
+	core : jsocketCoreHTTP,
 	host : '',
 	port : 0,
 	debug : false,
 	app : [ ],
+	uid : '',
+	commands : [ ],
 
 	/**
 	* Connect to the server via jsocketCore
@@ -29,7 +31,15 @@ var jsocketApi = {
 		jsocketApi.port = port;
 		jsocketApi.core.api = this;
 		jsocketApi.core.connect(jsocketApi.host, jsocketApi.port);
-		jsocketApi.core.send('{"cmd": "connected", "args": "null", "app": ""}');
+	},
+	
+	/**
+	* Changement de la methode de contact pour le serveur (par defaut TCP)
+	* @newCore : variable contenant le nouveau jsocketCore (TCP ou HTTP)
+	**/
+	method : function(newCore) {
+		newCore.isWorking = true;
+		jsocketApi.core = newCore;
 	},
 
 	/**
@@ -41,6 +51,17 @@ var jsocketApi = {
 		var newApp = appObject || { };
 		jsocketApi.app[appName] = newApp;
 		jsocketApi.app[appName].isMaster = false;
+	},
+
+	/**
+	* Renvoie true si l'application existe, false sinon
+	* @appName : application name
+	**/
+	appExists : function(appName) {
+		if (typeof(jsocketApi.app[appName]) != 'undefined') {
+			return (true);
+		}
+		return (false);
 	},
 
 	/**
@@ -79,11 +100,11 @@ var jsocketApi = {
 		}
 		if (enable == true) {
 			jsocketApi.debug = true;
-			document.getElementById('socketBridge').style.visibility = 'visible';
+			document.getElementById('socketBridge').style.top = '0px';
 		}
 		else {
 			jsocketApi.debug = false;
-			document.getElementById('socketBridge').style.visibility = 'hidden';
+			document.getElementById('socketBridge').style.top = '-1000px';
 		}
 	},
 
@@ -100,7 +121,8 @@ var jsocketApi = {
 			args.channel = (j.channel != null ? j.channel : '');
 			args.app = (j.app != null ? j.app : '');
 			args = jsocketApi.core.stripslashes(args);
-			if (j.app != null) {
+			if (j.app != null && j.app.length > 0 &&
+				jsocketApi.appExists(j.app) == true) {
 				try {
 					jsocketApi.appCallback(args['app'], 'on' + func_name, args);
 				} catch(e) { }
@@ -108,7 +130,7 @@ var jsocketApi = {
 			else {
 				try {
 					jsocketApi.appCallbacks('on' + func_name, args);
-					eval('jsocketApi.on'+func_name+"(args)");
+					eval('jsocketApi.on' + func_name + "(args)");
 				} catch(e) {
 					jsocketApi.onError(e);
 				}
@@ -119,10 +141,11 @@ var jsocketApi = {
 	/**
 	* Callback utilise pour recevoir un identifiant par defaut lors de
 	* la connection au serveur.
-	* @key : identifiant unique de l'utilisateur
+	* @info : identifiant unique de l'utilisateur
 	**/
-	onConnected : function (key) {
-		jsocketApi.key = key;
+	onConnected : function (info) {
+		jsocketApi.uid = info.value;
+		jsocketApi.sendPool();
 	},
 	
 	/**
@@ -146,7 +169,7 @@ var jsocketApi = {
 	* @message : le message retourne par le serveur -> Json string
 	**/
 	onReceive : function (message) {
-		//implement onReceive code here.
+		// DOT NOT ERASE
 		jsocketApi.parser(message);
 	},
 	
@@ -181,7 +204,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "auth", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "auth", "args": "' + password +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -197,7 +222,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "chanAuth", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "chanAuth", "args": "' + password +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -227,7 +254,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "join", "args": [ "'+channel+'", "'+password+'" ], "channel": "'+channel+'", "app": "'+appName+'"}');
+		jsocketApi.send('{"cmd": "join", "args": [ "' + channel +
+			'", "' + password + '" ], "channel": "' + channel +
+			'", "app": "' + appName + '", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -247,7 +276,9 @@ var jsocketApi = {
 	part : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "part", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "part", "args": "' + channel +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -272,7 +303,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "create", "args": [ "'+channel+'", "'+password+'" ], "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "create", "args": [ "' + channel +
+			'", "' + password + '" ], "app": "' + appName +
+			'", "channel": "' + channel + '", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -292,7 +325,9 @@ var jsocketApi = {
 	remove : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "remove", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "remove", "args": "' + channel +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -305,7 +340,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		nickname = jsocketApi.core.addslashes(nickname);
-		jsocketApi.core.send('{"cmd": "nick", "args": "'+nickname+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "nick", "args": "' + nickname +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -327,7 +364,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		command = jsocketApi.core.addslashes(command);
-		jsocketApi.core.send('{"cmd": "forward", "args": "'+command+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "forward", "args": "' + command +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 	
 	/**
@@ -347,7 +386,9 @@ var jsocketApi = {
 	list : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "list", "args": "'+channel+'", "app": "'+appName+'", "channel": "'+channel+'"}')
+		jsocketApi.send('{"cmd": "list", "args": "' + channel +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 
 	/**
@@ -380,7 +421,9 @@ var jsocketApi = {
 		}
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "message", "app": "'+appName+'", "args": ' + str + ', "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "message", "app": "' + appName +
+			'", "args": ' + str + ', "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 
 	/**
@@ -400,7 +443,8 @@ var jsocketApi = {
 	getStatus : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "getStatus", "args": "null", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "getStatus", "args": "null", "app": "' + appName +
+			'", "channel": "' + channel + '", "uid": "jsocketApi.uid"}');
 	},
 
 	/**
@@ -421,7 +465,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		status = jsocketApi.core.addslashes(status);
-		jsocketApi.core.send('{"cmd": "setStatus", "args": "'+status+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "setStatus", "args": "' + status +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 
 	/**
@@ -440,7 +486,8 @@ var jsocketApi = {
 	timeConnect : function(appName, channel) {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
-		jsocketApi.core.send('{"cmd": "timeConnect", "args": "null", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "timeConnect", "args": "null", "app": "' + appName +
+			'", "channel": "' + channel + '", "uid": "jsocketApi.uid"}');
 	},
 
 	/**
@@ -461,7 +508,9 @@ var jsocketApi = {
 		appName = jsocketApi.core.addslashes(appName);
 		channel = jsocketApi.core.addslashes(channel);
 		password = jsocketApi.core.addslashes(password);
-		jsocketApi.core.send('{"cmd": "chanMasterPwd", "args": "'+password+'", "app": "'+appName+'", "channel": "'+channel+'"}');
+		jsocketApi.send('{"cmd": "chanMasterPwd", "args": "' + password +
+			'", "app": "' + appName + '", "channel": "' + channel +
+			'", "uid": "jsocketApi.uid"}');
 	},
 
 	/**
@@ -477,6 +526,45 @@ var jsocketApi = {
 	* @error : le message d'erreur -> string
 	**/
 	onError : function(error) {
-		alert(error);
+		//implement onError code here.
+	},
+	
+	/**
+	* Callback sur l'erreur venant du core TCP. On change alors
+	* la methode de dialogue avec le serveur par HTTP.
+	* @error : le message d'erreur -> string
+	**/
+	onTCPError : function(error) {
+		jsocketCoreTCP.isWorking = false;
+		if (jsocketCoreHTTP.isWorking == false) {
+			jsocketApi.method(jsocketCoreHTTP);
+			jsocketApi.init(jsocketApi.host, jsocketApi.port);
+		}
+	},
+
+	/**
+	* Une fois que le client recupere son uid, alors les commandes
+	* en queue sont envoyes au serveur.
+	* @void
+	**/
+	sendPool : function() {
+		for (var i = 0; i < jsocketApi.commands.length; ++i) {
+			jsocketApi.core.send(jsocketApi.commands[i].replace(/jsocketApi\.uid/, jsocketApi.uid));
+		}
+		jsocketApi.commands = [ ];
+	},
+	
+	/**
+	* Gestion de queue pour les commandes a envoyer.
+	* Si jsocketApi.uid est null/empty alors on stock les
+	* commands puis on les envoie lorsque l'uid est renseigne.
+	* @msg : le message a envoyer
+	**/
+	send : function(msg) {
+		if (jsocketApi.uid != '') {
+			jsocketApi.core.send(msg.replace(/jsocketApi\.uid/, jsocketApi.uid));
+		} else if (jsocketApi.commands.length < 10) {
+			jsocketApi.commands.push(msg);
+		}
 	}
 };

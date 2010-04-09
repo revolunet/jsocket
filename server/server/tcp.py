@@ -6,40 +6,45 @@ import socket
 import sys
 import select
 import Queue
-from client import Client
-from room import Room
-from log import Log
-from worker import Worker
-from settings import SETTINGS
+from client.tcp import ClientTCP
+from commons.room import Room
+from log.logger import Log
+from commons.worker import Worker
+from config.settings import SETTINGS
+import threading
 
-class Server(object):
+class ServerTCP(threading.Thread):
 	"""docstring for Server"""
-	def __init__(self):
+	def __init__(self, room, squeue, rqueue, client_list, http_list):
 		self.__host = SETTINGS.SERVER_HOST
 		self.__port = SETTINGS.SERVER_PORT
 		self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.__socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.__socket.setsockopt(socket.SOL_SOCKET, socket.TCP_NODELAY, 1)
 		self.__socket.bind((self.__host, self.__port))
 		self.__socket.listen(5)
 		Log().add("[+] TCP Server launched on %s:%d" % (self.__host, self.__port), "green")
-		self.__room = Room()
-		self.__init_queues()
+		self.__room = room
+		self.__init_queues(squeue, rqueue)
 		#windows define
 		import os
 		if os.name != 'nt':
 			self.__input = [self.__socket, sys.stdin]
 		else:
 			self.__input = [self.__socket]
+			
+		self.client_list = client_list
+		self.http_list = http_list
+		
+		threading.Thread.__init__(self)
 
-	def __init_queues(self):
+	def __init_queues(self, squeue, rqueue):
 		""" Initialise les queues d'envoie et reception (parsing) de message client """
 
-		self.__squeue = Queue.Queue(0)
-		Worker(self.__squeue, 'send').start()
-		self.__rqueue = Queue.Queue(0)
-		Worker(self.__rqueue, 'recv').start()
+		self.__squeue = squeue
+		self.__rqueue = rqueue
 
-	def start(self):
+	def run(self):
 		while 1:
 			try:
 				inputready,outputready,exceptready = select.select(self.__input,[],[], SETTINGS.SERVER_SELECT_TIMEOUT) 
@@ -47,9 +52,10 @@ class Server(object):
 					if s == self.__socket: 
 						# handle the server socket 
 						client_socket, client_addr = self.__socket.accept()
-						Log().add("[+] Client connected " + (str(client_addr)))
-						current_client = Client(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue)
+						Log().add("[+] TCP Client connected " + (str(client_addr)))
+						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue, self.http_list)
 						current_client.start()
+						self.client_list['tcp'][current_client.unique_key] = current_client
 					elif s == sys.stdin: 
 						# handle standard input 
 						junk = sys.stdin.readline() 
@@ -64,4 +70,6 @@ class Server(object):
 							input.remove(s)
 			except KeyboardInterrupt:
 				self.__socket.close()
+				Log().add("[-] TCP Server Killed", 'ired')
 				exit()
+				return
