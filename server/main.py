@@ -48,7 +48,7 @@ if __name__ == '__main__':
 	Worker(rqueue, 'recv').start()
 	session = Session()
 	
-	#mainTCP(room, squeue, rqueue, client_list, http_list)
+	mainTCP(room, squeue, rqueue, client_list, http_list)
 	mainHTTP(room, squeue, rqueue, client_list, http_list, session)
 	
 	watchdog = WatchDog(client_list, session)
