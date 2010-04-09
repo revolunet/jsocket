@@ -14,6 +14,7 @@
 var jsocketApi = {
 	core : jsocketCoreTCP,
 	host : '',
+	urlFailOver : '',
 	port : 0,
 	debug : false,
 	app : [ ],
