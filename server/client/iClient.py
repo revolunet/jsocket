@@ -43,14 +43,14 @@ class IClient(threading.Thread):
 		"""
 		On ajoute des data dans la squeue du client.
 		"""
-		
+
 		self.squeue.put( { 'type': self.type, 'data': data, 'client': self } )
-	
+
 	def rput(self, data):
 		"""
 		On ajoute des data dans la rqueue du client.
 		"""
-		
+
 		self.rqueue.put( { 'type': self.type, 'data': data, 'client': self } )
 
 	def setSession(self, uid):

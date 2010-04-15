@@ -26,7 +26,7 @@ def profileitdd(printlines=20):
 			print ">>>---- Begin profiling print"
 			stats.print_stats(printlines)
 			print ">>>---- End profiling print"
-			return res 
+			return res
 		return _func
 	return _my
 
@@ -42,14 +42,14 @@ class ClientHTTP(IClient):
 		self.validJson = False
 		self.isUrlLib = False
 		IClient.__init__(self, room, rqueue, squeue, 'http', http_list, session)
-	
+
 	def get_name(self):
 		"""Return : Si l utilisateur n a pas de nickname on retourne la unique_key sinon son nickmae -> string """
-		
+
 		if self.nickName == None:
 			return self.unique_key
 		return self.nickName
-	
+
 	def sockRead(self):
 		try:
 			data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
@@ -65,20 +65,20 @@ class ClientHTTP(IClient):
 	#@profileitdd(40)
 	def run(self):
 		"""lecture du client """
-		
+
 		try:
 			data = self.sockRead()
 			if data is not None:
 				self.request.handle(data)
 				protocol = self.request.protocol
-			
+
 				if self.request.header_DATA('expect') is not None:
 					buff = self.response.Get(self.request, 100)
 					self.client_socket.send(buff)
 					data = self.sockRead()
 					if data is not None:
 						self.request.handle(data)
-				
+
 				#urllib
 				if self.request.hasPost():
 					pass
@@ -98,7 +98,7 @@ class ClientHTTP(IClient):
 					buff = self.response.Get(self.request, 200)
 					self.client_socket.send(buff)
 					data = self.sockRead()
-					if data is not None:
+ 					if data is not None:
 						self.request.handle(data)
 
 				if self.request.post_DATA('json') is not None:
@@ -179,25 +179,25 @@ class ClientHTTP(IClient):
 			return
 		self.disconnection()
 		return
-	
+
 	# outdated
 	def handleMethod(self):
 		"""Si la methode utilise dans la requette HTTP est de type option on ne fait rien, sinon on ajoute a rqueue le json."""
-		
+
 		if self.request.method == 'options':
 			pass
 		else:
 			if self.request.post_Ket_Exists("json") and len(self.request.post_DATA("json")) > 0:
 				self.rqueue.put([self, urllib.unquote_plus(self.request.post_DATA("json"))])
-	
+
 	def queue_cmd(self, command):
 		"""Ajoute une commande a la Queue en cours"""
-		
+
 		self.sput(command)
-	
+
 	def disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
-		
+
 		if self.client_socket is not None:
 			self.client_socket.close()
 			self.client_socket = None

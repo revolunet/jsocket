@@ -9,11 +9,11 @@ import urllib2
 
 class CONFIG(object):
 	IS_DEBUG = True
-	SERVER_PORT = 9999
-	#SERVER_PORT = 8080
+	#SERVER_PORT = 9999
+	SERVER_PORT = 8080
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
-	HTTP_SERVER_PORT = 81
+	HTTP_SERVER_PORT = 9090
 	SERVER_SELECT_TIMEOUT = 5
 	SERVER_MAX_READ = 1024
 	SERVER_HTTP_CLIENT_TIMEOUT = 30 # !important
@@ -160,17 +160,10 @@ class Protocol(object):
 				result = False
 				print '[%s] JSON key "%s" missing' % (name, k)
 				if CONFIG.IS_DEBUG == True:
-					print '[%s][DEBUG] %s' % (name, jsonEncoded)
+					print '[%s][DEBUG] %s' % (name, str(json))
 		return result
 
 def protocolTesting(client):
-	#string = 'ababgfdsfdsd\0'
-	#for i in range(0, 9):
-	#	string += 'a'
-	#string += '\0b'
-	#client.write(string)
-	#print client.handle()
-	#return
 	Protocol.connected(client)
 	Protocol.stdCommand('auth', client)
 	Protocol.stdCommand('create', client)
@@ -189,9 +182,13 @@ def protocolTesting(client):
 	client.disconnect()
 
 def main():
-	for i in range(0, 1):
+	import time
+
+	t = time.time()
+	for i in range(0, 100):
 		protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
 		#protocolTesting(HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT))
+	print str(time.time() - t) + ' secs'
 	print '[i] Press ^C to exit'
 	while True:
 		try:
