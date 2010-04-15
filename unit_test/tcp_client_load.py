@@ -9,7 +9,7 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('192.168.1.35', 9999)
+	tcpclient = TCPClient('localhost', 9999)
 	tcpclient.write('{"cmd":"setStatus", "args" : "hello"}\n')
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
@@ -38,9 +38,9 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.handle()
 	tcpclient.write('{"cmd":"chanAuth", "args": "joejoe", "channel": "toto", "app" : "whiteboard"}\n')
 	tcpclient.handle()
-	time.sleep(5)
+	time.sleep(500)
 	tcpclient.disconnect()
-	
+
 def create_tcp_client_(aim = 'default'):
 	tcpclient = TCPClient('192.168.1.35', 9999)
 	#tcpclient.handle()
@@ -50,13 +50,13 @@ def create_tcp_client_(aim = 'default'):
 	tcpclient.handle()
 	time.sleep(5)
 	tcpclient.disconnect()
- 
+
 def main():
-	client_thread = threading.Thread(target=create_tcp_client, args=())
-	client_thread.start()
-	for i in range(0,2):
-		client_thread = threading.Thread(target=create_tcp_client_, args=())
+	for i in range(0,200):
+		client_thread = threading.Thread(target=create_tcp_client, args=())
 		client_thread.start()
+	#	client_thread = threading.Thread(target=create_tcp_client_, args=())
+	#	client_thread.start()
 	print '[i] Press ^C to exit'
 	while True:
 		try:

@@ -138,7 +138,7 @@ var jsocketApi = {
 			}
 		}
 	},
-	
+
 	/**
 	* Callback utilise pour recevoir un identifiant par defaut lors de
 	* la connection au serveur.
@@ -148,7 +148,7 @@ var jsocketApi = {
 		jsocketApi.uid = info.value;
 		jsocketApi.sendPool();
 	},
-	
+
 	/**
 	* Callback appele via flash quand la connection avec le serveur echoue
 	* @code : true or false
@@ -156,7 +156,7 @@ var jsocketApi = {
 	onDisconnect : function (code) {
 		//implement onDisconnect code here.
 	},
-	
+
 	/**
 	* Callback lorsque la connection avec le serveur est etablie.
 	* @code : true ou false
@@ -164,7 +164,7 @@ var jsocketApi = {
 	onConnect : function (code) {
 		//implement onConnect code here.
 	},
-	
+
 	/**
 	* Callback utilise pour recevoir les donnees sortantes du serveur.
 	* @message : le message retourne par le serveur -> Json string
@@ -173,7 +173,7 @@ var jsocketApi = {
 		// DOT NOT ERASE
 		jsocketApi.parser(message);
 	},
-	
+
 	/**
 	* Callback appele pour le master d'un channel lorsqu'un utilisateur
 	* quit ou rejoind le channel.
@@ -183,7 +183,7 @@ var jsocketApi = {
 	onStatus : function (tab) {
 		//implement onStatus code here.
 	},
-	
+
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction auth
 	* @code : le retour de l'appel a la methode auth -> bool
@@ -191,7 +191,7 @@ var jsocketApi = {
 	onAuth : function(code) {
 		//implement onAuth code here.
 	},
-	
+
 	/**
 	* Cette fonction permet d'obtenir des droits supplementaire sur le serveur.
 	* @appName : le nom de l'application -> string
@@ -209,7 +209,7 @@ var jsocketApi = {
 			'", "app": "' + appName + '", "channel": "' + channel +
 			'", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Authentifie un utilisateur (comme master) sur un channel
 	* @appName : le nom de l'application/channel -> string
@@ -227,7 +227,7 @@ var jsocketApi = {
 			'", "app": "' + appName + '", "channel": "' + channel +
 			'", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction chanAuth
 	* @code : channel password or false
@@ -235,7 +235,7 @@ var jsocketApi = {
 	onChanAuth : function (code) {
 		//implement onChanAuth code here.
 	},
-	
+
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction join
 	* @code : le retour de l'appel a la methode join -> bool
@@ -243,7 +243,7 @@ var jsocketApi = {
 	onJoin : function(code) {
 		//implement onJoin code here.
 	},
-	
+
 	/**
 	* Cette fonction permet d'associé le client a un channel sur le serveur.
 	* @appName : le nom de l'application -> string
@@ -259,7 +259,7 @@ var jsocketApi = {
 			'", "' + password + '" ], "channel": "' + channel +
 			'", "app": "' + appName + '", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction part
 	* @code : le retour de l'appel a la methode part -> bool
@@ -267,7 +267,7 @@ var jsocketApi = {
 	onPart : function(code) {
 		//implement onPart code here.
 	},
-	
+
 	/**
 	* Cette fonction permet de quitter le channel auquel le client est associé.
 	* @appName : le nom de l'application -> string
@@ -281,7 +281,7 @@ var jsocketApi = {
 			'", "app": "' + appName + '", "channel": "' + channel +
 			'", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction create
 	* @code : le retour de l'appel a la methode create -> bool
@@ -289,7 +289,7 @@ var jsocketApi = {
 	onCreate : function(code) {
 		//implement onCreate code here.
 	},
-	
+
 	/**
 	* Cette fonction permet d'ajouter un nouveau channel sur le serveur.
 	* @appName : le nom de l'application -> string
@@ -308,7 +308,7 @@ var jsocketApi = {
 			'", "' + password + '" ], "app": "' + appName +
 			'", "channel": "' + channel + '", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction remove
 	* @code : le retour de l'appel a la methode remove -> bool
@@ -316,7 +316,7 @@ var jsocketApi = {
 	onRemove : function(code) {
 		//implement onRemove code here.
 	},
-	
+
 	/**
 	* Cette fonction permet d'effacer un channel du serveur.
 	* @appName : le nom de l'application -> string
@@ -330,7 +330,7 @@ var jsocketApi = {
 			'", "app": "' + appName + '", "channel": "' + channel +
 			'", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Change le nom d'utilisateur
 	* @appName : le nom de l'application -> string
@@ -345,7 +345,7 @@ var jsocketApi = {
 			'", "app": "' + appName + '", "channel": "' + channel +
 			'", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction nick
 	* @code : le retour de l'appel a la methode nick -> bool
@@ -353,7 +353,7 @@ var jsocketApi = {
 	onNick : function(code) {
 		//implement onNick code here.
 	},
-	
+
 	/**
 	* Cette fonction permet a un master de forwarder une commande
 	* sur tous les clients connectes a son channel
@@ -369,7 +369,7 @@ var jsocketApi = {
 			'", "app": "' + appName + '", "channel": "' + channel +
 			'", "uid": "jsocketApi.uid"}');
 	},
-	
+
 	/**
 	* Callback appeler lorsque un client recoie un message d'un master
 	* @info : [0] = master's username
@@ -455,7 +455,7 @@ var jsocketApi = {
 	onGetStatus : function(status) {
 		//implement onGetStatus code here.
 	},
-	
+
 	/**
 	* Set le status d'un utilisateur
 	* @appName : le nom de l'application -> string
@@ -529,7 +529,7 @@ var jsocketApi = {
 	onError : function(error) {
 		//implement onError code here.
 	},
-	
+
 	/**
 	* Callback sur l'erreur venant du core TCP. On change alors
 	* la methode de dialogue avec le serveur par HTTP.
@@ -554,7 +554,7 @@ var jsocketApi = {
 		}
 		jsocketApi.commands = [ ];
 	},
-	
+
 	/**
 	* Gestion de queue pour les commandes a envoyer.
 	* Si jsocketApi.uid est null/empty alors on stock les
