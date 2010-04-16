@@ -30,10 +30,10 @@ class Log(object):
 			self.__queue = Queue.Queue(nb_thread)
 			Worker(self.__queue, 'log').start()
 
-		def add(self, str, color = 'white'):
+		def add(self, msg, color = 'white'):
 			""" Ajoute un element dans la queue """
 
-			self.__queue.put([str, color])
+			self.__queue.put([msg, color])
 
 		def get_color(self, color = 'white'):
 			""" Retourne la couleur shell correspondante au parametre """
@@ -46,15 +46,15 @@ class Log(object):
 				'blue': '\033[1;34m$msg$\033[1;m' }
 			return colors.get(color)
 
-		def dprint(self, str, color = 'white'):
+		def dprint(self, msg, color = 'white'):
 			""" Affiche un message sur le sortie standard et le log dans un fichier """
 
 			if SETTINGS.IS_DEBUG:
-				if 'nt' not in os.name:
-					print self.get_color(color).replace('$msg$', str)
-				else:
-					print str
-			self.__logs.debug(str)
+				#if 'nt' not in os.name:
+				#	print self.get_color(color).replace('$msg$', msg)
+				#else:
+				print msg
+			self.__logs.debug(msg)
 
 		def __logTraceback(self):
 			""" Redirige la sortie d'erreurs vers un fichier """

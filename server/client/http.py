@@ -81,7 +81,9 @@ class ClientHTTP(IClient):
 						self.request.handle(data)
 				
 				#urllib
-				if self.request.header_DATA('User-Agent') is not None and self.request.header_DATA('User-Agent') == 'Python-urllib/2.6':
+				if self.request.hasPost():
+					pass
+				elif self.request.header_DATA('connection') is not None and self.request.header_DATA('connection') == 'close':
 					self.isUrlLib = True
 					self.response.AddHeader('connection', 'close')
 					buff = self.response.Get(self.request, 200)

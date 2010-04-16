@@ -12,9 +12,9 @@
 *	};
 **/
 var jsocketApi = {
-	// jsocketCore Object
 	core : jsocketCoreTCP,
 	host : '',
+	urlFailOver : '',
 	port : 0,
 	debug : false,
 	app : [ ],
@@ -32,7 +32,7 @@ var jsocketApi = {
 		jsocketApi.core.api = this;
 		jsocketApi.core.connect(jsocketApi.host, jsocketApi.port);
 	},
-	
+
 	/**
 	* Changement de la methode de contact pour le serveur (par defaut TCP)
 	* @newCore : variable contenant le nouveau jsocketCore (TCP ou HTTP)

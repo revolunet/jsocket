@@ -9,7 +9,7 @@ var jsocketCoreHTTP = {
 	**/
 	settings: {
 		refreshTimer: 2000,
-		url: 'http://127.0.0.1:8000/json-post/'
+		url: ''
 	},
 	/**
 	* Response:
@@ -26,7 +26,6 @@ var jsocketCoreHTTP = {
 	api : null,
 	initialized : false,
 	connectedToServer : false,
-	url : '',
 	commands : [ ],
 	socket : null,
 	isWorking: false,
@@ -38,7 +37,7 @@ var jsocketCoreHTTP = {
 	loaded : function()
 	{
 		jsocketCoreHTTP.initialized = true;
-		jsocketCoreHTTP.url = jsocketCoreHTTP.settings.url;
+		jsocketCoreHTTP.settings.url = jsocketCoreHTTP.api.urlFailOver;
 		return (true);
 	},
 
@@ -60,7 +59,7 @@ var jsocketCoreHTTP = {
 			return (false);
 		}
 		jsocketCoreHTTP.socket.onreadystatechange = jsocketCoreHTTP.receive;
-		jsocketCoreHTTP.socket.open('POST', jsocketCoreHTTP.url, true);
+		jsocketCoreHTTP.socket.open('POST', jsocketCoreHTTP.settings.url, true);
 		jsocketCoreHTTP.socket.send(parameters);
 		jsocketCoreHTTP.response.waiting = true;
 		return (true);
