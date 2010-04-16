@@ -40,6 +40,8 @@ class Worker(threading.Thread):
 						if item.get('data', None) is not None and len(item.get('data')) > 0:
 							if item.get('client').client_socket is not None:
 								item.get('client').client_socket.send(item.get('data') + "\0")
+					except KeyboardInterrupt:
+						raise
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
@@ -49,6 +51,8 @@ class Worker(threading.Thread):
 							if item.get('client').unique_key not in item.get('client').http_list:
 								item.get('client').http_list[item.get('client').unique_key] = [ ]
 							item.get('client').http_list[item.get('client').unique_key].append(item.get('data'))
+					except KeyboardInterrupt:
+						raise
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
@@ -83,6 +87,8 @@ class Worker(threading.Thread):
 							item['client'].rput(cmd)
 								
 					item.get('client').disconnection()
+				except KeyboardInterrupt:
+					raise
 				except Exception as e:
 					Log().add(e)
 					Log().add("[DEBUG] failed to send %s" % item['data'])
