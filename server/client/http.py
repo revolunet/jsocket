@@ -13,8 +13,6 @@ import simplejson
 import urllib
 import time
 
-
-
 def profileitdd(printlines=20):
 	def _my(func):
 		def _func(*args, **kargs):
@@ -58,6 +56,7 @@ class ClientHTTP(IClient):
 			while len(buffer) == SETTINGS.SERVER_MAX_READ:
 				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
 				data = data + buffer
+			print data
 			return data
 		except:
 			self.client_socket = None
@@ -82,7 +81,7 @@ class ClientHTTP(IClient):
 						self.request.handle(data)
 				
 				#urllib
-				if self.request.header_DATA('connection') is not None and self.request.header_DATA('connection') == 'close':
+				if self.request.header_DATA('User-Agent') is not None and self.request.header_DATA('User-Agent') == 'Python-urllib/2.6':
 					self.isUrlLib = True
 					self.response.AddHeader('connection', 'close')
 					buff = self.response.Get(self.request, 200)
@@ -90,7 +89,17 @@ class ClientHTTP(IClient):
 					data = self.sockRead()
 					if data is not None:
 						self.request.handle(data)
-	
+				elif self.request.hasPost() == False:
+					pass
+				elif self.request.header_DATA('User-Agent') is not None and self.request.header_DATA('User-Agent') == 'Python-urllib/2.5':
+					self.isUrlLib = True
+					self.response.AddHeader('connection', 'close')
+					buff = self.response.Get(self.request, 200)
+					self.client_socket.send(buff)
+					data = self.sockRead()
+					if data is not None:
+						self.request.handle(data)
+
 				if self.request.post_DATA('json') is not None:
 					if len(self.request.post_DATA('json')) != 0:
 						#try:
