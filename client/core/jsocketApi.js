@@ -38,8 +38,9 @@ var jsocketApi = {
 	* @newCore : variable contenant le nouveau jsocketCore (TCP ou HTTP)
 	**/
 	method : function(newCore) {
-		newCore.isWorking = true;
+		jsocketApi.core.isWorking = false;
 		jsocketApi.core = newCore;
+		jsocketApi.core.isWorking = true;
 	},
 
 	/**
@@ -115,7 +116,7 @@ var jsocketApi = {
 	parser : function(text) {
 		var j = json_parse(text);
 		if (j.from != null && j.value != null) {
-			func_name = j.from.substring(0,1).toUpperCase() + j.from.substring(1, j.from.length);
+			func_name = j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
 			var args = { };
 			args.value = (j.value != null ? j.value : '');
 			args.channel = (j.channel != null ? j.channel : '');

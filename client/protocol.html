@@ -1,0 +1,328 @@
+<html>
+	<head>
+		<style type="text/css">
+			body {
+				font-family: georgia, serif;
+				font-size: 12px;
+				width: 100%;
+				margin: 0px;
+				padding: 0px;
+			}
+
+			fieldset {
+				border: 1px solid #ddd;
+			}
+			
+			input[type=text] {
+				font-family: georgia, serif;
+				font-size: 12px;
+				width: 150px;
+				margin: 2px;
+			}
+			
+			label {
+				width: 100px;
+				margin: 2px;
+			}
+			
+			#commandResult {
+				width: 800px;
+				position: absolute;
+				top: 0px;
+				right: 0px;
+				height: 250px;
+				overflow: scroll;
+				display:none;
+			}
+		</style>
+	</head>
+	<body>
+		<pre id="commandResult"></pre>
+		<form action="" method="post" onsubmit="javascript:return (false);">
+			<fieldset>
+				<legend>Configuration</legend>
+				<label for="serverName">Serveur</label>
+				<input type="text" id="serverName"
+					onchange="javascript:saveOption(this);" /><br />
+	
+				<label for="serverPort">Port</label>
+				<input type="text" id="serverPort"
+					onchange="javascript:saveOption(this);" /><br />
+
+				<label for="appName">Nom de l'application</label>
+				<input type="text" id="appName" disabled="true"
+					onchange="javascript:saveOption(this);" /><br />
+
+				<label for="channelName">Nom du channel</label>
+				<input type="text" id="channelName"
+					onchange="javascript:saveOption(this);" /><br />
+				
+				<label for="channelPassword">Password du channel</label>
+				<input type="text" id="channelPassword"
+					onchange="javascript:saveOption(this);" /><br />
+				
+				<label for="authPassword">Authentification password</label>
+				<input type="text" id="authPassword"
+					onchange="javascript:saveOption(this);" /><br />
+				
+				<label for="nickName">Nickname</label>
+				<input type="text" id="nickName"
+					onchange="javascript:saveOption(this);" /><br />
+				
+				<label for="urlFailOver">URL Fail Over</label>
+				<input type="text" id="urlFailOver"
+					onchange="javascript:saveOption(this);" /><br />
+
+				<label for="status">Status</label>
+				<input type="text" id="status"
+					onchange="javascript:saveOption(this);" /><br />
+			</fieldset>
+			<fieldset>
+				<legend>Methode</legend>
+				<input type="button" value="HTTP"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="TCP"
+					onclick="javascript:callMethod(this);" />
+			</fieldset>
+			<fieldset>
+				<legend>Actions</legend>
+				<input type="button" value="Connect"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Auth"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Nick"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Create"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Join"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Part"
+					onclick="javascript:callMethod(this);" /><br />
+				<input type="text" id="forwardCommand"
+					onchange="javascript:saveOption(this);" />
+				<input type="button" value="Forward"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Message"
+					onclick="javascript:callMethod(this);" /><br />
+				<input type="button" value="SetStatus"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="GetStatus"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="TimeConnect"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="ChanMasterPwd"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Remove"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="Part"
+					onclick="javascript:callMethod(this);" />
+				<input type="button" value="List"
+					onclick="javascript:callMethod(this);" />
+			</fieldset>
+		</form>
+
+		<script type="text/javascript" src="jsocket.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject_src.js"></script>
+		<script type="text/javascript">
+		<!--
+			if (typeof console == 'undefined') {
+				console = {
+					log: function(from, args) {
+						document.getElementById('commandResult').innerHTML += (from + args);
+					}
+				};
+				document.getElementById('commandResult').style.display = '';
+			}
+			settings = {
+				serverName: '192.168.1.34',
+				serverPort: 9999,
+				appName: 'protocol',
+				channelName: 'room',
+				channelPassword: 'toto',
+				channelAuthPassword: '',
+				authPassword: 'admin',
+				nickName: 'Master',
+				status: 'undefined',
+				urlFailOver: 'http://127.0.0.1:8000/json-post/',
+				forwardCommand: 'Message pour tous les clients'
+			};
+			protocol = {
+				actionJoin: function() {
+					jsocketApi.join(settings.appName, settings.channelName, settings.channelPassword);
+				},
+
+				onJoin: function(args) {
+					console.log('onJoin: ', args);
+				},
+
+				actionNick: function() {
+					jsocketApi.nick(settings.appName, settings.channelName, settings.nickName);
+				},
+				
+				onNick: function(args) {
+					console.log('onNick: ', args);
+				},
+
+				actionCreate: function() {
+					jsocketApi.create(settings.appName, settings.channelName, settings.channelPassword);
+				},
+
+				onCreate: function(args) {
+					settings.channelAuthPassword = args;
+					console.log('onCreate: ', args);
+				},
+
+				actionAuth: function() {
+					jsocketApi.auth(settings.appName, settings.channelName, settings.authPassword);
+				},
+				
+				onAuth: function(args) {
+					console.log('onAuth: ', args);
+				},
+				
+				actionPart: function() {
+					jsocketApi.part(settings.appName, settings.channelName, settings.channelName);
+				},
+
+				onPart: function(args) {
+					console.log('onPart: ', args);
+				},
+
+				actionConnect: function() {
+					jsocketApi.urlFailOver = settings.urlFailOver;
+					jsocketApi.init(settings.serverName, settings.serverPort);
+				},
+				
+				onConnect: function(args) {
+					console.log('onConnect: ', args);
+				},
+
+				actionForward: function() {
+					var command = document.getElementById('forwardCommand').value;
+					jsocketApi.forward(settings.appName, settings.channelName, command);
+				},
+				
+				onForward: function(args) {
+					console.log('onForward: ', args);
+				},
+
+				actionSetStatus: function() {
+					jsocketApi.setStatus(settings.appName, settings.channelName, settings.status);
+				},
+				
+				onSetStatus: function(args) {
+					console.log('onSetStatus: ', args);
+				},
+
+				actionGetStatus: function() {
+					jsocketApi.getStatus(settings.appName, settings.channelName);
+				},
+				
+				onGetStatus: function(args) {
+					console.log('onGetStatus: ', args);
+					document.getElementById('status').value = args.value;
+				},
+
+				actionChanAuth: function() {
+					jsocketApi.chanAuth(settings.appName, settings.channelName, settings.channelAuthPassword);
+				},
+
+				onChanAuth: function(args) {
+					console.log('onChanAuth: ', args);
+				},
+
+				actionRemove: function() {
+					jsocketApi.remove(settings.appName, settings.channelName);
+				},
+				
+				onRemove: function(args) {
+					console.log('onRemove: ', args);
+				},
+
+				actionMessage: function() {
+					jsocketApi.message(settings.appName, settings.channelName,
+						[ settings.forwardCommand, [ '*' ] ]);
+				},
+				
+				onMessage: function(args) {
+					console.log('onMessage: ', args);
+				},
+
+				actionList: function () {
+					jsocketApi.list(settings.appName, settings.channelName);
+				},
+				
+				onList: function (args) {
+					console.log('onList: ', args);
+				},
+
+				actionTimeConnect: function() {
+					jsocketApi.timeConnect(settings.appName, settings.channelName);
+				},
+				
+				onTimeConnect: function (args) {
+					console.log('onTimeConnect: ', args);
+				},
+				
+				actionChanMasterPwd: function() {
+					jsocketApi.chanMasterPwd(settings.appName, settings.channelName, settings.channelPassword);
+				},
+				
+				onChanMasterPwd: function (args) {
+					console.log('onChanMasterPwd: ', args);
+				},
+				
+				onStatus: function (args) {
+					console.log('onStatus', args);
+					if (args.value.key == jsocketApi.uid) {
+						settings.status = args.value.status;
+						document.getElementById('status').value = args.value.status;
+					}
+				},
+				
+				actionHTTP: function() {
+					jsocketApi.method(jsocketCoreHTTP);
+				},
+				
+				actionTCP: function() {
+					jsocketApi.method(jsocketCoreTCP);
+				}
+			};
+			jsocketApi.register(settings.appName, protocol);
+			jsocketApi.onReceive = function(message) {
+				console.log('Receive: ', message);
+				jsocketApi.parser(message);
+			}
+			jsocketApi.send = function(msg) {
+				console.log('Send: ', msg.replace(/jsocketApi\.uid/, jsocketApi.uid));
+				if (jsocketApi.uid != '') {
+					jsocketApi.core.send(msg.replace(/jsocketApi\.uid/, jsocketApi.uid));
+				} else if (jsocketApi.commands.length < 10) {
+					jsocketApi.commands.push(msg);
+				}
+			}
+
+			function loadSettings() {
+				for (opt in settings) {
+					var obj = document.getElementById(opt);
+					if (obj != null) {
+						obj.value = settings[opt];
+					}
+				}
+			}
+	
+			function saveOption(obj) {
+				settings[obj.id] = obj.value;
+			}
+	
+			function callMethod(obj) {
+				var method = 'protocol.action' + obj.value + '();';
+				eval(method);
+			}
+	
+			loadSettings();
+		// -->
+		</script>
+
+	</body>
+</html>
