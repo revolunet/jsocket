@@ -5,6 +5,7 @@
 import socket
 import SocketServer
 import threading
+import sys
 
 from server.tcp import ServerTCP
 from server.http import ServerHTTP
@@ -18,25 +19,12 @@ import Queue
 def mainTCP(room, squeue, rqueue, client_list, http_list):
 	"""Lance un serveur TCP"""
 	serverTCP = ServerTCP(room, squeue, rqueue, client_list, http_list)
-	try:
-		serverTCP.start()
-	except KeyboardInterrupt:
-		Log().add("[-] TCP Server Killed", 'ired')
-		exit()
-		return
+	serverTCP.start()
 
 def mainHTTP(room, squeue, rqueue, client_list, http_list, session):
 	"""Lance un serveur HTTP"""
 	serverHTTP = ServerHTTP(room, squeue, rqueue, client_list, http_list, session)
-	try:
-		serverHTTP.start()
-	except KeyboardInterrupt:
-		Log().add("[-] HTTP Server Killed", 'ired')
-		exit()
-		return
-
-#if __name__ == '__main__':
-#	main()	
+	serverHTTP.start()
 
 if __name__ == '__main__':
 	client_list = {'http': {}, 'tcp': {}}
@@ -53,3 +41,9 @@ if __name__ == '__main__':
 	
 	watchdog = WatchDog(client_list, session)
 	watchdog.start()
+	try:
+		while (sys.stdin.readline()):
+			pass
+	except KeyboardInterrupt:
+		print 'Hey !'
+		exit()	

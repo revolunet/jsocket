@@ -6,6 +6,13 @@
 import simplejson
 from log.logger import Log
 
+def isMaster(f):
+	def decorated(self, *args, **kwargs):
+		if self.client.isMaster:
+			return f(self, *args, **kwargs)
+		return False
+	return decorated
+
 class Protocol(object):
 	"""docstring for Protocol"""
 	def __init__(self, client):
@@ -112,6 +119,7 @@ class Protocol(object):
 		self.client.sput("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
 
 	# {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
+	@isMaster
 	def __cmd_remove(self, args, channel = None, app = None):
 		"""On supprimet un channel, si celui si existe et que Client est Master"""
 		

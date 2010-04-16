@@ -61,6 +61,8 @@ class Log(object):
 
 			try:
 				sys.stderr = self.__logfile
+			except KeyboardInterrupt:
+				raise
 			except Exception:
 				self.add("[!] Could not redirect errors: " + str(Exception), 'ired')
 		

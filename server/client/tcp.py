@@ -27,6 +27,8 @@ class ClientTCP(IClient):
 				while len(buffer) == SETTINGS.SERVER_MAX_READ:
 					buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
 					data = data + buffer
+			except KeyboardInterrupt:
+				raise
 			except Exception:
 				self.__disconnection()
 				return

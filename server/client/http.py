@@ -56,7 +56,6 @@ class ClientHTTP(IClient):
 			while len(buffer) == SETTINGS.SERVER_MAX_READ:
 				buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
 				data = data + buffer
-			print data
 			return data
 		except:
 			self.client_socket = None
@@ -135,6 +134,8 @@ class ClientHTTP(IClient):
 														self.last_action = int(time.time())
 														self.session.updateSessionDic(json_uid, clientSession)
 														#self.session.update(json_uid, clientSession)
+												except KeyboardInterrupt:
+													raise
 												except:
 													Log().add(JException().formatExceptionInfo())
 												if json_uid is not None and self.http_list.get(json_cmd.get('uid'), None) is not None:
@@ -157,6 +158,8 @@ class ClientHTTP(IClient):
 												self.restoreSession(json_uid)
 												self.validJson = True
 												self.rput(data)
+									except KeyboardInterrupt:
+										raise
 									except Exception:
 										Log().add("[-] JSON error with simplejson.loads(data) data: %s" % data)
 										if self.client_socket is not None:
@@ -168,7 +171,8 @@ class ClientHTTP(IClient):
 				else:
 					Log().add("[-] HTTP Request, no json data BYE ! ", 'red')
 					self.disconnection()
-			
+		except KeyboardInterrupt:
+			raise
 		except Exception as e:
 			Log().add(JException().formatExceptionInfo())
 			self.disconnection()
