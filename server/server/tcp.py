@@ -12,6 +12,9 @@ from log.logger import Log
 from config.settings import SETTINGS
 import threading
 
+from twisted.internet import reactor, protocol, error
+from twisted.python import failure
+
 class ServerTCP(threading.Thread):
 	"""docstring for Server"""
 	def __init__(self, room, squeue, rqueue, client_list, http_list):
@@ -42,6 +45,7 @@ class ServerTCP(threading.Thread):
 
 		self.__squeue = squeue
 		self.__rqueue = rqueue
+		
 
 	def run(self):
 		while 1:

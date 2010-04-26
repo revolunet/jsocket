@@ -3,6 +3,7 @@
 ##
 
 from log.logger import Log
+from config.settings import SETTINGS
 
 class Request(object):
 	"""
@@ -10,7 +11,7 @@ class Request(object):
 	Cette class va segmente la requete afin de la transformer en un objet facilement utilisable.
 	"""
 
-	def __init__(self):
+	def __init__(self, clientSocket):
 		"""
 		Request Constructeur :
 			__header: les header de la requete, sous forme de [key] = value
@@ -21,7 +22,7 @@ class Request(object):
 			method: post/get..
 			protocol: HTTP/1.1 ...
 		"""
-
+		self.__socket = clientSocket
 		self.__header = {}
 		self.__post = {}
 		self.__get = {}
@@ -30,6 +31,13 @@ class Request(object):
 		self.protocol = None
 		self.__blackList = []
 		self.__BlackList()
+
+	def __ReadData(self):
+		data = buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+		while len(buffer) == SETTINGS.SERVER_MAX_READ:
+			buffer = self.client_socket.recv(SETTINGS.SERVER_MAX_READ).strip()
+			data = data + buffer
+		print data
 
 	def __BlackList(self):
 		"""
