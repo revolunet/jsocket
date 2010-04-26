@@ -4,11 +4,9 @@
 
 import sys
 import threading
-from twisted.web.server import Site
-from twisted.web.wsgi import WSGIResource
-from twisted.python.threadpool import ThreadPool
+from twisted.web import server, resource
 from twisted.internet import reactor
-from client.http import ClientHTTP, clientHTTP
+from client.http import ClientHTTP
 from log.logger import Log
 from config.settings import SETTINGS
 
@@ -25,11 +23,5 @@ class ServerHTTP(threading.Thread):
 
 	def run(self):
 		Log().add("[+] HTTP Server launched on %s:%d" % (self.__host, SETTINGS.SERVER_HTTP_PORT), "green")
-		wsgiThreadPool = ThreadPool()
-		wsgiThreadPool.start()
-		resource = WSGIResource(reactor, wsgiThreadPool, clientHTTP)
-		reactor.listenTCP(SETTINGS.SERVER_HTTP_PORT, Site(resource), interface=SETTINGS.SERVER_HOST)
-		reactor.run()
-		#client = server.Site(ClientHTTP())
-		#reactor.listenTCP(SETTINGS.SERVER_HTTP_PORT, client)
-		#reactor.run()
+		client = server.Site(ClientHTTP(self.__room, self.__rqueue, self.__squeue, self.http_list, self.session))
+		reactor.listenTCP(SETTINGS.SERVER_HTTP_PORT, client, interface=SETTINGS.SERVER_HOST)

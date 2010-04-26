@@ -9,8 +9,8 @@ import sys
 
 from server.twisted_tcp import ServerTCP
 from server.http import ServerHTTP
-from server.watchdog import WatchDog
-from commons.worker import WorkerReceive, WorkerSend
+#from server.watchdog import WatchDog
+from commons.worker import WorkerParser
 from commons.room import Room
 from commons.session import Session
 from log.logger import Log
@@ -27,23 +27,18 @@ def mainHTTP(room, squeue, rqueue, client_list, http_list, session):
 	serverHTTP.start()
 
 if __name__ == '__main__':
-	client_list = {'http': {}, 'tcp': {}}
-	http_list = { }
-	room = Room()
-	squeue = Queue.Queue(4)
-	WorkerSend(squeue).start()
-	rqueue = Queue.Queue(4)
-	WorkerReceive(rqueue).start()
-	session = Session()
+	#room = Room()
+	queue = Queue.Queue(4)
+	WorkerParser(queue).start()
+	#WorkerSend(squeue).start()
+	#rqueue = Queue.Queue(4)
+	#WorkerReceive(rqueue).start()
 
 	mainTCP(room, squeue, rqueue, client_list, http_list)
-	#mainHTTP(room, squeue, rqueue, client_list, http_list, session)
-	
+	mainHTTP(room, squeue, rqueue, client_list, http_list, session)
+
 	#watchdog = WatchDog(client_list, session)
 	#watchdog.start()
-
-	watchdog = WatchDog(client_list, session)
-	watchdog.start()
 	try:
 		while (sys.stdin.readline()):
 			pass

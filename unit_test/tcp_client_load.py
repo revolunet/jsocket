@@ -9,7 +9,7 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('192.168.1.38', 9999)
+	tcpclient = TCPClient('localhost', 9999)
 	tcpclient.write('{"cmd":"setStatus", "args" : "hello"}\n')
 	#tcpclient.handle()
 	tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
@@ -54,7 +54,7 @@ def create_tcp_client_(aim = 'default'):
 def main():
 	client_thread = threading.Thread(target=create_tcp_client, args=())
 	client_thread.start()
-	for i in range(0,200):
+	for i in range(0,1):
 		client_thread = threading.Thread(target=create_tcp_client, args=())
 		client_thread.start()
 	#	client_thread = threading.Thread(target=create_tcp_client_, args=())

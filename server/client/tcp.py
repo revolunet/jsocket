@@ -41,21 +41,21 @@ class ClientTCP(IClient):
 
 	def get_name(self):
 		"""Return : Si l utilisateur n a pas de nickname on retourne la unique_key sinon son nickmae -> string """
-		
+
 		if self.nickName == None:
 			return self.unique_key
 		return self.nickName
 
 	def queue_cmd(self, command):
 		"""Ajoute une commande a la Queue en cours"""
-		
+
 		self.sput(command)
-				
+
 	def __master_logout(self):
 		"""
 		Lorsque le master se deconnecte on l'efface du server.
 		"""
-		
+
 		rooms = self.room.rooms
 		for channel in rooms:
 			if rooms[channel].master == self:
@@ -64,19 +64,19 @@ class ClientTCP(IClient):
 						to_send = {"name": "Master", "key": "null", "status": "offline"}
 						Log().add("[+] Envoie du status master au client : " + user.get_name(), 'blue')
 						user.sput('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+user.room_name+'"}')
-		
+
 	def __disconnection(self):
 		"""On ferme la socket serveur du client lorsque celui-ci a ferme sa socket cliente"""
 
 		if self.master == True:
 			self.__master_logout()
-		
+
 		rooms = self.room.rooms
 		for channel in rooms:
 			for user in rooms[channel].client_list:
 				if user == self:
 					self.room.part(channel, self)
-					
+
 		self.status = "offline"
 		self.protocol.status(self)
 		self.client_socket.close()
