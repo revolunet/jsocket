@@ -9,11 +9,11 @@ import urllib2
 
 class CONFIG(object):
 	IS_DEBUG = True
-	#SERVER_PORT = 9999
-	SERVER_PORT = 8080
+	SERVER_PORT = 9999
+	#SERVER_PORT = 8080
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
-	HTTP_SERVER_PORT = 9090
+	HTTP_SERVER_PORT = 81
 	SERVER_SELECT_TIMEOUT = 5
 	SERVER_MAX_READ = 1024
 	SERVER_HTTP_CLIENT_TIMEOUT = 30 # !important
@@ -185,9 +185,9 @@ def main():
 	import time
 
 	t = time.time()
-	for i in range(0, 100):
-		protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
-		#protocolTesting(HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT))
+	for i in range(0, 10000):
+		#protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
+		protocolTesting(HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT))
 	print str(time.time() - t) + ' secs'
 	print '[i] Press ^C to exit'
 	while True:

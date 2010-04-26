@@ -9,7 +9,7 @@ class Request(object):
 	Handle sur une request de type HTTP.
 	Cette class va segmente la requete afin de la transformer en un objet facilement utilisable.
 	"""
-	
+
 	def __init__(self):
 		"""
 		Request Constructeur :
@@ -21,7 +21,7 @@ class Request(object):
 			method: post/get..
 			protocol: HTTP/1.1 ...
 		"""
-		
+
 		self.__header = {}
 		self.__post = {}
 		self.__get = {}
@@ -30,12 +30,12 @@ class Request(object):
 		self.protocol = None
 		self.__blackList = []
 		self.__BlackList()
-	
+
 	def __BlackList(self):
 		"""
 		Liste de mots clef a ignorer lors d une requete.
 		"""
-		
+
 		self.__blackList.append("favicon.ico")
 
 	def handle(self, data):
@@ -54,35 +54,35 @@ class Request(object):
 				if self.method == 'post' and len(line.split(' ')) == 1:
 					self.__handle_POST(line)
 		self.__handle_METHOD()
-	
+
 	def header_DATA(self, key):
 		"""
 		Recupere les donnees contenus dans le header de la requete
 		get, host, connection, user-agent, cache-control, accept,
 		accept-encoding, accept-language, accept-charset...
 		"""
-		
+
 		try:
 			return self.__header[key.lower()]
 		except KeyError:
 			if key != 'expect' and key != 'connection':
 				Log().add("[-] Erreur dans la methode header_DATA, la key : " + key + " n'existe pas", "ired")
 			return None
-	
+
 	def post_Ket_Exists(self, key):
 		"""
 		Verifie que la key existe dans le dictionnaire POST
 		"""
-		
+
 		if len(key) == 0:
 			return False
 		return key.lower() in self.__post
-	
+
 	def post_DATA(self, key = None):
 		"""
 		Recupere les donnees contenus dans le post de la requete
 		"""
-		
+
 		if key is not None:
 			try:
 				return self.__post[key.lower()]
@@ -90,12 +90,12 @@ class Request(object):
 				Log().add("[-] Erreur dans la methode post_DATA, la key : " + key + " n'existe pas", "ired")
 				return None
 		return self.__post
-			
+
 	def get_DATA(self, key = None):
 		"""
 		Recupere les donnees contenus dans le get de la requete
 		"""
-		
+
 		if key is not None:
 			try:
 				return self.__get[key.lower()]
@@ -108,9 +108,9 @@ class Request(object):
 		"""
 		Return: Si des datas ont etes postes ou non -> bool
 		"""
-		
+
 		return len(self.__post) > 0
-			
+
 	def __handle_POST(self, post):
 		"""
 		Parse une requete post et la transforme en un objet [key]=value
@@ -125,22 +125,22 @@ class Request(object):
 					self.__post[var_name.lower()] = var_content
 			except ValueError:
 				Log().add("[-] Erreur dans la methode __handle_POST data : " + data, "ired")
-			
+
 	def __handle_METHOD(self):
 		"""
 		Recupere la version du protocol HTML et le path de la requete
 		"""
-		
+
 		if self.method:
 			line = self.header_DATA(self.method)
 			(self.path, self.protocol) = line.split(' ')
 			self.__handle_PATH_DATA()
-	
+
 	def __handle_PATH_DATA(self):
 		"""
 		Recupere les donnees contenues dans le chemin de la requete GET/POST
 		"""
-		
+
 		if self.path:
 			index = self.path.find('?') or self.path.find('&')
 			path_data = self.path[index + 1:].replace('/', '').split('&')
