@@ -16,9 +16,8 @@ class WatchDog(threading.Thread):
 		self.maxIdleTime = 10
 		self.lock = Lock()
 		Log().add("[+] WatchDog launched")
-		
 		threading.Thread.__init__(self)
-	
+
 	def run(self):
 		while self.isRunning:
 			try:
@@ -46,7 +45,7 @@ class WatchDog(threading.Thread):
 				self.isRunning = False
 				print 'Watchdog INTERRUPT'
 				raise KeyboardInterrupt
-	
+
 	def pop(self, d):
 		client = self.client_list['http'][d['key']]
 		if d['reason'] == 'time':
@@ -59,7 +58,7 @@ class WatchDog(threading.Thread):
 		client.join()
 		self.client_list['http'].pop(d['key'])
 		self.lock.release()
-	
+
 	def sessionPop(self, d):
 		current_time = int(time.time())
 		clientSession = self.session.get(d['key'])

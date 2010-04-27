@@ -15,12 +15,6 @@ class ServerTCP(threading.Thread):
 		Log().add("[+] TwistedTCP Server launched on %s:%d" % (self.__host, self.__port), "green")
 		threading.Thread.__init__(self)
 
-	def __init_queues(self, squeue, rqueue):
-		""" Initialise les queues d'envoie et reception (parsing) de message client """
-
-		self.__squeue = squeue
-		self.__rqueue = rqueue
-
 	def run(self):
 		factory = protocol.ServerFactory()
 		reactor.listenTCP(self.__port, TwistedTCPFactory(), interface=self.__host)

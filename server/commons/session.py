@@ -11,19 +11,19 @@ class Session(object):
 		return this.instance
 
 	def create(self):
-		from log.logger import Log
 		from client.client import Client
 
 		client = Client(self.room)
 		self.clientList[client.unique_key] = client
-		Log().add('[+] Session: Add/Update client %s' % (client.unique_key))
 		return client.unique_key
 
 	def get(self, uid = None):
-		from log.logger import Log
-
-		Log().add('session_get_uid: %s' % str(uid))
-		Log().add('session_get_clientList: %s' % str(self.clientList))
 		if uid is not None:
 			return self.clientList.get(uid, None)
 		return None
+
+	def delete(self, uid):
+		if self.clientList.get(uid, None) is not None:
+			delete self.clientList[uid]
+			return True
+		return False

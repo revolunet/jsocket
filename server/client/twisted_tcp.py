@@ -5,7 +5,7 @@ from commons.approval import Approval
 class TwistedTCPClient(Protocol):
 	def dataReceived(self, data):
 		Approval().validate(data, self.dataSend)
-		
+
 	def dataSend(self, data):
 		self.transport.write(data)
 
