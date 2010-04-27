@@ -11,7 +11,7 @@ class CONFIG(object):
 	IS_DEBUG = True
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
-	CLIENT_NUMBER = 1
+	CLIENT_NUMBER = 100
 	CLIENT_THREAD = False
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
@@ -81,7 +81,7 @@ class TCPClient(object):
 	def write(self, json):
 		if CONFIG.IS_DEBUG == True:
 			print 'Sent: \'%s\'' % json
-		self.sock.send(json + "\0")
+		self.sock.send(json)
 
 	def disconnect(self):
 		self.sock.close()

@@ -38,6 +38,7 @@ class WorkerParser(threading.Thread):
 		""" Traitement des commandes json """
 
 		from log.logger import Log
+		from twisted.internet import reactor
 
 		while True:
 			item = self.queue.get()
@@ -50,5 +51,5 @@ class WorkerParser(threading.Thread):
 						continue
 					client.addResponse(self.protocol.parse(client, json))
 					if callable(item.get('callback', None)):
-						item['callback'](client.getResponse())
+						reactor.callFromThread(item['callback'], client.getResponse())
 			self.queue.task_done()

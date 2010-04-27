@@ -71,7 +71,7 @@ class Approval(object):
 		return None
 
 	def validate_protocol(self, decoded):
-		if decoded.get('cmd') in self.protocol.commands:
+		if decoded.get('cmd', None) is not None and self.protocol.commands.get(decoded['cmd'], None) is not None:
 			return self.protocol.commands[decoded.get('cmd')](decoded)
 		return False
 
