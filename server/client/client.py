@@ -1,6 +1,7 @@
 import time
 import random
 from config.settings import SETTINGS
+from log.logger import Log
 
 class Client(object):
 	"""
@@ -17,7 +18,7 @@ class Client(object):
 		self.master = False
 		self.nickName = None
 		self.master_password = SETTINGS.MASTER_PASSWORD
-		self.unique_key = hex(random.getrandbits(64))
+		self.unique_key = str(hex(random.getrandbits(64)))
 		self.status = 'online'
 		self.connection_time = int(time.time())
 		self.last_action = self.connection_time
@@ -35,6 +36,7 @@ class Client(object):
 		"""Ajoute une commande reponse a la Queue en cours"""
 
 		if command is not None:
+			Log().add('[+] Client add response: "%s"' % command)
 			self.response.append(command)
 
 	def getResponse(self):

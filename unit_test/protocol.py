@@ -8,16 +8,11 @@ import urllib
 import urllib2
 
 class CONFIG(object):
-<<<<<<< HEAD
 	IS_DEBUG = True
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
-=======
-	IS_DEBUG = False
-	SERVER_PORT = 9999
 	CLIENT_NUMBER = 100
-	CLIENT_THREAD = True
->>>>>>> 532c621f4cc7179ea2546d84110ffc90a1b1ca00
+	CLIENT_THREAD = False
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 	HTTP_SERVER_PORT = 81
@@ -38,6 +33,7 @@ class HTTPClient(object):
 		response = urllib2.urlopen(req)
 		self.buffer = response.read()
 		if CONFIG.IS_DEBUG == True:
+			print 'Sent: \'%s\'' % json
 			print self.buffer
 
 	def handle(self):
@@ -83,6 +79,8 @@ class TCPClient(object):
 		return self.buffer
 
 	def write(self, json):
+		if CONFIG.IS_DEBUG == True:
+			print 'Sent: \'%s\'' % json
 		self.sock.send(json)
 
 	def disconnect(self):
@@ -113,8 +111,7 @@ class Protocol(object):
 	]
 	defaultKeys = [
 		'app',
-		'channel',
-		'uid'
+		'channel'
 	]
 	errorKeys = [
 		'message'
@@ -196,11 +193,6 @@ def main():
 	import time
 
 	t = time.time()
-<<<<<<< HEAD
-	for i in range(0, 1):
-		protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
-		#protocolTesting(HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT))
-=======
 	for i in range(0, CONFIG.CLIENT_NUMBER):
 		if CONFIG.CLIENT_THREAD == True:
 			#threadTCP = threading.Thread(target=protocolTesting, args=TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
@@ -210,7 +202,6 @@ def main():
 		else:
 			#protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
 			protocolTesting()
->>>>>>> 532c621f4cc7179ea2546d84110ffc90a1b1ca00
 	print str(time.time() - t) + ' secs'
 	print '[i] Press ^C to exit'
 	while True:

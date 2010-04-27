@@ -18,3 +18,4 @@ class ServerHTTP(threading.Thread):
 		Log().add("[+] HTTP Server launched on %s:%d" % (SETTINGS.SERVER_HOST, SETTINGS.SERVER_HTTP_PORT), "green")
 		client = server.Site(ClientHTTP())
 		reactor.listenTCP(SETTINGS.SERVER_HTTP_PORT, client, interface=SETTINGS.SERVER_HOST)
+		reactor.run(installSignalHandlers=0)

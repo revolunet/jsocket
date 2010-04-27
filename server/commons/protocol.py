@@ -40,9 +40,9 @@ class Protocol(object):
 	def parse(self, client, json):
 		"""Parsing de l'entre json sur le serveur"""
 
-		if self.__cmd_list.get(json.cmd, None) is not None:
+		if self.__cmd_list.get(json['cmd'], None) is not None:
 			self.client = client
-			return self.__cmd_list[json.cmd](json)
+			return self.__cmd_list[json['cmd']](json)
 		return None
 
 	# {"cmd" : "connected", "args": "null"}
@@ -57,7 +57,9 @@ class Protocol(object):
 		Authentifie un client en tant que master du server.
 		"""
 
-		if args['data'] == self.client.master_password:
+		from log.logger import Log
+
+		if args['args'] == self.client.master_password:
 			self.client.master = True
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du serveur")
 			return ('{"from": "auth", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
@@ -86,7 +88,9 @@ class Protocol(object):
 		Retourne la policy pour un client flash.
 		"""
 
-		Log().add("[+] Send policy file request to " + str(self.client.client_address))
+		from log.logger import Log
+
+		Log().add("[+] Send policy file request to " + str(self.client.getName()))
 		return ("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
 
 	# {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
@@ -94,11 +98,13 @@ class Protocol(object):
 	def __cmd_remove(self, args):
 		"""On supprimet un channel, si celui si existe et que Client est Master"""
 
-		if self.client.room.remove(args['data']):
-			Log().add("[+] Le channel " + args['data'] + " a ete supprime par : " + str(self.client.client_address))
+		from log.logger import Log
+
+		if self.client.room.remove(args['args']):
+			Log().add("[+] Le channel " + args['args'] + " a ete supprime par : " + str(self.client.getName()))
 			return ('{"from": "remove", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
-			Log().add("[+] Command error : la commande delete a echoue ( le channel " + args['data'] + " n'existe pas )", 'yellow')
+			Log().add("[+] Command error : la commande delete a echoue ( le channel " + args['args'] + " n'existe pas )", 'yellow')
 			return ('{"from": "remove", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
@@ -106,9 +112,11 @@ class Protocol(object):
 	def __cmd_create(self, args):
 		"""Creation d'un nouveau channel si le Client est Master"""
 
-		if self.client.room.create(args['data'], self.client):
-			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.client_address))
-			return ('{"from": "create", "value": "'+str(self.client.room.channel(args['data'][0]).masterPwd)+'", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+		from log.logger import Log
+
+		if self.client.room.create(args['args'], self.client):
+			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.getName()))
+			return ('{"from": "create", "value": "'+str(self.client.room.channel(args['args'][0]).masterPwd)+'", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
 			Log().add("[+] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
 			return ('{"from": "create", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
@@ -117,39 +125,45 @@ class Protocol(object):
 	def __cmd_join(self, args):
 		"""Ajoute un client dans le salon specifie"""
 
-		if self.client.room.join(args['data'], self.client):
-			self.client.room_name = args['data'][0]
-			Log().add("[+] Client : l'utilisateur " + str(self.client.client_address) + " a rejoin le channel : " + args['data'][0], 'yellow')
+		from log.logger import Log
+
+		if self.client.room.join(args['args'], self.client):
+			self.client.room_name = args['args'][0]
+			Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + args['args'][0], 'yellow')
 			return ('{"from": "join", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 			if self.client.master == False:
 				self.status(self.client)
 			else:
 				self.status(self.client, True)
 		else:
-			Log().add("[+] Command error : le channel " + args['data'][0] + " n'existe pas ", 'yellow')
+			Log().add("[+] Command error : le channel " + args['args'][0] + " n'existe pas ", 'yellow')
 			return ('{"from": "join", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "part", "args": "irc"}
 	def __cmd_part(self, args):
 		"""Supprime un client du salon specifie"""
 
+		from log.logger import Log
+
 		if self.client.room_name and self.client.room.part(args, self.client):
 			self.client.room_name = None
 			self.client.status = "offline"
-			Log().add("[+] Client : le client " + str(self.client.client_address) + " a quitte le channel : " + args['data'])
-			return ('{"from": "part", "value": true, "channel": "'+args['data']+'", "app": "'+args['app']+'"}')
+			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + args['args'])
+			return ('{"from": "part", "value": true, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
 			if self.client.master == False:
 				self.status(self.client)
 		else:
-			Log().add("Command error : l'utilisateur n'est pas dans le channel : " + args['data'])
-			return ('{"from": "part", "value": false, "channel": "'+args['data']+'", "app": "'+args['app']+'"}')
+			Log().add("Command error : l'utilisateur n'est pas dans le channel : " + args['args'])
+			return ('{"from": "part", "value": false, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "chanAuth", "args": "passphrase", "channel": "channelName", "app" : ""}
 	def __cmd_chanAuth(self, args):
 		"""Auth pour definir si le Client est desormais master ou non d'une application"""
 
-		if self.client.room.chanAuth(args['channel'], args['data'], self.client):
-			Log().add("[+] Client : le client " + str(self.client.client_address) + " est a present master du channel : " + args['channel'])
+		from log.logger import Log
+
+		if self.client.room.chanAuth(args['channel'], args['args'], self.client):
+			Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du channel : " + args['channel'])
 			return ('{"from": "chanAuth", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
 			return ('{"from": "chanAuth", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
@@ -159,8 +173,10 @@ class Protocol(object):
 	def __cmd_forward(self, args):
 		"""Envoie une commande a tous les clients presents dans le channel"""
 
-		if args['channel'] and args['app'] and self.client.room.forward(args['channel'], args['data'], self.client, args['app']):
-			Log().add("[+] La commande : "+ args['data'] + " a ete envoye a tous les utilisateurs du channel : " + str(args['channel']))
+		from log.logger import Log
+
+		if args['channel'] and args['app'] and self.client.room.forward(args['channel'], args['args'], self.client, args['app']):
+			Log().add("[+] La commande : "+ args['args'] + " a ete envoye a tous les utilisateurs du channel : " + str(args['channel']))
 			return ('{"from": "forward", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
 			if self.client.room_name is None:
@@ -173,7 +189,7 @@ class Protocol(object):
 	def __cmd_message(self, args):
 		"""Envoie un message a une liste d'utilisateurs"""
 
-		message = args['data']
+		message = args['args']
 		if len(message) == 0:
 			return ('{"from": "message", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
@@ -199,13 +215,17 @@ class Protocol(object):
 	def __cmd_nick(self, args):
 		"""Permet au client de change de pseudo"""
 
-		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son nickname en : " + args['data'])
-		self.client.nickName = args['data']
+		from log.logger import Log
+
+		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son nickname en : " + args['args'])
+		self.client.nickName = args['args']
 		return ('{"from": "nick", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "getStatus", "args": "null"}
 	def __cmd_getStatus(self, args):
 		"""Retourne le status de l'utilisateur"""
+
+		from log.logger import Log
 
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande son status")
 		return ('{"from": "getStatus", "value": "' + self.client.status + '", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
@@ -214,13 +234,17 @@ class Protocol(object):
 	def __cmd_setStatus(self, args):
 		"""Change le status de l'utilisateur"""
 
+		from log.logger import Log
+
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args))
-		self.client.status = args['data']
+		self.client.status = args['args']
 		return ('{"from": "setStatus", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "timeConnect", "args": "null"}
 	def __cmd_timeConnect(self, args):
 		"""Retourne l'heure a laquelle c'est connecte le client"""
+
+		from log.logger import Log
 
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande l'heure de connection")
 		return ('{"from": "timeConnect", "value": "' + str(self.client.connection_time) + '", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
@@ -228,6 +252,8 @@ class Protocol(object):
 	# {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "channel": "channelName", "app" : ""}
 	def __cmd_chanMasterPwd(self, args):
 		"""Change le mot de passe master d'un channel"""
+
+		from log.logger import Log
 
 		if self.client.master and self.client.room.changeChanMasterPwd(args, args['channel']):
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a changer le mot de passe master du channel : " + args['app'])
@@ -245,6 +271,8 @@ class Protocol(object):
 		"""
 		Envoie le status aux clients lors d'une action ( join / part ... connect ...)
 		"""
+
+		from log.logger import Log
 
 		if client.room_name:
 			channel = client.room.channel(client.room_name)

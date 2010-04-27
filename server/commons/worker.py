@@ -37,13 +37,19 @@ class WorkerParser(threading.Thread):
 	def run(self):
 		""" Traitement des commandes json """
 
+		from log.logger import Log
+
 		while True:
 			item = self.queue.get()
+			Log().add('item: %s' % str(item))
 			if item.get('json', None) is not None:
-				client = None
 				for json in item['json']:
+					if json['cmd'] is 'refresh':
+						continue
+					client = self.session.get(item['uid'])
 					if client is None:
-						client = self.session.getFromJson(json)
+						continue
+					Log().add('client: %s' % client)
 					client.addResponse(self.protocol.parse(client, json))
 					if callable(item.get('callback', None)):
 						item['callback'](client.getResponse())

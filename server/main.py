@@ -11,10 +11,6 @@ from server.twisted_tcp import ServerTCP
 from server.http import ServerHTTP
 #from server.watchdog import WatchDog
 from commons.worker import WorkerParser
-from commons.room import Room
-from commons.session import Session
-from log.logger import Log
-import Queue
 
 def mainTCP():
 	"""Lance un serveur TCP"""
@@ -27,14 +23,8 @@ def mainHTTP():
 	serverHTTP.start()
 
 if __name__ == '__main__':
-	#room = Room()
-	#WorkerSend(squeue).start()
-	#rqueue = Queue.Queue(4)
-	#WorkerReceive(rqueue).start()
-
-	mainTCP()
-	#mainHTTP()
-
+	#mainTCP()
+	mainHTTP()
 	#watchdog = WatchDog(client_list, session)
 	#watchdog.start()
 	try:

@@ -1,5 +1,7 @@
 import simplejson
 from commons.worker import WorkerParser
+from commons.session import Session
+from log.logger import Log
 import Queue
 
 class ApprovalProtocol(object):
@@ -22,35 +24,33 @@ class ApprovalProtocol(object):
 			'part':  self.default,
 			'remove':  self.default
 		}
-	
+
 	def default(self, json):
-		return  json.get('args', None) is not None and\
+		return  json.get('args', None) is not None and \
 				json.get('uid', None) is not None and \
 				json.get('channel', None) is not None and \
 				json.get('app', None) is not None
 
 class Approval(object):
-	
+
 	instance = None
-	
-	def __new__(this): 
+
+	def __new__(this):
 		if this.instance is None:
 			this.instance = object.__new__(this)
+			this.queue = Queue.Queue(4)
+			WorkerParser(this.queue).start()
+			this.protocol = ApprovalProtocol()
+			this.callback = None
 		return this.instance
-		
-	def __init__(self):
-		self.queue = Queue.Queue(4)
-		WorkerParser(self.queue).start()
-		self.protocol = ApprovalProtocol()
-		self.callback = None
-			
-	def validate(self, datas, callback):
+
+	def validate(self, datas, callback = None):
 		if len(datas) == 0:
 			pass
-			
+
 		data_list = self._split(datas)
 		valid_cmd = []
-		
+
 		for cmd in data_list:
 			try:
 				decoded = simplejson.loads(cmd)
@@ -62,13 +62,19 @@ class Approval(object):
 			except ValueError:
 				print "[<] Json error -> %s " % str(datas)
 		if len(valid_cmd) > 0:
-			self.queue.put({'json': valid_cmd, 'callback': callback})
-	
+			uid = valid_cmd[0].get('uid', None)
+			if uid is None:
+				uid = Session().create()
+			Log().add('uid: %s' % uid)
+			self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid})
+			return uid
+		return None
+
 	def validate_protocol(self, decoded):
 		if decoded.get('cmd') in self.protocol.commands:
 			return self.protocol.commands[decoded.get('cmd')](decoded)
 		return False
-		
+
 	def _split(self, datas):
 		datas = datas.split("\n")
 		commands = []
