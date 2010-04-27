@@ -28,22 +28,24 @@ class Channel():
 	def add(self, client):
 		"""Ajoute un client dans la room specifie"""
 
+		from log.logger import Log
+
 		self.client_list.append(client)
-		Log().add("[+] Room : client " + str(client.client_address) + " joined Room " + self.name)
+		Log().add("[+] Room : client " + str(client.getName()) + " joined Room " + self.name)
 		Log().add("[+] Room : "  + self.name + " " + str(len(self.client_list)) + " users")
 
 	def delete(self, client):
 		"""Supprime un client de la room specifie"""
 
+		from log.logger import Log
+
 		if client in self.client_list:
-			Log().add("[+] Room : client " + str(client.client_address) + " left Room " + self.name)
+			Log().add("[+] Room : client " + str(client.getName()) + " left Room " + self.name)
 			self.client_list.remove(client)
 			Log().add("[+] Room : "  + self.name + " " + str(len(self.client_list)) + " users")
 
 	def auth(self, masterPwd, client):
-		"""
-		Return: Authentifie un client en tant que master du channel -> bool
-		"""
+		"""Return: Authentifie un client en tant que master du channel -> bool"""
 
 		if masterPwd == self.masterPwd:
 			self.master = client
@@ -51,9 +53,7 @@ class Channel():
 		return False
 
 	def isProtected(self):
-		"""
-		Return: Si le channel est protege ou non -> bool.
-		"""
+		"""Return: Si le channel est protege ou non -> bool."""
 
 		return self.channelPwd != None
 

@@ -1,6 +1,3 @@
-from twisted.internet.task import deferLater
-from twisted.web.server import NOT_DONE_YET
-from twisted.internet import reactor, defer
 from twisted.web import resource
 from log.logger import Log
 from config.settings import SETTINGS

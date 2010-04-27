@@ -11,7 +11,7 @@ class CONFIG(object):
 	IS_DEBUG = True
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
-	CLIENT_NUMBER = 100
+	CLIENT_NUMBER = 1
 	CLIENT_THREAD = False
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
@@ -81,7 +81,7 @@ class TCPClient(object):
 	def write(self, json):
 		if CONFIG.IS_DEBUG == True:
 			print 'Sent: \'%s\'' % json
-		self.sock.send(json)
+		self.sock.send(json + "\0")
 
 	def disconnect(self):
 		self.sock.close()
@@ -92,13 +92,13 @@ class Protocol(object):
 		'connected': '{"cmd": "connected", "args": "null"}',
 		'auth': '{"cmd": "auth", "args": "admin", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'create': '{"cmd": "create", "args": [ "protocol", "password" ], "app": "protocol", "channel": "protocol", "uid": "$uid"}',
-		'join': '{"cmd": "join", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
+		'join': '{"cmd": "join", "args": [ "protocol", "password" ], "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'chanMasterPwd': '{"cmd": "chanMasterPwd", "args": "passwordChan", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'chanAuth': '{"cmd": "chanAuth", "args": "passwordChan", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'nick': '{"cmd": "nick", "args": "protocolMaster", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'forward': '{"cmd": "forward", "args": "messageToForward", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'list': '{"cmd": "list", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
-		'message': '{"cmd": "message", "args": ["message", [ "*" ]], "app": "protocol", "channel": "protocol", "uid": "$uid"}',
+		'message': '{"cmd": "message", "args": ["message", [ "unknown" ]], "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'setStatus': '{"cmd": "setStatus", "args": "protocolMasterNewStatus", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'getStatus': '{"cmd": "getStatus", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'timeConnect': '{"cmd": "timeConnect", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
@@ -171,7 +171,8 @@ class Protocol(object):
 		return result
 
 def protocolTesting():
-	client = HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT)
+	#client = HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT)
+	client = TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT)
 	Protocol.connected(client)
 	Protocol.stdCommand('auth', client)
 	Protocol.stdCommand('create', client)
@@ -195,12 +196,9 @@ def main():
 	t = time.time()
 	for i in range(0, CONFIG.CLIENT_NUMBER):
 		if CONFIG.CLIENT_THREAD == True:
-			#threadTCP = threading.Thread(target=protocolTesting, args=TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
-			#threadTCP.start()
 			threadHTTP = threading.Thread(target=protocolTesting, args=())
 			threadHTTP.start()
 		else:
-			#protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
 			protocolTesting()
 	print str(time.time() - t) + ' secs'
 	print '[i] Press ^C to exit'

@@ -1,6 +1,6 @@
 from log.logger import Log
 from config.settings import SETTINGS
-from client.twisted_tcp import TwistedTCPClient
+from client.tcp import TwistedTCPClient
 
 from twisted.internet import reactor, protocol
 class TwistedTCPFactory(protocol.Factory):

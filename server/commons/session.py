@@ -24,6 +24,6 @@ class Session(object):
 
 	def delete(self, uid):
 		if self.clientList.get(uid, None) is not None:
-			delete self.clientList[uid]
+			del self.clientList[uid]
 			return True
 		return False

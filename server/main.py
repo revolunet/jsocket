@@ -7,7 +7,7 @@ import SocketServer
 import threading
 import sys
 
-from server.twisted_tcp import ServerTCP
+from server.tcp import ServerTCP
 from server.http import ServerHTTP
 #from server.watchdog import WatchDog
 from commons.worker import WorkerParser
@@ -23,8 +23,8 @@ def mainHTTP():
 	serverHTTP.start()
 
 if __name__ == '__main__':
-	#mainTCP()
 	mainHTTP()
+	mainTCP()
 	#watchdog = WatchDog(client_list, session)
 	#watchdog.start()
 	try:

@@ -145,7 +145,7 @@ class Protocol(object):
 
 		from log.logger import Log
 
-		if self.client.room_name and self.client.room.part(args, self.client):
+		if self.client.room_name and self.client.room.part(args['args'], self.client):
 			self.client.room_name = None
 			self.client.status = "offline"
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + args['args'])
@@ -261,7 +261,7 @@ class Protocol(object):
 		else:
 			if self.client.master == False:
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
-			elif self.client.room.channelExists(args[0]) == False:
+			elif self.client.room.channelExists(args['args']) == False:
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
 			else:
 				Log().add("[+] Command error : la commande chanMasterPwd a echoue", 'yellow')

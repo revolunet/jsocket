@@ -36,7 +36,6 @@ class Client(object):
 		"""Ajoute une commande reponse a la Queue en cours"""
 
 		if command is not None:
-			Log().add('[+] Client add response: "%s"' % command)
 			self.response.append(command)
 
 	def getResponse(self):

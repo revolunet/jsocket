@@ -41,7 +41,6 @@ class WorkerParser(threading.Thread):
 
 		while True:
 			item = self.queue.get()
-			Log().add('item: %s' % str(item))
 			if item.get('json', None) is not None:
 				for json in item['json']:
 					if json['cmd'] is 'refresh':
@@ -49,7 +48,6 @@ class WorkerParser(threading.Thread):
 					client = self.session.get(item['uid'])
 					if client is None:
 						continue
-					Log().add('client: %s' % client)
 					client.addResponse(self.protocol.parse(client, json))
 					if callable(item.get('callback', None)):
 						item['callback'](client.getResponse())

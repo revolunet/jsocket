@@ -6,8 +6,9 @@ class TwistedTCPClient(Protocol):
 	def dataReceived(self, data):
 		Approval().validate(data, self.dataSend)
 
-	def dataSend(self, data):
-		self.transport.write(data)
+	def dataSend(self, responses):
+		for json in responses:
+			self.transport.write(json)
 
 	def connectionMade(self):
 		print "[+] New TCP Client !"

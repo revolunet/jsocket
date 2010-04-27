@@ -16,7 +16,7 @@ class Log(object):
 	"""
 
 	class __Log:
-		def __init__(self, nb_thread = 4):
+		def __init__(self):
 			""" Creation du fichier de log et initialisation du Queue worker """
 
 			import os.path
@@ -27,7 +27,7 @@ class Log(object):
 			self.__logs.setLevel(logging.DEBUG)
 			self.__logfile = open(sys.path[0] + os.sep + 'log/logs_exception.log', 'w', 0)
 			self.__logTraceback()
-			self.__queue = Queue.Queue(nb_thread)
+			self.__queue = Queue.Queue(SETTINGS.LOG_QUEUE_NB_THREAD)
 			WorkerLog(self.__queue).start()
 
 		def add(self, msg, color = 'white'):

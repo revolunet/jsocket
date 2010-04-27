@@ -12,7 +12,8 @@ class Room():
 
 	def __init__(self):
 		from log.logger import Log
-		self.rooms = {}
+
+		self.rooms = { }
 		self.count_users = 0
 		self.init_rooms()
 
@@ -110,7 +111,7 @@ class Room():
 				if len(list_users) >= 1:
 					for user in list_users:
 						if user.master == False:
-							user.queue_cmd('{"from": "forward", "value": ["' + master.get_name() + '", "' + commande + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+							user.addResponse('{"from": "forward", "value": ["' + master.getName() + '", "' + commande + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 					return True
 		return False
 
@@ -123,19 +124,19 @@ class Room():
 				if len(users) > 0:
 					list_users = self.list_users(channelName)
 					if users[0] == 'master' and master:
-						master.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+						master.addResponse('{"from": "message", "value": ["' + sender.getName() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 						return True
 					elif users[0] == 'all':
 						if len(list_users) >= 1:
 							for user in list_users:
-								user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+								user.addResponse('{"from": "message", "value": ["' + sender.getName() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 							return True
 						return False
 					else:
 						if len(list_users) >= 1:
 							for user in list_users:
-								if user.get_name() in users or user.unique_key in users:
-									user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+								if user.getName() in users or user.unique_key in users:
+									user.addResponse('{"from": "message", "value": ["' + sender.getName() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
 							return True
 						return False
 		return False
@@ -163,4 +164,6 @@ class Room():
 	def channelExists(self, channelName):
 		"""Return : si le channel existe ou non -> bool """
 
-		return channelName in self.rooms
+		if self.rooms.get(channelName, False) == False:
+			return False
+		return True
