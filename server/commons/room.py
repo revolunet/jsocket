@@ -3,7 +3,6 @@
 ##
 
 from commons.channel import Channel
-from log.logger import Log
 from config.settings import SETTINGS
 
 class Room():
@@ -12,6 +11,7 @@ class Room():
 	"""
 
 	def __init__(self):
+		from log.logger import Log
 		self.rooms = {}
 		self.count_users = 0
 		self.init_rooms()

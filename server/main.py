@@ -16,26 +16,24 @@ from commons.session import Session
 from log.logger import Log
 import Queue
 
-def mainTCP(room, squeue, rqueue, client_list, http_list):
+def mainTCP():
 	"""Lance un serveur TCP"""
-	serverTCP = ServerTCP(room, squeue, rqueue, client_list, http_list)
+	serverTCP = ServerTCP()
 	serverTCP.start()
 
-def mainHTTP(room, squeue, rqueue, client_list, http_list, session):
+def mainHTTP():
 	"""Lance un serveur HTTP"""
-	serverHTTP = ServerHTTP(room, squeue, rqueue, client_list, http_list, session)
+	serverHTTP = ServerHTTP()
 	serverHTTP.start()
 
 if __name__ == '__main__':
 	#room = Room()
-	queue = Queue.Queue(4)
-	WorkerParser(queue).start()
 	#WorkerSend(squeue).start()
 	#rqueue = Queue.Queue(4)
 	#WorkerReceive(rqueue).start()
 
-	mainTCP(room, squeue, rqueue, client_list, http_list)
-	mainHTTP(room, squeue, rqueue, client_list, http_list, session)
+	mainTCP()
+	#mainHTTP()
 
 	#watchdog = WatchDog(client_list, session)
 	#watchdog.start()

@@ -1,5 +1,4 @@
 import simplejson
-from log.logger import Log
 
 def isMaster(attrs):
 	def _isMaster(f):
@@ -13,6 +12,7 @@ def isMaster(attrs):
 class Protocol(object):
 	"""docstring for Protocol"""
 	def __init__(self):
+		from log.logger import Log
 		self.client = None
 		self.__init_cmd()
 

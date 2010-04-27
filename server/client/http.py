@@ -2,7 +2,6 @@
 # http.py
 ##
 
-from commons.validator import Validator
 from log.logger import Log
 from config.settings import SETTINGS
 from server.watchdog import WatchDog

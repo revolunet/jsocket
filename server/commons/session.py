@@ -1,5 +1,3 @@
-from log.logger import Log
-from client.client import Client
 from commons.room import Room
 
 class Session(object):
@@ -15,6 +13,9 @@ class Session(object):
 		self.clientList = { }
 
 	def create(self):
+		from log.logger import Log
+		from client.client import Client
+		
 		client = Client(self.room)
 		self.clientList[client.unique_key] = client
 		Log().add('[+] Session: Add/Update client %s' % (client.unique_key))
