@@ -40,8 +40,10 @@ class WorkerParser(threading.Thread):
 		while True:
 			item = self.__queue.get()
 			if item.get('json', None) is not None:
+				client = None
 				for json in item['json']:
-					client = self.session.getFromJson(json)
+					if client is None:
+						client = self.session.getFromJson(json)
 					client.addResponse(self.protocol.parse(client, json))
 					if callable(item.get('callback', None)):
 						item['callback'](client.getResponse())
