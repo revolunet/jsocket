@@ -7,18 +7,17 @@ import Queue
 import time
 from jexception import JException
 
-class Worker(threading.Thread):
+class WorkerLog(threading.Thread):
 	"""
-	Gere de facon thread-safe les envoie/receptions de commandes clientes.
+	Gestion de l'affichage des logs
 	"""
-	
-	def __init__(self, queue, type = 'log'):
+
+	def __init__(self, queue):
 		self.__queue = queue
-		self.__type = type
 		threading.Thread.__init__(self)
 
-	def type_log(self):
-		""" Parcours la Queue pour y logger tous ces elements via Log """
+	def run(self):
+		""" Redirection vers la methode approprie pour le traitement de la Queue """
 
 		from log.logger import Log
 		while True:
@@ -26,11 +25,17 @@ class Worker(threading.Thread):
 			Log().dprint(item[0], item[1])
 			self.__queue.task_done()
 
-	def type_send(self):
-		""" Parcours la Queue pour envoyer la string correspondante a l'objet client """
-		
-		from client.tcp import ClientTCP
-		from log.logger import Log
+class WorkerSend(threading.Thread):
+	"""
+	Gestion d'envoie du json au client
+	"""
+
+	def __init__(self, queue):
+		self.__queue = queue
+		threading.Thread.__init__(self)
+
+	def run(self):
+		""" Parcours de la liste pour envoyer les requetes correspondantes """
 
 		while True:
 			item = self.__queue.get()
@@ -40,8 +45,6 @@ class Worker(threading.Thread):
 						if item.get('data', None) is not None and len(item.get('data')) > 0:
 							if item.get('client').client_socket is not None:
 								item.get('client').client_socket.send(item.get('data') + "\0")
-					except KeyboardInterrupt:
-						raise
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
@@ -51,18 +54,23 @@ class Worker(threading.Thread):
 							if item.get('client').unique_key not in item.get('client').http_list:
 								item.get('client').http_list[item.get('client').unique_key] = [ ]
 							item.get('client').http_list[item.get('client').unique_key].append(item.get('data'))
-					except KeyboardInterrupt:
-						raise
 					except Exception:
 						Log().add(JException().formatExceptionInfo())
 						Log().add("[DEBUG] failed to send %s" % item['data'])
-				else:
-					pass
 				self.__queue.task_done()
-		
-	def type_recv(self):
+
+class WorkerReceive(threading.Thread):
+	"""
+ 	Gestion de reception des commandes json des clients
+	"""
+
+	def __init__(self, queue):
+		self.__queue = queue
+		threading.Thread.__init__(self)
+
+	def run(self):
 		""" Parcours la Queue pour parser la string correspondante """
-		
+
 		from client.tcp import ClientTCP
 		from log.logger import Log
 		while True:
@@ -74,7 +82,8 @@ class Worker(threading.Thread):
 					item['client'].last_action = int(time.time())
 				else:
 					for cmd in commands:
-						item['client'].rput(cmd)
+						item['client'].protocol.parse(cmd)
+						item['client'].last_action = int(time.time())
 			elif item['type'] == 'http':
 				try:
 					http_buffer = ""
@@ -84,26 +93,11 @@ class Worker(threading.Thread):
 						item.get('client').updateSession(item.get('client').unique_key)
 					else:
 						for cmd in commands:
-							item['client'].rput(cmd)
-								
+							item.get('client').protocol.parse(cmd)
+							item.get('client').last_action = int(time.time())
+							item.get('client').updateSession(item.get('client').unique_key)
 					item.get('client').disconnection()
-				except KeyboardInterrupt:
-					raise
 				except Exception as e:
 					Log().add(e)
 					Log().add("[DEBUG] failed to send %s" % item['data'])
-			else:
-				pass
 			self.__queue.task_done()
-
-	def run(self):
-		""" Redirection vers la methode approprie pour le traitement de la Queue """
-
-		from log.logger import Log
-		try:
-			method = getattr(self, 'type_' + self.__type, None)
-		except AttributeError:
-			Log().add(JException().formatExceptionInfo())
-			Log().add("[!] Method %s of worker does not exists", 'ired')
-		if callable(method):
-			method()

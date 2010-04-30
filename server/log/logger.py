@@ -7,16 +7,16 @@ import sys
 import logging
 import threading
 import Queue
-from commons.worker import Worker
+from commons.worker import WorkerLog
 from config.settings import SETTINGS
 
 class Log(object):
-	"""
+ 	"""
 	Logger, enregistre les actions effectue sur le server dans des fichiers de logs et print les message.
 	"""
-	
+
 	class __Log:
-		def __init__(self, nb_thread = 0):
+		def __init__(self, nb_thread = 4):
 			""" Creation du fichier de log et initialisation du Queue worker """
 
 			import os.path
@@ -28,7 +28,7 @@ class Log(object):
 			self.__logfile = open(sys.path[0] + os.sep + 'log/logs_exception.log', 'w', 0)
 			self.__logTraceback()
 			self.__queue = Queue.Queue(nb_thread)
-			Worker(self.__queue, 'log').start()
+			WorkerLog(self.__queue).start()
 
 		def add(self, msg, color = 'white'):
 			""" Ajoute un element dans la queue """
@@ -50,10 +50,10 @@ class Log(object):
 			""" Affiche un message sur le sortie standard et le log dans un fichier """
 
 			if SETTINGS.IS_DEBUG:
-				#if 'nt' not in os.name:
-				#	print self.get_color(color).replace('$msg$', msg)
-				#else:
-				print msg
+				if 'nt' not in os.name:
+					print self.get_color(color).replace('$msg$', msg)
+				else:
+					print msg
 			self.__logs.debug(msg)
 
 		def __logTraceback(self):
@@ -65,7 +65,7 @@ class Log(object):
 				raise
 			except Exception:
 				self.add("[!] Could not redirect errors: " + str(Exception), 'ired')
-		
+
 	instance = None
 
 	def __new__(c):

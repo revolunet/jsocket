@@ -9,7 +9,6 @@ import Queue
 from client.tcp import ClientTCP
 from commons.room import Room
 from log.logger import Log
-from commons.worker import Worker
 from config.settings import SETTINGS
 import threading
 
@@ -35,10 +34,10 @@ class ServerTCP(threading.Thread):
 			self.__input = [self.__socket, sys.stdin]
 		else:
 			self.__input = [self.__socket]
-			
+
 		self.client_list = client_list
 		self.http_list = http_list
-		
+
 		threading.Thread.__init__(self)
 
 	def __init_queues(self, squeue, rqueue):
@@ -51,26 +50,26 @@ class ServerTCP(threading.Thread):
 	def run(self):
 		while 1:
 			try:
-				inputready,outputready,exceptready = select.select(self.__input,[],[], SETTINGS.SERVER_SELECT_TIMEOUT) 
+				inputready,outputready,exceptready = select.select(self.__input,[],[], SETTINGS.SERVER_SELECT_TIMEOUT)
 				for s in inputready:
-					if s == self.__socket: 
-						# handle the server socket 
+					if s == self.__socket:
+						# handle the server socket
 						client_socket, client_addr = self.__socket.accept()
 						Log().add("[+] TCP Client connected " + (str(client_addr)))
 						current_client = ClientTCP(client_socket, client_addr, self.__room, self.__rqueue, self.__squeue, self.http_list)
 						current_client.start()
 						self.client_list['tcp'][current_client.unique_key] = current_client
-					elif s == sys.stdin: 
-						# handle standard input 
-						junk = sys.stdin.readline() 
+					elif s == sys.stdin:
+						# handle standard input
+						junk = sys.stdin.readline()
 						running = 0
-					else: 
-						# handle all other sockets 
-						data = s.recv(size) 
-						if data: 
-							s.send(data) 
-						else: 
-							s.close() 
+					else:
+						# handle all other sockets
+						data = s.recv(size)
+						if data:
+							s.send(data)
+						else:
+							s.close()
 							input.remove(s)
 			except KeyboardInterrupt:
 				self.__socket.close()
