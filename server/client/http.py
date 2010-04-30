@@ -6,6 +6,7 @@ from client.iClient import IClient
 from log.logger import Log
 from config.settings import SETTINGS
 from request import Request
+from rrequest import RRequest
 from response import Response
 from server.watchdog import WatchDog
 from commons.jexception import JException
@@ -67,6 +68,8 @@ class ClientHTTP(IClient):
 		"""lecture du client """
 		
 		try:
+			rr = RRequest(self.client_socket)
+			
 			data = self.sockRead()
 			if data is not None:
 				self.request.handle(data)

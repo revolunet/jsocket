@@ -7,7 +7,7 @@ import SocketServer
 import threading
 import sys
 
-from server.tcp import ServerTCP
+from server.twisted_tcp import ServerTCP
 from server.http import ServerHTTP
 from server.watchdog import WatchDog
 from commons.worker import Worker
@@ -37,10 +37,10 @@ if __name__ == '__main__':
 	session = Session()
 	
 	mainTCP(room, squeue, rqueue, client_list, http_list)
-	mainHTTP(room, squeue, rqueue, client_list, http_list, session)
+	#mainHTTP(room, squeue, rqueue, client_list, http_list, session)
 	
-	watchdog = WatchDog(client_list, session)
-	watchdog.start()
+	#watchdog = WatchDog(client_list, session)
+	#watchdog.start()
 	try:
 		while (sys.stdin.readline()):
 			pass
