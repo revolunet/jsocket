@@ -20,31 +20,26 @@ class WatchDog(threading.Thread):
 
 	def run(self):
 		while self.isRunning:
-			try:
-				current_time = int(time.time())
-				client_to_delete = []
-				client_session_to_delete = []
-				for key in self.client_list['http']:
-					client = self.client_list['http'][key]
-					if client.validJson == False:
-						client_to_delete.append({'key':key, 'reason':'json'})
-					elif int(current_time - client.last_action) > self.maxIdleTime:
-						client_to_delete.append({'key':key, 'reason':'time'})
+			current_time = int(time.time())
+			client_to_delete = []
+			client_session_to_delete = []
+			for key in self.client_list['http']:
+				client = self.client_list['http'][key]
+				if client.validJson == False:
+					client_to_delete.append({'key':key, 'reason':'json'})
+				elif int(current_time - client.last_action) > self.maxIdleTime:
+					client_to_delete.append({'key':key, 'reason':'time'})
 				session_list = self.session.get()
-				for k in session_list:
-					clientSession = self.session.get(k)
-					if clientSession is not None:
-						if int(current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
-							client_session_to_delete.append({'key':k, 'reason':'time'})
-				for d in client_to_delete:
-					self.pop(d)
-				for c in client_session_to_delete:
-					self.sessionPop(c)
-				time.sleep(self.sleepTime)
-			except KeyboardInterrupt:
-				self.isRunning = False
-				print 'Watchdog INTERRUPT'
-				raise KeyboardInterrupt
+			for k in session_list:
+				clientSession = self.session.get(k)
+				if clientSession is not None:
+					if int(current_time - clientSession.get('last_action', 0)) > self.maxIdleTime:
+						client_session_to_delete.append({'key':k, 'reason':'time'})
+			for d in client_to_delete:
+				self.pop(d)
+			for c in client_session_to_delete:
+				self.sessionPop(c)
+			time.sleep(self.sleepTime)
 
 	def pop(self, d):
 		client = self.client_list['http'][d['key']]
