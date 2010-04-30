@@ -12,9 +12,6 @@ from twisted.web import resource
 class ClientHTTP(resource.Resource):
 	isLeaf = True
 
-	def __init__(self, room, rqueue, squeue, http_list, session):
-		pass
-
 	def render_POST(self, request):
 		if request.args.get('json', None) is not None:
 			Log().add('[+] HTTP Client received: %s' % (request.args['json'][0]))
