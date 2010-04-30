@@ -24,7 +24,7 @@ class ApprovalProtocol(object):
 		}
 	
 	def default(self, json):
-		return  json.get('args', None) is not None and\
+		return  json.get('args', None) is not None and \
 				json.get('uid', None) is not None and \
 				json.get('channel', None) is not None and \
 				json.get('app', None) is not None
