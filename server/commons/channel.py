@@ -3,7 +3,6 @@
 # channel.py
 ##
 
-from log.logger import Log
 
 class Channel():
 	"""
@@ -11,6 +10,7 @@ class Channel():
 	"""
 
 	def __init__(self, name):
+		from log.logger import Log
 		"""
 		name: Le nom du channel
 		master: l'objet client master

@@ -38,7 +38,7 @@ class WorkerParser(threading.Thread):
 		""" Traitement des commandes json """
 
 		while True:
-			item = self.__queue.get()
+			item = self.queue.get()
 			if item.get('json', None) is not None:
 				for json in item['json']:
 					client = self.session.getFromJson(json)

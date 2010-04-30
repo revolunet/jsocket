@@ -23,5 +23,5 @@ class ServerTCP(threading.Thread):
 
 	def run(self):
 		factory = protocol.ServerFactory()
-		reactor.listenTCP(self.__port, TwistedTCPFactory, interface=self.__host)
+		reactor.listenTCP(self.__port, TwistedTCPFactory(), interface=self.__host)
 		reactor.run(installSignalHandlers=0)
