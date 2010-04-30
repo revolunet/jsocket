@@ -9,7 +9,7 @@ import sys
 import os
 
 def create_tcp_client(aim = 'default'):
-	tcpclient = TCPClient('127.0.0.1', 9999)
+	tcpclient = TCPClient('192.168.1.38', 9999)
 	tcpclient.write('{"cmd":"setStatus", "args" : "hello"}\n')
 	#tcpclient.handle()
 	tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
@@ -42,7 +42,7 @@ def create_tcp_client(aim = 'default'):
 	tcpclient.disconnect()
 	
 def create_tcp_client_(aim = 'default'):
-	tcpclient = TCPClient('127.0.0.1', 9999)
+	tcpclient = TCPClient('192.168.1.38', 9999)
 	#tcpclient.handle()
 	tcpclient.write('{"cmd":"join", "args":"irc", "app": "irc"}\n')
 	tcpclient.handle()

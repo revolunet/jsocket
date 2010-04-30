@@ -34,5 +34,5 @@ class ServerTCP(threading.Thread):
 		
 	def run(self):
 		factory = protocol.ServerFactory()
-		reactor.listenTCP(self.__port, TwistedTCPFactory(self.__room, self.__rqueue, self.__squeue, self.http_list, self.client_list))
+		reactor.listenTCP(self.__port, TwistedTCPFactory(self.__room, self.__rqueue, self.__squeue, self.http_list, self.client_list), interface=self.__host)
 		reactor.run()
