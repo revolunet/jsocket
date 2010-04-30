@@ -130,11 +130,11 @@ class Protocol(object):
 		if self.client.room.join(args['args'], self.client):
 			self.client.room_name = args['args'][0]
 			Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + args['args'][0], 'yellow')
-			return ('{"from": "join", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 			if self.client.master == False:
 				self.status(self.client)
 			else:
 				self.status(self.client, True)
+			return ('{"from": "join", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
 			Log().add("[+] Command error : le channel " + args['args'][0] + " n'existe pas ", 'yellow')
 			return ('{"from": "join", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
@@ -149,9 +149,9 @@ class Protocol(object):
 			self.client.room_name = None
 			self.client.status = "offline"
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + args['args'])
-			return ('{"from": "part", "value": true, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
 			if self.client.master == False:
 				self.status(self.client)
+			return ('{"from": "part", "value": true, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
 		else:
 			Log().add("Command error : l'utilisateur n'est pas dans le channel : " + args['args'])
 			return ('{"from": "part", "value": false, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
