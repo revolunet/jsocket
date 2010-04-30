@@ -9,8 +9,8 @@ import urllib2
 
 class CONFIG(object):
 	IS_DEBUG = True
-	#SERVER_PORT = 9999
-	SERVER_PORT = 8080
+	SERVER_PORT = 9999
+	#SERVER_PORT = 8080
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 	HTTP_SERVER_PORT = 9090
@@ -185,7 +185,7 @@ def main():
 	import time
 
 	t = time.time()
-	for i in range(0, 100):
+	for i in range(0, 1):
 		protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
 		#protocolTesting(HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT))
 	print str(time.time() - t) + ' secs'

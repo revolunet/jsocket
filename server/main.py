@@ -30,20 +30,20 @@ if __name__ == '__main__':
 	client_list = {'http': {}, 'tcp': {}}
 	http_list = { }
 	room = Room()
-	squeue = Queue.Queue(4)
-	WorkerSend(squeue).start()
-	rqueue = Queue.Queue(4)
-	WorkerReceive(rqueue).start()
+	#squeue = Queue.Queue(4)
+	#WorkerSend(squeue).start()
+	#rqueue = Queue.Queue(4)
+	#WorkerReceive(rqueue).start()
 	session = Session()
 
-	mainTCP(room, squeue, rqueue, client_list, http_list)
+	mainTCP(room, None, None, client_list, http_list)
 	#mainHTTP(room, squeue, rqueue, client_list, http_list, session)
 	
 	#watchdog = WatchDog(client_list, session)
 	#watchdog.start()
 
-	watchdog = WatchDog(client_list, session)
-	watchdog.start()
+	#watchdog = WatchDog(client_list, session)
+	#watchdog.start()
 	try:
 		while (sys.stdin.readline()):
 			pass
