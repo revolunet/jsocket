@@ -15,6 +15,7 @@ class SETTINGS(object):
 	IS_DEBUG = True
 
 	SERVER_PORT = 9999
+	SERVER_HTTP_PORT = 81
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 

@@ -8,12 +8,19 @@ import urllib
 import urllib2
 
 class CONFIG(object):
+<<<<<<< HEAD
 	IS_DEBUG = True
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
+=======
+	IS_DEBUG = False
+	SERVER_PORT = 9999
+	CLIENT_NUMBER = 100
+	CLIENT_THREAD = True
+>>>>>>> 532c621f4cc7179ea2546d84110ffc90a1b1ca00
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
-	HTTP_SERVER_PORT = 9090
+	HTTP_SERVER_PORT = 81
 	SERVER_SELECT_TIMEOUT = 5
 	SERVER_MAX_READ = 1024
 	SERVER_HTTP_CLIENT_TIMEOUT = 30 # !important
@@ -30,7 +37,8 @@ class HTTPClient(object):
 		req = urllib2.Request('http://' + CONFIG.SERVER_HOST + ':' + str(CONFIG.HTTP_SERVER_PORT) + '/', params)
 		response = urllib2.urlopen(req)
 		self.buffer = response.read()
-		print self.buffer
+		if CONFIG.IS_DEBUG == True:
+			print self.buffer
 
 	def handle(self):
 		if len(self.buffer) > 0:
@@ -41,7 +49,8 @@ class HTTPClient(object):
 		req = urllib2.Request('http://' + CONFIG.SERVER_HOST + ':' + str(CONFIG.HTTP_SERVER_PORT) + '/', params)
 		response = urllib2.urlopen(req)
 		self.buffer = response.read()
-		print self.buffer
+		if CONFIG.IS_DEBUG == True:
+			print self.buffer
 		return self.buffer
 
 	def disconnect(self):
@@ -104,7 +113,8 @@ class Protocol(object):
 	]
 	defaultKeys = [
 		'app',
-		'channel'
+		'channel',
+		'uid'
 	]
 	errorKeys = [
 		'message'
@@ -121,8 +131,8 @@ class Protocol(object):
 		if Protocol.checkKeys(method, json, Protocol.neededKeys) == False:
 			return False
 		client.uid = json.get('value', '')
-		print '[%s] Result correct' % method
 		if CONFIG.IS_DEBUG == True:
+			print '[%s] Result correct' % method
 			print '[%s] %s' % (method, result)
 		return True
 
@@ -136,8 +146,8 @@ class Protocol(object):
 		if Protocol.checkKeys(method, json,
 			Protocol.neededKeys + Protocol.defaultKeys) == False:
 			return False
-		print '\n[%s] Result correct' % method
 		if CONFIG.IS_DEBUG == True:
+			print '\n[%s] Result correct' % method
 			print '[%s] %s' % (method, result)
 		return True
 
@@ -147,8 +157,8 @@ class Protocol(object):
 			jsonDecoded = simplejson.loads(jsonEncoded)
 			return jsonDecoded
 		except ValueError:
-			print '[%s] JSON malformed' % name
 			if CONFIG.IS_DEBUG == True:
+				print '[%s] JSON malformed' % name
 				print '[%s][DEBUG] %s' % (name, jsonEncoded)
 			return False
 
@@ -158,12 +168,13 @@ class Protocol(object):
 		for k in keys:
 			if json.get(k, None) is None:
 				result = False
-				print '[%s] JSON key "%s" missing' % (name, k)
 				if CONFIG.IS_DEBUG == True:
+					print '[%s] JSON key "%s" missing' % (name, k)
 					print '[%s][DEBUG] %s' % (name, str(json))
 		return result
 
-def protocolTesting(client):
+def protocolTesting():
+	client = HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT)
 	Protocol.connected(client)
 	Protocol.stdCommand('auth', client)
 	Protocol.stdCommand('create', client)
@@ -185,9 +196,21 @@ def main():
 	import time
 
 	t = time.time()
+<<<<<<< HEAD
 	for i in range(0, 1):
 		protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
 		#protocolTesting(HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT))
+=======
+	for i in range(0, CONFIG.CLIENT_NUMBER):
+		if CONFIG.CLIENT_THREAD == True:
+			#threadTCP = threading.Thread(target=protocolTesting, args=TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
+			#threadTCP.start()
+			threadHTTP = threading.Thread(target=protocolTesting, args=())
+			threadHTTP.start()
+		else:
+			#protocolTesting(TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT))
+			protocolTesting()
+>>>>>>> 532c621f4cc7179ea2546d84110ffc90a1b1ca00
 	print str(time.time() - t) + ' secs'
 	print '[i] Press ^C to exit'
 	while True:
