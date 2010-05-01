@@ -7,6 +7,10 @@ import os
 import urllib
 import urllib2
 
+# TODO:
+#  Check si on recoit les reponses des commandes envoyees
+#  meme si ces responses sont concatenees a d'autre (comme status avec join parfois)
+
 class CONFIG(object):
 	IS_DEBUG = True
 	SERVER_PORT = 9999
@@ -57,6 +61,7 @@ class Stats(object):
 		print '-----------------------------------------------------------------------'
 		totalTime = float(time.time() - self.begin)
 		totalCommand = len(Protocol.commands) * CONFIG.CLIENT_NUMBER
+		print ' - Client protocol used: %s' % CONFIG.CLIENT_TYPE
 		print ' - Total executed commands: %d' % totalCommand
 		print '  . Commands per client: %d' % len(Protocol.commands)
 		print ' - Total time (secs): %s' % str(totalTime)

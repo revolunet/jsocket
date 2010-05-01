@@ -7,6 +7,7 @@ import sys
 import logging
 import threading
 import Queue
+from time import gmtime, strftime
 from commons.worker import WorkerLog
 from config.settings import SETTINGS
 
@@ -49,12 +50,13 @@ class Log(object):
 		def dprint(self, msg, color = 'white'):
 			""" Affiche un message sur le sortie standard et le log dans un fichier """
 
+			msgTime = '[%s]' % strftime('%d-%m-%Y %H:%M:%S', gmtime())
 			if SETTINGS.IS_DEBUG:
 				if 'nt' not in os.name:
-					print self.get_color(color).replace('$msg$', msg)
+					print msgTime + self.get_color(color).replace('$msg$', msg)
 				else:
-					print msg
-			self.__logs.debug(msg)
+					print msgTime + msg
+			self.__logs.debug(msgTime + msg)
 
 		def __logTraceback(self):
 			""" Redirige la sortie d'erreurs vers un fichier """

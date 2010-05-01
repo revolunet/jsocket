@@ -104,7 +104,7 @@ class Protocol(object):
 			Log().add("[+] Le channel " + args['args'] + " a ete supprime par : " + str(self.client.getName()))
 			return ('{"from": "remove", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
-			Log().add("[+] Command error : la commande delete a echoue ( le channel " + args['args'] + " n'existe pas )", 'yellow')
+			Log().add("[!] Command error : la commande delete a echoue ( le channel " + args['args'] + " n'existe pas )", 'yellow')
 			return ('{"from": "remove", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
@@ -118,7 +118,7 @@ class Protocol(object):
 			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.getName()))
 			return ('{"from": "create", "value": "'+str(self.client.room.channel(args['args'][0]).masterPwd)+'", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
-			Log().add("[+] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
+			Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
 			return ('{"from": "create", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "join", "args": ["irc", ""]}
@@ -136,7 +136,7 @@ class Protocol(object):
 				self.status(self.client, True)
 			return ('{"from": "join", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
-			Log().add("[+] Command error : le channel " + args['args'][0] + " n'existe pas ", 'yellow')
+			Log().add("[!] Command error : le channel " + args['args'][0] + " n'existe pas ", 'yellow')
 			return ('{"from": "join", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "part", "args": "irc"}
@@ -153,7 +153,7 @@ class Protocol(object):
 				self.status(self.client)
 			return ('{"from": "part", "value": true, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
 		else:
-			Log().add("Command error : l'utilisateur n'est pas dans le channel : " + args['args'])
+			Log().add("[!] Command error : l'utilisateur n'est pas dans le channel : " + args['args'])
 			return ('{"from": "part", "value": false, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "chanAuth", "args": "passphrase", "channel": "channelName", "app" : ""}
@@ -180,9 +180,9 @@ class Protocol(object):
 			return ('{"from": "forward", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
 			if self.client.room_name is None:
-				Log().add("[+] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
+				Log().add("[!] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
 			else:
-				Log().add("[+] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
+				Log().add("[!] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
 			return ('{"from": "forward", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	# {"cmd": "message", "args": ['mon message', ['*']], "channel": "channelName", "app" : "" }
@@ -260,11 +260,11 @@ class Protocol(object):
 			return ('{"from": "chanMasterPwd", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 		else:
 			if self.client.master == False:
-				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
+				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
 			elif self.client.room.channelExists(args['args']) == False:
-				Log().add("[+] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
+				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
 			else:
-				Log().add("[+] Command error : la commande chanMasterPwd a echoue", 'yellow')
+				Log().add("[!] Command error : la commande chanMasterPwd a echoue", 'yellow')
 			return ('{"from": "chanMasterPwd", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
 
 	def status(self, client, master = False):
