@@ -35,12 +35,14 @@ class Client(object):
 	def addResponse(self, command):
 		"""Ajoute une commande reponse a la Queue en cours"""
 
+		self.last_action = time.time()
 		if command is not None:
 			self.response.append(command)
 
 	def getResponse(self):
 		"""Retourne les commandes en attente d'envoie"""
 
+		self.last_action = time.time()
 		res = self.response
 		self.response = [ ]
 		return res

@@ -9,7 +9,7 @@ import sys
 
 from server.tcp import ServerTCP
 from server.http import ServerHTTP
-#from server.watchdog import WatchDog
+from commons.watchdog import WatchDog
 from commons.worker import WorkerParser
 
 def mainTCP():
@@ -22,11 +22,15 @@ def mainHTTP():
 	serverHTTP = ServerHTTP()
 	serverHTTP.start()
 
+def mainWatchDog():
+	"""Lance le watchdog"""
+	watchdog = WatchDog()
+	watchdog.start()
+
 if __name__ == '__main__':
 	mainHTTP()
 	mainTCP()
-	#watchdog = WatchDog(client_list, session)
-	#watchdog.start()
+	mainWatchDog()
 	try:
 		while (sys.stdin.readline()):
 			pass

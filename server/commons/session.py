@@ -22,6 +22,9 @@ class Session(object):
 			return self.clientList.get(uid, None)
 		return None
 
+	def gets(self):
+		return self.clientList.items()
+
 	def delete(self, uid):
 		if self.clientList.get(uid, None) is not None:
 			del self.clientList[uid]
