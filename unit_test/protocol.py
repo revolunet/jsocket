@@ -8,11 +8,13 @@ import urllib
 import urllib2
 
 class CONFIG(object):
-	IS_DEBUG = False
+	IS_DEBUG = True
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
 	CLIENT_NUMBER = 100
 	CLIENT_THREAD = True
+	CLIENT_TYPE = 'HTTP'
+	#CLIENT_TYPE = 'TCP'
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 	HTTP_SERVER_PORT = 81
@@ -46,6 +48,7 @@ class Stats(object):
 	def show(self):
 		print '-----------------------------------------------------------------------'
 		print 'Server:'
+		print '-----------------------------------------------------------------------'
 		print ' - Host: %s' % str(CONFIG.SERVER_HOST)
 		print ' - TCP port: %d' % CONFIG.SERVER_PORT
 		print ' - HTTP port: %d' % CONFIG.HTTP_SERVER_PORT
@@ -54,16 +57,22 @@ class Stats(object):
 		print '-----------------------------------------------------------------------'
 		totalTime = float(time.time() - self.begin)
 		totalCommand = len(Protocol.commands) * CONFIG.CLIENT_NUMBER
-		print ' - Total executed commands: %d (%d commands per clients)' % (totalCommand, len(Protocol.commands))
-		print ' - Total time (secs): %s (avg. %s per commands / avg. %s per clients)' % (str(totalTime), str(totalTime / totalCommand), str(totalTime / CONFIG.CLIENT_NUMBER))
-		print ' - For %d Clients it founds %d errors (%s %% chance per command)' % (CONFIG.CLIENT_NUMBER, self.errorTotal, str(float(self.errorTotal) / float(totalCommand)))
+		print ' - Total executed commands: %d' % totalCommand
+		print '  . Commands per client: %d' % len(Protocol.commands)
+		print ' - Total time (secs): %s' % str(totalTime)
+		print '  . Average secs per command: %s' % str(totalTime / totalCommand)
+		print '  . Average secs per client: %s' % str(totalTime / CONFIG.CLIENT_NUMBER)
+		print '  . Average commands per secs: %s' % str(float(totalCommand) / float(totalTime))
+		print ' - For %d Clients it founds %d errors:' % (CONFIG.CLIENT_NUMBER, self.errorTotal)
+		print '  . Average error %% per command: %s' % str(float(self.errorTotal) / float(totalCommand))
 		print '-----------------------------------------------------------------------'
 		if self.errorTotal == 0:
-			print ' - No error found. You make a great JusDeChaussette TODAY !'
+			print ' - \\o/ No error found. You just made a great JusDeChaussette TODAY !'
 			print '-----------------------------------------------------------------------'
 			return True
 		print 'Errors:'
 		for (command, nbError) in self.errors.items():
+			print '-----------------------------------------------------------------------'
 			print '[%s] Found %d errors' % (command, nbError)
 			if CONFIG.IS_DEBUG == True:
 				print '[%s] Details:' % command
@@ -213,8 +222,10 @@ class Protocol(object):
 
 def protocolTesting(*args):
 	index = args[0]
-	client = HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT)
-	#client = TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT)
+	if CONFIG.CLIENT_TYPE == 'HTTP':
+		client = HTTPClient(CONFIG.SERVER_HOST, CONFIG.HTTP_SERVER_PORT)
+	else:
+		client = TCPClient(CONFIG.SERVER_HOST, CONFIG.SERVER_PORT)
 	Protocol.connected(client)
 	Protocol.stdCommand('auth', client)
 	Protocol.stdCommand('create', client)
