@@ -15,10 +15,10 @@ class CONFIG(object):
 	IS_DEBUG = False
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
-	CLIENT_NUMBER = 100
+	CLIENT_NUMBER = 1
 	CLIENT_THREAD = True
-	CLIENT_TYPE = 'HTTP'
-	#CLIENT_TYPE = 'TCP'
+	#CLIENT_TYPE = 'HTTP'
+	CLIENT_TYPE = 'TCP'
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 	HTTP_SERVER_PORT = 81

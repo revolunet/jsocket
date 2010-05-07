@@ -6,7 +6,7 @@ from commons.protocol import Protocol
 from commons.channel import Channel
 from config.settings import SETTINGS
 
-def channelExists(f):
+def chanExists(f):
 	def decorated(*args, **kwargs):
 		instance = args[0]
 		func_args = args[1]
@@ -80,7 +80,7 @@ class Room():
 			return True
 		return users <= SETTINGS.CHANNEL_MAX_USERS - 1
 
-	@channelExists
+	@chanExists
 	def join(self, args, client):
 		"""Return Ajoute un utilisateur dans la room specifie  -> bool """
 
@@ -96,7 +96,7 @@ class Room():
 			return True
 		return False
 
-	@channelExists
+	@chanExists
 	def part(self, channelName, client):
 		"""Return Supprime un utilisateur d'une room  -> bool """
 
@@ -111,10 +111,10 @@ class Room():
 			return self.rooms[channelName]
 		return None
 
-	@channelExists
+	@chanExists
 	def forward(self, channelName, commande, client, appName):
 		"""Return : Envoie une commande a tous les utilisateurs d'un channel -> bool """
-
+		
 		if client.master or client == self.channel(channelName).get_master():
 			master = (client.master and client or self.channel(channelName).get_master())
 			list_users = self.list_users(channelName)
@@ -127,7 +127,7 @@ class Room():
 				return True
 		return False
 
-	@channelExists
+	@chanExists
 	def message(self, channelName, sender, users, message, appName):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
 
