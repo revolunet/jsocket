@@ -136,7 +136,7 @@ class TCPClient(object):
 			sys.exit(2)
 
 	def handle(self):
-		self.buffer = self.sock.recv(4096)
+		self.buffer = self.sock.recv(8096)
 		return self.buffer
 
 	def write(self, json):
@@ -255,9 +255,10 @@ def main():
 	for i in range(0, CONFIG.CLIENT_NUMBER):
 		print '[i] Launching client n%d' % i
 		if CONFIG.CLIENT_THREAD == True:
-			threadHTTP = threading.Thread(target=protocolTesting, args=([ i ]))
-			threadHTTP.start()
-			threads.append(threadHTTP)
+			threadProtocol = threading.Thread(target=protocolTesting, args=([ i ]))
+			threadProtocol.daemon = True
+			threadProtocol.start()
+			threads.append(threadProtocol)
 		else:
 			protocolTesting(i)
 	if len(threads) > 0:

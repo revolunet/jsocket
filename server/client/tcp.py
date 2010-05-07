@@ -11,10 +11,10 @@ class TwistedTCPClient(Protocol):
 			self.transport.write(json + "\n")
 
 	def connectionMade(self):
-		print "[+] New TCP Client !"
+		pass
 
 	def connectionLost(self, reason):
-		print "[+] Delete TCP Client"
+		self.transport.loseConnection()
 
 	@property
 	def socket(self):

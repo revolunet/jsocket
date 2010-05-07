@@ -325,7 +325,7 @@ class Protocol(object):
 					Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName())
 					json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
 					master.addResponse(json)
-			else:
+			elif channel is not None:
 				for user in channel.client_list:
 					if user.master != client:
 						status = client.status

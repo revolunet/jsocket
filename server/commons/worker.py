@@ -5,8 +5,6 @@
 import threading
 import Queue
 import time
-from commons.session import Session
-from commons.protocol import Protocol
 from jexception import JException
 
 class WorkerLog(threading.Thread):
@@ -20,6 +18,7 @@ class WorkerLog(threading.Thread):
 		""" Affichage des donnees via Log() """
 
 		from log.logger import Log
+
 		while True:
 			item = self.__queue.get()
 			Log().dprint(item[0], item[1])
@@ -28,10 +27,10 @@ class WorkerLog(threading.Thread):
 class WorkerParser(threading.Thread):
 	""" Gestion du traitement des commandes json """
 
-	def __init__(self, queue):
+	def __init__(self, queue, session, protocol):
 		self.queue = queue
-		self.session = Session()
-		self.protocol = Protocol()
+		self.session = session
+		self.protocol = protocol
 		threading.Thread.__init__(self)
 
 	def run(self):
