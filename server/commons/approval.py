@@ -9,7 +9,7 @@ from commons.protocol import Protocol
 class ApprovalProtocol(object):
 	def __init__(self):
 		self.commands = {
-			'refresh': self.default,
+			'refresh': lambda l:True,
 			'connected':  lambda l:True,
 			'auth':  self.default,
 			'create':  self.default,

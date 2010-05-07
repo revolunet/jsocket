@@ -2,6 +2,7 @@
 # room.py
 ##
 
+from commons.protocol import Protocol
 from commons.channel import Channel
 from config.settings import SETTINGS
 
@@ -120,7 +121,7 @@ class Room():
 				if len(list_users) >= 1:
 					for user in list_users:
 						if user.master == False:
-							json = Protocol.jsonForge('forward', '["' + master.getName() + '", "' + commande + '"]',
+							json = Protocol.forgeJSON('forward', '["' + master.getName() + '", "' + commande + '"]',
 													  {'channel': channelName, 'app': appName})
 							user.addResponse(json)
 					return True
@@ -135,14 +136,14 @@ class Room():
 				if len(users) > 0:
 					list_users = self.list_users(channelName)
 					if users[0] == 'master' and master:
-						json = Protocol.jsonForge('message', '["' + sender.getName() + '", "' + message + '"]',
+						json = Protocol.forgeJSON('message', '["' + sender.getName() + '", "' + message + '"]',
 												  {'channel': channelName, 'app': appName})
 						master.addResponse(json)
 						return True
 					elif users[0] == 'all':
 						if len(list_users) >= 1:
 							for user in list_users:
-								json = Protocol.jsonForge('message', '["' + sender.getName() + '", "' + message + '"]',
+								json = Protocol.forgeJSON('message', '["' + sender.getName() + '", "' + message + '"]',
 														  {'channel': channelName, 'app': appName})
 								user.addResponse(json)
 							return True
@@ -151,7 +152,7 @@ class Room():
 						if len(list_users) >= 1:
 							for user in list_users:
 								if user.getName() in users or user.unique_key in users:
-									json = Protocol.jsonForge('message', '["' + sender.getName() + '", "' + message + '"]',
+									json = Protocol.forgeJSON('message', '["' + sender.getName() + '", "' + message + '"]',
 															  {'channel': channelName, 'app': appName})
 									user.addResponse(json)
 							return True

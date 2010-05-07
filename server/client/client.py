@@ -35,6 +35,10 @@ class Client(object):
 	def addResponse(self, command):
 		"""Ajoute une commande reponse a la Queue en cours"""
 
+		from log.logger import Log
+
+		if command is not None:
+			Log().add('[JSON][Responses] ' + str(command), 'green')
 		self.last_action = time.time()
 		if command is not None:
 			self.response.append(command)
@@ -47,5 +51,6 @@ class Client(object):
 		self.last_action = time.time()
 		res = self.response
 		self.response = [ ]
-		Log().add('[JSON][Responses] ' + str(res), 'red')
+		if len(res) > 0:
+			Log().add('[JSON][Responses] ' + str(res), 'red')
 		return res
