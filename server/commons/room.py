@@ -5,6 +5,15 @@
 from commons.channel import Channel
 from config.settings import SETTINGS
 
+def channelExists(attrs):
+	def _channelExists(f):
+		def decorated(self, *args, **kwargs):
+			if self.rooms.get(channelName, False) <> False:
+				return f(self, *args, **kwargs)
+			return False
+		return decorated
+	return _channelExists
+
 class Room():
 	"""
 	Liste des channels disponnible sur le server.
@@ -18,8 +27,8 @@ class Room():
 		self.init_rooms()
 
 	def init_rooms(self):
-		self.rooms['irc'] = Channel('irc')
-		self.rooms['tcp'] = Channel('tcp')
+		for app in SETTINGS.STARTUP_APP:
+			self.rooms[app] = Channel(app)
 
 	def list_users(self, channelName = None):
 		"""Return : la liste de tous les utilisateurs du serveur -> list(Client) """
