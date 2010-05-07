@@ -16,7 +16,7 @@ class CONFIG(object):
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
 	CLIENT_NUMBER = 100
-	CLIENT_THREAD = True
+	CLIENT_THREAD = False
 	CLIENT_TYPE = 'HTTP'
 	#CLIENT_TYPE = 'TCP'
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
