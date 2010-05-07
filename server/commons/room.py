@@ -5,14 +5,12 @@
 from commons.channel import Channel
 from config.settings import SETTINGS
 
-def channelExists(attrs):
-	def _channelExists(f):
-		def decorated(self, *args, **kwargs):
-			if self.rooms.get(channelName, False) <> False:
-				return f(self, *args, **kwargs)
-			return False
-		return decorated
-	return _channelExists
+def channelExists(f):
+	def decorated(self, *args, **kargs):
+		if self.rooms.get(args[0], False) <> False:
+			return f(self, *args, **kwargs)
+		return False
+	return decorated
 
 class Room():
 	"""
@@ -42,6 +40,7 @@ class Room():
 				users = list(merge(users, self.rooms[room].list_users()))
 			return users
 
+	@channelExists
 	def create(self, args, master):
 		"""Return Ajoute un channel a la liste des rooms  -> bool"""
 
