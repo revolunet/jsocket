@@ -10,7 +10,15 @@ def chanExists(f):
 	def decorated(*args, **kwargs):
 		instance = args[0]
 		func_args = args[1]
-		if args[0].rooms.get(func_args[0], False) <> False:
+		from log.logger import Log
+
+		if type(func_args).__name__ == 'str':
+			channelName = func_args
+		elif type(func_args).__name__ == 'list':
+			channelName = func_args[0]
+		else:
+			channelName = 'unknown'
+		if args[0].rooms.get(channelName, False) <> False:
 			return f(*args, **kwargs)
 		return False
 	return decorated
@@ -114,7 +122,7 @@ class Room(object):
 	@chanExists
 	def forward(self, channelName, commande, client, appName):
 		"""Return : Envoie une commande a tous les utilisateurs d'un channel -> bool """
-		
+
 		if client.master or client == self.channel(channelName).get_master():
 			master = (client.master and client or self.channel(channelName).get_master())
 			list_users = self.list_users(channelName)
