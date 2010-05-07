@@ -15,7 +15,7 @@ def channelExists(f):
 		return False
 	return decorated
 
-class Room():
+class Room(object):
 	"""
 	Liste des channels disponnible sur le server.
 	"""
