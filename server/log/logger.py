@@ -35,8 +35,9 @@ class Log(object):
 			self.__logs.addHandler(handler)
 			self.__logfile = open(sys.path[0] + os.sep + 'log/logs_exception.log', 'w', 0)
 			self.__logTraceback()
-			self.__queue = Queue.Queue(SETTINGS.LOG_QUEUE_NB_THREAD)
-			WorkerLog(self.__queue).start()
+			self.__queue = Queue.Queue(SETTINGS.LOG_QUEUE_SIZE)
+			for i in range(0, SETTINGS.LOG_THREADING_SIZE):
+				WorkerLog(self.__queue).start()
 
 		def add(self, msg, color = 'white'):
 			""" Ajoute un element dans la queue """

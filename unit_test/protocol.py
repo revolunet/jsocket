@@ -15,10 +15,10 @@ class CONFIG(object):
 	IS_DEBUG = False
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
-	CLIENT_NUMBER = 10
-	CLIENT_THREAD = True
-	#CLIENT_TYPE = 'HTTP'
-	CLIENT_TYPE = 'TCP'
+	CLIENT_NUMBER = 10000
+	CLIENT_THREAD = False
+	CLIENT_TYPE = 'HTTP'
+	#CLIENT_TYPE = 'TCP'
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 	HTTP_SERVER_PORT = 81
@@ -256,6 +256,7 @@ def main():
 		print '[i] Launching client n%d' % i
 		if CONFIG.CLIENT_THREAD == True:
 			threadProtocol = threading.Thread(target=protocolTesting, args=([ i ]))
+			threadProtocol.daemon = True
 			threadProtocol.start()
 			threads.append(threadProtocol)
 		else:

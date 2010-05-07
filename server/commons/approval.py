@@ -1,9 +1,10 @@
 import simplejson
+import Queue
 from commons.worker import WorkerParser
 from commons.session import Session
 from log.logger import Log
 from config.settings import SETTINGS
-import Queue
+from commons.protocol import Protocol
 
 class ApprovalProtocol(object):
 	def __init__(self):
@@ -39,8 +40,11 @@ class Approval(object):
 	def __new__(this):
 		if this.instance is None:
 			this.instance = object.__new__(this)
-			this.queue = Queue.Queue(SETTINGS.WORKER_QUEUE_NB_THREAD)
-			WorkerParser(this.queue).start()
+			this.session = Session()
+			this.jsonProtocol = Protocol()
+			this.queue = Queue.Queue(SETTINGS.WORKER_QUEUE_SIZE)
+			for i in range(0, SETTINGS.WORKER_THREADING_SIZE):
+				WorkerParser(this.queue, this.session, this.jsonProtocol).start()
 			this.protocol = ApprovalProtocol()
 			this.callback = None
 		return this.instance

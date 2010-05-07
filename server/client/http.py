@@ -21,7 +21,7 @@ class ClientHTTP(resource.Resource):
 	def render_POST(self, request):
 		if request.args.get('json', None) is not None:
 			uid = Approval().validate(request.args['json'][0])
-			if '{"cmd": "connected", "args": "null"}' in request.args['json'][0]:
+			if '{"cmd": "connected", "args": "null"' in request.args['json'][0]:
 				return '{"from": "connected", "value": "%s"}' % uid
 			return self.getData(uid)
 		return '{"from": "error", "value": "No JSON key"}'
