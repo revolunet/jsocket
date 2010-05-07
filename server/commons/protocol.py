@@ -9,12 +9,32 @@ def isMaster(attrs):
 		return decorated
 	return _isMaster
 
+def jsonPrototype(attrs):
+	def _jsonPrototype(f):
+		def decorated(self, *args, **kwargs):
+			res = f(self, *args, **kwargs)
+			json = Protocol.forgeJSON(attrs, res, args[0])
+			return json
+		return decorated
+	return _jsonPrototype
+
 class Protocol(object):
 	"""docstring for Protocol"""
 	def __init__(self):
 		from log.logger import Log
 		self.client = None
 		self.__init_cmd()
+
+	@staticmethod
+	def forgeJSON(methodName, value, param):
+		json = '{"from": "' + methodName + '"'
+		json += ', "value": ' + value
+		if param.get('channel', None) is not None:
+			json += ', "channel": "' + param['channel'] + '"'
+		if param.get('app', None) is not None:
+			json += ', "app": "' + param['app'] + '"'
+		json += '}'
+		return json
 
 	def __init_cmd(self):
 		"""On initialise la liste des commandes disponnible"""
@@ -46,12 +66,14 @@ class Protocol(object):
 		return None
 
 	# {"cmd" : "connected", "args": "null"}
+	@jsonPrototype('connected')
 	def __cmd_connected(self, args = None):
 		"""Le client est connecte, sa cle unique lui est send"""
 
-		return ('{"from": "connected", "value": "' + str(self.client.unique_key) + '"}')
+		return ('"' + str(self.client.unique_key) + '"')
 
 	# {"cmd" : "auth", "args": "masterpassword", "channel": "", "app" : ""}
+	@jsonPrototype('auth')
 	def __cmd_auth(self, args):
 		"""
 		Authentifie un client en tant que master du server.
@@ -62,10 +84,11 @@ class Protocol(object):
 		if args['args'] == self.client.master_password:
 			self.client.master = True
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du serveur")
-			return ('{"from": "auth", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
-		return ('{"from": "auth", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('true')
+		return ('false')
 
 	# {"cmd": "list", "args": "channelName", "channel": "", "app" : ""}
+	@jsonPrototype('list')
 	def __cmd_list(self, args):
 		""" Retourne la liste d'utilisateurs d'un channel """
 
@@ -80,7 +103,7 @@ class Protocol(object):
 			name = user.getName()
 			to_send = {"name": name, "key": key, "status": status}
 			str.append(to_send)
-		return ('{"from": "list", "value": ' + simplejson.JSONEncoder().encode(str) + ', "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+		return (simplejson.JSONEncoder().encode(str))
 
 	# flash-player send <policy-file-request/>
 	def __cmd_policy(self):
@@ -95,6 +118,7 @@ class Protocol(object):
 
 	# {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
 	@isMaster('remove')
+	@jsonPrototype('remove')
 	def __cmd_remove(self, args):
 		"""On supprimet un channel, si celui si existe et que Client est Master"""
 
@@ -102,13 +126,14 @@ class Protocol(object):
 
 		if self.client.room.remove(args['args']):
 			Log().add("[+] Le channel " + args['args'] + " a ete supprime par : " + str(self.client.getName()))
-			return ('{"from": "remove", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('true')
 		else:
 			Log().add("[!] Command error : la commande delete a echoue ( le channel " + args['args'] + " n'existe pas )", 'yellow')
-			return ('{"from": "remove", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('false')
 
 	# {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
 	@isMaster('create')
+	@jsonPrototype('create')
 	def __cmd_create(self, args):
 		"""Creation d'un nouveau channel si le Client est Master"""
 
@@ -116,12 +141,13 @@ class Protocol(object):
 
 		if self.client.room.create(args['args'], self.client):
 			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.getName()))
-			return ('{"from": "create", "value": "'+str(self.client.room.channel(args['args'][0]).masterPwd)+'", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('"' + str(self.client.room.channel(args['args'][0]).masterPwd) + '"')
 		else:
 			Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
-			return ('{"from": "create", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('false')
 
 	# {"cmd": "join", "args": ["irc", ""]}
+	@jsonPrototype('join')
 	def __cmd_join(self, args):
 		"""Ajoute un client dans le salon specifie"""
 
@@ -134,12 +160,13 @@ class Protocol(object):
 				self.status(self.client)
 			else:
 				self.status(self.client, True)
-			return ('{"from": "join", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('true')
 		else:
 			Log().add("[!] Command error : le channel " + args['args'][0] + " n'existe pas ", 'yellow')
-			return ('{"from": "join", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('false')
 
 	# {"cmd": "part", "args": "irc"}
+	@jsonPrototype('part')
 	def __cmd_part(self, args):
 		"""Supprime un client du salon specifie"""
 
@@ -151,12 +178,13 @@ class Protocol(object):
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + args['args'])
 			if self.client.master == False:
 				self.status(self.client)
-			return ('{"from": "part", "value": true, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
+			return ('true')
 		else:
 			Log().add("[!] Command error : l'utilisateur n'est pas dans le channel : " + args['args'])
-			return ('{"from": "part", "value": false, "channel": "'+args['args']+'", "app": "'+args['app']+'"}')
+			return ('false')
 
 	# {"cmd": "chanAuth", "args": "passphrase", "channel": "channelName", "app" : ""}
+	@jsonPrototype('chanAuth')
 	def __cmd_chanAuth(self, args):
 		"""Auth pour definir si le Client est desormais master ou non d'une application"""
 
@@ -164,12 +192,13 @@ class Protocol(object):
 
 		if self.client.room.chanAuth(args['channel'], args['args'], self.client):
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du channel : " + args['channel'])
-			return ('{"from": "chanAuth", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('true')
 		else:
-			return ('{"from": "chanAuth", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('false')
 
 	# {"cmd": "forward", "args": "message", "channel": "channelName", "app" : ""}
 	@isMaster('forward')
+	@jsonPrototype('forward')
 	def __cmd_forward(self, args):
 		"""Envoie une commande a tous les clients presents dans le channel"""
 
@@ -177,21 +206,22 @@ class Protocol(object):
 
 		if args['channel'] and args['app'] and self.client.room.forward(args['channel'], args['args'], self.client, args['app']):
 			Log().add("[+] La commande : "+ args['args'] + " a ete envoye a tous les utilisateurs du channel : " + str(args['channel']))
-			return ('{"from": "forward", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('true')
 		else:
 			if self.client.room_name is None:
 				Log().add("[!] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
 			else:
 				Log().add("[!] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
-			return ('{"from": "forward", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('false')
 
 	# {"cmd": "message", "args": ['mon message', ['*']], "channel": "channelName", "app" : "" }
+	@jsonPrototype('message')
 	def __cmd_message(self, args):
 		"""Envoie un message a une liste d'utilisateurs"""
 
 		message = args['args']
 		if len(message) == 0:
-			return ('{"from": "message", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('false')
 		else:
 			ret = False
 			if len(message[0]) != 0:
@@ -207,11 +237,12 @@ class Protocol(object):
 				else:
 					ret = self.client.room.message(args['channel'], self.client, ['master'], message[0], args['app'])
 			if ret:
-				return ('{"from": "message", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+				return ('true')
 			else:
-				return ('{"from": "message", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+				return ('false')
 
 	# {"cmd": "nick", "args": "nickName", "app": "appName"}
+	@jsonPrototype('nick')
 	def __cmd_nick(self, args):
 		"""Permet au client de change de pseudo"""
 
@@ -219,18 +250,20 @@ class Protocol(object):
 
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son nickname en : " + args['args'])
 		self.client.nickName = args['args']
-		return ('{"from": "nick", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+		return ('true')
 
 	# {"cmd": "getStatus", "args": "null"}
+	@jsonPrototype('getStatus')
 	def __cmd_getStatus(self, args):
 		"""Retourne le status de l'utilisateur"""
 
 		from log.logger import Log
 
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande son status")
-		return ('{"from": "getStatus", "value": "' + self.client.status + '", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+		return ('"' + self.client.status + '"')
 
 	# {"cmd": "setStatus", "args": "newStatus"}
+	@jsonPrototype('setStatus')
 	def __cmd_setStatus(self, args):
 		"""Change le status de l'utilisateur"""
 
@@ -238,18 +271,20 @@ class Protocol(object):
 
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args))
 		self.client.status = args['args']
-		return ('{"from": "setStatus", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+		return ('true')
 
 	# {"cmd": "timeConnect", "args": "null"}
+	@jsonPrototype('timeConnect')
 	def __cmd_timeConnect(self, args):
 		"""Retourne l'heure a laquelle c'est connecte le client"""
 
 		from log.logger import Log
 
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande l'heure de connection")
-		return ('{"from": "timeConnect", "value": "' + str(self.client.connection_time) + '", "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+		return ('"' + str(self.client.connection_time) + '"')
 
 	# {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "channel": "channelName", "app" : ""}
+	@jsonPrototype('chanMasterPwd')
 	def __cmd_chanMasterPwd(self, args):
 		"""Change le mot de passe master d'un channel"""
 
@@ -257,7 +292,7 @@ class Protocol(object):
 
 		if self.client.master and self.client.room.changeChanMasterPwd(args, args['channel']):
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a changer le mot de passe master du channel : " + args['app'])
-			return ('{"from": "chanMasterPwd", "value": true, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('true')
 		else:
 			if self.client.master == False:
 				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
@@ -265,7 +300,7 @@ class Protocol(object):
 				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
 			else:
 				Log().add("[!] Command error : la commande chanMasterPwd a echoue", 'yellow')
-			return ('{"from": "chanMasterPwd", "value": false, "channel": "'+args['channel']+'", "app": "'+args['app']+'"}')
+			return ('false')
 
 	def status(self, client, master = False):
 		"""
@@ -288,7 +323,8 @@ class Protocol(object):
 					name = client.getName()
 					to_send = {"name": name, "key": key, "status": status}
 					Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName())
-					master.addResponse('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+channel+'"}')
+					json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
+					master.addResponse(json)
 			else:
 				for user in channel.client_list:
 					if user.master != client:
@@ -297,4 +333,5 @@ class Protocol(object):
 						name = client.getName()
 						to_send = {"name": name, "key": key, "status": status}
 						Log().add("[+] Client : envoie du status master vers l'utilisateur : " + name)
-						user.addResponse('{"from": "status", "value": '+ simplejson.JSONEncoder().encode(to_send) +', "channel": "'+client.room_name+'"}')
+						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': client.room_name})
+						user.addResponse(json)

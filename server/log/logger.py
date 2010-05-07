@@ -56,7 +56,7 @@ class Log(object):
 					print msgTime + self.get_color(color).replace('$msg$', msg)
 				else:
 					print msgTime + msg
-			self.__logs.debug(msgTime + msg)
+			self.__logs.debug(msg)
 
 		def __logTraceback(self):
 			""" Redirige la sortie d'erreurs vers un fichier """

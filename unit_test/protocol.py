@@ -12,7 +12,7 @@ import urllib2
 #  meme si ces responses sont concatenees a d'autre (comme status avec join parfois)
 
 class CONFIG(object):
-	IS_DEBUG = True
+	IS_DEBUG = False
 	SERVER_PORT = 9999
 	#SERVER_PORT = 8080
 	CLIENT_NUMBER = 100
