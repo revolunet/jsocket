@@ -111,7 +111,9 @@ class Room():
 				if len(list_users) >= 1:
 					for user in list_users:
 						if user.master == False:
-							user.addResponse('{"from": "forward", "value": ["' + master.getName() + '", "' + commande + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+							json = Protocol.jsonForge('forward', '["' + master.getName() + '", "' + commande + '"]',
+													  {'channel': channelName, 'app': appName})
+							user.addResponse(json)
 					return True
 		return False
 
@@ -124,19 +126,25 @@ class Room():
 				if len(users) > 0:
 					list_users = self.list_users(channelName)
 					if users[0] == 'master' and master:
-						master.addResponse('{"from": "message", "value": ["' + sender.getName() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+						json = Protocol.jsonForge('message', '["' + sender.getName() + '", "' + message + '"]',
+												  {'channel': channelName, 'app': appName})
+						master.addResponse(json)
 						return True
 					elif users[0] == 'all':
 						if len(list_users) >= 1:
 							for user in list_users:
-								user.addResponse('{"from": "message", "value": ["' + sender.getName() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+								json = Protocol.jsonForge('message', '["' + sender.getName() + '", "' + message + '"]',
+														  {'channel': channelName, 'app': appName})
+								user.addResponse(json)
 							return True
 						return False
 					else:
 						if len(list_users) >= 1:
 							for user in list_users:
 								if user.getName() in users or user.unique_key in users:
-									user.addResponse('{"from": "message", "value": ["' + sender.getName() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+									json = Protocol.jsonForge('message', '["' + sender.getName() + '", "' + message + '"]',
+															  {'channel': channelName, 'app': appName})
+									user.addResponse(json)
 							return True
 						return False
 		return False

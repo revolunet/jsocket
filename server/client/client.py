@@ -42,7 +42,10 @@ class Client(object):
 	def getResponse(self):
 		"""Retourne les commandes en attente d'envoie"""
 
+		from log.logger import Log
+
 		self.last_action = time.time()
 		res = self.response
 		self.response = [ ]
+		Log().add('[JSON][Responses] ' + str(res), 'red')
 		return res
