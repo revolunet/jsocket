@@ -8,7 +8,7 @@ class TwistedTCPClient(Protocol):
 
 	def dataSend(self, responses):
 		for json in responses:
-			self.transport.write(json + "\n")
+			self.transport.write(str(json) + "\n")
 
 	def connectionMade(self):
 		pass
