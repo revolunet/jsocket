@@ -2,4 +2,6 @@ The :mod:`Protocol` class
 -------------------------
 
 .. automodule:: commons.protocol
-    :members:
+
+    .. autoclass:: Protocol
+	    :members:

@@ -35,10 +35,18 @@ function getJsocketDomain()
 	return (false);
 }
 
+jsocket = {
+	api : null,
+	core : {
+		http : null,
+		tcp : null
+	}
+};
+
 create('div', 'flashcontent');
 create('div', 'jsocketBridgeOutput');
 includeScript('lib/json-pack.js');
-includeScript('core/jsocketCoreTCP.js');
-includeScript('core/jsocketCoreHTTP.js');
-includeScript('core/jsocketApi.js');
-includeScript('core/jsocketFlash.js');
+includeScript('core/tcp.js');
+includeScript('core/http.js');
+includeScript('api.js');
+includeScript('flash.js');
