@@ -5,9 +5,18 @@ from commons.approval import Approval
 from commons.session import Session
 
 class ClientHTTP(resource.Resource):
+	"""
+	Classe HTTP utilisee par twisted
+	"""
+
 	isLeaf = True
 
 	def getData(self, uid):
+		"""
+		Recupere les reponses en suspend de l'utilisateur via son UID et
+		les revoie separees par des \n
+		"""
+
 		client = Session().get(uid)
 		if client is None:
 			return ''
@@ -19,6 +28,10 @@ class ClientHTTP(resource.Resource):
 		return json
 
 	def render_POST(self, request):
+		"""
+		Traite les informations envoye par POST.
+		Necessite la cle json.
+		"""
 		if request.args.get('json', None) is not None:
 			uid = Approval().validate(request.args['json'][0])
 			if '{"cmd": "connected", "args": "null"' in request.args['json'][0]:

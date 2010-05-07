@@ -7,6 +7,10 @@ from config.settings import SETTINGS
 from commons.protocol import Protocol
 
 class ApprovalProtocol(object):
+	"""
+	Classe permettant de valider les commandes JSON envoyee par le client
+	"""
+
 	def __init__(self):
 		self.commands = {
 			'refresh': lambda l:True,
@@ -28,12 +32,16 @@ class ApprovalProtocol(object):
 		}
 
 	def default(self, json):
+		""" Retourne True si la commande json comprend toute les keys obligatoires """
 		return  json.get('args', None) is not None and \
 				json.get('uid', None) is not None and \
 				json.get('channel', None) is not None and \
 				json.get('app', None) is not None
 
 class Approval(object):
+	"""
+	Classe permettant de faire valider les commandes json ainsi que de recuperer les reponses
+	"""
 
 	instance = None
 
@@ -50,6 +58,7 @@ class Approval(object):
 		return this.instance
 
 	def validate(self, datas, callback = None):
+		""" Valide la/les commande(s) json envoyees """
 		if len(datas) == 0:
 			pass
 
@@ -75,6 +84,7 @@ class Approval(object):
 		return None
 
 	def validate_protocol(self, decoded):
+		""" Valide la commande via l':func:`ApprovalProtocol` """
 		if decoded.get('cmd', None) is not None and self.protocol.commands.get(decoded['cmd'], None) is not None:
 			return self.protocol.commands[decoded.get('cmd')](decoded)
 		return False

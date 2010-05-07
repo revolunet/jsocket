@@ -10,6 +10,10 @@ from config.settings import SETTINGS
 from commons.session import Session
 
 class WatchDog(threading.Thread):
+	"""
+	Classe permettant de nettoyer les clients inactifs.
+	"""
+
 	def __init__(self):
 		self.lock = Lock()
 		Log().add("[+] WatchDog: launched", 'green')

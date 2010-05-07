@@ -4,7 +4,7 @@
 ##
 
 
-class Channel():
+class Channel(object):
 	"""
 	Stock les informations relative aux clients presents dans des salons.
 	"""

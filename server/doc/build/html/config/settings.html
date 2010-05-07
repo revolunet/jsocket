@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Settings class &mdash; jsocket v0.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="jsocket v0.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Config" href="../config.html" />
+    <link rel="next" title="Log" href="../log.html" />
+    <link rel="prev" title="Config" href="../config.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="../log.html" title="Log"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../config.html" title="Config"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">jsocket v0.2.2 documentation</a> &raquo;</li>
+          <li><a href="../config.html" accesskey="U">Config</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-config.settings">
+<h1>The <tt class="xref docutils literal"><span class="pre">Settings</span></tt> class<a class="headerlink" href="#module-config.settings" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="config.settings.SETTINGS">
+<em class="property">
+class </em><tt class="descclassname">config.settings.</tt><tt class="descname">SETTINGS</tt><a class="headerlink" href="#config.settings.SETTINGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Settings du / des servers</p>
+<blockquote>
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.IS_DEBUG">
+<tt class="descname">IS_DEBUG</tt><a class="headerlink" href="#config.settings.SETTINGS.IS_DEBUG" title="Permalink to this definition">¶</a></dt>
+<dd><p>bool(x) -&gt; bool</p>
+<p>Returns True when the argument x is true, False otherwise.
+The builtins True and False are the only two instances of the class bool.
+The class bool is a subclass of the class int, and cannot be subclassed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.SERVER_PORT">
+<tt class="descname">SERVER_PORT</tt><a class="headerlink" href="#config.settings.SETTINGS.SERVER_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.SERVER_HTTP_PORT">
+<tt class="descname">SERVER_HTTP_PORT</tt><a class="headerlink" href="#config.settings.SETTINGS.SERVER_HTTP_PORT" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.SERVER_HOST">
+<tt class="descname">SERVER_HOST</tt><a class="headerlink" href="#config.settings.SETTINGS.SERVER_HOST" title="Permalink to this definition">¶</a></dt>
+<dd><p>str(object) -&gt; string</p>
+<p>Return a nice string representation of the object.
+If the argument is a string, the return value is the same object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.CHANNEL_MAX_USERS">
+<tt class="descname">CHANNEL_MAX_USERS</tt><a class="headerlink" href="#config.settings.SETTINGS.CHANNEL_MAX_USERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.MASTER_PASSWORD">
+<tt class="descname">MASTER_PASSWORD</tt><a class="headerlink" href="#config.settings.SETTINGS.MASTER_PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd><p>str(object) -&gt; string</p>
+<p>Return a nice string representation of the object.
+If the argument is a string, the return value is the same object.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.LOG_QUEUE_SIZE">
+<tt class="descname">LOG_QUEUE_SIZE</tt><a class="headerlink" href="#config.settings.SETTINGS.LOG_QUEUE_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.WORKER_QUEUE_SIZE">
+<tt class="descname">WORKER_QUEUE_SIZE</tt><a class="headerlink" href="#config.settings.SETTINGS.WORKER_QUEUE_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.WATCHDOG_SLEEP_TIME">
+<tt class="descname">WATCHDOG_SLEEP_TIME</tt><a class="headerlink" href="#config.settings.SETTINGS.WATCHDOG_SLEEP_TIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.WATCHDOG_MAX_IDLE_TIME">
+<tt class="descname">WATCHDOG_MAX_IDLE_TIME</tt><a class="headerlink" href="#config.settings.SETTINGS.WATCHDOG_MAX_IDLE_TIME" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.LOG_FILE_MAX_SIZE">
+<tt class="descname">LOG_FILE_MAX_SIZE</tt><a class="headerlink" href="#config.settings.SETTINGS.LOG_FILE_MAX_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.LOG_BACKUP_COUNT">
+<tt class="descname">LOG_BACKUP_COUNT</tt><a class="headerlink" href="#config.settings.SETTINGS.LOG_BACKUP_COUNT" title="Permalink to this definition">¶</a></dt>
+<dd><p>int(x[, base]) -&gt; integer</p>
+<p>Convert a string or number to an integer, if possible.  A floating point
+argument will be truncated towards zero (this does not include a string
+representation of a floating point number!)  When converting a string, use
+the optional base.  It is an error to supply a base when converting a
+non-string.  If base is zero, the proper base is guessed based on the
+string content.  If the argument is outside the integer range a
+long object will be returned instead.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="config.settings.SETTINGS.STARTUP_APP">
+<tt class="descname">STARTUP_APP</tt><a class="headerlink" href="#config.settings.SETTINGS.STARTUP_APP" title="Permalink to this definition">¶</a></dt>
+<dd>list() -&gt; new list
+list(sequence) -&gt; new list initialized from sequence&#8217;s items</dd></dl>
+
+</blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="../config.html"
+                                  title="previous chapter">Config</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../log.html"
+                                  title="next chapter">Log</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/config/settings.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../log.html" title="Log"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../config.html" title="Config"
+             >previous</a> |</li>
+        <li><a href="../index.html">jsocket v0.2.2 documentation</a> &raquo;</li>
+          <li><a href="../config.html" >Config</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Revolunet.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

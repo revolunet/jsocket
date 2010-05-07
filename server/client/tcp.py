@@ -3,17 +3,25 @@ from zope.interface import implements
 from commons.approval import Approval
 
 class TwistedTCPClient(Protocol):
+	"""
+	Classe TCP utilisee par twisted.
+	"""
+
 	def dataReceived(self, data):
+		""" Methode appelee lorsque l'utilisateur recoit des donnees """
 		Approval().validate(data, self.dataSend)
 
 	def dataSend(self, responses):
+		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
 		for json in responses:
 			self.transport.write(str(json) + "\n")
 
 	def connectionMade(self):
+		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """
 		pass
 
 	def connectionLost(self, reason):
+		""" Methode appelee lorsqu'un utilisateur se deconnecte """
 		self.transport.loseConnection()
 
 	@property
