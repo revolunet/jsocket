@@ -7,28 +7,37 @@ import sys
 import logging
 import threading
 import Queue
-from commons.worker import Worker
+from logging.handlers import RotatingFileHandler
+from time import gmtime, strftime
+from commons.worker import WorkerLog
 from config.settings import SETTINGS
 
 class Log(object):
-	"""
+ 	"""
 	Logger, enregistre les actions effectue sur le server dans des fichiers de logs et print les message.
 	"""
-	
+
 	class __Log:
-		def __init__(self, nb_thread = 0):
+		def __init__(self):
 			""" Creation du fichier de log et initialisation du Queue worker """
 
 			import os.path
 			if os.path.exists(sys.path[0] + os.sep + 'log') != 1:
 				os.mkdir(sys.path[0] + os.sep + 'log')
-			logging.basicConfig(filename=sys.path[0] + os.sep + 'log/logs.log', format="%(asctime)s - %(message)s")
+			self.__logFilename = sys.path[0] + os.sep + 'log/logs.log'
+			logging.basicConfig(filename=self.__logFilename, format="%(asctime)s - %(message)s")
 			self.__logs = logging.getLogger("server")
 			self.__logs.setLevel(logging.DEBUG)
+			handler = logging.handlers.RotatingFileHandler(self.__logFilename, maxBytes=SETTINGS.LOG_FILE_MAX_SIZE,
+														   backupCount=SETTINGS.LOG_BACKUP_COUNT)
+			format = logging.Formatter('%(asctime)s %(message)s')
+			handler.setFormatter(format)
+			self.__logs.addHandler(handler)
 			self.__logfile = open(sys.path[0] + os.sep + 'log/logs_exception.log', 'w', 0)
 			self.__logTraceback()
-			self.__queue = Queue.Queue(nb_thread)
-			Worker(self.__queue, 'log').start()
+			self.__queue = Queue.Queue(SETTINGS.LOG_QUEUE_SIZE)
+			for i in range(0, SETTINGS.LOG_THREADING_SIZE):
+				WorkerLog(self.__queue).start()
 
 		def add(self, msg, color = 'white'):
 			""" Ajoute un element dans la queue """
@@ -49,11 +58,12 @@ class Log(object):
 		def dprint(self, msg, color = 'white'):
 			""" Affiche un message sur le sortie standard et le log dans un fichier """
 
+			msgTime = '[%s]' % strftime('%d-%m-%Y %H:%M:%S', gmtime())
 			if SETTINGS.IS_DEBUG:
-				#if 'nt' not in os.name:
-				#	print self.get_color(color).replace('$msg$', msg)
-				#else:
-				print msg
+				if 'nt' not in os.name:
+					print msgTime + self.get_color(color).replace('$msg$', msg)
+				else:
+					print msgTime + msg
 			self.__logs.debug(msg)
 
 		def __logTraceback(self):
@@ -63,7 +73,7 @@ class Log(object):
 				sys.stderr = self.__logfile
 			except Exception:
 				self.add("[!] Could not redirect errors: " + str(Exception), 'ired')
-		
+
 	instance = None
 
 	def __new__(c):

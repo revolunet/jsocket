@@ -2,27 +2,46 @@
 # room.py
 ##
 
+from commons.protocol import Protocol
 from commons.channel import Channel
-from log.logger import Log
 from config.settings import SETTINGS
 
-class Room():
+def chanExists(f):
+	def decorated(*args, **kwargs):
+		instance = args[0]
+		func_args = args[1]
+		from log.logger import Log
+
+		if type(func_args).__name__ == 'str':
+			channelName = func_args
+		elif type(func_args).__name__ == 'list':
+			channelName = func_args[0]
+		else:
+			channelName = 'unknown'
+		if args[0].rooms.get(channelName, False) <> False:
+			return f(*args, **kwargs)
+		return False
+	return decorated
+
+class Room(object):
 	"""
 	Liste des channels disponnible sur le server.
 	"""
-	
+
 	def __init__(self):
-		self.rooms = {}
+		from log.logger import Log
+
+		self.rooms = { }
 		self.count_users = 0
 		self.init_rooms()
-		
+
 	def init_rooms(self):
-		self.rooms['irc'] = Channel('irc')
-		self.rooms['tcp'] = Channel('tcp')
-	
+		for app in SETTINGS.STARTUP_APP:
+			self.rooms[app] = Channel(app)
+
 	def list_users(self, channelName = None):
 		"""Return : la liste de tous les utilisateurs du serveur -> list(Client) """
-		
+
 		if channelName and self.channelExists(channelName):
 			return self.rooms[channelName].list_users()
 		else:
@@ -31,10 +50,10 @@ class Room():
 			for room in self.rooms:
 				users = list(merge(users, self.rooms[room].list_users()))
 			return users
-	
+
 	def create(self, args, master):
 		"""Return Ajoute un channel a la liste des rooms  -> bool"""
-		
+
 		if self.channelExists(args[0]) == False:
 			import random
 			self.rooms[args[0]] = Channel(args[0])
@@ -44,20 +63,20 @@ class Room():
 				self.rooms[args[0]].channelPwd = args[1]
 			return True
 		return False
-		
+
 	def remove(self, channelName):
 		"""Return : Supprime un channel de la liste des rooms -> bool """
-		
+
 		if self.channelExists(channelName):
 			self.rooms.pop(channelName)
 			return True
 		return False
-		
+
 	def canJoin(self, channelName, client):
 		"""
 		Return: Dzfinie une limite de connection sur les channels ->  bool
 		"""
-		
+
 		if SETTINGS.CHANNEL_MAX_USERS == 0 or client.master:
 			return True
 		channel = self.rooms[channelName]
@@ -68,11 +87,12 @@ class Room():
 		if users == 0:
 			return True
 		return users <= SETTINGS.CHANNEL_MAX_USERS - 1
-		
+
+	@chanExists
 	def join(self, args, client):
 		"""Return Ajoute un utilisateur dans la room specifie  -> bool """
-		
-		if self.channelExists(args[0]) and self.canJoin(args[0], client):
+
+		if self.canJoin(args[0], client):
 			if self.rooms[args[0]].isProtected() and len(args) > 1:
 				if self.rooms[args[0]].channelPwd == args[1] or client.master == True:
 					self.rooms[args[0]].add(client)
@@ -83,73 +103,80 @@ class Room():
 			self.count_users = self.count_users + 1
 			return True
 		return False
-		
+
+	@chanExists
 	def part(self, channelName, client):
 		"""Return Supprime un utilisateur d'une room  -> bool """
-			
-		if self.channelExists(channelName):
-			self.rooms[channelName].delete(client)
-			self.count_users = self.count_users - 1
-			return True
-		return False
-		
+
+		self.rooms[channelName].delete(client)
+		self.count_users = self.count_users - 1
+		return True
+
 	def channel(self, channelName):
 		"""Return : le Channel specifie -> Channel """
-		
+
 		if self.channelExists(channelName):
 			return self.rooms[channelName]
 		return None
-	
+
+	@chanExists
 	def forward(self, channelName, commande, client, appName):
 		"""Return : Envoie une commande a tous les utilisateurs d'un channel -> bool """
-		
-		if self.channelExists(channelName):
-			if client.master or client == self.channel(channelName).get_master():
-				master = (client.master and client or self.channel(channelName).get_master())
-				list_users = self.list_users(channelName)
-				if len(list_users) >= 1:
-					for user in list_users:
-						if user.master == False:
-							user.queue_cmd('{"from": "forward", "value": ["' + master.get_name() + '", "' + commande + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
-					return True
+
+		if client.master or client == self.channel(channelName).get_master():
+			master = (client.master and client or self.channel(channelName).get_master())
+			list_users = self.list_users(channelName)
+			if len(list_users) >= 1:
+				for user in list_users:
+					if user.master == False:
+						json = Protocol.forgeJSON('forward', '["' + master.getName() + '", "' + commande + '"]',
+												  {'channel': channelName, 'app': appName})
+						user.addResponse(json)
+				return True
 		return False
-		
+
+	@chanExists
 	def message(self, channelName, sender, users, message, appName):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
 
-		if self.channelExists(channelName):
-			if sender in self.channel(channelName).list_users():
-				master = self.channel(channelName).get_master()
-				if len(users) > 0:
-					list_users = self.list_users(channelName)
-					if users[0] == 'master' and master:
-						master.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
+		if sender in self.channel(channelName).list_users():
+			master = self.channel(channelName).get_master()
+			if len(users) > 0:
+				list_users = self.list_users(channelName)
+				if users[0] == 'master' and master:
+					json = Protocol.forgeJSON('message', '["' + sender.getName() + '", "' + message + '"]',
+											  {'channel': channelName, 'app': appName})
+					master.addResponse(json)
+					return True
+				elif users[0] == 'all':
+					if len(list_users) >= 1:
+						for user in list_users:
+							json = Protocol.forgeJSON('message', '["' + sender.getName() + '", "' + message + '"]',
+													  {'channel': channelName, 'app': appName})
+							user.addResponse(json)
 						return True
-					elif users[0] == 'all':
-						if len(list_users) >= 1:
-							for user in list_users:
-								user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
-							return True
-						return False
-					else:
-						if len(list_users) >= 1:
-							for user in list_users:
-								if user.get_name() in users or user.unique_key in users:
-									user.queue_cmd('{"from": "message", "value": ["' + sender.get_name() + '", "' + message + '"], "channel" : "' + channelName + '", "app" : "' + appName + '"}')
-							return True
-						return False
+					return False
+				else:
+					if len(list_users) >= 1:
+						for user in list_users:
+							if user.getName() in users or user.unique_key in users:
+								json = Protocol.forgeJSON('message', '["' + sender.getName() + '", "' + message + '"]',
+														  {'channel': channelName, 'app': appName})
+								user.addResponse(json)
+						return True
+					return False
 		return False
-	
+
 	def chanAuth(self, appName, adminPwd, client):
 		"""Return : Auth un utilisateur sur un channel -> bool """
-		
+
 		if self.channelExists(appName):
 			return self.channel(appName).auth(adminPwd, client)
 		return False
-		
+
 	def changeChanMasterPwd(self, adminPwd, appName):
 		"""Return : change le mot de passe admin d'un channel -> bool """
-		
+
 		if self.channelExists(appName):
 			self.channel(appName).masterPwd = adminPwd
 			return True
@@ -157,10 +184,12 @@ class Room():
 
 	def total_users(self):
 		"""Return : le nombre d'utilisateurs connectes -> int """
-		
+
 		return self.count_users
-		
+
 	def channelExists(self, channelName):
 		"""Return : si le channel existe ou non -> bool """
-		
-		return channelName in self.rooms
+
+		if self.rooms.get(channelName, False) == False:
+			return False
+		return True

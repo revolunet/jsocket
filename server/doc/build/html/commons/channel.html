@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Channel class &mdash; jsocket v0.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="jsocket v0.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Commons" href="../commons.html" />
+    <link rel="next" title="The Protocol class" href="protocol.html" />
+    <link rel="prev" title="The Approval classes" href="approval.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="protocol.html" title="The Protocol class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="approval.html" title="The Approval classes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">jsocket v0.2.2 documentation</a> &raquo;</li>
+          <li><a href="../commons.html" accesskey="U">Commons</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-commons.channel">
+<h1>The <tt class="xref docutils literal"><span class="pre">Channel</span></tt> class<a class="headerlink" href="#module-commons.channel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="commons.channel.Channel">
+<em class="property">
+class </em><tt class="descclassname">commons.channel.</tt><tt class="descname">Channel</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#commons.channel.Channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stock les informations relative aux clients presents dans des salons.</p>
+<dl class="method">
+<dt id="commons.channel.Channel.add">
+<tt class="descname">add</tt><big>(</big><em>client</em><big>)</big><a class="headerlink" href="#commons.channel.Channel.add" title="Permalink to this definition">¶</a></dt>
+<dd>Ajoute un client dans la room specifie</dd></dl>
+
+<dl class="method">
+<dt id="commons.channel.Channel.auth">
+<tt class="descname">auth</tt><big>(</big><em>masterPwd</em>, <em>client</em><big>)</big><a class="headerlink" href="#commons.channel.Channel.auth" title="Permalink to this definition">¶</a></dt>
+<dd>Return: Authentifie un client en tant que master du channel -&gt; bool</dd></dl>
+
+<dl class="method">
+<dt id="commons.channel.Channel.delete">
+<tt class="descname">delete</tt><big>(</big><em>client</em><big>)</big><a class="headerlink" href="#commons.channel.Channel.delete" title="Permalink to this definition">¶</a></dt>
+<dd>Supprime un client de la room specifie</dd></dl>
+
+<dl class="method">
+<dt id="commons.channel.Channel.get_master">
+<tt class="descname">get_master</tt><big>(</big><big>)</big><a class="headerlink" href="#commons.channel.Channel.get_master" title="Permalink to this definition">¶</a></dt>
+<dd>Retourne le user master du channel -&gt; iClient</dd></dl>
+
+<dl class="method">
+<dt id="commons.channel.Channel.isProtected">
+<tt class="descname">isProtected</tt><big>(</big><big>)</big><a class="headerlink" href="#commons.channel.Channel.isProtected" title="Permalink to this definition">¶</a></dt>
+<dd>Return: Si le channel est protege ou non -&gt; bool.</dd></dl>
+
+<dl class="method">
+<dt id="commons.channel.Channel.list_users">
+<tt class="descname">list_users</tt><big>(</big><big>)</big><a class="headerlink" href="#commons.channel.Channel.list_users" title="Permalink to this definition">¶</a></dt>
+<dd>Return : La liste des utilisateurs de la room : -&gt; list(iClient)</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="approval.html"
+                                  title="previous chapter">The <tt class="docutils literal docutils literal docutils literal"><span class="pre">Approval</span></tt> classes</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="protocol.html"
+                                  title="next chapter">The <tt class="docutils literal"><span class="pre">Protocol</span></tt> class</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/commons/channel.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="protocol.html" title="The Protocol class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="approval.html" title="The Approval classes"
+             >previous</a> |</li>
+        <li><a href="../index.html">jsocket v0.2.2 documentation</a> &raquo;</li>
+          <li><a href="../commons.html" >Commons</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Revolunet.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Room class &mdash; jsocket v0.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="jsocket v0.2.2 documentation" href="../index.html" />
+    <link rel="up" title="Commons" href="../commons.html" />
+    <link rel="next" title="The Session class" href="session.html" />
+    <link rel="prev" title="The Protocol class" href="protocol.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="session.html" title="The Session class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="protocol.html" title="The Protocol class"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">jsocket v0.2.2 documentation</a> &raquo;</li>
+          <li><a href="../commons.html" accesskey="U">Commons</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-commons.room">
+<h1>The <tt class="xref docutils literal"><span class="pre">Room</span></tt> class<a class="headerlink" href="#module-commons.room" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="commons.room.Room">
+<em class="property">
+class </em><tt class="descclassname">commons.room.</tt><tt class="descname">Room</tt><a class="headerlink" href="#commons.room.Room" title="Permalink to this definition">¶</a></dt>
+<dd><p>Liste des channels disponnible sur le server.</p>
+<dl class="method">
+<dt id="commons.room.Room.canJoin">
+<tt class="descname">canJoin</tt><big>(</big><em>channelName</em>, <em>client</em><big>)</big><a class="headerlink" href="#commons.room.Room.canJoin" title="Permalink to this definition">¶</a></dt>
+<dd>Return: Dzfinie une limite de connection sur les channels -&gt;  bool</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.chanAuth">
+<tt class="descname">chanAuth</tt><big>(</big><em>appName</em>, <em>adminPwd</em>, <em>client</em><big>)</big><a class="headerlink" href="#commons.room.Room.chanAuth" title="Permalink to this definition">¶</a></dt>
+<dd>Return : Auth un utilisateur sur un channel -&gt; bool</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.changeChanMasterPwd">
+<tt class="descname">changeChanMasterPwd</tt><big>(</big><em>adminPwd</em>, <em>appName</em><big>)</big><a class="headerlink" href="#commons.room.Room.changeChanMasterPwd" title="Permalink to this definition">¶</a></dt>
+<dd>Return : change le mot de passe admin d&#8217;un channel -&gt; bool</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.channel">
+<tt class="descname">channel</tt><big>(</big><em>channelName</em><big>)</big><a class="headerlink" href="#commons.room.Room.channel" title="Permalink to this definition">¶</a></dt>
+<dd>Return : le Channel specifie -&gt; Channel</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.channelExists">
+<tt class="descname">channelExists</tt><big>(</big><em>channelName</em><big>)</big><a class="headerlink" href="#commons.room.Room.channelExists" title="Permalink to this definition">¶</a></dt>
+<dd>Return : si le channel existe ou non -&gt; bool</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.create">
+<tt class="descname">create</tt><big>(</big><em>args</em>, <em>master</em><big>)</big><a class="headerlink" href="#commons.room.Room.create" title="Permalink to this definition">¶</a></dt>
+<dd>Return Ajoute un channel a la liste des rooms  -&gt; bool</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.list_users">
+<tt class="descname">list_users</tt><big>(</big><em>channelName=None</em><big>)</big><a class="headerlink" href="#commons.room.Room.list_users" title="Permalink to this definition">¶</a></dt>
+<dd>Return : la liste de tous les utilisateurs du serveur -&gt; list(Client)</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.remove">
+<tt class="descname">remove</tt><big>(</big><em>channelName</em><big>)</big><a class="headerlink" href="#commons.room.Room.remove" title="Permalink to this definition">¶</a></dt>
+<dd>Return : Supprime un channel de la liste des rooms -&gt; bool</dd></dl>
+
+<dl class="method">
+<dt id="commons.room.Room.total_users">
+<tt class="descname">total_users</tt><big>(</big><big>)</big><a class="headerlink" href="#commons.room.Room.total_users" title="Permalink to this definition">¶</a></dt>
+<dd>Return : le nombre d&#8217;utilisateurs connectes -&gt; int</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="protocol.html"
+                                  title="previous chapter">The <tt class="docutils literal docutils literal docutils literal"><span class="pre">Protocol</span></tt> class</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="session.html"
+                                  title="next chapter">The <tt class="docutils literal"><span class="pre">Session</span></tt> class</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/commons/room.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="session.html" title="The Session class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="protocol.html" title="The Protocol class"
+             >previous</a> |</li>
+        <li><a href="../index.html">jsocket v0.2.2 documentation</a> &raquo;</li>
+          <li><a href="../commons.html" >Commons</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Revolunet.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.2.
+    </div>
+  </body>
+</html>

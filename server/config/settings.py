@@ -5,29 +5,36 @@
 import socket
 
 class SETTINGS(object):
-	"""
-	Settings du / des servers 
-	"""
-	
-	def __init__(self):
-		pass
-	
-	IS_DEBUG = True
-	
-	SERVER_PORT = 9999
-	SERVER_HOST = socket.gethostbyname(socket.gethostname())
-	#SERVER_HOST = '192.168.1.34'
-	
-	HTTP_SERVER_NAME = 'Jsocket Server 1.0'
+	""" Settings du / des servers """
 
-	SERVER_SELECT_TIMEOUT = 5
-	SERVER_MAX_READ = 1024
-	SERVER_HTTP_CLIENT_TIMEOUT = 30 # !important
-	
-	# Ne prends pas en compte le/les master/s
+	# DEBUG CONFIGURATION
+	IS_DEBUG = True
+
+	# SERVER CONFIGURATION
+	SERVER_PORT = 9999
+	SERVER_HTTP_PORT = 81
+	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
+	SERVER_HOST = 'localhost'
+
+	# CHANNEL/ROOM CONFIGURATION
 	CHANNEL_MAX_USERS = 100
-	
-	MAX_SENDQUEUE = 8
-	MAX_RECEIVEQUEUE = 8
-	
 	MASTER_PASSWORD = 'admin'
+
+	# QUEUE CONFIGURATION
+	LOG_QUEUE_SIZE = 16
+	WORKER_QUEUE_SIZE = 16
+
+	# THREAD CONFIGURATION
+	LOG_THREADING_SIZE = 4
+	WORKER_THREADING_SIZE = 4
+
+	# WATCHDOG CONFIGURATION
+	WATCHDOG_SLEEP_TIME = 10
+	WATCHDOG_MAX_IDLE_TIME = 70
+
+	# LOG CONFIGURATION
+	LOG_FILE_MAX_SIZE = 200000
+	LOG_BACKUP_COUNT = 10
+
+	# DEFAULT APPLICATION ON STARTUP
+	STARTUP_APP = ['irc']
