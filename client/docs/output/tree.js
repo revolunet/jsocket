@@ -8,6 +8,8 @@
 				]}
 				,
                 {"href":"output/jsocket.api.html","text":"api","id":"jsocket.api","isClass":true,"iconCls":"icon-static","cls":"cls","leaf":true}
+				,
+                {"href":"output/jsocket.protocol.html","text":"protocol","id":"jsocket.protocol","isClass":true,"iconCls":"icon-static","cls":"cls","leaf":true}
 				]}
 				]};
         Docs.icons = {
@@ -17,5 +19,7 @@
 			"jsocket.core.tcp":"icon-static"
 			,
 			"jsocket.api":"icon-static"
+			,
+			"jsocket.protocol":"icon-static"
 			};
     

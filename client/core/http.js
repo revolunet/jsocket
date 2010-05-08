@@ -2,7 +2,7 @@
  * @class jsocket.core.http
  * Javascript event's interface fail over HTTP
  * @author Revolunet
- * @version 0.2.2
+ * @version 0.2.3
  * @singleton
  */
 jsocket.core.http = {

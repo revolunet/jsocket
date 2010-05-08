@@ -37,6 +37,7 @@ function getJsocketDomain()
 
 jsocket = {
 	api : null,
+	protocol : null,
 	core : {
 		http : null,
 		tcp : null
@@ -45,7 +46,8 @@ jsocket = {
 
 create('div', 'flashcontent');
 create('div', 'jsocketBridgeOutput');
-includeScript('lib/json-pack.js');
+includeScript('lib/json2.js');
+includeScript('protocol.js');
 includeScript('core/tcp.js');
 includeScript('core/http.js');
 includeScript('api.js');

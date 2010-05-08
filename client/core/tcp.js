@@ -2,7 +2,7 @@
  * @class jsocket.core.tcp
  * Javascript event's interface for flash swf socket bridge
  * @author Revolunet
- * @version 0.2.2
+ * @version 0.2.3
  * @singleton
  */
 jsocket.core.tcp = {

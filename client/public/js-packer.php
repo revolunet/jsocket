@@ -8,11 +8,12 @@ $out = 'jsocket.js';
 
 $files = array(
 	'jsocket.min.js',
-	'lib/json.js',
-	'core/jsocketCoreTCP.js',
-	'core/jsocketCoreHTTP.js',
-	'core/jsocketApi.js',
-	'core/jsocketFlash.js',
+	'lib/json2.js',
+	'protocol.js',
+	'core/tcp.js',
+	'core/http.js',
+	'api.js',
+	'flash.js'
 );
 $src = array();
 

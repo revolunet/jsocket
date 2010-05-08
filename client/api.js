@@ -18,7 +18,7 @@ jsocket.api.app['myapp'].onJoin(args) {
 };
 </code></pre>
  * @author Revolunet
- * @version 0.2.2
+ * @version 0.2.3
  * @singleton
  */
 jsocket.api = {
@@ -196,7 +196,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} text Le texte a transformer
 	 */
 	parser : function(text) {
-		var j = json_parse(text);
+		var j = JSON.parse(text);
 		if (j.from != null && j.value != null) {
 			func_name = j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
 			var args = { };
@@ -287,12 +287,14 @@ jsocket.api.register('myApplicationName', myApplication);
 		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
 			jsocket.api.app[appName].isMaster = true;
 		}
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		password = jsocket.api.core.addslashes(password);
-		jsocket.api.send('{"cmd": "auth", "args": "' + password +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'auth',
+			args: password,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -305,12 +307,14 @@ jsocket.api.register('myApplicationName', myApplication);
 		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
 			jsocket.api.app[appName].isMaster = true;
 		}
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		password = jsocket.api.core.addslashes(password);
-		jsocket.api.send('{"cmd": "chanAuth", "args": "' + password +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'chanAuth',
+			args: password,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -336,12 +340,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe du salon
 	 */
 	join : function(appName, channel, password) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		password = jsocket.api.core.addslashes(password);
-		jsocket.api.send('{"cmd": "join", "args": [ "' + channel +
-			'", "' + password + '" ], "channel": "' + channel +
-			'", "app": "' + appName + '", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'join',
+			args: [ channel, password ],
+			channel: channel,
+			app: appName,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -358,11 +364,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 */
 	part : function(appName, channel) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		jsocket.api.send('{"cmd": "part", "args": "' + channel +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'part',
+			args: channel,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -383,12 +392,14 @@ jsocket.api.register('myApplicationName', myApplication);
 		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
 			jsocket.api.app[appName].isMaster = true;
 		}
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		password = jsocket.api.core.addslashes(password);
-		jsocket.api.send('{"cmd": "create", "args": [ "' + channel +
-			'", "' + password + '" ], "app": "' + appName +
-			'", "channel": "' + channel + '", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'create',
+			args: [ channel, password ],
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -405,11 +416,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 */
 	remove : function(appName, channel) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		jsocket.api.send('{"cmd": "remove", "args": "' + channel +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'remove',
+			args: channel,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -419,12 +433,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} nickname Le nom d'utilisateur
 	 */
 	nick : function(appName, channel, nickname) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		nickname = jsocket.api.core.addslashes(nickname);
-		jsocket.api.send('{"cmd": "nick", "args": "' + nickname +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'nick',
+			args: nickname,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -444,12 +460,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} command La commande a forwarder
 	 */
 	forward : function(appName, channel, command) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		command = jsocket.api.core.addslashes(command);
-		jsocket.api.send('{"cmd": "forward", "args": "' + command +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'forward',
+			args: command,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -467,11 +485,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 */
 	list : function(appName, channel) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		jsocket.api.send('{"cmd": "list", "args": "' + channel +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'list',
+			args: channel,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -502,11 +523,14 @@ jsocket.api.register('myApplicationName', myApplication);
 			}
 			str += ' ] ]';
 		}
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		jsocket.api.send('{"cmd": "message", "app": "' + appName +
-			'", "args": ' + str + ', "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'message',
+			args: str,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -524,10 +548,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 */
 	getStatus : function(appName, channel) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		jsocket.api.send('{"cmd": "getStatus", "args": "null", "app": "' + appName +
-			'", "channel": "' + channel + '", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'getStatus',
+			args: 'null',
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -545,12 +573,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} status Le status de l'utilisateur
 	 */
 	setStatus : function(appName, channel, status) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		status = jsocket.api.core.addslashes(status);
-		jsocket.api.send('{"cmd": "setStatus", "args": "' + status +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'setStatus',
+			args: status,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -567,10 +597,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 */
 	timeConnect : function(appName, channel) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		jsocket.api.send('{"cmd": "timeConnect", "args": "null", "app": "' + appName +
-			'", "channel": "' + channel + '", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'timeConnect',
+			args: 'null',
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
@@ -588,12 +622,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe
 	 */
 	chanMasterPwd : function(appName, channel, password) {
-		appName = jsocket.api.core.addslashes(appName);
-		channel = jsocket.api.core.addslashes(channel);
-		password = jsocket.api.core.addslashes(password);
-		jsocket.api.send('{"cmd": "chanMasterPwd", "args": "' + password +
-			'", "app": "' + appName + '", "channel": "' + channel +
-			'", "uid": "jsocket.api.uid"}');
+		var json = {
+			cmd: 'chanMasterPwd',
+			args: password,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
 	/**
