@@ -20,6 +20,7 @@ class SETTINGS(object):
 	# CHANNEL/ROOM CONFIGURATION
 	CHANNEL_MAX_USERS = 100
 	MASTER_PASSWORD = 'admin'
+	CHANNEL_MASTER_PASSWORD = 'adminachan'
 
 	# QUEUE CONFIGURATION
 	LOG_QUEUE_SIZE = 16
@@ -38,4 +39,7 @@ class SETTINGS(object):
 	LOG_BACKUP_COUNT = 10
 
 	# DEFAULT APPLICATION ON STARTUP
-	STARTUP_APP = ['irc']
+	STARTUP_APP = [
+		{'name': 'irc', 'app': 'default'},
+		{'name': 'test', 'app': 'default'}
+	]
