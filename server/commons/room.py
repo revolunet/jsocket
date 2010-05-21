@@ -2,6 +2,7 @@
 # room.py
 ##
 
+from commons.protocol import Protocol
 from config.settings import SETTINGS
 from commons.application import Application
 
@@ -20,7 +21,7 @@ class Room(object):
 		return []
 		
 	def create(self, appName, uid, password = None):
-		if appName in self.applications:
+		if appName not in self.applications:
 			import random
 			app = Application(appName)
 			app.master_password = random.getrandbits(16)
@@ -63,7 +64,7 @@ class Room(object):
 	def forward(self, appName, commande, uid, app):
 		from commons.session import Session
 		
-		if appName in self.applications and uid in self.applications[appName].masters:
+		if appName in self.applications and uid in self.applications[appName].masters():
 			users = self.applications[appName].users()
 			master = Session().get(uid)
 			json = Protocol.forgeJSON('forward', '["' + master.getName() + '", "' + commande + '"]',

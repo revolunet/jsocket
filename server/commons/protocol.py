@@ -93,13 +93,16 @@ class Protocol(object):
 	def __cmd_list(self, args):
 		""" Retourne la liste d'utilisateurs d'un channel """
 
+		from commons.session import Session
+
 		str = [ ]
 		appName = args['channel']
 		if args['channel'] is None:
-			users = self.client.room.list_users(args)
+			users = self.client.room.list_users(appname=args)
 		else:
 			users = self.client.room.list_users(appName=appName)
-		for user in users:
+		for u in users:
+			user = Session().get(u)
 			status = user.status
 			key = user.unique_key
 			name = user.getName()
@@ -126,11 +129,12 @@ class Protocol(object):
 
 		from log.logger import Log
 
-		if self.client.room.remove(args['args']):
-			Log().add("[+] Le channel " + args['args'] + " a ete supprime par : " + str(self.client.getName()))
+		appName = args['args']
+		if self.client.room.remove(appName=appName):
+			Log().add("[+] Le channel " + appName + " a ete supprime par : " + str(self.client.getName()))
 			return ('true')
 		else:
-			Log().add("[!] Command error : la commande delete a echoue ( le channel " + args['args'] + " n'existe pas )", 'yellow')
+			Log().add("[!] Command error : la commande delete a echoue ( le channel " + appName + " n'existe pas )", 'yellow')
 			return ('false')
 
 	# {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
@@ -141,12 +145,11 @@ class Protocol(object):
 
 		from log.logger import Log
 
-		chan = args['args'][0][0]
-		password = args['args'][0][1]
-
-		if self.client.room.create(appName=chan, password=password, uid=self.uid):
+		appName = args['args'][0]
+		password = args['args'][1]
+		if self.client.room.create(appName=appName, password=password, uid=self.uid):
 			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.getName()))
-			return ('"' + str(self.client.room.channel(args['args'][0]).masterPwd) + '"')
+			return ('"' + str(self.client.room.Application(appName).master_password) + '"')
 		else:
 			Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
 			return ('false')
@@ -158,20 +161,20 @@ class Protocol(object):
 
 		from log.logger import Log
 
-		app = args['args'][0][0]
-		password = args['args'][0][1]
+		appName = args['args'][0]
+		password = args['args'][1]
 		if len(password) == 0:
 			password = None
-		if self.client.room.join(appName=app, uid=self.uid, password=password):
-			self.client.room_name = args['args'][0]
-			Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + args['args'][0], 'yellow')
+		if self.client.room.join(appName=appName, uid=self.uid, password=password):
+			self.client.room_name = appName
+			Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + appName, 'yellow')
 			if self.client.master == False:
 				self.status(self.client)
 			else:
 				self.status(self.client, True)
 			return ('true')
 		else:
-			Log().add("[!] Command error : le channel " + args['args'][0] + " n'existe pas ", 'yellow')
+			Log().add("[!] Command error : le channel " + appName + " n'existe pas ", 'yellow')
 			return ('false')
 
 	# {"cmd": "part", "args": "irc"}
@@ -181,7 +184,8 @@ class Protocol(object):
 
 		from log.logger import Log
 
-		if self.client.room_name and self.client.room.part(args['args'], self.client):
+		appName = args['args']
+		if self.client.room_name and self.client.room.part(appName=appName, uid=self.uid):
 			self.client.room_name = None
 			self.client.status = "offline"
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + args['args'])
@@ -326,6 +330,7 @@ class Protocol(object):
 		"""
 
 		from log.logger import Log
+		from commons.session import Session
 
 		if client.room_name:
 			channel = client.room.Application(client.room_name)
@@ -344,7 +349,8 @@ class Protocol(object):
 					json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
 					master.addResponse(json)
 			elif channel is not None:
-				for user in channel.client_list:
+				for u in channel.users():
+					user = Session().get(u)
 					if user.master != client:
 						status = client.status
 						key = client.unique_key
