@@ -1,68 +1,77 @@
-
 ##
 # channel.py
 ##
 
+from config.settings import SETTINGS
 
 class Channel(object):
 	"""
-	Stock les informations relative aux clients presents dans des salons.
+	Stock les informations relative aux clients presents dans les channels.
 	"""
-
+	
 	def __init__(self, name):
-		from log.logger import Log
 		"""
+		__masters: liste des admin du channel
+		__users: la liste des clients presents dans le channel
+		master_password: le mot de passe admin de le channel
+		password: le mot de passe pour rejoindre le channel
 		name: Le nom du channel
-		master: l'objet client master
-		masterPwd: le mot de passe admin du channel
-		channelPwd: le mot de passe pour rejoindre le channel
-		client_list: la liste des clients presents dans le channel.
 		"""
-
+		
+		self.__masters = []
+		self.__users = []
+		self.password = None
+		self.master_password = SETTINGS.CHANNEL_MASTER_PASSWORD
 		self.name = name
-		self.master = None
-		self.masterPwd = None
-		self.channelPwd = None
-		self.client_list = []
 
-	def add(self, client):
-		"""Ajoute un client dans la room specifie"""
-
-		from log.logger import Log
-
-		self.client_list.append(client)
-		Log().add("[+] Room : client " + str(client.getName()) + " joined Room " + self.name)
-		Log().add("[+] Room : "  + self.name + " " + str(len(self.client_list)) + " users")
-
-	def delete(self, client):
-		"""Supprime un client de la room specifie"""
+	def isMaster(self, uid):
+		"""Return: si cet uid est un uid d'administrateur du channel ou non -> bool."""
+		
+		return uid in self.__masters
+		
+	def delete(self, uid):
+		"""Return: Supprime un client/master du channel specifie -> bool."""
 
 		from log.logger import Log
-
-		if client in self.client_list:
-			Log().add("[+] Room : client " + str(client.getName()) + " left Room " + self.name)
-			self.client_list.remove(client)
-			Log().add("[+] Room : "  + self.name + " " + str(len(self.client_list)) + " users")
-
-	def auth(self, masterPwd, client):
-		"""Return: Authentifie un client en tant que master du channel -> bool"""
-
-		if masterPwd == self.masterPwd:
-			self.master = client
+		
+		if uid in self.__users:
+			self.__users.remove(uid)
+			Log().add("[+] Channel : client " + str(uid) + " left " + self.name)
+			return True
+		if uid in self.__masters:
+			self.__users.remove(uid)
+			Log().add("[+] Channel : master " + str(uid) + " left " + self.name)
 			return True
 		return False
-
+			
+	def add(self, uid, pwd = None):
+		"""Return: Ajoute un client ou un master dans le channel specifie : -> bool."""
+		
+		from log.logger import Log
+		
+		if pwd is None and uid not in self.__users:
+			self.__users.append(uid)
+			Log().add("[+] Channel : client " + str(uid) + " joined " + self.name)
+			return True
+		elif pwd is not None and\
+			pwd == self.master_password and\
+			uid not in self.__masters:
+			self.__masters.append(uid)
+			Log().add("[+] Channel : master " + str(uid) + " joined " + self.name)
+			return True
+		return False
+			
 	def isProtected(self):
 		"""Return: Si le channel est protege ou non -> bool."""
-
-		return self.channelPwd != None
-
-	def list_users(self):
-		"""Return : La liste des utilisateurs de la room : -> list(iClient)"""
-
-		return self.client_list
-
-	def get_master(self):
-		""" Retourne le user master du channel -> iClient """
-
-		return self.master
+		
+		return self.password is not None
+		
+	def users(self):
+		"""Return : La liste des utilisateurs du Channel : -> list()"""
+		
+		return self.__users
+		
+	def masters(self):
+		"""Return : La liste des masters du Channel : -> list()"""
+		
+		return self.__masters
