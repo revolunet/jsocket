@@ -10,8 +10,9 @@ import os
 
 def create_tcp_client(aim = 'default'):
 	tcpclient = TCPClient('localhost', 9999)
+	tcpclient.handle()
 	tcpclient.write('{"cmd":"setStatus", "args" : "hello"}\n')
-	#tcpclient.handle()
+	tcpclient.handle()
 	tcpclient.write('{"cmd":"getStatus", "args":"null", "channel": "null", "app" : "null"}\n')
 	#tcpclient.handle()
 	tcpclient.write('{"cmd":"message", "args":"[\'HELLO\', [\'*ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\']]", "channel": "irc", "app" : "whiteboard"}\n')
@@ -54,7 +55,7 @@ def create_tcp_client_(aim = 'default'):
 def main():
 	client_thread = threading.Thread(target=create_tcp_client, args=())
 	client_thread.start()
-	for i in range(0,1):
+	for i in range(0,3):
 		client_thread = threading.Thread(target=create_tcp_client, args=())
 		client_thread.start()
 	#	client_thread = threading.Thread(target=create_tcp_client_, args=())
