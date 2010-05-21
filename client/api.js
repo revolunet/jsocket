@@ -18,7 +18,7 @@ jsocket.api.app['myapp'].onJoin(args) {
 };
 </code></pre>
  * @author Revolunet
- * @version 0.2.3
+ * @version 0.2.5
  * @singleton
  */
 jsocket.api = {
@@ -27,7 +27,7 @@ jsocket.api = {
 	 * @private
 	 * @type Object
 	 */
-	core : jsocket.core.tcp,
+	core : jsocket.core.websocket,
 
 	/**
 	 * Le nom de domaine ou adresse IP du serveur distant
@@ -229,6 +229,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Tableau contenant l'identifiant unique de l'utilisateur
 	 */
 	onConnected : function(args) {
+		console.log(args);
 		jsocket.api.uid = args.value;
 		jsocket.api.sendPool();
 	},

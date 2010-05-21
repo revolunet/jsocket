@@ -13,6 +13,7 @@ class SETTINGS(object):
 	# SERVER CONFIGURATION
 	SERVER_PORT = 9999
 	SERVER_HTTP_PORT = 81
+	SERVER_WEBSOCKET_PORT = 8080
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 

@@ -2,7 +2,7 @@
  * @class jsocket.core.tcp
  * Javascript event's interface for flash swf socket bridge
  * @author Revolunet
- * @version 0.2.3
+ * @version 0.2.5
  * @singleton
  */
 jsocket.core.tcp = {
@@ -40,10 +40,10 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded : function() {
-		jsocketCoreTCP.initialized = true;
-		jsocketCoreTCP.connectedToServer = false;
-		jsocketCoreTCP.socket = document.getElementById("socketBridge");
-		jsocketCoreTCP.output = document.getElementById("jsocketBridgeOutput");
+		jsocket.core.tcp.initialized = true;
+		jsocket.core.tcp.connectedToServer = false;
+		jsocket.core.tcp.socket = document.getElementById("socketBridge");
+		jsocket.core.tcp.output = document.getElementById("jsocketBridgeOutput");
 		return (true);
 	},
 
@@ -53,11 +53,11 @@ jsocket.core.tcp = {
 	 * @param {Int} port Le numero du port du serveur
 	 */
 	connect : function(server, port) {
-		if (jsocketCoreTCP.initialized == true && jsocketCoreTCP.connectedToServer == false) {
-			jsocketCoreTCP.socket.connect(server, port);
+		if (jsocket.core.tcp.initialized == true && jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.socket.connect(server, port);
 		}
-		else if (jsocketCoreTCP.connectedToServer == false) {
-			jsocketCoreTCP.setTimeout("jsocketCoreTCP.reconnect();", 500);
+		else if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.setTimeout("jsocket.core.tcp.reconnect();", 500);
 		}
 	},
 
@@ -65,7 +65,7 @@ jsocket.core.tcp = {
 	 * Alias de {@link #connect connect} sans avoir a repreciser les parametres de connection
 	 */
 	reconnect : function() {
-		jsocketCoreTCP.connect(jsocketCoreTCP.api.host, jsocketCoreTCP.api.port);
+		jsocket.core.tcp.connect(jsocket.core.tcp.api.host, jsocket.core.tcp.api.port);
 	},
 
 	/**
@@ -75,7 +75,7 @@ jsocket.core.tcp = {
 	 * @param {Int} delay Le temps d'attente
 	 */
 	setTimeout : function(cmd, delay) {
-		if (jsocketCoreTCP.isWorking == true) {
+		if (jsocket.core.tcp.isWorking == true) {
 			setTimeout(cmd, delay);
 		}
 	},
@@ -92,7 +92,7 @@ jsocket.core.tcp = {
 		}
 		else if (typeof(str) == 'object') {
 			for (var i in str) {
-				str[i] = jsocketCoreTCP.addslashes(str[i]);
+				str[i] = jsocket.core.tcp.addslashes(str[i]);
 			}
 		}
 		return (str);
@@ -110,7 +110,7 @@ jsocket.core.tcp = {
 		}
 		else if (typeof(str) == 'object') {
 			for (var i in str) {
-				str[i] = jsocketCoreTCP.stripslashes(str[i]);
+				str[i] = jsocket.core.tcp.stripslashes(str[i]);
 			}
 		}
 		return (str);
@@ -123,16 +123,16 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	write : function(msg) {
-		if (jsocketCoreTCP.connectedToServer == false) {
-			jsocketCoreTCP.reconnect();
+		if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.reconnect();
 		}
-		if (jsocketCoreTCP.connectedToServer) {
-			jsocketCoreTCP.socket.write(msg + "\n");
+		if (jsocket.core.tcp.connectedToServer) {
+			jsocket.core.tcp.socket.write(msg + "\n");
 		} else {
-			if (typeof jsocketCoreTCP.api != 'object') {
+			if (typeof jsocket.core.tcp.api != 'object') {
 				return (false);
 			}
-			jsocketCoreTCP.setTimeout("jsocketCoreTCP.send('" + msg + "');", 500);
+			jsocket.core.tcp.setTimeout("jsocket.core.tcp.send('" + msg + "');", 500);
 			return (false);
 		}
 		return (true);
@@ -144,7 +144,7 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	send : function(msg) {
-		return (jsocketCoreTCP.write(msg));
+		return (jsocket.core.tcp.write(msg));
 	},
 
 	/**
@@ -153,12 +153,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected : function() {
-		if (typeof jsocketCoreTCP.api != 'object') {
+		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
-		jsocketCoreTCP.connectedToServer = true;
-		jsocketCoreTCP.send('{"cmd": "connected", "args": "null", "app": ""}');
-		jsocketCoreTCP.api.onReceive('{"from": "connect", "value": true}');
+		jsocket.core.tcp.connectedToServer = true;
+		jsocket.core.tcp.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.tcp.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
 
@@ -167,7 +167,7 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close : function() {
-		jsocketCoreTCP.socket.close();
+		jsocket.core.tcp.socket.close();
 		return (true);
 	},
 
@@ -177,13 +177,13 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected : function() {
-		if (typeof jsocketCoreTCP.api != 'object') {
+		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
-		jsocketCoreTCP.api.uid = '';
-		jsocketCoreTCP.api.parser('{"from": "disconnect", "value": true}');
-		jsocketCoreTCP.connectedToServer = false;
-		jsocketCoreTCP.reconnect();
+		jsocket.core.tcp.api.uid = '';
+		jsocket.core.tcp.api.parser('{"from": "disconnect", "value": true}');
+		jsocket.core.tcp.connectedToServer = false;
+		jsocket.core.tcp.reconnect();
 		return (true);
 	},
 
@@ -194,12 +194,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	ioError: function(msg) {
-		if (typeof jsocketCoreTCP.api != 'object') {
+		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
-		jsocketCoreTCP.api.parser('{"from": "error", "value": "' + msg + '"}');
-		if (jsocketCoreTCP.connectedToServer == false) {
-			jsocketCoreTCP.api.parser('{"from": "TCPError", "value": "Input/Output error"}');
+		jsocket.core.tcp.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.api.parser('{"from": "TCPError", "value": "Input/Output error"}');
 		}
 		return (true);
 	},
@@ -211,12 +211,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	securityError: function(msg) {
-		if (typeof jsocketCoreTCP.api != 'object') {
+		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
-		jsocketCoreTCP.api.parser('{"from": "error", "value": "' + msg + '"}');
-		if (jsocketCoreTCP.connectedToServer == false) {
-			jsocketCoreTCP.api.parser('{"from": "TCPError", "value": "Security error"}');
+		jsocket.core.tcp.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.api.parser('{"from": "TCPError", "value": "Security error"}');
 		}
 		return (true);
 	},
@@ -228,12 +228,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		if (typeof jsocketCoreTCP.api != 'object') {
+		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
 		var tab = msg.split("\n");
 		for (var i = 0; i < tab.length; ++i) {
-			jsocketCoreTCP.api.onReceive(tab[i]);
+			jsocket.core.tcp.api.onReceive(tab[i]);
 		}
 		return (true);
 	}

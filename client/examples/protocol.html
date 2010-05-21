@@ -83,6 +83,8 @@
 					onclick="javascript:callMethod(this);" />
 				<input type="button" value="TCP"
 					onclick="javascript:callMethod(this);" />
+				<input type="button" value="WebSocket"
+					onclick="javascript:callMethod(this);" />
 			</fieldset>
 			<fieldset>
 				<legend>Actions</legend>
@@ -121,7 +123,7 @@
 			</fieldset>
 		</form>
 
-		<script type="text/javascript" src="jsocket.js"></script>
+		<script type="text/javascript" src="../public/jsocket.js"></script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject_src.js"></script>
 		<script type="text/javascript">
 		<!--
@@ -148,7 +150,7 @@
 			};
 			protocol = {
 				actionJoin: function() {
-					jsocketApi.join(settings.appName, settings.channelName, settings.channelPassword);
+					jsocket.api.join(settings.appName, settings.channelName, settings.channelPassword);
 				},
 
 				onJoin: function(args) {
@@ -156,7 +158,7 @@
 				},
 
 				actionNick: function() {
-					jsocketApi.nick(settings.appName, settings.channelName, settings.nickName);
+					jsocket.api.nick(settings.appName, settings.channelName, settings.nickName);
 				},
 
 				onNick: function(args) {
@@ -164,7 +166,7 @@
 				},
 
 				actionCreate: function() {
-					jsocketApi.create(settings.appName, settings.channelName, settings.channelPassword);
+					jsocket.api.create(settings.appName, settings.channelName, settings.channelPassword);
 				},
 
 				onCreate: function(args) {
@@ -173,7 +175,7 @@
 				},
 
 				actionAuth: function() {
-					jsocketApi.auth(settings.appName, settings.channelName, settings.authPassword);
+					jsocket.api.auth(settings.appName, settings.channelName, settings.authPassword);
 				},
 
 				onAuth: function(args) {
@@ -181,7 +183,7 @@
 				},
 
 				actionPart: function() {
-					jsocketApi.part(settings.appName, settings.channelName, settings.channelName);
+					jsocket.api.part(settings.appName, settings.channelName, settings.channelName);
 				},
 
 				onPart: function(args) {
@@ -189,8 +191,8 @@
 				},
 
 				actionConnect: function() {
-					jsocketApi.urlFailOver = settings.urlFailOver;
-					jsocketApi.init(settings.serverName, settings.serverPort);
+					jsocket.api.urlFailOver = settings.urlFailOver;
+					jsocket.api.init(settings.serverName, settings.serverPort);
 				},
 
 				onConnect: function(args) {
@@ -199,7 +201,7 @@
 
 				actionForward: function() {
 					var command = document.getElementById('forwardCommand').value;
-					jsocketApi.forward(settings.appName, settings.channelName, command);
+					jsocket.api.forward(settings.appName, settings.channelName, command);
 				},
 
 				onForward: function(args) {
@@ -207,7 +209,7 @@
 				},
 
 				actionSetStatus: function() {
-					jsocketApi.setStatus(settings.appName, settings.channelName, settings.status);
+					jsocket.api.setStatus(settings.appName, settings.channelName, settings.status);
 				},
 
 				onSetStatus: function(args) {
@@ -215,7 +217,7 @@
 				},
 
 				actionGetStatus: function() {
-					jsocketApi.getStatus(settings.appName, settings.channelName);
+					jsocket.api.getStatus(settings.appName, settings.channelName);
 				},
 
 				onGetStatus: function(args) {
@@ -224,7 +226,7 @@
 				},
 
 				actionChanAuth: function() {
-					jsocketApi.chanAuth(settings.appName, settings.channelName, settings.channelAuthPassword);
+					jsocket.api.chanAuth(settings.appName, settings.channelName, settings.channelAuthPassword);
 				},
 
 				onChanAuth: function(args) {
@@ -232,7 +234,7 @@
 				},
 
 				actionRemove: function() {
-					jsocketApi.remove(settings.appName, settings.channelName);
+					jsocket.api.remove(settings.appName, settings.channelName);
 				},
 
 				onRemove: function(args) {
@@ -240,7 +242,7 @@
 				},
 
 				actionMessage: function() {
-					jsocketApi.message(settings.appName, settings.channelName,
+					jsocket.api.message(settings.appName, settings.channelName,
 						[ settings.forwardCommand, [ '*' ] ]);
 				},
 
@@ -249,7 +251,7 @@
 				},
 
 				actionList: function () {
-					jsocketApi.list(settings.appName, settings.channelName);
+					jsocket.api.list(settings.appName, settings.channelName);
 				},
 
 				onList: function (args) {
@@ -257,7 +259,7 @@
 				},
 
 				actionTimeConnect: function() {
-					jsocketApi.timeConnect(settings.appName, settings.channelName);
+					jsocket.api.timeConnect(settings.appName, settings.channelName);
 				},
 
 				onTimeConnect: function (args) {
@@ -265,7 +267,7 @@
 				},
 
 				actionChanMasterPwd: function() {
-					jsocketApi.chanMasterPwd(settings.appName, settings.channelName, settings.channelPassword);
+					jsocket.api.chanMasterPwd(settings.appName, settings.channelName, settings.channelPassword);
 				},
 
 				onChanMasterPwd: function (args) {
@@ -274,31 +276,35 @@
 
 				onStatus: function (args) {
 					console.log('onStatus', args);
-					if (args.value.key == jsocketApi.uid) {
+					if (args.value.key == jsocket.api.uid) {
 						settings.status = args.value.status;
 						document.getElementById('status').value = args.value.status;
 					}
 				},
 
 				actionHTTP: function() {
-					jsocketApi.method(jsocketCoreHTTP);
+					jsocket.api.method(jsocket.core.http);
 				},
 
 				actionTCP: function() {
-					jsocketApi.method(jsocketCoreTCP);
-				}
+					jsocket.api.method(jsocket.core.tcp);
+				},
+
+		        actionWebSocket: function() {
+		            jsocket.api.method(jsocket.core.websocket);
+		        }
 			};
-			jsocketApi.register(settings.appName, protocol);
-			jsocketApi.onReceive = function(message) {
+			jsocket.api.register(settings.appName, protocol);
+			jsocket.api.onReceive = function(message) {
 				console.log('Receive: ', message);
-				jsocketApi.parser(message);
+				jsocket.api.parser(message);
 			}
-			jsocketApi.send = function(msg) {
-				console.log('Send: ', msg.replace(/jsocketApi\.uid/, jsocketApi.uid));
-				if (jsocketApi.uid != '') {
-					jsocketApi.core.send(msg.replace(/jsocketApi\.uid/, jsocketApi.uid));
-				} else if (jsocketApi.commands.length < 10) {
-					jsocketApi.commands.push(msg);
+			jsocket.api.send = function(msg) {
+				console.log('Send: ', msg.replace(/jsocket.api\.uid/, jsocket.api.uid));
+				if (jsocket.api.uid != '') {
+					jsocket.api.core.send(msg.replace(/jsocket.api\.uid/, jsocket.api.uid));
+				} else if (jsocket.api.commands.length < 10) {
+					jsocket.api.commands.push(msg);
 				}
 			}
 

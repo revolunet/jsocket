@@ -40,7 +40,8 @@ jsocket = {
 	protocol : null,
 	core : {
 		http : null,
-		tcp : null
+		tcp : null,
+		websocket : null
 	}
 };
 
@@ -50,5 +51,6 @@ includeScript('lib/json2.js');
 includeScript('protocol.js');
 includeScript('core/tcp.js');
 includeScript('core/http.js');
+includeScript('core/websocket.js');
 includeScript('api.js');
 includeScript('flash.js');

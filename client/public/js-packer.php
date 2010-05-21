@@ -12,6 +12,7 @@ $files = array(
 	'protocol.js',
 	'core/tcp.js',
 	'core/http.js',
+	'core/websocket.js',
 	'api.js',
 	'flash.js'
 );
