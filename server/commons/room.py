@@ -7,20 +7,35 @@ from config.settings import SETTINGS
 from commons.application import Application
 
 class Room(object):
+	"""
+	Liste des channels disponnible sur le server.
+	"""
+	
 	def __init__(self):
 		self.applications = {}
 		self.init_app()
 		
 	def init_app(self):
+		"""Initialise les applications par defaut."""
+		
 		for app in SETTINGS.STARTUP_APP:
 			self.applications[app] = Application(app)
 		
 	def list_users(self, appName = None):
+		"""Return : la liste de tous les utilisateurs du serveur ou d'une application -> list(Client) """
+		
 		if appName in self.applications:
 			return self.applications[appName].users()
-		return []
+		
+		from heapq import merge
+		users = []
+		for app in self.applications:
+			users = list(merge(users, self.applications[app].users()))
+		return users
 		
 	def create(self, appName, uid, password = None):
+		"""Return: Ajoute un channel a la liste des rooms  -> bool"""
+		
 		if appName not in self.applications:
 			import random
 			app = Application(appName)
@@ -33,12 +48,16 @@ class Room(object):
 		return False
 		
 	def remove(self, appName):
+		"""Return: Supprime un channel de la liste des rooms -> bool """
+		
 		if appName in self.applications:
 			self.applications.pop(appName)
 			return True
 		return False
 		
 	def join(self, appName, uid, password = None):
+		"""Return: Ajoute un utilisateur dans la room specifie  -> bool """
+		
 		if appName in self.applications:
 			if password is not None:
 				if self.applications[appName].password == password:
@@ -51,17 +70,23 @@ class Room(object):
 		return False
 	
 	def part(self, appName, uid):
+		"""Return Supprime un utilisateur d'une room  -> bool """
+		
 		if appName in self.applications:
 			self.applications[appName].delete(uid)
 			return True
 		return False
 		
 	def Application(self, appName):
+		"""Return : l'application specifie -> Application """
+		
 		if appName in self.applications:
 			return self.applications[appName]
 		return None
 		
 	def forward(self, appName, commande, uid, app):
+		"""Return : Envoie une commande a tous les utilisateurs d'une application -> bool """
+		
 		from commons.session import Session
 		
 		if appName in self.applications and uid in self.applications[appName].masters():
@@ -77,6 +102,8 @@ class Room(object):
 		return False
 		
 	def message(self, appName, sender, users, message, app):
+		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
+		
 		if appName in self.applications:
 			if len(users) > 0:
 				if users[0] == 'master' and sender in self.applications[appName].masters():
@@ -97,12 +124,14 @@ class Room(object):
 		return False
 		
 	def appAuth(self, appName, password, uid):
+		"""Return : Auth un utilisateur sur une application -> bool """
 		
 		if appName in self.applications:
 			return self.applications[appName].add(uid, password)
 		return False
 	
 	def changeAppMasterPwd(self, appName, password):
+		"""Return: change le mot de passe admin d'une application -> bool """
 		
 		if appName in self.applications:
 			self.applications[appName].master_password = password
@@ -110,9 +139,13 @@ class Room(object):
 		return False
 				
 	def appExists(self, appName):
+		"""Return: Si une application existe ou non -> bool."""
+		
 		return appName in self.applications
 		
 	def __sendMessage(self, appName, sender, to, message, app):
+		"""Fromate le json, et envoie le message a l'utilisateur"""
+		
 		from commons.session import Session
 		
 		sender = Session().get(sender)
