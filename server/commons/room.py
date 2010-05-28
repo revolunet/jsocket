@@ -29,7 +29,7 @@ class Room(object):
 	def list_users(self, channelName, appName = None):
 		"""Return : la liste de tous les utilisateurs du serveur ou d'une application -> list(Client) """
 		
-		if appName in self.applications and self.chanExists(channelName=channelName, appName=appName):
+		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName=channelName, appName=appName)
 			if channel is not None:
 				return channel.users()
