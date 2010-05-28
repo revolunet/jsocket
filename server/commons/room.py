@@ -71,7 +71,7 @@ class Room(object):
 					self.applications[appName].pop(idx)
 					return True
 		return False
-		
+	
 	def join(self, channelName, appName, uid, password = None):
 		"""Return: Ajoute un utilisateur dans la room specifie  -> bool """
 		
