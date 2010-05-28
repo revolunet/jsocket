@@ -19,6 +19,7 @@ class WatchDog(threading.Thread):
 		self.running = True
 		Log().add("[+] WatchDog: launched", 'green')
 		threading.Thread.__init__(self)
+		self.setDaemon(True)
 
 	def kill(self):
 		self.running = False
