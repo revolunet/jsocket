@@ -170,7 +170,7 @@ class Protocol(object):
 		if len(password) == 0:
 			password = None
 		if self.client.room.join(channelName=channelName, appName=appName, uid=self.uid, password=password):
-			self.client.room_name = appName
+			self.client.room_name = channelName
 			Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + channelName, 'yellow')
 			if self.client.master == False:
 				self.status(client=self.client, appName=appName, master=False)
@@ -320,14 +320,14 @@ class Protocol(object):
 		channelName = args['channel']
 		password = args['args']
 		appName = args['app']
-		
+
 		if self.client.master and self.client.room.changeAppMasterPwd(channelName=channelName, appName=appName, password=password):
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a changer le mot de passe master du channel : " + channelName)
 			return ('true')
 		else:
 			if self.client.master == False:
 				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
-			elif self.client.room.chanExists(channelName) == False:
+			elif self.client.room.chanExists(channelName=channelName, appName=appName) == False:
 				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
 			else:
 				Log().add("[!] Command error : la commande chanMasterPwd a echoue", 'yellow')
@@ -344,12 +344,15 @@ class Protocol(object):
 		if client.room_name:
 			channel = client.room.Channel(channelName=client.room_name, appName=appName)
 			if channel and master == False:
-				master = channel.get_master()
-				if master:
+				masters = channel.masters()
+				for master in masters:
 					if client.room_name:
 						channel = client.room_name
 					else:
 						channel = "none"
+					master = Session().get(master)
+					if master is None:
+						continue
 					status = client.status
 					key = client.unique_key
 					name = client.getName()

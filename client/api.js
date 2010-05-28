@@ -27,7 +27,7 @@ jsocket.api = {
 	 * @private
 	 * @type Object
 	 */
-	core : jsocket.core.websocket,
+	core : jsocket.core.tcp,
 
 	/**
 	 * Le nom de domaine ou adresse IP du serveur distant

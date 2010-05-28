@@ -16,11 +16,15 @@ class WatchDog(threading.Thread):
 
 	def __init__(self):
 		self.lock = Lock()
+		self.running = True
 		Log().add("[+] WatchDog: launched", 'green')
 		threading.Thread.__init__(self)
 
+	def kill(self):
+		self.running = False
+
 	def run(self):
-		while True:
+		while self.running:
 			current_time = int(time.time())
 			clients = Session().gets()
 			uidToDelete = [ ]

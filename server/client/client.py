@@ -1,5 +1,6 @@
 import time
 import random
+from twisted.internet import reactor
 from config.settings import SETTINGS
 from log.logger import Log
 
@@ -23,6 +24,7 @@ class Client(object):
 		self.connection_time = int(time.time())
 		self.last_action = self.connection_time
 		self.room_name = None
+		self.callback = None
 		self.response = [ ]
 
 	def getName(self):
@@ -40,6 +42,12 @@ class Client(object):
 		if command is not None:
 			Log().add('[JSON][Responses] ' + str(command), 'green')
 		self.last_action = time.time()
+		if self.callback is not None:
+			if callable(self.callback):
+				reactor.callFromThread(self.callback, [ command ])
+			else:
+				self.callback = None
+			command = None
 		if command is not None:
 			self.response.append(command)
 

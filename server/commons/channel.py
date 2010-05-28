@@ -8,7 +8,7 @@ class Channel(object):
 	"""
 	Stock les informations relative aux clients presents dans les channels.
 	"""
-	
+
 	def __init__(self, name):
 		"""
 		__masters: liste des admin du channel
@@ -17,7 +17,7 @@ class Channel(object):
 		password: le mot de passe pour rejoindre le channel
 		name: Le nom du channel
 		"""
-		
+
 		self.__masters = []
 		self.__users = []
 		self.password = None
@@ -26,14 +26,14 @@ class Channel(object):
 
 	def isMaster(self, uid):
 		"""Return: si cet uid est un uid d'administrateur du channel ou non -> bool."""
-		
+
 		return uid in self.__masters
-		
+
 	def delete(self, uid):
 		"""Return: Supprime un client/master du channel specifie -> bool."""
 
 		from log.logger import Log
-		
+
 		if uid in self.__users:
 			self.__users.remove(uid)
 			Log().add("[+] Channel : client " + str(uid) + " left " + self.name)
@@ -43,12 +43,12 @@ class Channel(object):
 			Log().add("[+] Channel : master " + str(uid) + " left " + self.name)
 			return True
 		return False
-			
+
 	def add(self, uid, pwd = None):
 		"""Return: Ajoute un client ou un master dans le channel specifie : -> bool."""
-		
+
 		from log.logger import Log
-		
+
 		if pwd is None and uid not in self.__users:
 			self.__users.append(uid)
 			Log().add("[+] Channel : client " + str(uid) + " joined " + self.name)
@@ -60,18 +60,18 @@ class Channel(object):
 			Log().add("[+] Channel : master " + str(uid) + " joined " + self.name)
 			return True
 		return False
-			
+
 	def isProtected(self):
 		"""Return: Si le channel est protege ou non -> bool."""
-		
+
 		return self.password is not None
-		
+
 	def users(self):
 		"""Return : La liste des utilisateurs du Channel : -> list()"""
-		
+
 		return self.__users
-		
+
 	def masters(self):
 		"""Return : La liste des masters du Channel : -> list()"""
-		
+
 		return self.__masters
