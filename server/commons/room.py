@@ -77,13 +77,11 @@ class Room(object):
 		
 		if self.chanExists(channelName=channelName, appName=appName) is False:
 			return False
+		channel = self.Channel(channelName=channelName, appName=appName)
 		if password is not None:
-			channel = self.Channel(channelName=channelName, appName=appName)
-			if channel.password is not password:
+			if channel.password != password:
 				return False
-			channel.add(uid)
-		else:
-			self.applications[appName].add(uid)
+		channel.add(uid)
 		return True
 	
 	def part(self, channelName, appName, uid):
@@ -116,6 +114,7 @@ class Room(object):
 		
 		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName=channelName, appName=appName)
+			
 			if uid in channel.masters():
 				users = channel.users()
 				master = Session().get(uid)
