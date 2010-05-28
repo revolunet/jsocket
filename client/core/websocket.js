@@ -73,10 +73,10 @@ jsocket.core.websocket = {
 		jsocket.core.websocket.loaded();
 		if (jsocket.core.websocket.initialized == true && jsocket.core.websocket.connectedToServer == false) {
 			jsocket.core.websocket.socket = new WebSocket('ws://' + server + ':' + jsocket.core.websocket.port + '/jsocket');
-			jsocket.core.websocket.socket.onopen = jsocket.core.websocket.connected;
 			jsocket.core.websocket.socket.onmessage = jsocket.core.websocket.receive;
-			jsocket.core.websocket.socket.onclose = jsocket.core.websocket.disconnected;
 			jsocket.core.websocket.socket.onerror = jsocket.core.websocket.error;
+			jsocket.core.websocket.socket.onopen = jsocket.core.websocket.connected;
+			jsocket.core.websocket.socket.onclose = jsocket.core.websocket.disconnected;
 		}
 		else if (jsocket.core.websocket.connectedToServer == false) {
 			jsocket.core.websocket.setTimeout("jsocket.core.websocket.reconnect();", 500);
@@ -100,8 +100,8 @@ jsocket.core.websocket = {
 			return (false);
 		}
 		jsocket.core.websocket.connectedToServer = true;
-		jsocket.core.websocket.send('{"cmd": "connected", "args": "null", "app": ""}');
 		jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
+		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": "null", "app": ""}');
 		return (true);
 	},
 
@@ -142,11 +142,14 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
+		console.log('core-receive: ', msg);
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
-		console.log('core-receive: ', msg);
 		msg = msg.data;
+		if (msg.data == '{"from": "connect", "value": "true"}') {
+			jsocket.core.websocket.send('{"cmd": "connected", "args": "null", "app": ""}');
+		}
 		var tab = msg.split("\n");
 		for (var i = 0; i < tab.length; ++i) {
 			jsocket.core.websocket.api.onReceive(tab[i]);
@@ -209,10 +212,12 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	write : function(msg) {
+		console.log('Write WebSocket: ', jsocket);
 		if (jsocket.core.websocket.connectedToServer == false) {
 			jsocket.core.websocket.reconnect();
 		}
 		if (jsocket.core.websocket.connectedToServer) {
+			console.log('core-websocket-write-to-server: ', msg);
 			jsocket.core.websocket.socket.send(msg + "\n");
 		} else {
 			if (typeof jsocket.core.websocket.api != 'object') {
@@ -230,6 +235,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	send : function(msg) {
+		console.log('core-websocket-send: ', msg);
 		return (jsocket.core.websocket.write(msg));
 	},
 

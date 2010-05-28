@@ -1,22 +1,8 @@
 # coding: utf-8
-# (c) 2009 Gleicon Moraes
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
-
+import re
 from twisted.protocols.basic import LineReceiver
 from twisted.internet.protocol import Factory
-import re
 
 class BasicOperations(object):
 	"""
@@ -42,7 +28,8 @@ class BasicOperations(object):
 		if self.writeHandler == None:
 			print 'No handler'
 		else:
-			self.writeHandler('\x00%s' % msg.encode('utf-8'))
+			data = '\x00' + msg.encode('utf-8')
+			self.writeHandler(data)
 
 	def after_connection(self):
 		pass
@@ -53,18 +40,14 @@ class WebSocketServer(LineReceiver):
 	HDR_HOST = re.compile('Host\:\s+(.*)')
 
 	def __init__(self):
-		self.hdr = '''HTTP/1.1 101 Web Socket Protocol Handshake\r
-Upgrade: WebSocket\r
-Connection: Upgrade\r
-WebSocket-Origin: %s\r
-WebSocket-Location: ws://%s%s\r\n\r\n'''
+		self.hdr = 'HTTP/1.1 101 Web Socket Protocol Handshake\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\nWebSocket-Origin: %s\r\nWebSocket-Location: ws://%s%s\r\n\r\n'
 
 	def connectionMade(self):
 		self.setRawMode()
 		self.factory.oper.on_connect()
 
 	def lineReceived(self, line):
-		self.factory.oper.on_read(line[1:].decode('utf-8', 'ignore'))
+		self.factory.oper.on_read(line[1:].decode('utf-8'))
 
 	def rawDataReceived(self, line):
 		origin, location, host = self._parseHeaders(line)

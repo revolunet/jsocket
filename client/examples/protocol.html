@@ -322,13 +322,21 @@
 			}
 
 			function callMethod(obj) {
+	            console.log(jsocket);
 				var method = 'protocol.action' + obj.value + '();';
 				eval(method);
+	            console.log(jsocket);
 			}
-
+function debug() {
+ console.log(jsocket);
+ jsocket.core.websocket.send('{"cmd":"connected", "args":"null", "app":""}');
+ console.log(jsocket);
+}
 			loadSettings();
 		// -->
 		</script>
+
+		<input type="button" value="DEBUG" onclick="javascript:debug();" />
 
 	</body>
 </html>

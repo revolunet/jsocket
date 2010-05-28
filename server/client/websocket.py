@@ -16,9 +16,7 @@ class ClientWebSocket(BasicOperations):
 
 	def on_read(self, line):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
-		Log().add('[+] Send: %s' % line, 'green')
-		#Approval().validate(line, self.dataSend)
-		self.send(line)
+		Approval().validate(line, self.dataSend)
 
 	def on_connect(self):
 		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """
@@ -30,4 +28,4 @@ class ClientWebSocket(BasicOperations):
 
 	def after_connection(self):
 		""" Methode appelee lorsqu'un utilisateur est connecte """
-		pass
+		self.send('{"from": "connect", "value": true}')
