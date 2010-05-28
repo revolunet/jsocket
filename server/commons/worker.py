@@ -13,6 +13,7 @@ class WorkerLog(threading.Thread):
 	def __init__(self, queue):
 		self.__queue = queue
 		threading.Thread.__init__(self)
+		self.setDaemon(True)
 
 	def run(self):
 		""" Affichage des donnees via Log() """
@@ -32,6 +33,7 @@ class WorkerParser(threading.Thread):
 		self.session = session
 		self.protocol = protocol
 		threading.Thread.__init__(self)
+		self.setDaemon(True)
 
 	def run(self):
 		""" Traitement des commandes json """
