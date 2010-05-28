@@ -151,7 +151,7 @@ class Protocol(object):
 		channelName = args['args'][0]
 		password = args['args'][1]
 		if self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.uid):
-			Log().add("[+] Un nouveau channel a ete ajoute par : " + str(self.client.getName()))
+			Log().add("[+] Le channel %s a ete ajoute par : %s"  % ( channelName,  str(self.client.getName())))
 			return ('"' + str(self.client.room.Channel(channelName=channelName, appName=appName).master_password) + '"')
 		else:
 			Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
@@ -173,9 +173,9 @@ class Protocol(object):
 			self.client.room_name = appName
 			Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + channelName, 'yellow')
 			if self.client.master == False:
-				self.status(channelName=self.client, appName=appName, master=False)
+				self.status(client=self.client, appName=appName, master=False)
 			else:
-				self.status(channelName=self.client, appName=appName, master=True)
+				self.status(client=self.client, appName=appName, master=True)
 			return ('true')
 		else:
 			Log().add("[!] Command error : le channel " + channelName + " n'existe pas ", 'yellow')
