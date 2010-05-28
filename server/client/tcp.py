@@ -1,6 +1,7 @@
 from twisted.internet.protocol import Protocol
 from zope.interface import implements
 from commons.approval import Approval
+from log.logger import Log
 
 class TwistedTCPClient(Protocol):
 	"""
@@ -9,12 +10,15 @@ class TwistedTCPClient(Protocol):
 
 	def dataReceived(self, data):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
-		Approval().validate(data, self.dataSend)
+		if '<policy-file-request/>' in data:
+			self.socket.send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>" + "\0")
+		else:
+			Approval().validate(data, self.dataSend)
 
 	def dataSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
 		for json in responses:
-			self.transport.write(str(json) + "\n")
+			self.socket.send(str(json) + "\0")
 
 	def connectionMade(self):
 		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """

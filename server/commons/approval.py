@@ -54,7 +54,6 @@ class Approval(object):
 			for i in range(0, SETTINGS.WORKER_THREADING_SIZE):
 				WorkerParser(this.queue, this.session, this.jsonProtocol).start()
 			this.protocol = ApprovalProtocol()
-			this.callback = None
 		return this.instance
 
 	def validate(self, datas, callback = None):
@@ -74,11 +73,11 @@ class Approval(object):
 					else:
 						pass
 			except ValueError as e:
-				Log().add("Approval JSON error: %s,%s" % (str(datas), str(e)), "red")
+				Log().add("[!] Approval: JSON error %s, %s" % (str(datas), str(e)), "red")
 		if len(valid_cmd) > 0:
 			uid = valid_cmd[0].get('uid', None)
 			if uid is None:
-				uid = Session().create()
+				uid = Session().create(callback)
 			self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid})
 			return uid
 		return None

@@ -10,10 +10,11 @@ class Session(object):
 			this.clientList = { }
 		return this.instance
 
-	def create(self):
+	def create(self, callback = None):
 		from client.client import Client
 
 		client = Client(self.room)
+		client.callback = callback
 		self.clientList[client.unique_key] = client
 		return client.unique_key
 
