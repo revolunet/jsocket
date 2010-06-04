@@ -128,7 +128,8 @@ class Room(object):
 													  {'channel': channelName, 'app': appName})
 				for u in users:
 					user = Session().get(u)
-					user.addResponse(json)
+					if user is not None:
+						user.addResponse(json)
 				if len(users) > 1:
 					return True
 		return False
@@ -195,4 +196,5 @@ class Room(object):
 		receiver =  Session().get(to)
 		json = Protocol.forgeJSON('message', '["' + sender.getName() + '", "' + message + '"]',
 											  {'channel': channelName, 'app': appName})
-		receiver.addResponse(json)
+		if receiver is not None:
+			receiver.addResponse(json)
