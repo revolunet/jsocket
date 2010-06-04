@@ -72,8 +72,8 @@ class Approval(object):
 						valid_cmd.append(decoded)
 					else:
 						pass
-			except ValueError as e:
-				Log().add("[!] Approval: JSON error %s, %s" % (str(datas), str(e)), "red")
+			except ValueError:
+				Log().add("[!] Approval: JSON error %s" % str(datas), "red")
 		if len(valid_cmd) > 0:
 			uid = valid_cmd[0].get('uid', None)
 			if uid is None:

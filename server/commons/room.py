@@ -15,6 +15,13 @@ class Room(object):
 		self.applications = {}
 		self.init_app()
 
+	def merge(self, list1, list2):
+		""" Merge deux list ensemble """
+		for s in list2:
+			if s not in list1:
+				list1.append(s)
+		return list1
+
 	def init_app(self):
 		"""Initialise les applications par defaut."""
 
@@ -33,11 +40,10 @@ class Room(object):
 			channel = self.Channel(channelName=channelName, appName=appName)
 			if channel is not None:
 				return channel.users()
-		from heapq import merge
 		users = []
 		for app in self.applications:
 			for c in self.applications[app]:
-				users = list(merge(users, c.get('object').users()))
+				self.merge(users, c.get('object').users())
 		return users
 
 	def create(self, channelName, uid, appName, password = None):

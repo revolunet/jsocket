@@ -13,12 +13,12 @@ import urllib2
 
 class CONFIG(object):
 	IS_DEBUG = False
-	#SERVER_PORT = 9999
-	SERVER_PORT = 81
+	SERVER_PORT = 9999
+	#SERVER_PORT = 81
 	CLIENT_NUMBER = 1
 	CLIENT_THREAD = False
-	CLIENT_TYPE = 'HTTP'
-	#CLIENT_TYPE = 'TCP'
+	#CLIENT_TYPE = 'HTTP'
+	CLIENT_TYPE = 'TCP'
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
 	SERVER_HOST = 'localhost'
 	HTTP_SERVER_PORT = 81
@@ -140,7 +140,7 @@ class TCPClient(object):
 		return self.buffer
 
 	def write(self, json):
-		self.sock.send(json)
+		self.sock.send(json + "\n")
 
 	def disconnect(self):
 		self.sock.close()

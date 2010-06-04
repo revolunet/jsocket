@@ -5,6 +5,8 @@
                 {"href":"output/jsocket.core.http.html","text":"http","id":"jsocket.core.http","isClass":true,"iconCls":"icon-static","cls":"cls","leaf":true}
 				,
                 {"href":"output/jsocket.core.tcp.html","text":"tcp","id":"jsocket.core.tcp","isClass":true,"iconCls":"icon-static","cls":"cls","leaf":true}
+				,
+                {"href":"output/jsocket.core.websocket.html","text":"websocket","id":"jsocket.core.websocket","isClass":true,"iconCls":"icon-static","cls":"cls","leaf":true}
 				]}
 				,
                 {"href":"output/jsocket.api.html","text":"api","id":"jsocket.api","isClass":true,"iconCls":"icon-static","cls":"cls","leaf":true}
@@ -17,6 +19,8 @@
 			"jsocket.core.http":"icon-static"
 			,
 			"jsocket.core.tcp":"icon-static"
+			,
+			"jsocket.core.websocket":"icon-static"
 			,
 			"jsocket.api":"icon-static"
 			,
