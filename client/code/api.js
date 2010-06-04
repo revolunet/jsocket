@@ -511,7 +511,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} tab [0] = message a envoyer
 	 *        [1] = [ '*' ] pour tous les clients du channel
 	 *              [ '' ] ou [ 'master' ] pour le master du channel
-	 *              [ 'username1', 'username2', ... ] pour une liste de clients
+	 *              [ 'username1', 'username2', 'uidClient3', ... ] pour une liste de clients
 	 */
 	message : function(appName, channel, tab) {
 		var json = {

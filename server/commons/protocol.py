@@ -249,11 +249,7 @@ class Protocol(object):
 		import urllib
 		from log.logger import Log
 
-		try:
-			message = simplejson.loads(message)
-		except ValueError:
-			Log().add("[!] Message: JSON error %s" % message, "red")
-			return ('false')
+		message = args.get('args', '')
 		channelName = args['channel']
 		appName = args['app']
 		if len(message) == 0:
