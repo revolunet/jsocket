@@ -3,6 +3,7 @@
 ##
 
 from config.settings import SETTINGS
+from commons.history import History
 
 class Channel(object):
 	"""
@@ -23,6 +24,7 @@ class Channel(object):
 		self.password = None
 		self.master_password = SETTINGS.CHANNEL_MASTER_PASSWORD
 		self.name = name
+		self.history = History()
 
 	def isMaster(self, uid):
 		"""Return: si cet uid est un uid d'administrateur du channel ou non -> bool."""
