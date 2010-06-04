@@ -7,14 +7,14 @@ $dir = realpath(dirname(__FILE__).'/../').'/';
 $out = 'jsocket.js';
 
 $files = array(
-	'jsocket.min.js',
+	'code/jsocket.min.js',
 	'lib/json2.js',
-	'protocol.js',
-	'core/tcp.js',
-	'core/http.js',
-	'core/websocket.js',
-	'api.js',
-	'flash.js'
+	'code/protocol.js',
+	'code/core/tcp.js',
+	'code/core/http.js',
+	'code/core/websocket.js',
+	'code/api.js',
+	'code/flash.js'
 );
 $src = array();
 
