@@ -2,7 +2,7 @@ import time
 
 class History(object):
 	"""
-	Garde en mémoire les messages d'un channel
+	Garde en memoire les messages d'un channel
 	"""
 	
 	def __init__(self):
