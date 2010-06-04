@@ -242,8 +242,7 @@
 				},
 
 				actionMessage: function() {
-					jsocket.api.message(settings.appName, settings.channelName,
-						[ settings.forwardCommand, [ '*' ] ]);
+					jsocket.api.message(settings.appName, settings.channelName, [ settings.forwardCommand, ['*'] ]);
 				},
 
 				onMessage: function(args) {

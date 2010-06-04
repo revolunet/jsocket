@@ -247,7 +247,6 @@ class Protocol(object):
 		import urllib
 		from log.logger import Log
 
-		message = urllib.unquote_plus(args['args'])
 		try:
 			message = simplejson.loads(message)
 		except ValueError:

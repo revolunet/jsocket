@@ -514,19 +514,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 *              [ 'username1', 'username2', ... ] pour une liste de clients
 	 */
 	message : function(appName, channel, tab) {
-		if (typeof(tab) == 'string') {
-			str = jsocket.api.core.addslashes(tab);
-		} else {
-			var str = '[ "' + jsocket.api.core.addslashes(tab[0]) +
-				'", [ "' + (tab[1][0] ? jsocket.api.core.addslashes(tab[1][0]) : '') + '"';
-			for (var i = 1; tab[1][i]; ++i) {
-				str += (', "' + jsocket.api.core.addslashes(tab[1][i]) + '"');
-			}
-			str += ' ] ]';
-		}
 		var json = {
 			cmd: 'message',
-			args: str,
+			args: tab,
 			app: appName,
 			channel: channel,
 			uid: 'jsocket.api.uid'
