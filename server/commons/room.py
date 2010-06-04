@@ -146,7 +146,7 @@ class Room(object):
 						self.__sendMessage(channelName, appName, sender, master, message)
 					return True
 				list_users = channel.users()
-				list_masters = channel.master()
+				list_masters = channel.masters()
 				list_users = self.merge(list_users, list_masters)
 				if len(list_users) >= 1:
 					if users[0] == 'all':
