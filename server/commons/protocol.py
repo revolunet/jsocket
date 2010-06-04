@@ -195,7 +195,9 @@ class Protocol(object):
 			self.client.status = "offline"
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + channelName)
 			if self.client.master == False:
-				self.status(self.client, appName=appName, master=False)
+				self.status(client=self.client, appName=appName, master=False)
+			else:
+				self.status(client=self.client, appName=appName, master=True)
 			return ('true')
 		else:
 			Log().add("[!] Command error : l'utilisateur n'est pas dans le channel : " + channelName)
