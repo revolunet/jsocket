@@ -31,7 +31,7 @@ class WatchDog(threading.Thread):
 			clients = Session().gets()
 			uidToDelete = [ ]
 			if len(clients) != total_client:
-				total_client = clients
+				total_client = len(clients)
 				Log().add('[i] WatchDog: Server hosts %d clients' % len(clients), 'yellow')
 			for (uid, client) in clients:
 				if int(current_time - client.last_action) > SETTINGS.WATCHDOG_MAX_IDLE_TIME:

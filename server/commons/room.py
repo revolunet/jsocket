@@ -69,7 +69,7 @@ class Room(object):
 				'app': appName
 			})
 			return True
-		self.applications.pop(appName)
+		#self.applications.pop(appName)
 		return False
 
 	def remove(self, channelName, appName):
