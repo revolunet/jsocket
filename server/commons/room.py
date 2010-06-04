@@ -146,10 +146,13 @@ class Room(object):
 						self.__sendMessage(channelName, appName, sender, master, message)
 					return True
 				list_users = channel.users()
+				list_masters = channel.master()
+				list_users = self.merge(list_users, list_masters)
 				if len(list_users) >= 1:
 					if users[0] == 'all':
 						for u in list_users:
-							self.__sendMessage(channelName, appName, sender, u, message)
+							if sender is not u:
+								self.__sendMessage(channelName, appName, sender, u, message)
 						return True
 					for user in list_users:
 						if user in users:
