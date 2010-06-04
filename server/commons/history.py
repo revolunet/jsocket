@@ -20,3 +20,6 @@ class History(object):
 			if h.time <= start and h.time >= end:
 				history.append(h)
 		return history
+		
+	def flush(self):
+		self.__history = []
