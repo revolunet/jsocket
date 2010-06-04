@@ -50,10 +50,13 @@ class Room(object):
 		"""Return: Ajoute un channel a la liste des rooms  -> bool"""
 
 		import random
+		from commons.session import Session
 
 		if appName not in self.applications:
 			self.applications[appName] = []
 		if self.chanExists(channelName=channelName, appName=appName) == False:
+			client = Session().get(uid)
+			client.room_name = channelName
 			channel = Channel(channelName)
 			channel.master_password = random.getrandbits(16)
 			channel.add(uid, channel.master_password)
@@ -96,8 +99,7 @@ class Room(object):
 		if self.chanExists(channelName=channelName, appName=appName) is False:
 			return False
 		channel = self.Channel(channelName=channelName, appName=appName)
-		channel.delete(uid)
-		return True
+		return channel.delete(uid)
 
 	def Channel(self, channelName, appName):
 		if appName in self.applications:
