@@ -244,7 +244,15 @@ class Protocol(object):
 	def __cmd_message(self, args):
 		"""Envoie un message a une liste d'utilisateurs"""
 
-		message = args['args']
+		import urllib
+		from log.logger import Log
+
+		message = urllib.unquote_plus(args['args'])
+		try:
+			message = simplejson.loads(message)
+		except ValueError:
+			Log().add("[!] Message: JSON error %s" % message, "red")
+			return ('false')
 		channelName = args['channel']
 		appName = args['app']
 		if len(message) == 0:

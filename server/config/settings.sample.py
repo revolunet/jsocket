@@ -15,7 +15,7 @@ class SETTINGS(object):
 	SERVER_HTTP_PORT = 81
 	SERVER_WEBSOCKET_PORT = 8080
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
-	SERVER_HOST = 'localhost'
+	SERVER_HOST = '172.16.174.128'
 
 	# CHANNEL/ROOM CONFIGURATION
 	CHANNEL_MAX_USERS = 100
