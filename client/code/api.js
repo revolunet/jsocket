@@ -27,7 +27,7 @@ jsocket.api = {
 	 * @private
 	 * @type Object
 	 */
-	core : jsocket.core.tcp,
+	core : null,
 
 	/**
 	 * Le nom de domaine ou adresse IP du serveur distant
@@ -84,6 +84,9 @@ jsocket.api = {
 	 * @param {Int} port Le port du serveur distant
 	 */
 	init : function(host, port) {
+		if (jsocket.api.core == null) {
+			jsocket.api.method(jsocket.core.tcp);
+		}
 		jsocket.api.host = host;
 		jsocket.api.port = port;
 		jsocket.api.core.api = this;
@@ -101,7 +104,9 @@ jsocket.api = {
 	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (TCP ou HTTP)
 	 */
 	method : function(newCore) {
-		jsocket.api.core.isWorking = false;
+		if (jsocket.api.core != null) {
+			jsocket.api.core.isWorking = false;
+		}
 		jsocket.api.core = newCore;
 		jsocket.api.core.isWorking = true;
 	},
@@ -229,7 +234,6 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Tableau contenant l'identifiant unique de l'utilisateur
 	 */
 	onConnected : function(args) {
-		console.log(args);
 		jsocket.api.uid = args.value;
 		jsocket.api.sendPool();
 	},
@@ -468,6 +472,7 @@ jsocket.api.register('myApplicationName', myApplication);
 			channel: channel,
 			uid: 'jsocket.api.uid'
 		};
+		console.log(json);
 		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 

@@ -10,6 +10,7 @@ class TwistedTCPClient(Protocol):
 
 	def dataReceived(self, data):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
+		Log().add('[TCP] Received: %s' % data)
 		if '<policy-file-request/>' in data:
 			self.socket.send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>" + "\0")
 		else:

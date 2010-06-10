@@ -142,7 +142,6 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		console.log('core-receive: ', msg);
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
@@ -212,12 +211,10 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	write : function(msg) {
-		console.log('Write WebSocket: ', jsocket);
 		if (jsocket.core.websocket.connectedToServer == false) {
 			jsocket.core.websocket.reconnect();
 		}
 		if (jsocket.core.websocket.connectedToServer) {
-			console.log('core-websocket-write-to-server: ', msg);
 			jsocket.core.websocket.socket.send(msg + "\n");
 		} else {
 			if (typeof jsocket.core.websocket.api != 'object') {
@@ -235,7 +232,6 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	send : function(msg) {
-		console.log('core-websocket-send: ', msg);
 		return (jsocket.core.websocket.write(msg));
 	},
 
