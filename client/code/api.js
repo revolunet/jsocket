@@ -472,7 +472,6 @@ jsocket.api.register('myApplicationName', myApplication);
 			channel: channel,
 			uid: 'jsocket.api.uid'
 		};
-		console.log(json);
 		jsocket.api.send(jsocket.protocol.forge(json));
 	},
 
