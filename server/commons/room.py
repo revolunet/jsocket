@@ -6,6 +6,7 @@ from commons.protocol import Protocol
 from config.settings import SETTINGS
 from commons.channel import Channel
 
+
 class Room(object):
 	"""
 	Liste des channels disponnible sur le server.
@@ -68,7 +69,7 @@ class Room(object):
 				'app': appName
 			})
 			return True
-		self.applications.pop(appName)
+		#self.applications.pop(appName)
 		return False
 
 	def remove(self, channelName, appName):
@@ -128,6 +129,7 @@ class Room(object):
 				master = Session().get(uid)
 				json = Protocol.forgeJSON('forward', '["' + master.getName() + '", "' + commande + '"]',
 													  {'channel': channelName, 'app': appName})
+				channel.history.add(uid, json)
 				for u in users:
 					user = Session().get(u)
 					if user is not None:
