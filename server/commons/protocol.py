@@ -33,6 +33,8 @@ class Protocol(object):
 			json += ', "channel": "' + param['channel'] + '"'
 		if param.get('app', None) is not None:
 			json += ', "app": "' + param['app'] + '"'
+		if param.get('toUid', None) is not None:
+			json += ', "toUid": "' + param['toUid'] + '"'
 		json += '}'
 		return json
 
@@ -161,10 +163,10 @@ class Protocol(object):
 	# {"cmd": "history", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
 	@jsonPrototype('history')
 	def __cmd_history(self, args):
-		
+
 		appName = args['app']
 		channelName = args['args'][0]
-		
+
 		history = self.client.room.history(appName=appName, channelName=channelName)
 		if len(history) > 0:
 			return (simplejson.JSONEncoder().encode(history))
@@ -313,9 +315,9 @@ class Protocol(object):
 		"""Change le status de l'utilisateur"""
 
 		from log.logger import Log
-		
+
 		appName = args['app']
-		
+
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args))
 		self.client.status = args['args']
 		if self.client.master == False:

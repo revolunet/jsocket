@@ -110,7 +110,7 @@ jsocket.api = {
 	 */
 	init : function(host, port) {
 		if (jsocket.api.core == null) {
-			jsocket.api.method(jsocket.core.websocket);
+			jsocket.api.method(jsocket.core.tcp);
 		}
 		jsocket.api.host = host;
 		jsocket.api.port = port;

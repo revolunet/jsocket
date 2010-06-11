@@ -39,11 +39,10 @@ class Client(object):
 
 		from log.logger import Log
 
-		if command is not None:
-			Log().add('[JSON][Responses] ' + str(command), 'green')
 		self.last_action = time.time()
 		if self.callback is not None:
 			if callable(self.callback):
+				Log().add('[JSON][Responses] ' + str(command), 'green')
 				reactor.callFromThread(self.callback, [ command ])
 			else:
 				self.callback = None
