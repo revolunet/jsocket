@@ -3,6 +3,7 @@
 ##
 
 import sys
+import time
 
 from server.tcphttp import ServerTwisted
 from commons.watchdog import WatchDog
@@ -22,6 +23,8 @@ if __name__ == '__main__':
 	mainTwisted()
 	mainWatchDog()
 	try:
+		time.sleep(2)
+		reactor.run()
 		while (sys.stdin.readline()):
 			pass
 	except KeyboardInterrupt:
