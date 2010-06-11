@@ -13,7 +13,7 @@ import urllib2
 
 class CONFIG(object):
 	IS_DEBUG = False
-	SERVER_PORT = 9999
+	SERVER_PORT = 8082
 	#SERVER_PORT = 81
 	CLIENT_NUMBER = 3
 	CLIENT_THREAD = False
