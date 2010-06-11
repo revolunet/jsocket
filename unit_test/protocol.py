@@ -13,7 +13,7 @@ import urllib2
 
 class CONFIG(object):
 	IS_DEBUG = False
-	SERVER_PORT = 9999
+	SERVER_PORT = 8082
 	#SERVER_PORT = 81
 	CLIENT_NUMBER = 3
 	CLIENT_THREAD = False
@@ -162,6 +162,7 @@ class Protocol(object):
 		'setStatus': '{"cmd": "setStatus", "args": "protocolMasterNewStatus", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'getStatus': '{"cmd": "getStatus", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'timeConnect': '{"cmd": "timeConnect", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
+		'history': '{"cmd": "history", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'part': '{"cmd": "part", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'remove': '{"cmd": "remove", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'refresh': '{"cmd": "refresh", "args": "null", "uid": "$uid", "channel": "protocol", "app": "protocol"}',
@@ -248,6 +249,7 @@ def protocolTesting(*args):
 	Protocol.stdCommand('setStatus', client)
 	Protocol.stdCommand('getStatus', client)
 	Protocol.stdCommand('timeConnect', client)
+	Protocol.stdCommand('history', client)
 	Protocol.stdCommand('part', client)
 	Protocol.stdCommand('remove', client)
 	Protocol.stdCommand('history', client)

@@ -79,13 +79,38 @@ jsocket.api = {
 	commands : [ ],
 
 	/**
+	 * La liste des cores disponibles.
+	 * Si un core ne fonctionne pas, alors
+	 * le core suivant est teste.
+	 * @private
+	 * @type Object
+	 */
+	cores : {
+		websocket: {
+			object: jsocket.core.websocket,
+			tested: false,
+			worked: true
+		},
+		tcp: {
+			object: jsocket.core.tcp,
+			tested: false,
+			worked: true
+		},
+		http: {
+			object: jsocket.core.http,
+			tested: false,
+			worked: true
+		}
+	},
+
+	/**
 	 * Connect to the server via jsocketCore
 	 * @param {String} host Le nom de domaine ou adresse IP du serveur distant
 	 * @param {Int} port Le port du serveur distant
 	 */
 	init : function(host, port) {
 		if (jsocket.api.core == null) {
-			jsocket.api.method(jsocket.core.tcp);
+			jsocket.api.method(jsocket.core.websocket);
 		}
 		jsocket.api.host = host;
 		jsocket.api.port = port;
@@ -262,6 +287,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * plusieurs commandes JSON. (Si plusieurs, elle sont alors separees par des \n)
 	 */
 	onReceive : function(message) {
+		console.log('jsocket.api.receive: ', message);
 		jsocket.api.parser(message);
 	},
 
@@ -516,7 +542,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	history : function(appName, channel) {
 		var json = {
 			cmd: 'history',
-			args: '',
+			args: 'null',
 			app: appName,
 			channel: channel,
 			uid: 'jsocket.api.uid'
@@ -689,6 +715,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	sendPool : function() {
 		for (var i = 0; i < jsocket.api.commands.length; ++i) {
+			console.log('jsocket.api.send: ', jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
 			jsocket.api.core.send(jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
 		}
 		jsocket.api.commands = [ ];
@@ -702,6 +729,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	send : function(msg) {
 		if (jsocket.api.uid != '') {
+			console.log('jsocket.api.send: ', msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
 			jsocket.api.core.send(msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
 		} else if (jsocket.api.commands.length < 10) {
 			jsocket.api.commands.push(msg);

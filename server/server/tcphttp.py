@@ -37,4 +37,4 @@ class ServerTwisted(threading.Thread):
 		reactor.listenTCP(SETTINGS.SERVER_HTTP_PORT, client, interface=SETTINGS.SERVER_HOST)
 
 		# Running servers
-		#reactor.run(installSignalHandlers=0)
+		reactor.run(installSignalHandlers=0)
