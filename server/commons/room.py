@@ -168,7 +168,7 @@ class Room(object):
 		"""Return : Auth un utilisateur sur une application -> bool """
 
 		if self.chanExists(channelName=channelName, appName=appName):
-			channel = Channel(channelName)
+			channel = self.Channel(channelName, appName)
 			return channel.add(uid, password)
 		return False
 
@@ -176,7 +176,7 @@ class Room(object):
 		"""Return: change le mot de passe admin d'une application -> bool """
 
 		if self.chanExists(channelName=channelName, appName=appName):
-			channel = Channel(channelName)
+			channel = self.Channel(channelName, appName)
 			channel.master_password = password
 			return True
 		return False

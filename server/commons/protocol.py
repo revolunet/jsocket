@@ -356,20 +356,18 @@ class Protocol(object):
 					else:
 						channel = "none"
 					master = Session().get(master)
-					if master is None:
-						continue
-					status = client.status
-					key = client.unique_key
-					name = client.getName()
-					to_send = {"name": name, "key": key, "status": status}
-					Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName())
-					json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
 					if master is not None:
+						status = client.status
+						key = client.unique_key
+						name = client.getName()
+						to_send = {"name": name, "key": key, "status": status}
+						Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName())
+						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
 						master.addResponse(json)
 			elif channel is not None:
 				for u in channel.users():
 					user = Session().get(u)
-					if user.master != client:
+					if user is not None and user.master != client:
 						status = client.status
 						key = client.unique_key
 						name = client.getName()

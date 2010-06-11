@@ -18,8 +18,9 @@ class TwistedTCPClient(Protocol):
 
 	def dataSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
-		for json in responses:
-			self.socket.send(str(json) + "\0")
+		if self.socket is not None:
+			for json in responses:
+				self.socket.send(str(json) + "\0")
 
 	def connectionMade(self):
 		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """

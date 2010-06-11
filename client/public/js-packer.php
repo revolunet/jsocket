@@ -4,7 +4,7 @@
 require(dirname(__FILE__).'/class.JavaScriptPacker.php');
 
 $dir = realpath(dirname(__FILE__).'/../').'/';
-$out = 'jsocket.js';
+$out = dirname(__FILE__).'/jsocket.js';
 
 $files = array(
 	'code/jsocket.min.js',
