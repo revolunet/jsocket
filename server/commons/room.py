@@ -137,6 +137,13 @@ class Room(object):
 				if len(users) > 1:
 					return True
 		return False
+		
+	def history(self, channelName, appName):
+		
+		if self.chanExists(channelName=channelName, appName=appName):
+			channel = self.Channel(channelName=channelName, appName=appName)
+			return channel.history.get()
+		return []
 
 	def message(self, channelName, appName, sender, users, message):
 		"""Return : Envoie un message a une liste d'utilisateurs -> bool """
