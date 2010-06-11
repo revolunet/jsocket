@@ -1,6 +1,6 @@
 /**
-* Includes swf for flash socket bridge
-**/
+ * Includes swf for flash socket bridge
+ */
 function createSwf() {
 	if (typeof swfobject != 'undefined' && typeof jsocket.core.tcp != 'undefined') {
 		swfobject.embedSWF(jsocketBridgeDomain, "flashcontent", "900", "200", "8.0.0", "expressInstall.swf",

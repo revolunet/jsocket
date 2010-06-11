@@ -42,7 +42,8 @@ jsocket = {
 		http : null,
 		tcp : null,
 		websocket : null
-	}
+	},
+	version: '0.2.6'
 };
 
 create('div', 'flashcontent');

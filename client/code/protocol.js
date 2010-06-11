@@ -3,7 +3,7 @@
  * <p><b><u>jsocket Protocol</u></b></p>
  * <p>Valide et forge le JSON des commandes a partir d'un objet.</p>
  * @author Revolunet
- * @version 0.2.3
+ * @version 0.2.6
  * @singleton
  */
 jsocket.protocol = {

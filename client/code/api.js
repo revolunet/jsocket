@@ -18,7 +18,7 @@ jsocket.api.app['myapp'].onJoin(args) {
 };
 </code></pre>
  * @author Revolunet
- * @version 0.2.5
+ * @version 0.2.6
  * @singleton
  */
 jsocket.api = {
@@ -506,6 +506,30 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Le retour de la commande {@link #list list}
 	 */
 	onList : function(args) {
+	},
+
+	/**
+	 * Demande au serveur la liste des dernieres commandes effectuees par le master.
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 */
+	history : function(appName, channel) {
+		var json = {
+			cmd: 'history',
+			args: '',
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onHistory
+	 * Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+	 * @param {Object} args Le retour de la commande {@link #history history}
+	 */
+	onHistory : function(args) {
 	},
 
 	/**

@@ -2,7 +2,7 @@
  * @class jsocket.core.websocket
  * Javascript event's interface for websocket HTML 5
  * @author Revolunet
- * @version 0.2.5
+ * @version 0.2.6
  * @singleton
  */
 jsocket.core.websocket = {

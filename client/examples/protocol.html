@@ -120,6 +120,8 @@
 					onclick="javascript:callMethod(this);" />
 				<input type="button" value="List"
 					onclick="javascript:callMethod(this);" />
+				<input type="button" value="History"
+					onclick="javascript:callMethod(this);" />
 			</fieldset>
 		</form>
 
@@ -211,6 +213,14 @@
 				actionSetStatus: function() {
 					jsocket.api.setStatus(settings.appName, settings.channelName, settings.status);
 				},
+
+		        actionHistory: function() {
+		            jsocket.api.history(settings.appName, settings.channelName);
+		        },
+
+ 		        onHistory: function(args) {
+		            console.log('onHistory: ', args);
+		        },
 
 				onSetStatus: function(args) {
 					console.log('onSetStatus: ', args);
