@@ -1,6 +1,9 @@
 
 
 class Filter(object):
+	"""
+	Class pour filtrer l'historique, via des regexp.
+	"""
 	def __init__(self):
 		self.__filters = []
 		self.init_filters()

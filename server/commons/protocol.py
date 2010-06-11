@@ -54,7 +54,8 @@ class Protocol(object):
 			'getStatus' : self.__cmd_getStatus,
 			'setStatus' : self.__cmd_setStatus,
 			'timeConnect' : self.__cmd_timeConnect,
-			'chanMasterPwd' : self.__cmd_chanMasterPwd
+			'chanMasterPwd' : self.__cmd_chanMasterPwd,
+			'history' : self.__cmd_history
 		}
 
 	def parse(self, client, json):
@@ -156,6 +157,11 @@ class Protocol(object):
 		else:
 			Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
 			return ('false')
+
+	# {"cmd": "history", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
+	@jsonPrototype('history')
+	def __cmd_history(self, args):
+		pass
 
 	# {"cmd": "join", "args": ["irc", ""]}
 	@jsonPrototype('join')
@@ -300,9 +306,15 @@ class Protocol(object):
 		"""Change le status de l'utilisateur"""
 
 		from log.logger import Log
-
+		
+		appName = args['app']
+		
 		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args))
 		self.client.status = args['args']
+		if self.client.master == False:
+			self.status(client=self.client, appName=appName, master=False)
+		else:
+			self.status(client=self.client, appName=appName, master=True)
 		return ('true')
 
 	# {"cmd": "timeConnect", "args": "null"}
