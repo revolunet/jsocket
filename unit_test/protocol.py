@@ -162,6 +162,7 @@ class Protocol(object):
 		'setStatus': '{"cmd": "setStatus", "args": "protocolMasterNewStatus", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'getStatus': '{"cmd": "getStatus", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'timeConnect': '{"cmd": "timeConnect", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
+		'history': '{"cmd": "history", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'part': '{"cmd": "part", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'remove': '{"cmd": "remove", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}'
 	}
@@ -245,6 +246,7 @@ def protocolTesting(*args):
 	Protocol.stdCommand('setStatus', client)
 	Protocol.stdCommand('getStatus', client)
 	Protocol.stdCommand('timeConnect', client)
+	Protocol.stdCommand('history', client)
 	Protocol.stdCommand('part', client)
 	Protocol.stdCommand('remove', client)
 	client.disconnect()
