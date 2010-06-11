@@ -161,7 +161,14 @@ class Protocol(object):
 	# {"cmd": "history", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
 	@jsonPrototype('history')
 	def __cmd_history(self, args):
-		pass
+		
+		appName = args['app']
+		channelName = args['args'][0]
+		
+		history = self.client.room.history(appName=appName, channelName=channelName)
+		if len(history) > 0:
+			return (simplejson.JSONEncoder().encode(history))
+		return ([])
 
 	# {"cmd": "join", "args": ["irc", ""]}
 	@jsonPrototype('join')
