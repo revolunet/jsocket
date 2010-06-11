@@ -163,7 +163,9 @@ class Protocol(object):
 		'getStatus': '{"cmd": "getStatus", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'timeConnect': '{"cmd": "timeConnect", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'part': '{"cmd": "part", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
-		'remove': '{"cmd": "remove", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}'
+		'remove': '{"cmd": "remove", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
+		'refresh': '{"cmd": "refresh", "args": "null", "uid": "$uid", "channel": "protocol", "app": "protocol"}',
+		'history': '{"cmd": "history", "args": "null", "uid": "$uid", "channel": "protocol", "app": "protocol"}'
 	}
 	neededKeys = [
 		'from',
@@ -195,6 +197,7 @@ class Protocol(object):
 		client.write(Protocol.commands.get(method, '').replace('$uid', client.uid))
 		results = client.handle().strip(' \t\n\0').split("\n")
 		for result in results:
+			print "Result: %s" % result
 			json = Protocol.checkJson(method, result)
 			if json == False:
 				return False
@@ -247,6 +250,7 @@ def protocolTesting(*args):
 	Protocol.stdCommand('timeConnect', client)
 	Protocol.stdCommand('part', client)
 	Protocol.stdCommand('remove', client)
+	Protocol.stdCommand('history', client)
 	client.disconnect()
 	print '[i] Client n%d finished' % index
 

@@ -140,8 +140,8 @@ class Room(object):
 		
 	def history(self, channelName, appName):
 		
-		if self.chanExists(channelName=channelName, appName=appName):
-			channel = self.Channel(channelName=channelName, appName=appName)
+		channel = self.Channel(channelName=channelName, appName=appName)
+		if channel is not None:
 			return channel.history.get()
 		return []
 
@@ -151,7 +151,7 @@ class Room(object):
 		if self.chanExists(channelName=channelName, appName=appName):
 			if len(users) > 0:
 				channel = self.Channel(channelName=channelName, appName=appName)
-				if users[0] == 'master' and sender in channel.masters():
+				if users[0] == 'master' and sender in channel.users():
 					masters = channel.masters()
 					for master in masters:
 						self.__sendMessage(channelName, appName, sender, master, message)

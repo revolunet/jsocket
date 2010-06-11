@@ -15,6 +15,7 @@ class ApprovalProtocol(object):
 		self.commands = {
 			'refresh': lambda l:True,
 			'connected':  lambda l:True,
+			'history':  self.default,
 			'auth':  self.default,
 			'create':  self.default,
 			'join':  self.default,

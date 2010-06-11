@@ -163,11 +163,12 @@ class Protocol(object):
 	def __cmd_history(self, args):
 		
 		appName = args['app']
-		channelName = args['args'][0]
+		channelName = args['channel']
 		
 		history = self.client.room.history(appName=appName, channelName=channelName)
 		if len(history) > 0:
 			return (simplejson.JSONEncoder().encode(history))
+		
 		return ([])
 
 	# {"cmd": "join", "args": ["irc", ""]}
