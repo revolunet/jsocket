@@ -129,6 +129,7 @@ class Room(object):
 		"""Return : Envoie une commande a tous les utilisateurs d'une application -> bool """
 
 		from commons.session import Session
+		from log.logger import Log
 
 		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName=channelName, appName=appName)
@@ -137,12 +138,14 @@ class Room(object):
 				users = channel.users()
 				master = Session().get(uid)
 				json = Protocol.forgeJSON('forward', '["' + master.getName() + '", "' + commande + '"]',
-										  {'channel': channelName, 'app': appName})
+										  {'channel': channelName, 'app': appName, 'toUid': uid})
 				channel.history.add(uid, json)
 				for u in users:
 					user = Session().get(u)
 					if user is not None:
+						Log().add('[+] Forward add response to uid/object: %s/%s' % (u, user))
 						user.addResponse(json)
+				Log().add('[i] Forward end add response')
 				if len(users) > 1:
 					return True
 		return False

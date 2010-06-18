@@ -1,31 +1,25 @@
 import datetime
 
-from server.websocket import BasicOperations
+from server.websocket import WebSocketHandler
 from commons.approval import Approval
 from log.logger import Log
 
-class ClientWebSocket(BasicOperations):
+class ClientWebSocket(WebSocketHandler):
 	"""
 	Classe WebSocket HTML5 utilisee par twisted
 	"""
 
-	def dataSend(self, responses):
+	def callbackSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
 		for json in responses:
-			self.send(json)
+			if '{"from": "connected",' not in json:
+				self.transport.write(json)
 
-	def on_read(self, line):
+	def frameReceived(self, frame):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
-		Approval().validate(line, self.dataSend)
-
-	def on_connect(self):
-		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """
-		pass
-
-	def on_close(self, r):
-		""" Methode appelee lorsqu'un utilisateur se deconnecte """
-		pass
-
-	def after_connection(self):
-		""" Methode appelee lorsqu'un utilisateur est connecte """
-		self.send('{"from": "connect", "value": true}')
+		Log().add('[WebSocket] Received: %s' % frame)
+		if '{"cmd": "connected", "args": "null"' in frame:
+			uid = Approval().validate(frame)
+			self.transport.write('{"from": "connected", "value": "%s"}' % uid)
+		else:
+			Approval().validate(frame, self.callbackSend)

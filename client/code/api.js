@@ -125,8 +125,9 @@ jsocket.api = {
 	 * <div class="mdetail-params"><ul>
 	 * <li><b><tt>{@link jsocket.core.tcp#loaded}</tt></b></li>
 	 * <li><b><tt>{@link jsocket.core.http#loaded}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.websocket#loaded}</tt></b></li>
 	 * </ul></div></p>
-	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (TCP ou HTTP)
+	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
 	 */
 	method : function(newCore) {
 		if (jsocket.api.core != null) {
