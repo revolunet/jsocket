@@ -86,11 +86,6 @@ jsocket.api = {
 	 * @type Object
 	 */
 	cores : {
-		websocket: {
-			object: jsocket.core.websocket,
-			tested: false,
-			worked: true
-		},
 		tcp: {
 			object: jsocket.core.tcp,
 			tested: false,
@@ -98,6 +93,11 @@ jsocket.api = {
 		},
 		http: {
 			object: jsocket.core.http,
+			tested: false,
+			worked: true
+		},
+		websocket: {
+			object: jsocket.core.websocket,
 			tested: false,
 			worked: true
 		}
@@ -110,7 +110,7 @@ jsocket.api = {
 	 */
 	init : function(host, port) {
 		if (jsocket.api.core == null) {
-			jsocket.api.method(jsocket.core.websocket);
+			jsocket.api.method(jsocket.core.tcp);
 		}
 		jsocket.api.host = host;
 		jsocket.api.port = port;

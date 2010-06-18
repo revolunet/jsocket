@@ -1,1 +1,2080 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('C 3H=34();9(2o==H){C 2o=3H+\'4f/56.3F\'}7 1y(3E,1O){C 1V=1v.55(3E);1V.1O=1O;1V.5m=\'&5d;\';1v.4R.4S(1V)}7 31(1A){h(1A.5f(0,1A.52("/"))+\'/\')}7 34(){C 1P=1v.4Z("4X");Q(C i=0;1P[i];++i){9(1P[i].3f.54(/2.4s/i)){h 31(1P[i].3f)}}h(m)}2={6:H,R:H,3:{o:H,A:H,q:H}};1y(\'3a\',\'3B\');1y(\'3a\',\'2X\');9(!15.1a){15.1a={}}(7(){7 f(n){h n<10?\'0\'+n:n}9(y 2a.1w.1s!==\'7\'){2a.1w.1s=7(1f){h 39(15.2P())?15.4b()+\'-\'+f(15.4a()+1)+\'-\'+f(15.4d())+\'T\'+f(15.4N())+\':\'+f(15.40())+\':\'+f(15.3Z())+\'Z\':H};1U.1w.1s=3Y.1w.1s=47.1w.1s=7(1f){h 15.2P()}}C 29=/[\\48\\2O\\2N-\\2Q\\2R\\2U\\2L\\2V-\\2I\\2H-\\2J\\2K-\\2F\\2E\\2S-\\3h]/g,24=/[\\\\\\"\\3W-\\3Q\\3R-\\4m\\2O\\2N-\\2Q\\2R\\2U\\2L\\2V-\\2I\\2H-\\2J\\2K-\\2F\\2E\\2S-\\3h]/g,Y,1D,3b={\'\\b\':\'\\\\b\',\'\\t\':\'\\\\t\',\'\\n\':\'\\\\n\',\'\\f\':\'\\\\f\',\'\\r\':\'\\\\r\',\'"\':\'\\\\"\',\'\\\\\':\'\\\\\\\\\'},1l;7 21(X){24.3e=0;h 24.2A(X)?\'"\'+X.W(24,7(a){C c=3b[a];h y c===\'X\'?c:\'\\\\u\'+(\'37\'+a.32(0).2B(16)).35(-4)})+\'"\':\'"\'+X+\'"\'}7 l(1f,1B){C i,k,v,P,1J=Y,18,z=1B[1f];9(z&&y z===\'J\'&&y z.1s===\'7\'){z=z.1s(1f)}9(y 1l===\'7\'){z=1l.1N(1B,1f,z)}4j(y z){1C\'X\':h 21(z);1C\'2s\':h 39(z)?1U(z):\'H\';1C\'4q\':1C\'H\':h 1U(z);1C\'J\':9(!z){h\'H\'}Y+=1D;18=[];9(2u.1w.2B.4o(z)===\'[J 4n]\'){P=z.P;Q(i=0;i<P;i+=1){18[i]=l(i,z)||\'H\'}v=18.P===0?\'[]\':Y?\'[\\n\'+Y+18.1o(\',\\n\'+Y)+\'\\n\'+1J+\']\':\'[\'+18.1o(\',\')+\']\';Y=1J;h v}9(1l&&y 1l===\'J\'){P=1l.P;Q(i=0;i<P;i+=1){k=1l[i];9(y k===\'X\'){v=l(k,z);9(v){18.25(21(k)+(Y?\': \':\':\')+v)}}}}O{Q(k 14 z){9(2u.3d.1N(z,k)){v=l(k,z);9(v){18.25(21(k)+(Y?\': \':\':\')+v)}}}}v=18.P===0?\'{}\':Y?\'{\\n\'+Y+18.1o(\',\\n\'+Y)+\'\\n\'+1J+\'}\':\'{\'+18.1o(\',\')+\'}\';Y=1J;h v}}9(y 1a.1S!==\'7\'){1a.1S=7(z,1x,1I){C i;Y=\'\';1D=\'\';9(y 1I===\'2s\'){Q(i=0;i<1I;i+=1){1D+=\' \'}}O 9(y 1I===\'X\'){1D=1I}1l=1x;9(1x&&y 1x!==\'7\'&&(y 1x!==\'J\'||y 1x.P!==\'2s\')){33 1t 3S(\'1a.1S\')}h l(\'\',{\'\':z})}}9(y 1a.28!==\'7\'){1a.28=7(1e,2C){C j;7 2t(1B,1f){C k,v,z=1B[1f];9(z&&y z===\'J\'){Q(k 14 z){9(2u.3d.1N(z,k)){v=2t(z,k);9(v!==1m){z[k]=v}O{3X z[k]}}}}h 2C.1N(1B,1f,z)}1e=1U(1e);29.3e=0;9(29.2A(1e)){1e=1e.W(29,7(a){h\'\\\\u\'+(\'37\'+a.32(0).2B(16)).35(-4)})}9(/^[\\],:{}\\s]*$/.2A(1e.W(/\\\\(?:["\\\\\\/59]|u[0-53-4Y-F]{4})/g,\'@\').W(/"[^"\\\\\\n\\r]*"|p|m|H|-?\\d+(?:\\.\\d*)?(?:[50][+\\-]?\\d+)?/g,\']\').W(/(?:^|:|,)(?:\\s*\\[)+/g,\'\'))){j=1q(\'(\'+1e+\')\');h y 2C===\'7\'?2t({\'\':j},\'\'):j}33 1t 5b(\'1a.28\')}}}());2.R={U:7(1G){Q(C i 14 1G){1G[i]=2.6.3.1r(1G[i])}h(1a.1S(1G))}};2.3.A={6:H,1c:m,N:m,1i:m,1E:7(){2.3.A.1c=p;2.3.A.N=m;2.3.A.L=1v.26("1K");2.3.A.5j=1v.26("2X");h(p)},12:7(1F,V){9(2.3.A.1c==p&&2.3.A.N==m){2.3.A.L.12(1F,V)}O 9(2.3.A.N==m){2.3.A.17("2.3.A.1d();",22)}},1d:7(){2.3.A.12(2.3.A.6.1h,2.3.A.6.V)},17:7(M,20){9(2.3.A.1i==p){17(M,20)}},1r:7(l){9(y(l)==\'X\'){l=2g(l);l=l.W(/\\\'/g,"%27")}O 9(y(l)==\'J\'){Q(C i 14 l){l[i]=2.3.A.1r(l[i])}}h(l)},1u:7(l){9(y(l)==\'X\'){l=l.W(/\\%27/g,"\'");l=2k(l)}O 9(y(l)==\'J\'){Q(C i 14 l){l[i]=2.3.A.1u(l[i])}}h(l)},1p:7(G){9(2.3.A.N==m){2.3.A.1d()}9(2.3.A.N){2.3.A.L.1p(G+"\\n")}O{9(y 2.3.A.6!=\'J\'){h(m)}2.3.A.17("2.3.A.I(\'"+G+"\');",22);h(m)}h(p)},I:7(G){h(2.3.A.1p(G))},1g:7(){9(y 2.3.A.6!=\'J\'){h(m)}2.3.A.N=p;2.3.A.I(\'{"M": "1g", "w": "H", "E": ""}\');2.3.A.6.1n(\'{"S": "12", "z": p}\');h(p)},1Z:7(){2.3.A.L.1Z();h(p)},23:7(){9(y 2.3.A.6!=\'J\'){h(m)}2.3.A.6.B=\'\';2.3.A.6.13(\'{"S": "2i", "z": p}\');2.3.A.N=m;2.3.A.1d();h(p)},5o:7(G){9(y 2.3.A.6!=\'J\'){h(m)}2.3.A.6.13(\'{"S": "19", "z": "\'+G+\'"}\');9(2.3.A.N==m){2.3.A.6.13(\'{"S": "2Z", "z": "5n/5i 19"}\')}h(p)},5h:7(G){9(y 2.3.A.6!=\'J\'){h(m)}2.3.A.6.13(\'{"S": "19", "z": "\'+G+\'"}\');9(2.3.A.N==m){2.3.A.6.13(\'{"S": "2Z", "z": "5c 19"}\')}h(p)},1z:7(G){9(y 2.3.A.6!=\'J\'){h(m)}C 1k=G.2f("\\n");Q(C i=0;i<1k.P;++i){2.3.A.6.1n(1k[i])}h(p)}};2.3.o={1Q:{3g:5e,1A:\'\'},1j:{1Y:m,1W:0,3c:5},6:H,1c:m,N:m,11:[],L:H,1i:m,1E:7(){2.3.o.1c=p;2.3.o.1Q.1A=2.3.o.6.3M;h(p)},2p:7(1T){1T=5g(\'K=\'+1T);9(3i.30){2.3.o.L=1t 30()}O{2.3.o.L=1t 5a("4W.36")}9(!2.3.o.L){4C(\'4B 1y 36 4D\');h(m)}2.3.o.L.4E=2.3.o.1z;2.3.o.L.4F(\'4A\',2.3.o.1Q.1A,p);2.3.o.L.I(1T);2.3.o.1j.1Y=p;h(p)},12:7(1F,V){2.3.o.1E();2.3.o.I(\'{"M": "1g", "w": "H", "E": ""}\');2.3.o.2q()},1d:7(){2.3.o.12(2.3.o.6.1h,2.3.o.6.V)},1r:7(l){9(y(l)==\'X\'){l=2g(l);l=l.W(/\\\'/g,"%27")}O 9(y(l)==\'J\'){Q(C i 14 l){l[i]=2.3.o.1r(l[i])}}h(l)},1u:7(l){9(y(l)==\'X\'){l=l.W(/\\%27/g,"\'");l=2k(l)}O 9(y(l)==\'J\'){Q(C i 14 l){l[i]=2.3.o.1u(l[i])}}h(l)},2q:7(){9(y 2.3.o.6!=\'J\'){h(m)}2.3.o.1p();17("2.3.o.2q();",2.3.o.1Q.3g)},2W:7(){C 2e=2G.2T(1t 2a().2M()/2c);9(2.3.o.1j.1Y==m){h(p)}O 9((2e-2.3.o.1j.1W)>2.3.o.1j.3c){2.3.o.1j.1W=2e;h(p)}h(m)},1p:7(){9(y 2.3.o.6!=\'J\'||2.3.o.2W()==m){h(m)}G=\'\';9(2.3.o.11.P>0){G=2.3.o.11.1o("\\n");2.3.o.11=[];2.3.o.2p(G+"\\n")}O{2.3.o.2p(\'{"M": "4x", "w": "H", "E": "", "B": "\'+2.3.o.6.B+\'"}\\n\')}h(p)},I:7(G){9(G.P>0){h(2.3.o.11.25(G))}h(m)},1g:7(){9(y 2.3.o.6!=\'J\'){h(m)}2.3.o.N=p;2.3.o.6.1n(\'{"S": "12", "z": p}\');h(p)},23:7(){9(y 2.3.o.6!=\'J\'){h(m)}2.3.o.6.13(\'{"S": "2i", "z": p}\');2.3.o.N=m;2.3.o.1d();h(p)},1z:7(){9(y 2.3.o.6!=\'J\'){h(m)}9(2.3.o.L.4G==4){9(2.3.o.L.1X==2z){9(2.3.o.N==m){2.3.o.1g()}2.3.o.1j.1Y=m;2.3.o.1j.1W=2G.2T(1t 2a().2M()/2c);G=2.3.o.L.4O;9(G!=\'\'){2j=G.2f("\\n");Q(C i=0;2j[i];++i){2.3.o.6.1n(2j[i])}}}O{2.3.o.6.13(\'{"S": "19", "z": "4I 4K 19: \'+2.3.o.L.1X+\'"}\')}}h(p)}};2.3.q={6:H,1c:m,N:m,1i:m,V:4L,L:H,1E:7(){9(\'2Y\'14 3i){2.3.q.1c=p;2.3.q.N=m;h(p)}2.3.q.1c=m;2.3.q.N=m;h(m)},12:7(1F,V){2.3.q.1E();9(2.3.q.1c==p&&2.3.q.N==m){2.3.q.L=1t 2Y(\'57://\'+1F+\':\'+2.3.q.V+\'/2\');2.3.q.L.4M=2.3.q.1z;2.3.q.L.4J=2.3.q.19;2.3.q.L.4P=2.3.q.1g;2.3.q.L.4U=2.3.q.23}O 9(2.3.q.N==m){2.3.q.17("2.3.q.1d();",22)}},1d:7(){2.3.q.12(2.3.q.6.1h,2.3.q.6.V)},1g:7(){9(y 2.3.q.6!=\'J\'){h(m)}2.3.q.N=p;2.3.q.6.1n(\'{"S": "12", "z": p}\');2.3.q.L.I(\'{"M": "1g", "w": "H", "E": ""}\');h(p)},23:7(){9(y 2.3.q.6!=\'J\'){h(m)}2.3.q.6.B=\'\';2.3.q.6.13(\'{"S": "2i", "z": p}\');2.3.q.N=m;2.3.q.1d();h(p)},19:7(G){9(y 2.3.q.6!=\'J\'){h(m)}2.3.q.6.13(\'{"S": "19", "z": "\'+G+\'"}\');h(p)},1z:7(G){9(y 2.3.q.6!=\'J\'){h(m)}G=G.3O;9(G.3O==\'{"S": "12", "z": "p"}\'){2.3.q.I(\'{"M": "1g", "w": "H", "E": ""}\')}C 1k=G.2f("\\n");Q(C i=0;i<1k.P;++i){2.3.q.6.1n(1k[i])}h(p)},17:7(M,20){9(2.3.q.1i==p){17(M,20)}},1r:7(l){9(y(l)==\'X\'){l=2g(l);l=l.W(/\\\'/g,"%27")}O 9(y(l)==\'J\'){Q(C i 14 l){l[i]=2.3.q.1r(l[i])}}h(l)},1u:7(l){9(y(l)==\'X\'){l=l.W(/\\%27/g,"\'");l=2k(l)}O 9(y(l)==\'J\'){Q(C i 14 l){l[i]=2.3.q.1u(l[i])}}h(l)},1p:7(G){9(2.3.q.N==m){2.3.q.1d()}9(2.3.q.N){2.3.q.L.I(G+"\\n")}O{9(y 2.3.q.6!=\'J\'){h(m)}2.3.q.17("2.3.q.I(\'"+G+"\');",22);h(m)}h(p)},I:7(G){h(2.3.q.1p(G))},1Z:7(){2.3.q.L.1Z();h(p)}};2.6={3:H,1h:\'\',V:0,3M:\'\',1M:m,E:[],B:\'\',11:[],4w:{q:{J:2.3.q,2n:m,2m:p},A:{J:2.3.A,2n:m,2m:p},o:{J:2.3.o,2n:m,2m:p}},3K:7(1h,V){9(2.6.3==H){2.6.2y(2.3.q)}2.6.1h=1h;2.6.V=V;2.6.3.6=15;2.6.3.12(2.6.1h,2.6.V)},2y:7(3p){9(2.6.3!=H){2.6.3.1i=m}2.6.3=3p;2.6.3.1i=p},4z:7(D,3s){C 3n=3s||{};2.6.E[D]=3n;2.6.E[D].2b=m},3v:7(D){9(y(2.6.E[D])!=\'1m\'){h(p)}h(m)},2D:7(D,1H,w){9(y(1q(\'2.6.E["\'+D+\'"].\'+1H))!=\'1m\'){1q(\'2.6.E["\'+D+\'"].\'+1H+\'(w);\');h(p)}h(m)},3x:7(1H,w){Q(C i 14 2.6.E){2.6.2D(i,1H,w)}},1M:7(2d){9(2.6.3.1c==m){17("2.6.1M("+2d+");",2c);h(m)}9(2d==p){2.6.1M=p;1v.26(\'1K\').2l.2x=\'5l\'}O{2.6.1M=m;1v.26(\'1K\').2l.2x=\'-38\'}},13:7(1e){C j=1a.28(1e);9(j.S!=H&&j.z!=H){1R=j.S.3C(0,1).51()+j.S.3C(1,j.S.P);C w={};w.z=(j.z!=H?j.z:\'\');w.x=(j.x!=H?j.x:\'\');w.E=(j.E!=H?j.E:\'\');w=2.6.3.1u(w);9(j.E!=H&&j.E.P>0&&2.6.3v(j.E)==p){3w{2.6.2D(w[\'E\'],\'2r\'+1R,w)}3y(e){}}O{3w{2.6.3x(\'2r\'+1R,w);1q(\'2.6.2r\'+1R+"(w)")}3y(e){2.6.3N(e)}}}},4V:7(w){2.6.B=w.z;2.6.3J()},41:7(w){},42:7(w){},1n:7(1L){2v.2w(\'2.6.1z: \',1L);2.6.13(1L)},43:7(w){},46:7(w){},3z:7(D,x,1b){9(y(1q(\'2.6.E["\'+D+\'"]\'))!=\'1m\'){2.6.E[D].2b=p}C K={M:\'3z\',w:1b,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},3A:7(D,x,1b){9(y(1q(\'2.6.E["\'+D+\'"]\'))!=\'1m\'){2.6.E[D].2b=p}C K={M:\'3A\',w:1b,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},3T:7(w){},3V:7(w){},1o:7(D,x,1b){C K={M:\'1o\',w:[x,1b],x:x,E:D,B:\'2.6.B\'};2.6.I(2.R.U(K))},3U:7(w){},3D:7(D,x){C K={M:\'3D\',w:x,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},45:7(w){},1y:7(D,x,1b){9(y(1q(\'2.6.E["\'+D+\'"]\'))!=\'1m\'){2.6.E[D].2b=p}C K={M:\'1y\',w:[x,1b],E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4r:7(w){},3u:7(D,x){C K={M:\'3u\',w:x,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},3t:7(D,x,3m){C K={M:\'3t\',w:3m,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4k:7(w){},3l:7(D,x,3k){C K={M:\'3l\',w:3k,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4p:7(w){},3j:7(D,x){C K={M:\'3j\',w:x,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4i:7(w){},3G:7(D,x){C K={M:\'3G\',w:\'H\',E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4c:7(w){},1L:7(D,x,1k){C K={M:\'1L\',w:1k,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4e:7(w){},3r:7(D,x){C K={M:\'3r\',w:\'H\',E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4g:7(w){},3q:7(D,x,1X){C K={M:\'3q\',w:1X,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4l:7(w){},3P:7(D,x){C K={M:\'3P\',w:\'H\',E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},4h:7(w){},3L:7(D,x,1b){C K={M:\'3L\',w:1b,E:D,x:x,B:\'2.6.B\'};2.6.I(2.R.U(K))},49:7(w){},3N:7(19){},44:7(19){4H.1i=m;9(3I.1i==m){2.6.2y(3I);2.6.3K(2.6.1h,2.6.V)}},3J:7(){Q(C i=0;i<2.6.11.P;++i){2v.2w(\'2.6.I: \',2.6.11[i].W(/2\\.6\\.B/,2.6.B));2.6.3.I(2.6.11[i].W(/2\\.6\\.B/,2.6.B))}2.6.11=[]},I:7(G){9(2.6.B!=\'\'){2v.2w(\'2.6.I: \',G.W(/2\\.6\\.B/,2.6.B));2.6.3.I(G.W(/2\\.6\\.B/,2.6.B))}O 9(2.6.11.P<10){2.6.11.25(G)}}};7 2h(){9(y 3o!=\'1m\'&&y 2.3.A!=\'1m\'){3o.58(2o,"3B","5k","2z","8.0.0","4u.3F",{4t:\'2.3.A\'},{4v:m},{1O:\'1K\',4y:\'1K\',2l:\'4Q:4T;2x:-38;\'})}O{17(\'2h()\',2z)}}2h();',62,335,'||jsocket|core|||api|function||if||||||||return||||str|false||http|true|websocket||||||args|channel|typeof|value|tcp|uid|var|appName|app||msg|null|send|object|json|socket|cmd|connectedToServer|else|length|for|protocol|from||forge|port|replace|string|gap|||commands|connect|parser|in|this||setTimeout|partial|error|JSON|password|initialized|reconnect|text|key|connected|host|isWorking|response|tab|rep|undefined|onReceive|join|write|eval|addslashes|toJSON|new|stripslashes|document|prototype|replacer|create|receive|url|holder|case|indent|loaded|server|obj|callName|space|mind|socketBridge|message|debug|call|id|scripts|settings|func_name|stringify|parameters|String|docType|lastTime|status|waiting|close|delay|quote|500|disconnected|escapable|push|getElementById||parse|cx|Date|isMaster|1000|enable|now|split|encodeURIComponent|createSwf|disconnect|res|decodeURIComponent|style|worked|tested|jsocketBridgeDomain|_post|pool|on|number|walk|Object|console|log|top|method|200|test|toString|reviver|appCallback|ufeff|u206f|Math|u2028|u200f|u202f|u2060|u17b5|getTime|u0600|u00ad|valueOf|u0604|u070f|ufff0|floor|u17b4|u200c|checkResponse|jsocketBridgeOutput|WebSocket|TCPError|XMLHttpRequest|getURLBase|charCodeAt|throw|getJsocketDomain|slice|XMLHTTP|0000|1000px|isFinite|div|meta|timeout|hasOwnProperty|lastIndex|src|refreshTimer|uffff|window|list|command|forward|nickname|newApp|swfobject|newCore|setStatus|getStatus|appObject|nick|remove|appExists|try|appCallbacks|catch|auth|chanAuth|flashcontent|substring|part|type|swf|history|jsocketDomain|jsocketCoreHTTP|sendPool|init|chanMasterPwd|urlFailOver|onError|data|timeConnect|x1f|x7f|Error|onChanAuth|onPart|onJoin|x00|delete|Number|getUTCSeconds|getUTCMinutes|onDisconnect|onConnect|onStatus|onTCPError|onCreate|onAuth|Boolean|u0000|onChanMasterPwd|getUTCMonth|getUTCFullYear|onHistory|getUTCDate|onMessage|ext|onGetStatus|onTimeConnect|onList|switch|onNick|onSetStatus|x9f|Array|apply|onForward|boolean|onRemove|js|scope|expressInstall|menu|cores|refresh|name|register|POST|Cannot|alert|instance|onreadystatechange|open|readyState|jsocketCoreTCP|HTTP|onerror|request|8080|onmessage|getUTCHours|responseText|onopen|position|body|appendChild|absolute|onclose|onConnected|Microsoft|script|fA|getElementsByTagName|eE|toUpperCase|lastIndexOf|9a|match|createElement|jsocketBridge|ws|embedSWF|bfnrt|ActiveXObject|SyntaxError|Security|nbsp|2000|substr|encodeURI|securityError|Output|output|900|0px|innerHTML|Input|ioError'.split('|'),0,{}))
+var jsocketDomain = getJsocketDomain();
+if (jsocketBridgeDomain == null) {
+	var jsocketBridgeDomain = jsocketDomain + 'ext/jsocketBridge.swf';
+}
+
+function create(type, id)
+{
+  var docType = document.createElement(type);
+  docType.id = id;
+  docType.innerHTML = '&nbsp;';
+  document.body.appendChild(docType);
+}
+
+function getURLBase(url)
+{
+	return (url.substr(0, url.lastIndexOf("/")) + '/');
+}
+
+function getJsocketDomain()
+{
+	var scripts = document.getElementsByTagName("script");
+	for (var i = 0; scripts[i]; ++i) {
+		if (scripts[i].src.match(/jsocket.js/i)) {
+			return getURLBase(scripts[i].src);
+		}
+	}
+	return (false);
+}
+
+jsocket = {
+	api : null,
+	protocol : null,
+	core : {
+		http : null,
+		tcp : null,
+		websocket : null
+	}
+};
+
+create('div', 'flashcontent');
+create('div', 'jsocketBridgeOutput');
+
+/*
+    http://www.JSON.org/json2.js
+    2010-03-20
+
+    Public Domain.
+
+    NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+
+    See http://www.JSON.org/js.html
+
+
+    This code should be minified before deployment.
+    See http://javascript.crockford.com/jsmin.html
+
+    USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
+    NOT CONTROL.
+
+
+    This file creates a global JSON object containing two methods: stringify
+    and parse.
+
+        JSON.stringify(value, replacer, space)
+            value       any JavaScript value, usually an object or array.
+
+            replacer    an optional parameter that determines how object
+                        values are stringified for objects. It can be a
+                        function or an array of strings.
+
+            space       an optional parameter that specifies the indentation
+                        of nested structures. If it is omitted, the text will
+                        be packed without extra whitespace. If it is a number,
+                        it will specify the number of spaces to indent at each
+                        level. If it is a string (such as '\t' or '&nbsp;'),
+                        it contains the characters used to indent at each level.
+
+            This method produces a JSON text from a JavaScript value.
+
+            When an object value is found, if the object contains a toJSON
+            method, its toJSON method will be called and the result will be
+            stringified. A toJSON method does not serialize: it returns the
+            value represented by the name/value pair that should be serialized,
+            or undefined if nothing should be serialized. The toJSON method
+            will be passed the key associated with the value, and this will be
+            bound to the value
+
+            For example, this would serialize Dates as ISO strings.
+
+                Date.prototype.toJSON = function (key) {
+                    function f(n) {
+                        // Format integers to have at least two digits.
+                        return n < 10 ? '0' + n : n;
+                    }
+
+                    return this.getUTCFullYear()   + '-' +
+                         f(this.getUTCMonth() + 1) + '-' +
+                         f(this.getUTCDate())      + 'T' +
+                         f(this.getUTCHours())     + ':' +
+                         f(this.getUTCMinutes())   + ':' +
+                         f(this.getUTCSeconds())   + 'Z';
+                };
+
+            You can provide an optional replacer method. It will be passed the
+            key and value of each member, with this bound to the containing
+            object. The value that is returned from your method will be
+            serialized. If your method returns undefined, then the member will
+            be excluded from the serialization.
+
+            If the replacer parameter is an array of strings, then it will be
+            used to select the members to be serialized. It filters the results
+            such that only members with keys listed in the replacer array are
+            stringified.
+
+            Values that do not have JSON representations, such as undefined or
+            functions, will not be serialized. Such values in objects will be
+            dropped; in arrays they will be replaced with null. You can use
+            a replacer function to replace those with JSON values.
+            JSON.stringify(undefined) returns undefined.
+
+            The optional space parameter produces a stringification of the
+            value that is filled with line breaks and indentation to make it
+            easier to read.
+
+            If the space parameter is a non-empty string, then that string will
+            be used for indentation. If the space parameter is a number, then
+            the indentation will be that many spaces.
+
+            Example:
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}]);
+            // text is '["e",{"pluribus":"unum"}]'
+
+
+            text = JSON.stringify(['e', {pluribus: 'unum'}], null, '\t');
+            // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
+
+            text = JSON.stringify([new Date()], function (key, value) {
+                return this[key] instanceof Date ?
+                    'Date(' + this[key] + ')' : value;
+            });
+            // text is '["Date(---current time---)"]'
+
+
+        JSON.parse(text, reviver)
+            This method parses a JSON text to produce an object or array.
+            It can throw a SyntaxError exception.
+
+            The optional reviver parameter is a function that can filter and
+            transform the results. It receives each of the keys and values,
+            and its return value is used instead of the original value.
+            If it returns what it received, then the structure is not modified.
+            If it returns undefined then the member is deleted.
+
+            Example:
+
+            // Parse the text. Values that look like ISO date strings will
+            // be converted to Date objects.
+
+            myData = JSON.parse(text, function (key, value) {
+                var a;
+                if (typeof value === 'string') {
+                    a =
+/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                    if (a) {
+                        return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4],
+                            +a[5], +a[6]));
+                    }
+                }
+                return value;
+            });
+
+            myData = JSON.parse('["Date(09/09/2001)"]', function (key, value) {
+                var d;
+                if (typeof value === 'string' &&
+                        value.slice(0, 5) === 'Date(' &&
+                        value.slice(-1) === ')') {
+                    d = new Date(value.slice(5, -1));
+                    if (d) {
+                        return d;
+                    }
+                }
+                return value;
+            });
+
+
+    This is a reference implementation. You are free to copy, modify, or
+    redistribute.
+*/
+
+/*jslint evil: true, strict: false */
+
+/*members "", "\b", "\t", "\n", "\f", "\r", "\"", JSON, "\\", apply,
+    call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
+    getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
+    lastIndex, length, parse, prototype, push, replace, slice, stringify,
+    test, toJSON, toString, valueOf
+*/
+
+
+// Create a JSON object only if one does not already exist. We create the
+// methods in a closure to avoid creating global variables.
+
+if (!this.JSON) {
+    this.JSON = {};
+}
+
+(function () {
+
+    function f(n) {
+        // Format integers to have at least two digits.
+        return n < 10 ? '0' + n : n;
+    }
+
+    if (typeof Date.prototype.toJSON !== 'function') {
+
+        Date.prototype.toJSON = function (key) {
+
+            return isFinite(this.valueOf()) ?
+                   this.getUTCFullYear()   + '-' +
+                 f(this.getUTCMonth() + 1) + '-' +
+                 f(this.getUTCDate())      + 'T' +
+                 f(this.getUTCHours())     + ':' +
+                 f(this.getUTCMinutes())   + ':' +
+                 f(this.getUTCSeconds())   + 'Z' : null;
+        };
+
+        String.prototype.toJSON =
+        Number.prototype.toJSON =
+        Boolean.prototype.toJSON = function (key) {
+            return this.valueOf();
+        };
+    }
+
+    var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+        gap,
+        indent,
+        meta = {    // table of character substitutions
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+        },
+        rep;
+
+
+    function quote(string) {
+
+// If the string contains no control characters, no quote characters, and no
+// backslash characters, then we can safely slap some quotes around it.
+// Otherwise we must also replace the offending characters with safe escape
+// sequences.
+
+        escapable.lastIndex = 0;
+        return escapable.test(string) ?
+            '"' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string' ? c :
+                    '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' :
+            '"' + string + '"';
+    }
+
+
+    function str(key, holder) {
+
+// Produce a string from holder[key].
+
+        var i,          // The loop counter.
+            k,          // The member key.
+            v,          // The member value.
+            length,
+            mind = gap,
+            partial,
+            value = holder[key];
+
+// If the value has a toJSON method, call it to obtain a replacement value.
+
+        if (value && typeof value === 'object' &&
+                typeof value.toJSON === 'function') {
+            value = value.toJSON(key);
+        }
+
+// If we were called with a replacer function, then call the replacer to
+// obtain a replacement value.
+
+        if (typeof rep === 'function') {
+            value = rep.call(holder, key, value);
+        }
+
+// What happens next depends on the value's type.
+
+        switch (typeof value) {
+        case 'string':
+            return quote(value);
+
+        case 'number':
+
+// JSON numbers must be finite. Encode non-finite numbers as null.
+
+            return isFinite(value) ? String(value) : 'null';
+
+        case 'boolean':
+        case 'null':
+
+// If the value is a boolean or null, convert it to a string. Note:
+// typeof null does not produce 'null'. The case is included here in
+// the remote chance that this gets fixed someday.
+
+            return String(value);
+
+// If the type is 'object', we might be dealing with an object or an array or
+// null.
+
+        case 'object':
+
+// Due to a specification blunder in ECMAScript, typeof null is 'object',
+// so watch out for that case.
+
+            if (!value) {
+                return 'null';
+            }
+
+// Make an array to hold the partial results of stringifying this object value.
+
+            gap += indent;
+            partial = [];
+
+// Is the value an array?
+
+            if (Object.prototype.toString.apply(value) === '[object Array]') {
+
+// The value is an array. Stringify every element. Use null as a placeholder
+// for non-JSON values.
+
+                length = value.length;
+                for (i = 0; i < length; i += 1) {
+                    partial[i] = str(i, value) || 'null';
+                }
+
+// Join all of the elements together, separated with commas, and wrap them in
+// brackets.
+
+                v = partial.length === 0 ? '[]' :
+                    gap ? '[\n' + gap +
+                            partial.join(',\n' + gap) + '\n' +
+                                mind + ']' :
+                          '[' + partial.join(',') + ']';
+                gap = mind;
+                return v;
+            }
+
+// If the replacer is an array, use it to select the members to be stringified.
+
+            if (rep && typeof rep === 'object') {
+                length = rep.length;
+                for (i = 0; i < length; i += 1) {
+                    k = rep[i];
+                    if (typeof k === 'string') {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            } else {
+
+// Otherwise, iterate through all of the keys in the object.
+
+                for (k in value) {
+                    if (Object.hasOwnProperty.call(value, k)) {
+                        v = str(k, value);
+                        if (v) {
+                            partial.push(quote(k) + (gap ? ': ' : ':') + v);
+                        }
+                    }
+                }
+            }
+
+// Join all of the member texts together, separated with commas,
+// and wrap them in braces.
+
+            v = partial.length === 0 ? '{}' :
+                gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
+                        mind + '}' : '{' + partial.join(',') + '}';
+            gap = mind;
+            return v;
+        }
+    }
+
+// If the JSON object does not yet have a stringify method, give it one.
+
+    if (typeof JSON.stringify !== 'function') {
+        JSON.stringify = function (value, replacer, space) {
+
+// The stringify method takes a value and an optional replacer, and an optional
+// space parameter, and returns a JSON text. The replacer can be a function
+// that can replace values, or an array of strings that will select the keys.
+// A default replacer method can be provided. Use of the space parameter can
+// produce text that is more easily readable.
+
+            var i;
+            gap = '';
+            indent = '';
+
+// If the space parameter is a number, make an indent string containing that
+// many spaces.
+
+            if (typeof space === 'number') {
+                for (i = 0; i < space; i += 1) {
+                    indent += ' ';
+                }
+
+// If the space parameter is a string, it will be used as the indent string.
+
+            } else if (typeof space === 'string') {
+                indent = space;
+            }
+
+// If there is a replacer, it must be a function or an array.
+// Otherwise, throw an error.
+
+            rep = replacer;
+            if (replacer && typeof replacer !== 'function' &&
+                    (typeof replacer !== 'object' ||
+                     typeof replacer.length !== 'number')) {
+                throw new Error('JSON.stringify');
+            }
+
+// Make a fake root object containing our value under the key of ''.
+// Return the result of stringifying the value.
+
+            return str('', {'': value});
+        };
+    }
+
+
+// If the JSON object does not yet have a parse method, give it one.
+
+    if (typeof JSON.parse !== 'function') {
+        JSON.parse = function (text, reviver) {
+
+// The parse method takes a text and an optional reviver function, and returns
+// a JavaScript value if the text is a valid JSON text.
+
+            var j;
+
+            function walk(holder, key) {
+
+// The walk method is used to recursively walk the resulting structure so
+// that modifications can be made.
+
+                var k, v, value = holder[key];
+                if (value && typeof value === 'object') {
+                    for (k in value) {
+                        if (Object.hasOwnProperty.call(value, k)) {
+                            v = walk(value, k);
+                            if (v !== undefined) {
+                                value[k] = v;
+                            } else {
+                                delete value[k];
+                            }
+                        }
+                    }
+                }
+                return reviver.call(holder, key, value);
+            }
+
+
+// Parsing happens in four stages. In the first stage, we replace certain
+// Unicode characters with escape sequences. JavaScript handles many characters
+// incorrectly, either silently deleting them, or treating them as line endings.
+
+            text = String(text);
+            cx.lastIndex = 0;
+            if (cx.test(text)) {
+                text = text.replace(cx, function (a) {
+                    return '\\u' +
+                        ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+                });
+            }
+
+// In the second stage, we run the text against regular expressions that look
+// for non-JSON patterns. We are especially concerned with '()' and 'new'
+// because they can cause invocation, and '=' because it can cause mutation.
+// But just to be safe, we want to reject all unexpected forms.
+
+// We split the second stage into 4 regexp operations in order to work around
+// crippling inefficiencies in IE's and Safari's regexp engines. First we
+// replace the JSON backslash pairs with '@' (a non-JSON character). Second, we
+// replace all simple value tokens with ']' characters. Third, we delete all
+// open brackets that follow a colon or comma or that begin the text. Finally,
+// we look to see that the remaining characters are only whitespace or ']' or
+// ',' or ':' or '{' or '}'. If that is so, then the text is safe for eval.
+
+            if (/^[\],:{}\s]*$/.
+test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@').
+replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+
+// In the third stage we use the eval function to compile the text into a
+// JavaScript structure. The '{' operator is subject to a syntactic ambiguity
+// in JavaScript: it can begin a block or an object literal. We wrap the text
+// in parens to eliminate the ambiguity.
+
+                j = eval('(' + text + ')');
+
+// In the optional fourth stage, we recursively walk the new structure, passing
+// each name/value pair to a reviver function for possible transformation.
+
+                return typeof reviver === 'function' ?
+                    walk({'': j}, '') : j;
+            }
+
+// If the text is not JSON parseable, then a SyntaxError is thrown.
+
+            throw new SyntaxError('JSON.parse');
+        };
+    }
+}());
+
+/**
+ * @class jsocket.protocol
+ * <p><b><u>jsocket Protocol</u></b></p>
+ * <p>Valide et forge le JSON des commandes a partir d'un objet.</p>
+ * @author Revolunet
+ * @version 0.2.6
+ * @singleton
+ */
+jsocket.protocol = {
+	/**
+	 * Forge une commande JSON a partir d'un objet javascript
+	 * @param {Object} obj Objet javascript
+	 * @return {String} Commande JSON
+	 */
+	forge : function(obj) {
+		for (var i in obj) {
+			obj[i] = jsocket.api.core.addslashes(obj[i]);
+		}
+		return (JSON.stringify(obj));
+	}
+};
+
+/**
+ * @class jsocket.core.tcp
+ * Javascript event's interface for flash swf socket bridge
+ * @author Revolunet
+ * @version 0.2.6
+ * @singleton
+ */
+jsocket.core.tcp = {
+	/**
+	 * Pointeur vers l'API
+	 * @private
+	 * @type {@link jsocket.api}
+	 */
+	api : null,
+
+	/**
+	 * True si le core a ete initialize sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	initialized : false,
+
+	/**
+	 * True si le core est connecte au server sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	connectedToServer : false,
+
+	/**
+	 * True si ce core est utilise par l'API sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	isWorking : false,
+
+	/**
+	 * @event loaded
+	 * Callback appele par flash lorsque le swf est charge
+	 * @return {Boolean} True si l'application a ete chargee
+	 */
+	loaded : function() {
+		jsocket.core.tcp.initialized = true;
+		jsocket.core.tcp.connectedToServer = false;
+		jsocket.core.tcp.socket = document.getElementById("socketBridge");
+		jsocket.core.tcp.output = document.getElementById("jsocketBridgeOutput");
+		return (true);
+	},
+
+	/**
+	 * Initialise une connection via une socket sur le server:port
+	 * @param {String} server Le nom de domaine ou adresse IP du serveur
+	 * @param {Int} port Le numero du port du serveur
+	 */
+	connect : function(server, port) {
+		if (jsocket.core.tcp.initialized == true && jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.socket.connect(server, port);
+		}
+		else if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.setTimeout("jsocket.core.tcp.reconnect();", 500);
+		}
+	},
+
+	/**
+	 * Alias de {@link #connect connect} sans avoir a repreciser les parametres de connection
+	 */
+	reconnect : function() {
+		jsocket.core.tcp.connect(jsocket.core.tcp.api.host, jsocket.core.tcp.api.port);
+	},
+
+	/**
+	 * Lance un setTimeout sur cmd avec comme temps d'attente delay a
+	 * condition que ce core est utilise par l'API
+	 * @param {String} cmd La commande a lancer
+	 * @param {Int} delay Le temps d'attente
+	 */
+	setTimeout : function(cmd, delay) {
+		if (jsocket.core.tcp.isWorking == true) {
+			setTimeout(cmd, delay);
+		}
+	},
+
+	/**
+	 * Addslashes les caracteres ' " \\ \0
+	 * @param {String} str Le texte a addslasher
+	 * @return {String} La chaine avec les caracteres echapes
+	 */
+	addslashes : function(str) {
+		if (typeof(str) == 'string') {
+			str = encodeURIComponent(str);
+			str = str.replace(/\'/g, "%27");
+		}
+		else if (typeof(str) == 'object') {
+			for (var i in str) {
+				str[i] = jsocket.core.tcp.addslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+	/**
+	 * Supprime tous les slashes des caracteres ' " \\ \0
+	 * @param {String} str Le texte a stripslasher
+	 * @return {String} La chaine avec les caracteres non echapes
+	 */
+	stripslashes : function (str) {
+		if (typeof(str) == 'string') {
+			str = str.replace(/\%27/g, "'");
+			str = decodeURIComponent(str);
+		}
+		else if (typeof(str) == 'object') {
+			for (var i in str) {
+				str[i] = jsocket.core.tcp.stripslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+	/**
+	 * Envoie le message au serveur.
+	 * Tentative de reconnection a ce dernier le cas echeant.
+	 * @param {String} msg Le texte a envoyer au serveur
+	 * @return {Boolean} True si le message a ete envoye sinon False
+	 */
+	write : function(msg) {
+		if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.reconnect();
+		}
+		if (jsocket.core.tcp.connectedToServer) {
+			jsocket.core.tcp.socket.write(msg + "\n");
+		} else {
+			if (typeof jsocket.core.tcp.api != 'object') {
+				return (false);
+			}
+			jsocket.core.tcp.setTimeout("jsocket.core.tcp.send('" + msg + "');", 500);
+			return (false);
+		}
+		return (true);
+	},
+
+	/**
+	 * Alias de {@link #write write}
+	 * @param {String} msg Le message a envoye au serveur
+	 * @return {Boolean} True si le message a ete envoye sinon False
+	 */
+	send : function(msg) {
+		return (jsocket.core.tcp.write(msg));
+	},
+
+	/**
+	 * @event connected
+	 * Callback appele par flash lorsque la socket est connectee au serveur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	connected : function() {
+		if (typeof jsocket.core.tcp.api != 'object') {
+			return (false);
+		}
+		jsocket.core.tcp.connectedToServer = true;
+		jsocket.core.tcp.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.tcp.api.onReceive('{"from": "connect", "value": true}');
+		return (true);
+	},
+
+	/**
+	 * Ferme la connection au serveur
+	 * @return {Boolean} True si la connection a ete fermee sinon False
+	 */
+	close : function() {
+		jsocket.core.tcp.socket.close();
+		return (true);
+	},
+
+	/**
+	 * @event disconnected
+	 * Callback appele par flash lorsqu'une deconnection a ete effectuee
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	disconnected : function() {
+		if (typeof jsocket.core.tcp.api != 'object') {
+			return (false);
+		}
+		jsocket.core.tcp.api.uid = '';
+		jsocket.core.tcp.api.parser('{"from": "disconnect", "value": true}');
+		jsocket.core.tcp.connectedToServer = false;
+		jsocket.core.tcp.reconnect();
+		return (true);
+	},
+
+	/**
+	 * @event ioError
+	 * Callback appele par flash lorsqu'une Input/Output erreur survient
+	 * @param {String} msg Le message ainsi que le code d'erreur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	ioError: function(msg) {
+		if (typeof jsocket.core.tcp.api != 'object') {
+			return (false);
+		}
+		jsocket.core.tcp.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.api.parser('{"from": "TCPError", "value": "Input/Output error"}');
+		}
+		return (true);
+	},
+
+	/**
+	 * @event securityError
+	 * Callback appele par flash lorsqu'une erreur de securite survient
+	 * @param {String} msg Le message ainsi que le code d'erreur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	securityError: function(msg) {
+		if (typeof jsocket.core.tcp.api != 'object') {
+			return (false);
+		}
+		jsocket.core.tcp.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (jsocket.core.tcp.connectedToServer == false) {
+			jsocket.core.tcp.api.parser('{"from": "TCPError", "value": "Security error"}');
+		}
+		return (true);
+	},
+
+	/**
+	 * @event receive
+	 * Callback appele par flash lors de la reception d'un message via la socket
+	 * @param {String} msg Le message envoye par le serveur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	receive: function(msg) {
+		if (typeof jsocket.core.tcp.api != 'object') {
+			return (false);
+		}
+		var tab = msg.split("\n");
+		for (var i = 0; i < tab.length; ++i) {
+			jsocket.core.tcp.api.onReceive(tab[i]);
+		}
+		return (true);
+	}
+};
+
+/**
+ * @class jsocket.core.http
+ * Javascript event's interface fail over HTTP
+ * @author Revolunet
+ * @version 0.2.6
+ * @singleton
+ */
+jsocket.core.http = {
+	/**
+	 * <p><b><u>Settings:</u></b></p>
+	 * <div class="mdetail-params"><ul>
+	 * <li><b><tt>refreshTimer: Temps de rafraichissement entre chaque requetes</tt></b></li>
+	 * <li><b><tt>url: URL pour le _POST[json] (default: api.server:81)</tt></b></li>
+	 * </ul></div></p>
+	 * @public
+	 * @type Object
+	 */
+	settings: {
+		refreshTimer: 2000,
+		url: ''
+	},
+
+	/**
+	 * <p><b><u>Response:</u></b></p>
+	 * <div class="mdetail-params"><ul>
+	 * <li><b><tt>waiting: true si une requete est en attente de reponse sinon false</tt></b></li>
+	 * <li><b><tt>lastTime: timestamp de la derniere reponse obtenue</tt></b></li>
+	 * <li><b><tt>timeout: temps en seconde avant de relancer une requete si il n'y a pas
+	 * eu de reponse positive entre temps</tt></b></li>
+	 * </ul></div></p>
+	 * @public
+	 * @type Object
+	 */
+	response: {
+		waiting: false,
+		lastTime: 0,
+		timeout: 5
+	},
+
+	/**
+	 * Pointeur vers l'API
+	 * @private
+	 * @type {@link jsocket.api}
+	 */
+	api : null,
+
+	/**
+	 * True si le core a ete initialize sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	initialized : false,
+
+	/**
+	 * True si le core est connecte au server sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	connectedToServer : false,
+
+	/**
+	 * Liste des commandes en attente
+	 * @private
+	 * @type Array
+	 */
+	commands : [ ],
+
+	/**
+	 * Objet comprenant la connection AJAX
+	 * @private
+	 * @type Object
+	 */
+	socket : null,
+
+	/**
+	 * True si ce core est utilise par l'API sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	isWorking: false,
+
+	/**
+	 * Initialisation du core HTTP
+	 * @return {Boolean} True si l'application a ete chargee
+	 */
+	loaded : function()	{
+		jsocket.core.http.initialized = true;
+		jsocket.core.http.settings.url = jsocket.core.http.api.urlFailOver;
+		return (true);
+	},
+
+	/**
+	 * Permet d'effectuer une requete HTTP POST sur le serveur (host, port)
+	 * @param {String} parameters La commande JSON a envoyee
+	 * @return {Boolean} True si la commande a ete envoyee sinon False
+	 */
+	_post : function(parameters) {
+		parameters = encodeURI('json=' + parameters);
+		if (window.XMLHttpRequest) {
+			jsocket.core.http.socket = new XMLHttpRequest();
+		} else {
+			jsocket.core.http.socket = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		if (!jsocket.core.http.socket) {
+			alert('Cannot create XMLHTTP instance');
+			return (false);
+		}
+		jsocket.core.http.socket.onreadystatechange = jsocket.core.http.receive;
+		jsocket.core.http.socket.open('POST', jsocket.core.http.settings.url, true);
+		jsocket.core.http.socket.send(parameters);
+		jsocket.core.http.response.waiting = true;
+		return (true);
+	},
+
+	/**
+	 * Initialise une connection via une socket sur le server:port
+	 * @param {String} server Le nom de domaine ou adresse IP du serveur
+	 * @param {Int} port Le numero du port du serveur
+	 */
+	connect : function(server, port) {
+		jsocket.core.http.loaded();
+		jsocket.core.http.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.http.pool();
+	},
+
+	/**
+	 * Alias de {@link #connect connect} sans avoir a repreciser les parametres de connection
+	 */
+	reconnect : function() {
+		jsocket.core.http.connect(jsocket.core.http.api.host, jsocket.core.http.api.port);
+	},
+
+	/**
+	 * Addslashes les caracteres ' " \\ \0
+	 * @param {String} str Le texte a addslasher
+	 * @return {String} La chaine avec les caracteres echapes
+	 */
+	addslashes : function(str) {
+		if (typeof(str) == 'string') {
+			str = encodeURIComponent(str);
+			str = str.replace(/\'/g, "%27");
+		}
+		else if (typeof(str) == 'object') {
+			for (var i in str) {
+				str[i] = jsocket.core.http.addslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+	/**
+	 * Supprime tous les slashes des caracteres ' " \\ \0
+	 * @param {String} str Le texte a stripslasher
+     * @return {String} La chaine avec les caracteres non echapes
+	 */
+	stripslashes : function (str) {
+		if (typeof(str) == 'string') {
+			str = str.replace(/\%27/g, "'");
+			str = decodeURIComponent(str);
+		}
+		else if (typeof(str) == 'object') {
+			for (var i in str) {
+				str[i] = jsocket.core.http.stripslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+	/**
+	 * Pool le serveur HTTP en envoyant les requetes des n dernieres
+	 * secondes du client et pour obtenir les reponses des commandes
+	 * actuelles/precedentes
+	 * @return {Boolean} False si l'API n'est pas definie
+	 */
+	pool: function() {
+		if (typeof jsocket.core.http.api != 'object') {
+			return (false);
+		}
+		jsocket.core.http.write();
+		setTimeout("jsocket.core.http.pool();", jsocket.core.http.settings.refreshTimer);
+	},
+
+	/**
+	 * Verifie si une commande peut etre envoye au serveur
+	 * @return {Boolean} True si la commande peut etre envoyee sinon False
+	 */
+	checkResponse: function() {
+		var now = Math.floor(new Date().getTime() / 1000);
+		if (jsocket.core.http.response.waiting == false) {
+			return (true);
+		} else if ((now - jsocket.core.http.response.lastTime) > jsocket.core.http.response.timeout) {
+			jsocket.core.http.response.lastTime = now;
+			return (true);
+		}
+		return (false);
+	},
+
+	/**
+	 * Envoie les commandes stockees prealablement au serveur.
+	 * @return {Boolean} True si les commandes ont ete envoyees sinon False
+	 */
+	write : function() {
+		if (typeof jsocket.core.http.api != 'object' ||
+			jsocket.core.http.checkResponse() == false) {
+			return (false);
+		}
+		msg = '';
+		if (jsocket.core.http.commands.length > 0) {
+			msg = jsocket.core.http.commands.join("\n");
+			jsocket.core.http.commands = [ ];
+			jsocket.core.http._post(msg + "\n");
+		} else {
+			jsocket.core.http._post('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
+			  jsocket.core.http.api.uid + '"}\n');
+		}
+		return (true);
+	},
+
+	/**
+	 * Alias de {@link #write write}
+	 * @param {String} msg Le message a envoye au serveur
+	 * @return {Boolean} True si le message a ete envoye sinon False
+	 */
+	send : function(msg) {
+		if (msg.length > 0) {
+			return (jsocket.core.http.commands.push(msg));
+		}
+		return (false);
+	},
+
+	/**
+	 * @event connected
+	 * Callback appele par flash lorsque la socket est connectee au serveur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	connected : function() {
+		if (typeof jsocket.core.http.api != 'object') {
+			return (false);
+		}
+		jsocket.core.http.connectedToServer = true;
+		jsocket.core.http.api.onReceive('{"from": "connect", "value": true}');
+		return (true);
+	},
+
+	/**
+	 * @event disconnected
+	 * Callback appele par flash lorsqu'une deconnection a ete effectuee
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	disconnected : function() {
+		if (typeof jsocket.core.http.api != 'object') {
+			return (false);
+		}
+		jsocket.core.http.api.parser('{"from": "disconnect", "value": true}');
+		jsocket.core.http.connectedToServer = false;
+		jsocket.core.http.reconnect();
+		return (true);
+	},
+
+	/**
+	 * @event receive
+	 * Callback appele par socket lors de la reception d'un message
+	 * @return {Boolean} True si la commande a ete envoyee a l'API sinon False
+	 */
+	receive: function()	{
+		if (typeof jsocket.core.http.api != 'object') {
+			return (false);
+		}
+		if (jsocket.core.http.socket.readyState == 4) {
+			if (jsocket.core.http.socket.status == 200) {
+				if (jsocket.core.http.connectedToServer == false) {
+					jsocket.core.http.connected();
+				}
+				jsocket.core.http.response.waiting = false;
+				jsocket.core.http.response.lastTime = Math.floor(new Date().getTime() / 1000);
+				msg = jsocket.core.http.socket.responseText;
+				if (msg != '') {
+					res = msg.split("\n");
+					for (var i = 0; res[i]; ++i) {
+						jsocket.core.http.api.onReceive(res[i]);
+					}
+				}
+			} else {
+				jsocket.core.http.api.parser('{"from": "error", "value": "HTTP request error: ' +
+					jsocket.core.http.socket.status + '"}');
+			}
+		}
+		return (true);
+	}
+};
+
+/**
+ * @class jsocket.core.websocket
+ * Javascript event's interface for websocket HTML 5
+ * @author Revolunet
+ * @version 0.2.6
+ * @singleton
+ */
+jsocket.core.websocket = {
+	/**
+	 * Pointeur vers l'API
+	 * @private
+	 * @type {@link jsocket.api}
+	 */
+	api : null,
+
+	/**
+	 * True si le core a ete initialize sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	initialized : false,
+
+	/**
+	 * True si le core est connecte au server sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	connectedToServer : false,
+
+	/**
+	 * True si ce core est utilise par l'API sinon False
+	 * @private
+	 * @type Boolean
+	 */
+	isWorking : false,
+
+	/**
+	 * Port de la websocket
+	 * @private
+	 * @type Int
+	 */
+	port : 8080,
+
+	/**
+	 * Socket
+	 * @private
+	 * @type WebSocket
+	 */
+	socket : null,
+
+	/**
+	 * @event loaded
+	 * Initialisation du code WebSocket
+	 * @return {Boolean} True si l'application a ete chargee
+	 */
+	loaded : function() {
+		if ('WebSocket' in window) {
+			jsocket.core.websocket.initialized = true;
+			jsocket.core.websocket.connectedToServer = false;
+			return (true);
+		}
+		jsocket.core.websocket.initialized = false;
+		jsocket.core.websocket.connectedToServer = false;
+		return (false);
+	},
+
+	/**
+	 * Initialise une connection via une socket sur le server:port
+	 * @param {String} server Le nom de domaine ou adresse IP du serveur
+	 * @param {Int} port Le numero du port du serveur
+	 */
+	connect : function(server, port) {
+		jsocket.core.websocket.loaded();
+		if (jsocket.core.websocket.initialized == true && jsocket.core.websocket.connectedToServer == false) {
+			jsocket.core.websocket.socket = new WebSocket('ws://' + server + ':' + jsocket.core.websocket.port + '/jsocket');
+			jsocket.core.websocket.socket.onmessage = jsocket.core.websocket.receive;
+			jsocket.core.websocket.socket.onerror = jsocket.core.websocket.error;
+			jsocket.core.websocket.socket.onopen = jsocket.core.websocket.connected;
+			jsocket.core.websocket.socket.onclose = jsocket.core.websocket.disconnected;
+		}
+		else if (jsocket.core.websocket.connectedToServer == false) {
+			jsocket.core.websocket.setTimeout("jsocket.core.websocket.reconnect();", 500);
+		}
+	},
+
+	/**
+	 * Alias de {@link #connect connect} sans avoir a repreciser les parametres de connection
+	 */
+	reconnect : function() {
+		jsocket.core.websocket.connect(jsocket.core.websocket.api.host, jsocket.core.websocket.api.port);
+	},
+
+	/**
+	 * @event connected
+	 * Callback appele par flash lorsque la socket est connectee au serveur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	connected : function() {
+		if (typeof jsocket.core.websocket.api != 'object') {
+			return (false);
+		}
+		jsocket.core.websocket.connectedToServer = true;
+		jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
+		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": "null", "app": ""}');
+		return (true);
+	},
+
+	/**
+	 * @event disconnected
+	 * Callback appele par flash lorsqu'une deconnection a ete effectuee
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	disconnected : function() {
+		if (typeof jsocket.core.websocket.api != 'object') {
+			return (false);
+		}
+		jsocket.core.websocket.api.uid = '';
+		jsocket.core.websocket.api.parser('{"from": "disconnect", "value": true}');
+		jsocket.core.websocket.connectedToServer = false;
+		jsocket.core.websocket.reconnect();
+		return (true);
+	},
+
+	/**
+	 * @event error
+	 * Callback appele par WebSocket lorsqu'une erreur survient
+	 * @param {String} msg Le message ainsi que le code d'erreur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	error: function(msg) {
+		if (typeof jsocket.core.websocket.api != 'object') {
+			return (false);
+		}
+		jsocket.core.websocket.api.parser('{"from": "error", "value": "' + msg + '"}');
+		return (true);
+	},
+
+	/**
+	 * @event receive
+	 * Callback appele par WebSocket lors de la reception d'un message
+	 * @param {String} msg Le message envoye par le serveur
+	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
+	 */
+	receive: function(msg) {
+		if (typeof jsocket.core.websocket.api != 'object') {
+			return (false);
+		}
+		msg = msg.data;
+		if (msg.data == '{"from": "connect", "value": "true"}') {
+			jsocket.core.websocket.send('{"cmd": "connected", "args": "null", "app": ""}');
+		}
+		var tab = msg.split("\n");
+		for (var i = 0; i < tab.length; ++i) {
+			jsocket.core.websocket.api.onReceive(tab[i]);
+		}
+		return (true);
+	},
+
+	/**
+	 * Lance un setTimeout sur cmd avec comme temps d'attente delay a
+	 * condition que ce core est utilise par l'API
+	 * @param {String} cmd La commande a lancer
+	 * @param {Int} delay Le temps d'attente
+	 */
+	setTimeout : function(cmd, delay) {
+		if (jsocket.core.websocket.isWorking == true) {
+			setTimeout(cmd, delay);
+		}
+	},
+
+	/**
+	 * Addslashes les caracteres ' " \\ \0
+	 * @param {String} str Le texte a addslasher
+	 * @return {String} La chaine avec les caracteres echapes
+	 */
+	addslashes : function(str) {
+		if (typeof(str) == 'string') {
+			str = encodeURIComponent(str);
+			str = str.replace(/\'/g, "%27");
+		}
+		else if (typeof(str) == 'object') {
+			for (var i in str) {
+				str[i] = jsocket.core.websocket.addslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+	/**
+	 * Supprime tous les slashes des caracteres ' " \\ \0
+	 * @param {String} str Le texte a stripslasher
+	 * @return {String} La chaine avec les caracteres non echapes
+	 */
+	stripslashes : function (str) {
+		if (typeof(str) == 'string') {
+			str = str.replace(/\%27/g, "'");
+			str = decodeURIComponent(str);
+		}
+		else if (typeof(str) == 'object') {
+			for (var i in str) {
+				str[i] = jsocket.core.websocket.stripslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+	/**
+	 * Envoie le message au serveur.
+	 * Tentative de reconnection a ce dernier le cas echeant.
+	 * @param {String} msg Le texte a envoyer au serveur
+	 * @return {Boolean} True si le message a ete envoye sinon False
+	 */
+	write : function(msg) {
+		if (jsocket.core.websocket.connectedToServer == false) {
+			jsocket.core.websocket.reconnect();
+		}
+		if (jsocket.core.websocket.connectedToServer) {
+			jsocket.core.websocket.socket.send(msg + "\n");
+		} else {
+			if (typeof jsocket.core.websocket.api != 'object') {
+				return (false);
+			}
+			jsocket.core.websocket.setTimeout("jsocket.core.websocket.send('" + msg + "');", 500);
+			return (false);
+		}
+		return (true);
+	},
+
+	/**
+	 * Alias de {@link #write write}
+	 * @param {String} msg Le message a envoye au serveur
+	 * @return {Boolean} True si le message a ete envoye sinon False
+	 */
+	send : function(msg) {
+		return (jsocket.core.websocket.write(msg));
+	},
+
+	/**
+	 * Ferme la connection au serveur
+	 * @return {Boolean} True si la connection a ete fermee sinon False
+	 */
+	close : function() {
+		jsocket.core.websocket.socket.close();
+		return (true);
+	}
+};
+
+/**
+ * @class jsocket.api
+ * <p><b><u>jsocket API</u></b></p>
+ * <p>Chaque callback est appele avec en parametres un dictionnaire comprenant les attributs
+ * suivants:
+ * <div class="mdetail-params"><ul>
+ * <li><b><tt>param.value : value JSON field (empty string '' if not exists)</tt></b></li>
+ * <li><b><tt>param.app : app JSON field (empty string '' if not exists)</tt></b></li>
+ * <li><b><tt>param.channel : channel JSON field (empty string '' if not exists)</tt></b></li>
+ * </ul></div></p>
+ *
+ * <p><b><u>Exemple:</u></b></p>
+<pre><code>
+jsocket.api.app['myapp'].onJoin(args) {
+  args.value = true;
+  args.app = 'myapp';
+  args.channel = 'myapp_channel';
+};
+</code></pre>
+ * @author Revolunet
+ * @version 0.2.6
+ * @singleton
+ */
+jsocket.api = {
+	/**
+	 * Le core a utiliser par defaut
+	 * @private
+	 * @type Object
+	 */
+	core : null,
+
+	/**
+	 * Le nom de domaine ou adresse IP du serveur distant
+	 * @private
+	 * @type String
+	 */
+	host : '',
+
+	/**
+	 * Le port du serveur TCP distant
+	 * @private
+	 * @type Int
+	 */
+	port : 0,
+
+	/**
+	 * L'url utilisee par le jsocketCoreHTTP pour contacter le serveur
+	 * @public
+	 * @type String
+	 */
+	urlFailOver : '',
+
+	/**
+	 * A activer pour afficher les commandes JSON en entree/sortie
+	 * @private
+	 * @type Boolean
+	 */
+	debug : false,
+
+	/**
+	 * Le tableau des applications enregistrees dans l'API
+	 * @private
+	 * @type Array
+	 */
+	app : [ ],
+
+	/**
+	 * L'uid du client une fois connecte
+	 * @public
+	 * @type String
+	 */
+	uid : '',
+
+	/**
+	 * La liste des commandes en attente d'envoie
+	 * @private
+	 * @type Array
+	 */
+	commands : [ ],
+
+	/**
+	 * La liste des cores disponibles.
+	 * Si un core ne fonctionne pas, alors
+	 * le core suivant est teste.
+	 * @private
+	 * @type Object
+	 */
+	cores : {
+		tcp: {
+			object: jsocket.core.tcp,
+			tested: false,
+			worked: true
+		},
+		http: {
+			object: jsocket.core.http,
+			tested: false,
+			worked: true
+		},
+		websocket: {
+			object: jsocket.core.websocket,
+			tested: false,
+			worked: true
+		}
+	},
+
+	/**
+	 * Connect to the server via jsocketCore
+	 * @param {String} host Le nom de domaine ou adresse IP du serveur distant
+	 * @param {Int} port Le port du serveur distant
+	 */
+	init : function(host, port) {
+		if (jsocket.api.core == null) {
+			jsocket.api.method(jsocket.core.tcp);
+		}
+		jsocket.api.host = host;
+		jsocket.api.port = port;
+		jsocket.api.core.api = this;
+		jsocket.api.core.connect(jsocket.api.host, jsocket.api.port);
+	},
+
+	/**
+	 * <p>Changement de la methode de contact pour le serveur (par defaut TCP).</p>
+	 *
+	 * <p>Cores disponibles:
+	 * <div class="mdetail-params"><ul>
+	 * <li><b><tt>{@link jsocket.core.tcp#loaded}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.http#loaded}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * </ul></div></p>
+	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
+	 */
+	method : function(newCore) {
+		if (jsocket.api.core != null) {
+			jsocket.api.core.isWorking = false;
+		}
+		jsocket.api.core = newCore;
+		jsocket.api.core.isWorking = true;
+	},
+
+	/**
+	 * <p>Enregistre une application dans l'API</p>
+	 *
+	 * <p><b><u>Exemple d'utilisation:</u></b></p>
+<pre><code>
+var myApplication = {
+  onConnected : function(data) {
+    if (data.value == true) {
+	  alert('Vous etes connecte !');
+	} else {
+	  alert('La connection au serveur a echoue');
+	}
+  }
+};
+jsocket.api.register('myApplicationName', myApplication);
+</code></pre>
+	 * @param {String} appName Le nom de l'application
+	 * @param {Object} appObject L'application contenant les callbacks
+	 */
+	register : function(appName, appObject) {
+		var newApp = appObject || { };
+		jsocket.api.app[appName] = newApp;
+		jsocket.api.app[appName].isMaster = false;
+	},
+
+	/**
+	 * @private
+	 * Test si une application existe
+	 * @param {String} appName Le nom de l'application
+	 * @return {Boolean} True si l'application exists sinon False
+	 */
+	appExists : function(appName) {
+		if (typeof(jsocket.api.app[appName]) != 'undefined') {
+			return (true);
+		}
+		return (false);
+	},
+
+	/**
+	 * @private
+	 * Appel le callback (s'il existe) d'une application (si elle existe)
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} callName Le nom du callback
+	 * @return {Boolean} True si le callback a ete appele sinon False
+	 */
+	appCallback : function(appName, callName, args) {
+		if (typeof(eval('jsocket.api.app["' + appName + '"].' + callName)) != 'undefined') {
+			eval('jsocket.api.app["' + appName + '"].' + callName + '(args);');
+			return (true);
+		}
+		return (false);
+	},
+
+	/**
+	 * @private
+	 * Appel le callback de chaque application
+	 * @param {String} callName Le nom du callback
+	 * @param {Mixed} args Les arguments a passer au callback
+	 */
+	appCallbacks : function(callName, args) {
+		for (var i in jsocket.api.app) {
+			jsocket.api.appCallback(i, callName, args);
+		}
+	},
+
+	/**
+	 * Active la console de debug de flash
+	 * @param {Boolean} enable True pour activer la console False pour desactiver
+	 */
+	debug : function(enable) {
+		if (jsocket.api.core.initialized == false) {
+			setTimeout("jsocket.api.debug(" + enable + ");", 1000);
+			return (false);
+		}
+		if (enable == true) {
+			jsocket.api.debug = true;
+			document.getElementById('socketBridge').style.top = '0px';
+		}
+		else {
+			jsocket.api.debug = false;
+			document.getElementById('socketBridge').style.top = '-1000px';
+		}
+	},
+
+	/**
+	 * @private
+	 * Callback utilise pour transformer du texte en un objet JSON
+	 * @param {String} text Le texte a transformer
+	 */
+	parser : function(text) {
+		var j = JSON.parse(text);
+		if (j.from != null && j.value != null) {
+			func_name = j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
+			var args = { };
+			args.value = (j.value != null ? j.value : '');
+			args.channel = (j.channel != null ? j.channel : '');
+			args.app = (j.app != null ? j.app : '');
+			args = jsocket.api.core.stripslashes(args);
+			if (j.app != null && j.app.length > 0 &&
+				jsocket.api.appExists(j.app) == true) {
+				try {
+					jsocket.api.appCallback(args['app'], 'on' + func_name, args);
+				} catch(e) { }
+			}
+			else {
+				try {
+					jsocket.api.appCallbacks('on' + func_name, args);
+					eval('jsocket.api.on' + func_name + "(args)");
+				} catch(e) {
+					jsocket.api.onError(e);
+				}
+			}
+		}
+	},
+
+	/**
+	 * @private
+	 * @event onConnected
+	 * Callback utilise pour recevoir un identifiant par defaut lors de
+	 * la connection au serveur.
+	 * @param {Object} args Tableau contenant l'identifiant unique de l'utilisateur
+	 */
+	onConnected : function(args) {
+		jsocket.api.uid = args.value;
+		jsocket.api.sendPool();
+	},
+
+	/**
+	 * @event onDisconnect
+	 * Callback appele via flash quand la connection avec le serveur echoue
+	 * @param {Object} args Objet ayant pour <i>value</i> un Boolean
+	 */
+	onDisconnect : function(args) {
+	},
+
+	/**
+	 * @event onConnect
+	 * Callback lorsque la connection avec le serveur est etablie.
+	 * @param {Object} args Objet ayant pour <i>value</i> un Boolean
+	 */
+	onConnect : function(args) {
+	},
+
+	/**
+	 * @private
+	 * @event onReceive
+	 * Callback utilise pour recevoir les donnees sortantes du serveur.
+	 * @param {String} message Le message retourne par le serveur contenant une ou
+	 * plusieurs commandes JSON. (Si plusieurs, elle sont alors separees par des \n)
+	 */
+	onReceive : function(message) {
+		console.log('jsocket.api.receive: ', message);
+		jsocket.api.parser(message);
+	},
+
+	/**
+	 * @event onStatus
+	 * Callback appele pour le master d'un channel lorsqu'un utilisateur
+	 * quitte ou rejoind le channel.
+	 * @param {Object} args Objet
+	 */
+	onStatus : function(args) {
+	},
+
+	/**
+	 * @event onAuth
+	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction auth
+	 * @param {Object} args Objet ayant pour value le retour de l'appel a la methode auth
+	 */
+	onAuth : function(args) {
+	},
+
+	/**
+	 * Cette fonction permet d'obtenir des droits supplementaire sur le serveur.
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} password Le mot de passe pour passer admin sur le serveur
+	 */
+	auth : function(appName, channel, password) {
+		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
+			jsocket.api.app[appName].isMaster = true;
+		}
+		var json = {
+			cmd: 'auth',
+			args: password,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * Authentifie un utilisateur (comme master) sur un channel
+	 * @param {String} appName Le nom de l'application/channel
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} password Le mot de passe du channel
+	 */
+	chanAuth : function(appName, channel, password) {
+		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
+			jsocket.api.app[appName].isMaster = true;
+		}
+		var json = {
+			cmd: 'chanAuth',
+			args: password,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onChanAuth
+	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction chanAuth
+	 * @param {Object} args Channel password or false
+	 */
+	onChanAuth : function(args) {
+	},
+
+	/**
+	 * @event onJoin
+	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction join
+	 * @param {Object} args Le retour de l'appel a la methode join
+	 */
+	onJoin : function(args) {
+	},
+
+	/**
+	 * Cette fonction permet d'associé le client a un channel sur le serveur.
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} password Le mot de passe du salon
+	 */
+	join : function(appName, channel, password) {
+		var json = {
+			cmd: 'join',
+			args: [ channel, password ],
+			channel: channel,
+			app: appName,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onPart
+	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction part
+	 * @param {Object} args Le retour de l'appel a la methode part
+	 */
+	onPart : function(args) {
+	},
+
+	/**
+	 * Cette fonction permet de quitter le channel auquel le client est associé.
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 */
+	part : function(appName, channel) {
+		var json = {
+			cmd: 'part',
+			args: channel,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onCreate
+	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction create
+	 * @param {Object} args Le retour de l'appel a la methode create
+	 */
+	onCreate : function(args) {
+	},
+
+	/**
+	 * Cette fonction permet d'ajouter un nouveau channel sur le serveur.
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} password Le mot de passe du salon
+	 */
+	create : function(appName, channel, password) {
+		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
+			jsocket.api.app[appName].isMaster = true;
+		}
+		var json = {
+			cmd: 'create',
+			args: [ channel, password ],
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onRemove
+	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction remove
+	 * @param {Object} args Le retour de l'appel a la methode remove
+	 */
+	onRemove : function(args) {
+	},
+
+	/**
+	 * Cette fonction permet d'effacer un channel du serveur.
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 */
+	remove : function(appName, channel) {
+		var json = {
+			cmd: 'remove',
+			args: channel,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * Change le nom de l'utilisateur courant
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} nickname Le nom d'utilisateur
+	 */
+	nick : function(appName, channel, nickname) {
+		var json = {
+			cmd: 'nick',
+			args: nickname,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onNick
+	 * Callback lorsque le serveur renvoie des informations suite a
+	 * l'appel de la fonction {@link #nick nick}
+	 * @param {Object} args Le retour de l'appel a la methode {@link #nick nick}
+	 */
+	onNick : function(args) {
+	},
+
+	/**
+	 * Cette fonction permet a un master de forwarder une commande
+	 * sur tous les clients connectes a son channel
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} command La commande a forwarder
+	 */
+	forward : function(appName, channel, command) {
+		var json = {
+			cmd: 'forward',
+			args: command,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onForward
+	 * Callback appeler lorsque un client recoie un message d'un master
+	 * (via {@link #forward forward})
+	 * @param {Object} args Le retour de la commande {@link #forward forward}
+	 */
+	onForward : function(args) {
+	},
+
+	/**
+	 * Permet de lister tous les utilisateurs connecte au channel
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 */
+	list : function(appName, channel) {
+		var json = {
+			cmd: 'list',
+			args: channel,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onList
+	 * Callback appeler contenant la liste des utilisateurs connectes a un channel
+	 * @param {Object} args Le retour de la commande {@link #list list}
+	 */
+	onList : function(args) {
+	},
+
+	/**
+	 * Demande au serveur la liste des dernieres commandes effectuees par le master.
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 */
+	history : function(appName, channel) {
+		var json = {
+			cmd: 'history',
+			args: 'null',
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onHistory
+	 * Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+	 * @param {Object} args Le retour de la commande {@link #history history}
+	 */
+	onHistory : function(args) {
+	},
+
+	/**
+	 * Envoie un message a un ou plusieurs clients
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {Object} tab [0] = message a envoyer
+	 *        [1] = [ '*' ] pour tous les clients du channel
+	 *              [ '' ] ou [ 'master' ] pour le master du channel
+	 *              [ 'username1', 'username2', 'uidClient3', ... ] pour une liste de clients
+	 */
+	message : function(appName, channel, tab) {
+		var json = {
+			cmd: 'message',
+			args: tab,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onMessage
+	 * Callback reception d'un message {@link #message message}
+	 * @param {Object} args command [0] = l'emmeteur du message
+	 *        [1] = le message
+	 */
+	onMessage : function(args) {
+	},
+
+	/**
+	 * Renvoie le statut de l'utilisateur courant
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 */
+	getStatus : function(appName, channel) {
+		var json = {
+			cmd: 'getStatus',
+			args: 'null',
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onGetStatus
+	 * Callback reception status {@link #getStatus getStatus}
+	 * @param {Object} args Status de l'utilisateur courant
+	 */
+	onGetStatus : function(args) {
+	},
+
+	/**
+	 * Remplace le status de l'utilisateur courant
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} status Le status de l'utilisateur
+	 */
+	setStatus : function(appName, channel, status) {
+		var json = {
+			cmd: 'setStatus',
+			args: status,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onSetStatus
+	 * Callback de la commande {@link #setStatus setStatus}
+	 * @param {Object} args True or false
+	 */
+	onSetStatus : function(args) {
+	},
+
+	/**
+	 * Renvoie l'heure a laquelle l'utilisateur courant s'est connecte
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 */
+	timeConnect : function(appName, channel) {
+		var json = {
+			cmd: 'timeConnect',
+			args: 'null',
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onTimeConnect
+	 * Callback de la commande {@link #timeConnect timeConnect}
+	 * @param {Object} args True or False
+	 */
+	onTimeConnect : function(args) {
+	},
+
+	/**
+	 * Change le mot de passe d'un salon
+	 * @param {String} appName Le nom de l'application
+	 * @param {String} channel Le nom d'un salon
+	 * @param {String} password Le mot de passe
+	 */
+	chanMasterPwd : function(appName, channel, password) {
+		var json = {
+			cmd: 'chanMasterPwd',
+			args: password,
+			app: appName,
+			channel: channel,
+			uid: 'jsocket.api.uid'
+		};
+		jsocket.api.send(jsocket.protocol.forge(json));
+	},
+
+	/**
+	 * @event onChanMasterPwd
+	 * Callback {@link #chanMasterPwd chanMasterPwd}
+	 * @param {Object} args True or false
+	 */
+	onChanMasterPwd : function(args) {
+	},
+
+	/**
+	 * @event onError
+	 * Callback sur l'erreur d'execution d'une des methodes de l'API
+	 * @param {String} error Le message d'erreur
+	 */
+	onError : function(error) {
+	},
+
+	/**
+	 * @private
+	 * @event onTCPError
+	 * Callback sur l'erreur venant du core TCP. On change alors
+	 * la methode de dialogue avec le serveur par HTTP.
+	 * @param {String} error Le message d'erreur
+	 */
+	onTCPError : function(error) {
+		jsocketCoreTCP.isWorking = false;
+		if (jsocketCoreHTTP.isWorking == false) {
+			jsocket.api.method(jsocketCoreHTTP);
+			jsocket.api.init(jsocket.api.host, jsocket.api.port);
+		}
+	},
+
+	/**
+	 * @private
+	 * Une fois que le client recupere son uid, alors les commandes
+	 * en queue sont envoyes au serveur.
+	 */
+	sendPool : function() {
+		for (var i = 0; i < jsocket.api.commands.length; ++i) {
+			console.log('jsocket.api.send: ', jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
+			jsocket.api.core.send(jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
+		}
+		jsocket.api.commands = [ ];
+	},
+
+	/**
+	 * Gestion de queue pour les commandes a envoyer.
+	 * Si jsocket.api.uid est null/empty alors on stock les
+	 * commands puis on les envoie lorsque l'uid est renseigne.
+	 * @param {String} msg Le message (commande JSON) a envoyer
+	 */
+	send : function(msg) {
+		if (jsocket.api.uid != '') {
+			console.log('jsocket.api.send: ', msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
+			jsocket.api.core.send(msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
+		} else if (jsocket.api.commands.length < 10) {
+			jsocket.api.commands.push(msg);
+		}
+	}
+};
+
+/**
+ * Includes swf for flash socket bridge
+ */
+function createSwf() {
+	if (typeof swfobject != 'undefined' && typeof jsocket.core.tcp != 'undefined') {
+		swfobject.embedSWF(jsocketBridgeDomain, "flashcontent", "900", "200", "8.0.0", "expressInstall.swf",
+						   {scope: 'jsocket.core.tcp'}, {menu: false},
+						   {id:'socketBridge', name:'socketBridge', style:'position:absolute;top:-1000px;'});
+	} else {
+		setTimeout('createSwf()', 200);
+	}
+}
+
+createSwf();

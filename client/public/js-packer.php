@@ -4,6 +4,7 @@
 require(dirname(__FILE__).'/class.JavaScriptPacker.php');
 
 $dir = realpath(dirname(__FILE__).'/../').'/';
+$outMin = dirname(__FILE__).'/jsocket-min.js';
 $out = dirname(__FILE__).'/jsocket.js';
 
 $files = array(
@@ -25,4 +26,5 @@ foreach ($files as $key => $file) {
 $packer = new JavaScriptPacker(implode(chr(10), $src));
 $script = $packer->pack();
 
-file_put_contents($out, $script);
+file_put_contents($outMin, $script);
+file_put_contents($out, implode(chr(10), $src));
