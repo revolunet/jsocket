@@ -25,6 +25,8 @@ class ClientHTTP(resource.Resource):
 		for res in responses:
 			if '{"from": "connected",' not in res:
 				json += (res + "\n")
+		if len(json) > 0:
+			Log().add('[HTTP] Send: %s' % json)
 		return json
 
 	def render_POST(self, request):
@@ -32,9 +34,17 @@ class ClientHTTP(resource.Resource):
 		Traite les informations envoye par POST.
 		Necessite la cle json.
 		"""
+
+		cuid = None
 		if request.args.get('json', None) is not None:
-			uid = Approval().validate(request.args['json'][0])
-			if '{"cmd": "connected", "args": "null"' in request.args['json'][0]:
-				return '{"from": "connected", "value": "%s"}' % uid
-			return self.getData(uid)
+			#if '{"cmd": "refresh", "args": "null",' not in request.args['json'][0]:
+			Log().add('[HTTP] Receive: %s' % request.args['json'][0])
+			commands = request.args['json'][0].split("\n")
+			for cmd in commands:
+				uid = Approval().validate(cmd)
+				if uid is not None and cuid is None:
+					cuid = uid
+				if '{"cmd": "connected", "args": "null"' in request.args['json'][0]:
+					return '{"from": "connected", "value": "%s"}' % cuid
+			return self.getData(cuid)
 		return '{"from": "error", "value": "No JSON key"}'
