@@ -40,6 +40,9 @@ class Filter(object):
 		self.__filters.append({ 'name': 'toggleWebcam', 'match' : 'this.scene.toggleWebcam',
 			'handler' : self.remove
 		})
+		self.__filters.append({ 'name': 'window.open', 'match' : 'window.open',
+			'handler' : self.remove
+		})
 		self.__filters.append({ 'name': 'addImage', 'match' : 'this.scene.addImage',
 			'handler' : self.untilLast
 		})
@@ -52,7 +55,7 @@ class Filter(object):
 			if method is not None:
 				filter_history = method(filter_history, match)
 		return filter_history
-				
+
 	def remove(self, history, match):
 		filter_history = []
 		for h in history:
