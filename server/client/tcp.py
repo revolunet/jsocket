@@ -11,13 +11,13 @@ class TwistedTCPClient(Protocol):
 	def callbackSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
 		for json in responses:
-			self.socket.send(str(json) + "\0")
+			self.transport.getHandle().send(str(json) + "\0")
 
 	def dataReceived(self, data):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
 		Log().add('[TCP] Received: %s' % data)
 		if '<policy-file-request/>' in data:
-			self.socket.send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>" + "\0")
+			self.transport.getHandle().send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>" + "\0")
 		else:
 			Approval().validate(data, self.callbackSend)
 
