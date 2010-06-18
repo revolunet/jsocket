@@ -8,6 +8,7 @@ import time
 from server.tcphttp import ServerTwisted
 from commons.watchdog import WatchDog
 from twisted.internet import reactor
+from log.logger import Log
 
 def mainTwisted():
 	"""Lance un serveur HTTP et TCP"""

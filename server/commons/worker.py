@@ -6,7 +6,9 @@ import threading
 import Queue
 import time
 from jexception import JException
+from threading import Lock
 
+lock = Lock()
 class WorkerLog(threading.Thread):
 	""" Gestion de l'affichage des logs """
 
@@ -22,8 +24,11 @@ class WorkerLog(threading.Thread):
 
 		while True:
 			item = self.__queue.get()
+			
+			lock.acquire()
 			Log().dprint(item[0], item[1])
 			self.__queue.task_done()
+			lock.release()
 
 class WorkerParser(threading.Thread):
 	""" Gestion du traitement des commandes json """
