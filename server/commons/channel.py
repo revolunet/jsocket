@@ -41,7 +41,7 @@ class Channel(object):
 			Log().add("[+] Channel : client " + str(uid) + " left " + self.name)
 			return True
 		if uid in self.__masters:
-			self.__users.remove(uid)
+			self.__masters.remove(uid)
 			Log().add("[+] Channel : master " + str(uid) + " left " + self.name)
 			return True
 		return False

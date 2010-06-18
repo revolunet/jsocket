@@ -26,9 +26,30 @@ class WatchDog(threading.Thread):
 
 	def run(self):
 		total_client = -1
+		room = None
 		while self.running:
+			if room is None and len(Session().gets()) > 0:
+				clients = Session().gets()
+				(uid, client) = clients[0]
+				room = client.room
+			if room is not None:
+				self.removeRooms(room)
 			total_client = self.removeClients(total_client)
 			time.sleep(SETTINGS.WATCHDOG_SLEEP_TIME)
+
+	def removeRooms(self, room):
+		appToRemove = []
+		for application in room.applications:
+			for c in room.applications[application]:
+				channel = c.get('channel')
+				if len(channel.users()) == 0 and len(channel.masters()) == 0:
+					room.remove(channelName=channel.name, appName=application)
+					Log().add('[i] WatchDog: Deleted %s channel' % channel.name, 'blue')
+				if len(room.applications[application]) == 0:
+					appToRemove.append(application)
+		for app in appToRemove:
+			room.applications.pop(app)
+			Log().add('[i] WatchDog: Deleted %s application' % app, 'blue')
 
 	def removeClients(self, total_client):
 		current_time = int(time.time())

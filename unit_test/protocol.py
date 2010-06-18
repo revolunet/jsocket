@@ -15,12 +15,12 @@ class CONFIG(object):
 	IS_DEBUG = False
 	SERVER_PORT = 9999
 	#SERVER_PORT = 81
-	CLIENT_NUMBER = 3
+	CLIENT_NUMBER = 1
 	CLIENT_THREAD = False
 	#CLIENT_TYPE = 'HTTP'
 	CLIENT_TYPE = 'TCP'
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
-	SERVER_HOST = 'localhost'
+	SERVER_HOST = '192.168.1.74'
 	#SERVER_HOST = '172.16.174.128'
 	HTTP_SERVER_PORT = 81
 	SERVER_SELECT_TIMEOUT = 5
@@ -164,7 +164,7 @@ class Protocol(object):
 		'timeConnect': '{"cmd": "timeConnect", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'history': '{"cmd": "history", "args": "null", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'part': '{"cmd": "part", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
-		'remove': '{"cmd": "remove", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
+		#'remove': '{"cmd": "remove", "args": "protocol", "app": "protocol", "channel": "protocol", "uid": "$uid"}',
 		'refresh': '{"cmd": "refresh", "args": "null", "uid": "$uid", "channel": "protocol", "app": "protocol"}',
 		'history': '{"cmd": "history", "args": "null", "uid": "$uid", "channel": "protocol", "app": "protocol"}'
 	}
