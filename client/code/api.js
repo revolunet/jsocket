@@ -131,6 +131,16 @@ jsocket.api = {
 	},
 
 	/**
+	 * <p>Deconnection du server via le core en cours</p>
+	 */
+	disconnect: function() {
+		if (jsocket.api.core != null) {
+			return (jsocket.api.core.close());
+		}
+		return (false);
+	},
+
+	/**
 	 * <p>Changement de la methode de contact pour le serveur (par defaut TCP).</p>
 	 *
 	 * <p>Cores disponibles:

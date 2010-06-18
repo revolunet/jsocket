@@ -181,6 +181,15 @@ jsocket.core.http = {
 	},
 
 	/**
+	 * Ferme la connection au serveur
+	 * @return {Boolean} True si la connection a ete fermee sinon False
+	 */
+	close: function() {
+		jsocket.core.http.connectedToServer = false;
+		return (true);
+	},
+
+	/**
 	 * Verifie si une commande peut etre envoye au serveur
 	 * @return {Boolean} True si la commande peut etre envoyee sinon False
 	 */

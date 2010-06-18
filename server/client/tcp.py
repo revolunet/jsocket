@@ -1,5 +1,6 @@
 from twisted.internet.protocol import Protocol
 from zope.interface import implements
+from commons.session import Session
 from commons.approval import Approval
 from log.logger import Log
 
@@ -7,6 +8,9 @@ class TwistedTCPClient(Protocol):
 	"""
 	Classe TCP utilisee par twisted.
 	"""
+
+	def __init__(self):
+		self.uid = None
 
 	def callbackSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
@@ -21,14 +25,19 @@ class TwistedTCPClient(Protocol):
 		else:
 			commands = data.split("\n")
 			for cmd in commands:
-				Approval().validate(cmd, self.callbackSend)
+				uid = Approval().validate(cmd, self.callbackSend)
+				if uid is not None:
+					self.uid = uid
 
 	def connectionMade(self):
 		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """
-		pass
+		self.uid = None
 
 	def connectionLost(self, reason):
 		""" Methode appelee lorsqu'un utilisateur se deconnecte """
+		Log().add('[ConnectionLost] %s' % str(self.uid))
+		if self.uid is not None:
+			Session().delete(self.uid)
 		self.transport.loseConnection()
 
 	@property
