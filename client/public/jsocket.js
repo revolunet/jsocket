@@ -582,6 +582,13 @@ jsocket.core.tcp = {
 	isWorking : false,
 
 	/**
+	 * Determine si la deconnection a ete forcer ou non
+	 * @private
+	 * @type Boolean
+	 */
+	manuallyDisconnected : false,
+
+	/**
 	 * @event loaded
 	 * Callback appele par flash lorsque le swf est charge
 	 * @return {Boolean} True si l'application a ete chargee
@@ -715,6 +722,7 @@ jsocket.core.tcp = {
 	 */
 	close : function() {
 		jsocket.core.tcp.socket.close();
+		jsocket.core.tcp.manuallyDisconnected = true;
 		return (true);
 	},
 
@@ -730,7 +738,11 @@ jsocket.core.tcp = {
 		jsocket.core.tcp.api.uid = '';
 		jsocket.core.tcp.api.parser('{"from": "disconnect", "value": true}');
 		jsocket.core.tcp.connectedToServer = false;
-		jsocket.core.tcp.reconnect();
+		if (jsocket.core.tcp.manuallyDisconnected == true) {
+			jsocket.core.tcp.manuallyDisconnected = false;
+		} else {
+			jsocket.core.tcp.reconnect();
+		}
 		return (true);
 	},
 
@@ -969,6 +981,15 @@ jsocket.core.http = {
 	},
 
 	/**
+	 * Ferme la connection au serveur
+	 * @return {Boolean} True si la connection a ete fermee sinon False
+	 */
+	close: function() {
+		jsocket.core.http.connectedToServer = false;
+		return (true);
+	},
+
+	/**
 	 * Verifie si une commande peut etre envoye au serveur
 	 * @return {Boolean} True si la commande peut etre envoyee sinon False
 	 */
@@ -1196,7 +1217,11 @@ jsocket.core.websocket = {
 		jsocket.core.websocket.api.uid = '';
 		jsocket.core.websocket.api.parser('{"from": "disconnect", "value": true}');
 		jsocket.core.websocket.connectedToServer = false;
-		jsocket.core.websocket.reconnect();
+		if (jsocket.core.websocket.manuallyDisconnected == true) {
+			jsocket.core.websocket.manuallyDisconnected = false;
+		} else {
+			jsocket.core.websocket.reconnect();
+		}
 		return (true);
 	},
 
@@ -1454,6 +1479,17 @@ jsocket.api = {
 		} else {
 			jsocket.api.method(jsocket.core.http);
 		}
+	},
+
+	/**
+	 * <p>Deconnection du server via le core en cours.</p>
+	 * @return {Boolean} True si la deconnection a reussie sinon False
+	 */
+	disconnect: function() {
+		if (jsocket.api.core != null) {
+			return (jsocket.api.core.close());
+		}
+		return (false);
 	},
 
 	/**
