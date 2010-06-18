@@ -43,7 +43,6 @@ class Client(object):
 		self.last_action = time.time()
 		if self.callback is not None:
 			if callable(self.callback):
-				Log().add('[JSON][Responses] uid/callback addr: %s/%s' % (self.unique_key, str(self.callback)))
 				Log().add('[JSON][Responses] ' + str(command), 'green')
 				reactor.callFromThread(self.callback, [ command ])
 			else:

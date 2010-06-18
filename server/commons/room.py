@@ -56,7 +56,7 @@ class Room(object):
 
 		if appName not in self.applications:
 			self.applications[appName] = []
-			
+
 		if self.chanExists(channelName=channelName, appName=appName) == False:
 			client = Session().get(uid)
 			client.room_name = channelName
@@ -103,7 +103,7 @@ class Room(object):
 			return False
 		channel = self.Channel(channelName=channelName, appName=appName)
 		return channel.delete(uid)
-		
+
 	def leaveRooms(self, uid):
 		for application in self.applications:
 			for c in self.applications[application]:
@@ -143,15 +143,13 @@ class Room(object):
 				for u in users:
 					user = Session().get(u)
 					if user is not None:
-						Log().add('[+] Forward add response to uid/object: %s/%s' % (u, user))
 						user.addResponse(json)
-				Log().add('[i] Forward end add response')
 				if len(users) > 1:
 					return True
 		return False
 
 	def history(self, channelName, appName):
-		
+
 		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName=channelName, appName=appName)
 			return channel.history.get()

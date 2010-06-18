@@ -19,7 +19,9 @@ class TwistedTCPClient(Protocol):
 		if '<policy-file-request/>' in data:
 			self.socket.send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>" + "\0")
 		else:
-			Approval().validate(data, self.callbackSend)
+			commands = data.split("\n")
+			for cmd in commands:
+				Approval().validate(cmd, self.callbackSend)
 
 	def connectionMade(self):
 		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """
