@@ -2,6 +2,7 @@
 # room.py
 ##
 
+import simplejson
 from commons.protocol import Protocol
 from config.settings import SETTINGS
 from commons.channel import Channel
@@ -105,10 +106,15 @@ class Room(object):
 		return channel.delete(uid)
 
 	def leaveRooms(self, uid):
+		from commons.session import Session
+		
+		client = Session().get(uid)
 		for application in self.applications:
 			for c in self.applications[application]:
 				channel = c.get('channel')
 				if channel is not None:
+					if client is not None:
+						self.status(client, application, channel.name)
 					channel.delete(uid)
 
 	def Channel(self, channelName, appName):
@@ -210,6 +216,23 @@ class Room(object):
 				if c.get('name') == channelName:
 					return True
 		return False
+		
+	def status(self, client, appName, channelName):
+		from log.logger import Log
+		from commons.session import Session
+		
+		if self.chanExists(channelName=channelName, appName=appName):
+			channel = self.Channel(channelName, appName)
+			key = client.unique_key
+			name = client.getName()
+			to_send = {"name": name, "key": key, "status": 'offline'}
+			masters = channel.masters()
+			for master in masters:
+				m = Session().get(master)
+				if m is not None:
+					Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + m.getName())
+					json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel.name})
+					m.addResponse(json)
 
 	def __sendMessage(self, channelName, appName, sender, to, message):
 		"""Fromate le json, et envoie le message a l'utilisateur"""
