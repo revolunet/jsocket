@@ -40,6 +40,9 @@ class Filter(object):
 		self.__filters.append({ 'name': 'toggleWebcam', 'match' : 'this.scene.toggleWebcam',
 			'handler' : self.remove
 		})
+		self.__filters.append({ 'name': 'addImage', 'match' : 'this.scene.addImage',
+			'handler' : self.untilLast
+		})
 		
 	def Run(self, history):
 		filter_history = history
@@ -56,4 +59,13 @@ class Filter(object):
 			if re.match(h, match) is None:
 				filter_history.append(h)
 		return filter_history
-				
+		
+	def untilLast(self, history, match):
+		toDelete = []
+		for h in history:
+			if re.match(h, match) is not None:
+				toDelete(h)
+		toDelete = toDelete[:-1]
+		for delete in toDelete:
+			history.pop(delete)
+		return history
