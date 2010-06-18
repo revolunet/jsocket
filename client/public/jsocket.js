@@ -1509,6 +1509,7 @@ jsocket.api = {
 		}
 		jsocket.api.core = newCore;
 		jsocket.api.core.isWorking = true;
+		jsocket.api.core.api = this;
 	},
 
 	/**

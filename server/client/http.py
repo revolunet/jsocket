@@ -21,13 +21,13 @@ class ClientHTTP(resource.Resource):
 		if client is None:
 			return ''
 		responses = client.getResponse()
-		json = ''
+		response = ''
 		for res in responses:
 			if '{"from": "connected",' not in res:
-				json += (res + "\n")
-		if len(json) > 0:
-			Log().add('[HTTP] Send: %s' % json)
-		return json
+				response += (str(res) + "\n")
+		if len(response) > 0:
+			Log().add('[HTTP] Send: %s' % response)
+		return response
 
 	def render_POST(self, request):
 		"""
