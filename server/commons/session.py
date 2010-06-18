@@ -28,6 +28,8 @@ class Session(object):
 
 	def delete(self, uid):
 		if self.clientList.get(uid, None) is not None:
+			client = self.clientList.get(uid, None)
+			client.room.leaveRooms(uid)
 			del self.clientList[uid]
 			return True
 		return False

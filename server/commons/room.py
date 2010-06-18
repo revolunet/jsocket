@@ -27,7 +27,8 @@ class Room(object):
 		"""Initialise les applications par defaut."""
 
 		for app in SETTINGS.STARTUP_APP:
-			self.applications[app.get('app')] = []
+			if app.get('app') not in self.applications:
+				self.applications[app.get('app')] = []
 			self.applications[app.get('app')].append({
 				'name': app.get('name'),
 				'channel': Channel(app.get('name')),
@@ -55,6 +56,7 @@ class Room(object):
 
 		if appName not in self.applications:
 			self.applications[appName] = []
+			
 		if self.chanExists(channelName=channelName, appName=appName) == False:
 			client = Session().get(uid)
 			client.room_name = channelName
@@ -101,6 +103,13 @@ class Room(object):
 			return False
 		channel = self.Channel(channelName=channelName, appName=appName)
 		return channel.delete(uid)
+		
+	def leaveRooms(self, uid):
+		for application in self.applications:
+			for c in self.applications[application]:
+				channel = c.get('channel')
+				if channel is not None:
+					channel.delete(uid)
 
 	def Channel(self, channelName, appName):
 		if appName in self.applications:
