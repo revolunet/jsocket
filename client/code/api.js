@@ -151,10 +151,13 @@ jsocket.api = {
 	method : function(newCore) {
 		if (jsocket.api.core != null) {
 			jsocket.api.core.isWorking = false;
+			jsocket.api.disconnect();
+			jsocket.api.core.connect(jsocket.api.host, jsocket.api.port);
+		} else {
+			jsocket.api.core = newCore;
+			jsocket.api.core.isWorking = true;
+			jsocket.api.core.api = this;
 		}
-		jsocket.api.core = newCore;
-		jsocket.api.core.isWorking = true;
-		jsocket.api.core.api = this;
 	},
 
 	/**
