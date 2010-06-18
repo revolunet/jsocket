@@ -121,6 +121,7 @@ class WebSocketRequest(Request):
 
         def finishHandshake(nonce):
             """ Receive nonce value from request body, and calculate repsonse. """
+
             protocolHeaders = self.requestHeaders.getRawHeaders(
                 "WebSocket-Protocol", [])
             if len(protocolHeaders) not in (0,  1):
@@ -323,7 +324,7 @@ class WebSocketTransport(object):
         @param frame: a I{UTF-8} encoded C{str} to send to the client.
         @type frame: C{str}
         """
-        self._request.write("\x00%s\xff" % frame)
+        self._request.write("\x00%s\xff" % frame.encode('utf8'))
 
 
     def loseConnection(self):
