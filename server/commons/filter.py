@@ -29,25 +29,25 @@ class Filter(object):
 		Liste des filtres pour l'history.
 		"""
 		
-		self.__filters.append({ 'name': 'sendClientSize', 'match' : 'this.scene.sendClientSize',
+		self.__filters.append({ 'name': 'sendClientSize', 'match' : 'this\.scene\.sendClientSize',
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'setCursor', 'match' : 'this.scene.setCursor',
+		self.__filters.append({ 'name': 'setCursor', 'match' : 'this\.scene\.setCursor',
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'YT_', 'match' : 'this.scene.YT_',
+		self.__filters.append({ 'name': 'YT_', 'match' : 'this\.scene\.YT_',
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'VP_', 'match' : 'this.scene.VP_',
+		self.__filters.append({ 'name': 'VP_', 'match' : 'this\.scene\.VP_',
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'toggleWebcam', 'match' : 'this.scene.toggleWebcam',
+		self.__filters.append({ 'name': 'toggleWebcam', 'match' : 'this\.scene\.toggleWebcam',
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'window.open', 'match' : 'window.open',
+		self.__filters.append({ 'name': 'window.open', 'match' : 'window\.open',
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'addImage', 'match' : 'this.scene.addImage',
+		self.__filters.append({ 'name': 'addImage', 'match' : 'this\.scene\.addImage',
 			'handler' : self.untilLast
 		})
 		
