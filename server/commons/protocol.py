@@ -165,7 +165,7 @@ class Protocol(object):
 	def __cmd_history(self, args):
 
 		appName = args['app']
-		channelName = args['args'][0]
+		channelName = args['channel']
 
 		history = self.client.room.history(appName=appName, channelName=channelName)
 		if len(history) > 0:

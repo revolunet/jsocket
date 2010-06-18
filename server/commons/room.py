@@ -142,7 +142,7 @@ class Room(object):
 		return False
 
 	def history(self, channelName, appName):
-
+		
 		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName=channelName, appName=appName)
 			return channel.history.get()
