@@ -56,14 +56,14 @@ class Filter(object):
 	def remove(self, history, match):
 		filter_history = []
 		for h in history:
-			if re.match(h, match) is None:
+			if re.match(h.get('json'), match) is None:
 				filter_history.append(h)
 		return filter_history
 		
 	def untilLast(self, history, match):
 		toDelete = []
 		for h in history:
-			if re.match(h, match) is not None:
+			if re.match(h.get('json'), match) is not None:
 				toDelete(h)
 		toDelete = toDelete[:-1]
 		for delete in toDelete:
