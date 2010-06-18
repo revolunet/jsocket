@@ -6,7 +6,7 @@ import simplejson
 from commons.protocol import Protocol
 from config.settings import SETTINGS
 from commons.channel import Channel
-
+from commons.filter import Filter
 
 class Room(object):
 	"""
@@ -16,6 +16,7 @@ class Room(object):
 	def __init__(self):
 		self.applications = {}
 		self.init_app()
+		self.filter = Filter()
 
 	def merge(self, list1, list2):
 		""" Merge deux list ensemble """
@@ -158,7 +159,7 @@ class Room(object):
 
 		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName=channelName, appName=appName)
-			return channel.history.get()
+			return self.filter.Run(channel.history.get())
 		return []
 
 	def message(self, channelName, appName, sender, users, message):

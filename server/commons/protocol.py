@@ -63,7 +63,7 @@ class Protocol(object):
 	def parse(self, client, json):
 		"""Parsing de l'entre json sur le serveur"""
 		self.uid = client.unique_key
-
+		
 		if self.__cmd_list.get(json['cmd'], None) is not None:
 			self.client = client
 			return self.__cmd_list[json['cmd']](json)
