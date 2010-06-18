@@ -67,5 +67,5 @@ class Filter(object):
 				toDelete(h)
 		toDelete = toDelete[:-1]
 		for delete in toDelete:
-			history.pop(delete)
+			history.pop(history.index(delete))
 		return history
