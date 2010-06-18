@@ -123,11 +123,7 @@ jsocket.api = {
 	 * @private
 	 */
 	setCore: function() {
-		if (jsocket.core.tcp.initialized == true) {
-			jsocket.api.method(jsocket.core.tcp);
-		} else {
-			jsocket.api.method(jsocket.core.http);
-		}
+		jsocket.api.method(jsocket.core.tcp);
 	},
 
 	/**
