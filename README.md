@@ -5,5 +5,5 @@ version 0.2.5
 
 **Requirements:**
 
-- Twisted 0.8.0+
+- Twisted 10.0.0+
 - Python 2.5+
