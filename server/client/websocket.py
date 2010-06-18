@@ -18,8 +18,10 @@ class ClientWebSocket(WebSocketHandler):
 	def frameReceived(self, frame):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
 		Log().add('[WebSocket] Received: %s' % frame)
-		if '{"cmd": "connected", "args": "null"' in frame:
-			uid = Approval().validate(frame)
-			self.transport.write('{"from": "connected", "value": "%s"}' % uid)
-		else:
-			Approval().validate(frame, self.callbackSend)
+		commands = frame.split("\n")
+		for cmd in commands:
+			if '{"cmd": "connected", "args": "null"' in cmd:
+				uid = Approval().validate(cmd)
+				self.transport.write('{"from": "connected", "value": "%s"}' % uid)
+			else:
+				Approval().validate(cmd, self.callbackSend)

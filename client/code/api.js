@@ -104,18 +104,30 @@ jsocket.api = {
 	},
 
 	/**
-	 * Connect to the server via jsocketCore
+	 * Connect to the server via jsocket.core
 	 * @param {String} host Le nom de domaine ou adresse IP du serveur distant
 	 * @param {Int} port Le port du serveur distant
 	 */
 	init : function(host, port) {
 		if (jsocket.api.core == null) {
-			jsocket.api.method(jsocket.core.tcp);
+			jsocket.api.setCore();
 		}
 		jsocket.api.host = host;
 		jsocket.api.port = port;
 		jsocket.api.core.api = this;
 		jsocket.api.core.connect(jsocket.api.host, jsocket.api.port);
+	},
+
+	/**
+	 * Selectionne un core
+	 * @private
+	 */
+	setCore: function() {
+		if (jsocket.core.tcp.initialized == true) {
+			jsocket.api.method(jsocket.core.tcp);
+		} else {
+			jsocket.api.method(jsocket.core.http);
+		}
 	},
 
 	/**
@@ -702,9 +714,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onTCPError : function(error) {
-		jsocketCoreTCP.isWorking = false;
-		if (jsocketCoreHTTP.isWorking == false) {
-			jsocket.api.method(jsocketCoreHTTP);
+		if (jsocket.core.http.isWorking == false) {
+			jsocket.api.method(jsocket.core.http);
 			jsocket.api.init(jsocket.api.host, jsocket.api.port);
 		}
 	},
