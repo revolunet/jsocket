@@ -170,7 +170,7 @@ class Protocol(object):
 		history = self.client.room.history(appName=appName, channelName=channelName)
 		if len(history) > 0:
 			return (simplejson.JSONEncoder().encode(history))
-		return ([])
+		return (simplejson.JSONEncoder().encode([]))
 
 	# {"cmd": "join", "args": ["irc", ""]}
 	@jsonPrototype('join')

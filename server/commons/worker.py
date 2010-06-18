@@ -6,7 +6,6 @@ import threading
 import Queue
 import time
 from jexception import JException
-
 class WorkerLog(threading.Thread):
 	""" Gestion de l'affichage des logs """
 
@@ -22,6 +21,7 @@ class WorkerLog(threading.Thread):
 
 		while True:
 			item = self.__queue.get()
+			
 			Log().dprint(item[0], item[1])
 			self.__queue.task_done()
 

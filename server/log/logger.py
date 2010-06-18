@@ -7,7 +7,7 @@ import sys
 import logging
 import threading
 import Queue
-from logging.handlers import RotatingFileHandler
+#from logging.handlers import RotatingFileHandler
 from time import gmtime, strftime
 from commons.worker import WorkerLog
 from config.settings import SETTINGS
@@ -28,11 +28,11 @@ class Log(object):
 			logging.basicConfig(filename=self.__logFilename, format="%(asctime)s - %(message)s")
 			self.__logs = logging.getLogger("server")
 			self.__logs.setLevel(logging.DEBUG)
-			handler = logging.handlers.RotatingFileHandler(self.__logFilename, maxBytes=SETTINGS.LOG_FILE_MAX_SIZE,
-														   backupCount=SETTINGS.LOG_BACKUP_COUNT)
-			format = logging.Formatter('%(asctime)s %(message)s')
-			handler.setFormatter(format)
-			self.__logs.addHandler(handler)
+			#handler = logging.handlers.FileHandler(self.__logFilename, maxBytes=SETTINGS.LOG_FILE_MAX_SIZE,
+			#											   backupCount=SETTINGS.LOG_BACKUP_COUNT)
+			#format = logging.Formatter('%(asctime)s %(message)s')
+			#handler.setFormatter(format)
+			#self.__logs.addHandler(handler)
 			self.__logfile = open(sys.path[0] + os.sep + 'log/logs_exception.log', 'w', 0)
 			self.__logTraceback()
 			self.__queue = Queue.Queue(SETTINGS.LOG_QUEUE_SIZE)

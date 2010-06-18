@@ -27,21 +27,25 @@ class WatchDog(threading.Thread):
 	def run(self):
 		total_client = -1
 		while self.running:
-			current_time = int(time.time())
-			clients = Session().gets()
-			uidToDelete = [ ]
-			if len(clients) != total_client:
-				total_client = len(clients)
-				Log().add('[i] WatchDog: Server hosts %d clients' % len(clients), 'yellow')
-			for (uid, client) in clients:
-				if int(current_time - client.last_action) > SETTINGS.WATCHDOG_MAX_IDLE_TIME:
-					uidToDelete.append(client.unique_key)
-			if len(uidToDelete) > 0:
-				Log().add('[i] WatchDog: Deleted %d clients' % len(uidToDelete), 'blue')
-				self.lock.acquire()
-				for uid in uidToDelete:
-					Session().delete(uid)
-				self.lock.release()
-			del clients
-			del uidToDelete
+			total_client = self.removeClients(total_client)
 			time.sleep(SETTINGS.WATCHDOG_SLEEP_TIME)
+
+	def removeClients(self, total_client):
+		current_time = int(time.time())
+		clients = Session().gets()
+		uidToDelete = [ ]
+		if len(clients) != total_client:
+			total_client = len(clients)
+			Log().add('[i] WatchDog: Server hosts %d clients' % len(clients), 'yellow')
+		for (uid, client) in clients:
+			if int(current_time - client.last_action) > SETTINGS.WATCHDOG_MAX_IDLE_TIME:
+				uidToDelete.append(client.unique_key)
+		if len(uidToDelete) > 0:
+			Log().add('[i] WatchDog: Deleted %d clients' % len(uidToDelete), 'blue')
+			self.lock.acquire()
+			for uid in uidToDelete:
+				Session().delete(uid)
+			self.lock.release()
+		del clients
+		del uidToDelete
+		return total_client
