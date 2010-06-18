@@ -28,7 +28,5 @@ if __name__ == '__main__':
 			pass
 	except KeyboardInterrupt:
 		print 'Please wait few seconds. Exiting...'
-		#watchdog.kill()
-		#watchdog.join()
 		reactor.stop()
 		sys.exit(0)

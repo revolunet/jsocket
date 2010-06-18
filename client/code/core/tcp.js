@@ -35,6 +35,13 @@ jsocket.core.tcp = {
 	isWorking : false,
 
 	/**
+	 * Determine si la deconnection a ete forcer ou non
+	 * @private
+	 * @type Boolean
+	 */
+	manuallyDisconnected : false,
+
+	/**
 	 * @event loaded
 	 * Callback appele par flash lorsque le swf est charge
 	 * @return {Boolean} True si l'application a ete chargee
@@ -168,6 +175,7 @@ jsocket.core.tcp = {
 	 */
 	close : function() {
 		jsocket.core.tcp.socket.close();
+		jsocket.core.tcp.manuallyDisconnected = true;
 		return (true);
 	},
 
@@ -183,7 +191,11 @@ jsocket.core.tcp = {
 		jsocket.core.tcp.api.uid = '';
 		jsocket.core.tcp.api.parser('{"from": "disconnect", "value": true}');
 		jsocket.core.tcp.connectedToServer = false;
-		jsocket.core.tcp.reconnect();
+		if (jsocket.core.tcp.manuallyDisconnected == true) {
+			jsocket.core.tcp.manuallyDisconnected = false;
+		} else {
+			jsocket.core.tcp.reconnect();
+		}
 		return (true);
 	},
 

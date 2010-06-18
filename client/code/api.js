@@ -131,7 +131,8 @@ jsocket.api = {
 	},
 
 	/**
-	 * <p>Deconnection du server via le core en cours</p>
+	 * <p>Deconnection du server via le core en cours.</p>
+	 * @return {Boolean} True si la deconnection a reussie sinon False
 	 */
 	disconnect: function() {
 		if (jsocket.api.core != null) {

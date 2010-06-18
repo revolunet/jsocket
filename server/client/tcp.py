@@ -35,8 +35,9 @@ class TwistedTCPClient(Protocol):
 
 	def connectionLost(self, reason):
 		""" Methode appelee lorsqu'un utilisateur se deconnecte """
-		Log().add('[ConnectionLost] %s' % str(self.uid))
+
 		if self.uid is not None:
+			Log().add('[TCP] Logout %s' % str(self.uid))
 			Session().delete(self.uid)
 		self.transport.loseConnection()
 

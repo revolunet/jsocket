@@ -117,7 +117,11 @@ jsocket.core.websocket = {
 		jsocket.core.websocket.api.uid = '';
 		jsocket.core.websocket.api.parser('{"from": "disconnect", "value": true}');
 		jsocket.core.websocket.connectedToServer = false;
-		jsocket.core.websocket.reconnect();
+		if (jsocket.core.websocket.manuallyDisconnected == true) {
+			jsocket.core.websocket.manuallyDisconnected = false;
+		} else {
+			jsocket.core.websocket.reconnect();
+		}
 		return (true);
 	},
 
