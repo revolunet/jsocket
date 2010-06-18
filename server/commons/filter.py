@@ -25,6 +25,10 @@ class Filter(object):
 		self.init_filters()
 		
 	def init_filters(self):
+		"""
+		Liste des filtres pour l'history.
+		"""
+		
 		self.__filters.append({ 'name': 'sendClientSize', 'match' : 'this.scene.sendClientSize',
 			'handler' : self.remove
 		})
@@ -48,6 +52,10 @@ class Filter(object):
 		})
 		
 	def Run(self, history):
+		"""
+		Filtre un historique en appliquant les regexp des filtres.
+		"""
+		
 		filter_history = history
 		for filter in self.__filters:
 			method = filter.get('handler', None)
@@ -57,6 +65,11 @@ class Filter(object):
 		return filter_history
 
 	def remove(self, history, match):
+		"""
+		Remove methode sur les commande de l'historique.
+		Si le pattern match on supprime le record.
+		"""
+		
 		filter_history = []
 		for h in history:
 			if re.match(h.get('json'), match) is None:
@@ -64,6 +77,10 @@ class Filter(object):
 		return filter_history
 		
 	def untilLast(self, history, match):
+		"""
+		Delete les lignes de l'historique qui match les filtres sauf le dernier record
+		"""
+		
 		toDelete = []
 		for h in history:
 			if re.match(h.get('json'), match) is not None:
