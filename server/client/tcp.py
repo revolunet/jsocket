@@ -28,7 +28,7 @@ class TwistedTCPClient(Protocol):
 		else:
 			commands = data.split("\n")
 			for cmd in commands:
-				uid = Approval().validate(cmd, self.callbackSend)
+				uid = Approval().validate(cmd, self.callbackSend, 'tcp')
 				if uid is not None:
 					self.uid = uid
 
