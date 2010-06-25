@@ -69,7 +69,9 @@ class Filter(object):
 		"""
 		Filtre les commandes en entree d historique
 		"""
+		import time
 		
+		json_cmd = {'json': cmd, 'time': time.time(), 'uid': None}
 		filter_history = []
 		filter_history.append(cmd)
 		for filter in self.__filters:
