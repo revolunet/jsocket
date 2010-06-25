@@ -11,19 +11,20 @@ class TwistedTCPClient(Protocol):
 
 	def __init__(self):
 		self.uid = None
+		self.connected = False
 
 	def callbackSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
 
 		for json in responses:
-			self.transport.getHandle().send(str(json) + "\0")
+			self.send(str(json))
 
 	def dataReceived(self, data):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
 
 		Log().add('[TCP] Received: %s' % data)
 		if '<policy-file-request/>' in data:
-			self.transport.getHandle().send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>" + "\0")
+			self.send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
 		else:
 			commands = data.split("\n")
 			for cmd in commands:
@@ -35,14 +36,22 @@ class TwistedTCPClient(Protocol):
 		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """
 
 		self.uid = None
+		self.connected = True
 
 	def connectionLost(self, reason):
 		""" Methode appelee lorsqu'un utilisateur se deconnecte """
 
+		self.connected = False
 		if self.uid is not None:
 			Log().add('[TCP] Logout %s' % str(self.uid))
 			Session().delete(self.uid)
 		self.transport.loseConnection()
+
+	def send(self, msg):
+		""" Methode permettant d'ecrire le message sur la socket si l'utilisateur est connecte """
+
+		if self.connected is True:
+			self.transport.getHandle().send(msg + "\0")
 
 	@property
 	def socket(self):
