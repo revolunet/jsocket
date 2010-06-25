@@ -8,7 +8,7 @@
    this.scene.VP_*
    this.scene.toggleWebcam*
    window.open*
-   
+
 * Garder seulement les lignes apres le dernier:
    this.scene.addImage*
 
@@ -23,39 +23,39 @@ class Filter(object):
 	def __init__(self):
 		self.__filters = []
 		self.init_filters()
-		
+
 	def init_filters(self):
 		"""
 		Liste des filtres pour l'history.
 		"""
-		
-		self.__filters.append({ 'name': 'sendClientSize', 'match' : 'this\.scene\.sendClientSize',
+
+		self.__filters.append({ 'name': 'sendClientSize', 'match' : r"""this.scene.sendClientSize""",
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'setCursor', 'match' : 'this\.scene\.setCursor',
+		self.__filters.append({ 'name': 'setCursor', 'match' : r"""this.scene.setCursor""",
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'YT_', 'match' : 'this\.scene\.YT_',
+		self.__filters.append({ 'name': 'YT_', 'match' : r"""this.scene.YT_""",
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'VP_', 'match' : 'this\.scene\.VP_',
+		self.__filters.append({ 'name': 'VP_', 'match' : r"""this.scene.VP_""",
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'toggleWebcam', 'match' : 'this\.scene\.toggleWebcam',
+		self.__filters.append({ 'name': 'toggleWebcam', 'match' : r"""this.scene.toggleWebcam""",
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'window.open', 'match' : 'window\.open',
+		self.__filters.append({ 'name': 'window.open', 'match' : r"""window.open""",
 			'handler' : self.remove
 		})
-		self.__filters.append({ 'name': 'addImage', 'match' : 'this\.scene\.addImage',
+		self.__filters.append({ 'name': 'addImage', 'match' : r"""this.scene.addImage""",
 			'handler' : self.untilLast
 		})
-		
+
 	def Run(self, history):
 		"""
 		Filtre un historique en appliquant les regexp des filtres.
 		"""
-		
+
 		filter_history = history
 		for filter in self.__filters:
 			method = filter.get('handler', None)
@@ -69,22 +69,22 @@ class Filter(object):
 		Remove methode sur les commande de l'historique.
 		Si le pattern match on supprime le record.
 		"""
-		
+
 		filter_history = []
 		for h in history:
-			if re.match(h.get('json'), match) is None:
+			if re.search(match, h.get('json'), re.MULTILINE | re.DOTALL) is None:
 				filter_history.append(h)
 		return filter_history
-		
+
 	def untilLast(self, history, match):
 		"""
 		Delete les lignes de l'historique qui match les filtres sauf le dernier record
 		"""
-		
+
 		toDelete = []
 		for h in history:
-			if re.match(h.get('json'), match) is not None:
-				toDelete(h)
+			if re.search(match, h.get('json'), re.MULTILINE | re.DOTALL) is not None:
+				toDelete.append(h)
 		toDelete = toDelete[:-1]
 		for delete in toDelete:
 			history.pop(history.index(delete))
