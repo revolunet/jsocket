@@ -11,49 +11,42 @@ jsocket.core.websocket = {
 	 * @private
 	 * @type {@link jsocket.api}
 	 */
-	api : null,
+	api: null,
 
 	/**
 	 * True si le core a ete initialize sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	initialized : false,
+	initialized: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	connectedToServer : false,
+	connectedToServer: false,
 
 	/**
 	 * True si ce core est utilise par l'API sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	isWorking : false,
-
-	/**
-	 * Port de la websocket
-	 * @private
-	 * @type Int
-	 */
-	port : 8080,
+	isWorking: false,
 
 	/**
 	 * Socket
 	 * @private
 	 * @type WebSocket
 	 */
-	socket : null,
+	socket: null,
 
 	/**
 	 * @event loaded
 	 * Initialisation du code WebSocket
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
-	loaded : function() {
+	loaded: function() {
 		if ('WebSocket' in window) {
 			jsocket.core.websocket.initialized = true;
 			jsocket.core.websocket.connectedToServer = false;
@@ -66,28 +59,19 @@ jsocket.core.websocket = {
 
 	/**
 	 * Initialise une connection via une socket sur le server:port
-	 * @param {String} server Le nom de domaine ou adresse IP du serveur
-	 * @param {Int} port Le numero du port du serveur
 	 */
-	connect : function(server, port) {
+	connect: function() {
 		jsocket.core.websocket.loaded();
 		if (jsocket.core.websocket.initialized == true && jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.socket = new WebSocket('ws://' + server + ':' + jsocket.core.websocket.port + '/jsocket');
+			jsocket.core.websocket.socket = new WebSocket('ws://' + jsocket.api.settings.websocket.host + ':' + jsocket.api.settings.websocket.port + '/jsocket');
 			jsocket.core.websocket.socket.onmessage = jsocket.core.websocket.receive;
 			jsocket.core.websocket.socket.onerror = jsocket.core.websocket.error;
 			jsocket.core.websocket.socket.onopen = jsocket.core.websocket.connected;
 			jsocket.core.websocket.socket.onclose = jsocket.core.websocket.disconnected;
 		}
 		else if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.setTimeout("jsocket.core.websocket.reconnect();", 500);
+			jsocket.core.websocket.setTimeout("jsocket.core.websocket.connect();", 500);
 		}
-	},
-
-	/**
-	 * Alias de {@link #connect connect} sans avoir a repreciser les parametres de connection
-	 */
-	reconnect : function() {
-		jsocket.core.websocket.connect(jsocket.core.websocket.api.host, jsocket.core.websocket.api.port);
 	},
 
 	/**
@@ -95,7 +79,7 @@ jsocket.core.websocket = {
 	 * Callback appele par flash lorsque la socket est connectee au serveur
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
-	connected : function() {
+	connected: function() {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
@@ -110,7 +94,7 @@ jsocket.core.websocket = {
 	 * Callback appele par flash lorsqu'une deconnection a ete effectuee
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
-	disconnected : function() {
+	disconnected: function() {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
@@ -120,7 +104,7 @@ jsocket.core.websocket = {
 		if (jsocket.core.websocket.manuallyDisconnected == true) {
 			jsocket.core.websocket.manuallyDisconnected = false;
 		} else {
-			jsocket.core.websocket.reconnect();
+			jsocket.core.websocket.connect();
 		}
 		return (true);
 	},
@@ -166,7 +150,7 @@ jsocket.core.websocket = {
 	 * @param {String} cmd La commande a lancer
 	 * @param {Int} delay Le temps d'attente
 	 */
-	setTimeout : function(cmd, delay) {
+	setTimeout: function(cmd, delay) {
 		if (jsocket.core.websocket.isWorking == true) {
 			setTimeout(cmd, delay);
 		}
@@ -177,7 +161,7 @@ jsocket.core.websocket = {
 	 * @param {String} str Le texte a addslasher
 	 * @return {String} La chaine avec les caracteres echapes
 	 */
-	addslashes : function(str) {
+	addslashes: function(str) {
 		if (typeof(str) == 'string') {
 			str = encodeURIComponent(str);
 			str = str.replace(/\'/g, "%27");
@@ -195,7 +179,7 @@ jsocket.core.websocket = {
 	 * @param {String} str Le texte a stripslasher
 	 * @return {String} La chaine avec les caracteres non echapes
 	 */
-	stripslashes : function (str) {
+	stripslashes: function (str) {
 		if (typeof(str) == 'string') {
 			str = str.replace(/\%27/g, "'");
 			str = decodeURIComponent(str);
@@ -214,9 +198,9 @@ jsocket.core.websocket = {
 	 * @param {String} msg Le texte a envoyer au serveur
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
-	write : function(msg) {
+	write: function(msg) {
 		if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.reconnect();
+			jsocket.core.websocket.connect();
 		}
 		if (jsocket.core.websocket.connectedToServer) {
 			jsocket.core.websocket.socket.send(msg + "\n");
@@ -235,7 +219,7 @@ jsocket.core.websocket = {
 	 * @param {String} msg Le message a envoye au serveur
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
-	send : function(msg) {
+	send: function(msg) {
 		return (jsocket.core.websocket.write(msg));
 	},
 
@@ -243,7 +227,7 @@ jsocket.core.websocket = {
 	 * Ferme la connection au serveur
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
-	close : function() {
+	close: function() {
 		jsocket.core.websocket.socket.close();
 		return (true);
 	}

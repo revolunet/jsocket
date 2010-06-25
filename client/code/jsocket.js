@@ -36,12 +36,12 @@ function getJsocketDomain()
 }
 
 jsocket = {
-	api : null,
-	protocol : null,
-	core : {
-		http : null,
-		tcp : null,
-		websocket : null
+	api: null,
+	protocol: null,
+	core: {
+		http: null,
+		tcp: null,
+		websocket: null
 	},
 	version: '0.2.6'
 };
