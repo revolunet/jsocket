@@ -222,18 +222,30 @@ class Room(object):
 		from log.logger import Log
 		from commons.session import Session
 
+		master = False
 		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName, appName)
+			if channel and client.unique_key in channel.masters():
+				master = True
 			key = client.unique_key
 			name = client.getName()
 			to_send = {"name": name, "key": key, "status": 'offline'}
-			masters = channel.masters()
-			for master in masters:
-				m = Session().get(master)
-				if m is not None:
-					Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + m.getName())
-					json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel.name})
-					m.addResponse(json)
+			if master == False:
+				masters = channel.masters()
+				for master in masters:
+					m = Session().get(master)
+					if m is not None:
+						Log().add("[+] Client (room.py) : envoie du status de " + name + " vers l'utilisateur : " + m.getName())
+						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel.name})
+						m.addResponse(json)
+			else:
+				users = channel.users()
+				for user in users:
+					u = Session().get(users)
+					if u is not None:
+						Log().add("[+] Client (room.py) : envoie du status master vers l'utilisateur : " + u.getName())
+						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel.name})
+						u.addResponse(json)
 
 	def __sendMessage(self, channelName, appName, sender, to, message):
 		"""Fromate le json, et envoie le message a l'utilisateur"""
