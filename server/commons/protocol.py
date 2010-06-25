@@ -206,6 +206,7 @@ class Protocol(object):
 		appName = args['app']
 		if self.client.room_name and self.client.room.part(channelName=channelName, appName=appName, uid=self.uid):
 			self.client.status = "offline"
+			self.client.room_name = channelName
 			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + channelName)
 			if self.client.master == False:
 				self.status(client=self.client, appName=appName, master=False)

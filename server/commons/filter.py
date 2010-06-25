@@ -30,25 +30,25 @@ class Filter(object):
 		"""
 
 		self.__filters.append({ 'name': 'sendClientSize', 'match' : r"""this.scene.sendClientSize""",
-			'handler' : self.remove
+			'handler' : self.remove, 'type': 'in'
 		})
 		self.__filters.append({ 'name': 'setCursor', 'match' : r"""this.scene.setCursor""",
-			'handler' : self.remove
+			'handler' : self.remove, 'type': 'in'
 		})
 		self.__filters.append({ 'name': 'YT_', 'match' : r"""this.scene.YT_""",
-			'handler' : self.remove
+			'handler' : self.remove, 'type': 'in'
 		})
 		self.__filters.append({ 'name': 'VP_', 'match' : r"""this.scene.VP_""",
-			'handler' : self.remove
+			'handler' : self.remove, 'type': 'in'
 		})
 		self.__filters.append({ 'name': 'toggleWebcam', 'match' : r"""this.scene.toggleWebcam""",
-			'handler' : self.remove
+			'handler' : self.remove, 'type': 'in'
 		})
 		self.__filters.append({ 'name': 'window.open', 'match' : r"""window.open""",
-			'handler' : self.remove
+			'handler' : self.remove, 'type': 'in'
 		})
 		self.__filters.append({ 'name': 'addImage', 'match' : r"""this.scene.addImage""",
-			'handler' : self.untilLast
+			'handler' : self.untilLast, 'type': 'out'
 		})
 
 	def Run(self, history):
@@ -60,9 +60,28 @@ class Filter(object):
 		for filter in self.__filters:
 			method = filter.get('handler', None)
 			match = filter.get('match', None)
-			if method is not None:
+			inout = filter.get('type', None)
+			if method is not None and inout is not None and inout == 'out':
 				filter_history = method(filter_history, match)
 		return filter_history
+		
+	def RunIn(self, cmd):
+		"""
+		Filtre les commandes en entree d historique
+		"""
+		
+		filter_history = []
+		filter_history.append(cmd)
+		for filter in self.__filters:
+			method = filter.get('handler', None)
+			match = filter.get('match', None)
+			inout = filter.get('type', None)
+			if method is not None and inout is not None and inout == 'in':
+				filter_history = method(filter_history, match)
+		if len(filter_history) == 1:
+			return True
+		return False
+		
 
 	def remove(self, history, match):
 		"""
