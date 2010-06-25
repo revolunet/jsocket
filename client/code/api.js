@@ -747,6 +747,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onError: function(error) {
+		console.log('jsocket.api.onError: ', error);
 	},
 
 	/**

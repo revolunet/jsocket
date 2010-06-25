@@ -46,6 +46,13 @@ jsocket = {
 	version: '0.2.6'
 };
 
+if (typeof console == 'undefined') {
+	console = {
+		log: function() { },
+		error: function() { }
+	};
+}
+
 create('div', 'flashcontent');
 create('div', 'jsocketBridgeOutput');
 includeScript('lib/json2.js');

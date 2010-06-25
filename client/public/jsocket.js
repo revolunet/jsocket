@@ -38,6 +38,13 @@ jsocket = {
 	version: '0.2.6'
 };
 
+if (typeof console == 'undefined') {
+	console = {
+		log: function() { },
+		error: function() { }
+	};
+}
+
 create('div', 'flashcontent');
 create('div', 'jsocketBridgeOutput');
 
@@ -2062,6 +2069,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onError: function(error) {
+		console.log('jsocket.api.onError: ', error);
 	},
 
 	/**
