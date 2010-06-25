@@ -63,7 +63,7 @@ class Protocol(object):
 	def parse(self, client, json):
 		"""Parsing de l'entre json sur le serveur"""
 		self.uid = client.unique_key
-		
+
 		if self.__cmd_list.get(json['cmd'], None) is not None:
 			self.client = client
 			return self.__cmd_list[json['cmd']](json)
@@ -107,11 +107,12 @@ class Protocol(object):
 			users = self.client.room.list_users(channelName=channelName, appName=appName)
 		for u in users:
 			user = Session().get(u)
-			status = user.status
-			key = user.unique_key
-			name = user.getName()
-			to_send = {"name": name, "key": key, "status": status}
-			str.append(to_send)
+			if user is not None:
+				status = user.status
+				key = user.unique_key
+				name = user.getName()
+				to_send = {"name": name, "key": key, "status": status}
+				str.append(to_send)
 		return (simplejson.JSONEncoder().encode(str))
 
 	# flash-player send <policy-file-request/>
