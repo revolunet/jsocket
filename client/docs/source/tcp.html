@@ -9,7 +9,7 @@
  * @class jsocket.core.tcp
  * Javascript event's interface for flash swf socket bridge
  * @author Revolunet
- * @version 0.2.5
+ * @version 0.2.6
  * @singleton
  */
 jsocket.core.tcp = {
@@ -40,6 +40,13 @@ jsocket.core.tcp = {
 	 * @type Boolean
 	 */
 	isWorking : false,
+
+	/**
+	 * Determine si la deconnection a ete forcer ou non
+	 * @private
+	 * @type Boolean
+	 */
+	manuallyDisconnected : false,
 
 	<div id="event-jsocket.core.tcp-loaded"></div>/**
 	 * @event loaded
@@ -175,6 +182,7 @@ jsocket.core.tcp = {
 	 */
 	close : function() {
 		jsocket.core.tcp.socket.close();
+		jsocket.core.tcp.manuallyDisconnected = true;
 		return (true);
 	},
 
@@ -190,7 +198,11 @@ jsocket.core.tcp = {
 		jsocket.core.tcp.api.uid = '';
 		jsocket.core.tcp.api.parser('{"from": "disconnect", "value": true}');
 		jsocket.core.tcp.connectedToServer = false;
-		jsocket.core.tcp.reconnect();
+		if (jsocket.core.tcp.manuallyDisconnected == true) {
+			jsocket.core.tcp.manuallyDisconnected = false;
+		} else {
+			jsocket.core.tcp.reconnect();
+		}
 		return (true);
 	},
 
