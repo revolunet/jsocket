@@ -24,7 +24,7 @@ class TwistedTCPClient(Protocol):
 
 		Log().add('[TCP] Received: %s' % data)
 		if '<policy-file-request/>' in data:
-			self.send("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
+			self.send('<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd"><cross-domain-policy><allow-access-from domain="*" to-ports="*" secure="false" /></cross-domain-policy>')
 		else:
 			commands = data.split("\n")
 			for cmd in commands:
