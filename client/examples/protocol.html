@@ -193,8 +193,7 @@
 				},
 
 				actionConnect: function() {
-					jsocket.api.urlFailOver = settings.urlFailOver;
-					jsocket.api.init(settings.serverName, settings.serverPort);
+					jsocket.api.connect();
 				},
 
 				onConnect: function(args) {
@@ -328,6 +327,11 @@
 
 			function saveOption(obj) {
 				settings[obj.id] = obj.value;
+				jsocket.api.configure({
+				 tcp: { host: settings.serverName, port: settings.serverPort},
+                 http: { url: settings.urlFailOver},
+                 websocket: { host: settings.serverName, port: settings.serverPort }
+				});
 			}
 
 			function callMethod(obj) {
