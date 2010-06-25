@@ -4,9 +4,9 @@
  * <p>Chaque callback est appele avec en parametres un dictionnaire comprenant les attributs
  * suivants:
  * <div class="mdetail-params"><ul>
- * <li><b><tt>param.value : value JSON field (empty string '' if not exists)</tt></b></li>
- * <li><b><tt>param.app : app JSON field (empty string '' if not exists)</tt></b></li>
- * <li><b><tt>param.channel : channel JSON field (empty string '' if not exists)</tt></b></li>
+ * <li><b><tt>param.value: value JSON field (empty string '' if not exists)</tt></b></li>
+ * <li><b><tt>param.app: app JSON field (empty string '' if not exists)</tt></b></li>
+ * <li><b><tt>param.channel: channel JSON field (empty string '' if not exists)</tt></b></li>
  * </ul></div></p>
  *
  * <p><b><u>Exemple:</u></b></p>
@@ -27,56 +27,35 @@ jsocket.api = {
 	 * @private
 	 * @type Object
 	 */
-	core : null,
-
-	/**
-	 * Le nom de domaine ou adresse IP du serveur distant
-	 * @private
-	 * @type String
-	 */
-	host : '',
-
-	/**
-	 * Le port du serveur TCP distant
-	 * @private
-	 * @type Int
-	 */
-	port : 0,
-
-	/**
-	 * L'url utilisee par le jsocketCoreHTTP pour contacter le serveur
-	 * @public
-	 * @type String
-	 */
-	urlFailOver : '',
+	core: null,
 
 	/**
 	 * A activer pour afficher les commandes JSON en entree/sortie
 	 * @private
 	 * @type Boolean
 	 */
-	debug : false,
+	debug: false,
 
 	/**
 	 * Le tableau des applications enregistrees dans l'API
 	 * @private
 	 * @type Array
 	 */
-	app : [ ],
+	app: [ ],
 
 	/**
 	 * L'uid du client une fois connecte
 	 * @public
 	 * @type String
 	 */
-	uid : '',
+	uid: '',
 
 	/**
 	 * La liste des commandes en attente d'envoie
 	 * @private
 	 * @type Array
 	 */
-	commands : [ ],
+	commands: [ ],
 
 	/**
 	 * La liste des cores disponibles.
@@ -85,7 +64,7 @@ jsocket.api = {
 	 * @private
 	 * @type Object
 	 */
-	cores : {
+	cores: {
 		tcp: {
 			object: jsocket.core.tcp,
 			tested: false,
@@ -104,18 +83,68 @@ jsocket.api = {
 	},
 
 	/**
-	 * Connect to the server via jsocket.core
-	 * @param {String} host Le nom de domaine ou adresse IP du serveur distant
-	 * @param {Int} port Le port du serveur distant
+	 * <p>Parametres de configuration:</p>
+	 * <p><div class="mdetail-params"><ul>
+	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp}</tt></b></li>
+	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp}</tt></b></li>
+	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http}</tt></b></li>
+	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket}</tt></b></li>
+	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket}</tt></b></li>
+	 * </ul></div></p>
+	 * Ce parametre peut etre changer directement comme dans l'exemple ci-dessous
+	 * ou via la methode {@link jsocket.api.configure}
+	 * <p><b><u>Exemple de configuration:</u></b></p>
+<pre><code>
+jsocket.api.settings = {
+  tcp: {
+    host: 'localhost',
+	port: 8080
+  },
+  http: {
+    url: 'http://localhost:8081/'
+  },
+  websocket: {
+    host: 'localhost',
+    port: 8082
+  }
+};
+</code></pre>
 	 */
-	init : function(host, port) {
+	settings: {
+		tcp: {
+			host: 'localhost',
+			port: 8080
+		},
+		http: {
+			url: 'http://localhost:8081/'
+		},
+		websocket: {
+			host: 'localhost',
+			port: 8082
+		}
+	},
+
+	/**
+	 * <p>Connection au serveur via le jsocket.core</p>
+	 * @param {Object} Parametre optionnel de configuration {@link jsocket.api.settings}
+	 */
+	connect: function(settings) {
+		if (typeof settings != undefined && settings != null) {
+			jsocket.api.configure(settings);
+		}
 		if (jsocket.api.core == null) {
 			jsocket.api.setCore();
 		}
-		jsocket.api.host = host;
-		jsocket.api.port = port;
 		jsocket.api.core.api = this;
-		jsocket.api.core.connect(jsocket.api.host, jsocket.api.port);
+		jsocket.api.core.connect();
+	},
+
+	/**
+	 * <p>Permet de changer la configuration de l'api</p>
+	 * @param {Object} Configuration {@link jsocket.api.settings}
+	 */
+	configure: function(settings) {
+		jsocket.api.settings = settings;
 	},
 
 	/**
@@ -148,14 +177,14 @@ jsocket.api = {
 	 * </ul></div></p>
 	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
 	 */
-	method : function(newCore) {
+	method: function(newCore) {
 		if (jsocket.api.core != null) {
 			jsocket.api.disconnect();
 			jsocket.api.core.isWorking = false;
 			jsocket.api.core = newCore;
 			jsocket.api.core.isWorking = true;
 			jsocket.api.core.api = this;
-			jsocket.api.core.connect(jsocket.api.host, jsocket.api.port);
+			jsocket.api.core.connect();
 		} else {
 			jsocket.api.core = newCore;
 			jsocket.api.core.isWorking = true;
@@ -169,7 +198,7 @@ jsocket.api = {
 	 * <p><b><u>Exemple d'utilisation:</u></b></p>
 <pre><code>
 var myApplication = {
-  onConnected : function(data) {
+  onConnected: function(data) {
     if (data.value == true) {
 	  alert('Vous etes connecte !');
 	} else {
@@ -182,7 +211,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @param {Object} appObject L'application contenant les callbacks
 	 */
-	register : function(appName, appObject) {
+	register: function(appName, appObject) {
 		var newApp = appObject || { };
 		jsocket.api.app[appName] = newApp;
 		jsocket.api.app[appName].isMaster = false;
@@ -194,7 +223,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @return {Boolean} True si l'application exists sinon False
 	 */
-	appExists : function(appName) {
+	appExists: function(appName) {
 		if (typeof(jsocket.api.app[appName]) != 'undefined') {
 			return (true);
 		}
@@ -208,7 +237,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} callName Le nom du callback
 	 * @return {Boolean} True si le callback a ete appele sinon False
 	 */
-	appCallback : function(appName, callName, args) {
+	appCallback: function(appName, callName, args) {
 		if (typeof(eval('jsocket.api.app["' + appName + '"].' + callName)) != 'undefined') {
 			eval('jsocket.api.app["' + appName + '"].' + callName + '(args);');
 			return (true);
@@ -222,7 +251,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} callName Le nom du callback
 	 * @param {Mixed} args Les arguments a passer au callback
 	 */
-	appCallbacks : function(callName, args) {
+	appCallbacks: function(callName, args) {
 		for (var i in jsocket.api.app) {
 			jsocket.api.appCallback(i, callName, args);
 		}
@@ -232,7 +261,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Active la console de debug de flash
 	 * @param {Boolean} enable True pour activer la console False pour desactiver
 	 */
-	debug : function(enable) {
+	debug: function(enable) {
 		if (jsocket.api.core.initialized == false) {
 			setTimeout("jsocket.api.debug(" + enable + ");", 1000);
 			return (false);
@@ -252,14 +281,14 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback utilise pour transformer du texte en un objet JSON
 	 * @param {String} text Le texte a transformer
 	 */
-	parser : function(text) {
+	parser: function(text) {
 		var j = JSON.parse(text);
 		if (j.from != null && j.value != null) {
 			func_name = j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
 			var args = { };
-			args.value = (j.value != null ? j.value : '');
-			args.channel = (j.channel != null ? j.channel : '');
-			args.app = (j.app != null ? j.app : '');
+			args.value = (j.value != null ? j.value: '');
+			args.channel = (j.channel != null ? j.channel: '');
+			args.app = (j.app != null ? j.app: '');
 			args = jsocket.api.core.stripslashes(args);
 			if (j.app != null && j.app.length > 0 &&
 				jsocket.api.appExists(j.app) == true) {
@@ -285,7 +314,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * la connection au serveur.
 	 * @param {Object} args Tableau contenant l'identifiant unique de l'utilisateur
 	 */
-	onConnected : function(args) {
+	onConnected: function(args) {
 		jsocket.api.uid = args.value;
 		jsocket.api.sendPool();
 	},
@@ -295,7 +324,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback appele via flash quand la connection avec le serveur echoue
 	 * @param {Object} args Objet ayant pour <i>value</i> un Boolean
 	 */
-	onDisconnect : function(args) {
+	onDisconnect: function(args) {
 	},
 
 	/**
@@ -303,7 +332,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback lorsque la connection avec le serveur est etablie.
 	 * @param {Object} args Objet ayant pour <i>value</i> un Boolean
 	 */
-	onConnect : function(args) {
+	onConnect: function(args) {
 	},
 
 	/**
@@ -313,7 +342,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} message Le message retourne par le serveur contenant une ou
 	 * plusieurs commandes JSON. (Si plusieurs, elle sont alors separees par des \n)
 	 */
-	onReceive : function(message) {
+	onReceive: function(message) {
 		console.log('jsocket.api.receive: ', message);
 		jsocket.api.parser(message);
 	},
@@ -324,7 +353,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * quitte ou rejoind le channel.
 	 * @param {Object} args Objet
 	 */
-	onStatus : function(args) {
+	onStatus: function(args) {
 	},
 
 	/**
@@ -332,7 +361,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction auth
 	 * @param {Object} args Objet ayant pour value le retour de l'appel a la methode auth
 	 */
-	onAuth : function(args) {
+	onAuth: function(args) {
 	},
 
 	/**
@@ -341,7 +370,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} password Le mot de passe pour passer admin sur le serveur
 	 */
-	auth : function(appName, channel, password) {
+	auth: function(appName, channel, password) {
 		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
 			jsocket.api.app[appName].isMaster = true;
 		}
@@ -361,7 +390,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} password Le mot de passe du channel
 	 */
-	chanAuth : function(appName, channel, password) {
+	chanAuth: function(appName, channel, password) {
 		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
 			jsocket.api.app[appName].isMaster = true;
 		}
@@ -380,7 +409,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction chanAuth
 	 * @param {Object} args Channel password or false
 	 */
-	onChanAuth : function(args) {
+	onChanAuth: function(args) {
 	},
 
 	/**
@@ -388,7 +417,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction join
 	 * @param {Object} args Le retour de l'appel a la methode join
 	 */
-	onJoin : function(args) {
+	onJoin: function(args) {
 	},
 
 	/**
@@ -397,7 +426,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} password Le mot de passe du salon
 	 */
-	join : function(appName, channel, password) {
+	join: function(appName, channel, password) {
 		var json = {
 			cmd: 'join',
 			args: [ channel, password ],
@@ -413,7 +442,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction part
 	 * @param {Object} args Le retour de l'appel a la methode part
 	 */
-	onPart : function(args) {
+	onPart: function(args) {
 	},
 
 	/**
@@ -421,7 +450,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @param {String} channel Le nom d'un salon
 	 */
-	part : function(appName, channel) {
+	part: function(appName, channel) {
 		var json = {
 			cmd: 'part',
 			args: channel,
@@ -437,7 +466,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction create
 	 * @param {Object} args Le retour de l'appel a la methode create
 	 */
-	onCreate : function(args) {
+	onCreate: function(args) {
 	},
 
 	/**
@@ -446,7 +475,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} password Le mot de passe du salon
 	 */
-	create : function(appName, channel, password) {
+	create: function(appName, channel, password) {
 		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
 			jsocket.api.app[appName].isMaster = true;
 		}
@@ -465,7 +494,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction remove
 	 * @param {Object} args Le retour de l'appel a la methode remove
 	 */
-	onRemove : function(args) {
+	onRemove: function(args) {
 	},
 
 	/**
@@ -473,7 +502,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @param {String} channel Le nom d'un salon
 	 */
-	remove : function(appName, channel) {
+	remove: function(appName, channel) {
 		var json = {
 			cmd: 'remove',
 			args: channel,
@@ -490,7 +519,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} nickname Le nom d'utilisateur
 	 */
-	nick : function(appName, channel, nickname) {
+	nick: function(appName, channel, nickname) {
 		var json = {
 			cmd: 'nick',
 			args: nickname,
@@ -507,7 +536,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * l'appel de la fonction {@link #nick nick}
 	 * @param {Object} args Le retour de l'appel a la methode {@link #nick nick}
 	 */
-	onNick : function(args) {
+	onNick: function(args) {
 	},
 
 	/**
@@ -517,7 +546,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} command La commande a forwarder
 	 */
-	forward : function(appName, channel, command) {
+	forward: function(appName, channel, command) {
 		var json = {
 			cmd: 'forward',
 			args: command,
@@ -534,7 +563,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * (via {@link #forward forward})
 	 * @param {Object} args Le retour de la commande {@link #forward forward}
 	 */
-	onForward : function(args) {
+	onForward: function(args) {
 	},
 
 	/**
@@ -542,7 +571,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @param {String} channel Le nom d'un salon
 	 */
-	list : function(appName, channel) {
+	list: function(appName, channel) {
 		var json = {
 			cmd: 'list',
 			args: channel,
@@ -558,7 +587,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback appeler contenant la liste des utilisateurs connectes a un channel
 	 * @param {Object} args Le retour de la commande {@link #list list}
 	 */
-	onList : function(args) {
+	onList: function(args) {
 	},
 
 	/**
@@ -566,7 +595,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @param {String} channel Le nom d'un salon
 	 */
-	history : function(appName, channel) {
+	history: function(appName, channel) {
 		var json = {
 			cmd: 'history',
 			args: 'null',
@@ -582,7 +611,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback appeler contenant la liste des dernieres commandes effectuees par le master.
 	 * @param {Object} args Le retour de la commande {@link #history history}
 	 */
-	onHistory : function(args) {
+	onHistory: function(args) {
 	},
 
 	/**
@@ -594,7 +623,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 *              [ '' ] ou [ 'master' ] pour le master du channel
 	 *              [ 'username1', 'username2', 'uidClient3', ... ] pour une liste de clients
 	 */
-	message : function(appName, channel, tab) {
+	message: function(appName, channel, tab) {
 		var json = {
 			cmd: 'message',
 			args: tab,
@@ -611,7 +640,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args command [0] = l'emmeteur du message
 	 *        [1] = le message
 	 */
-	onMessage : function(args) {
+	onMessage: function(args) {
 	},
 
 	/**
@@ -619,7 +648,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @param {String} channel Le nom d'un salon
 	 */
-	getStatus : function(appName, channel) {
+	getStatus: function(appName, channel) {
 		var json = {
 			cmd: 'getStatus',
 			args: 'null',
@@ -635,7 +664,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback reception status {@link #getStatus getStatus}
 	 * @param {Object} args Status de l'utilisateur courant
 	 */
-	onGetStatus : function(args) {
+	onGetStatus: function(args) {
 	},
 
 	/**
@@ -644,7 +673,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} status Le status de l'utilisateur
 	 */
-	setStatus : function(appName, channel, status) {
+	setStatus: function(appName, channel, status) {
 		var json = {
 			cmd: 'setStatus',
 			args: status,
@@ -660,7 +689,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback de la commande {@link #setStatus setStatus}
 	 * @param {Object} args True or false
 	 */
-	onSetStatus : function(args) {
+	onSetStatus: function(args) {
 	},
 
 	/**
@@ -668,7 +697,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} appName Le nom de l'application
 	 * @param {String} channel Le nom d'un salon
 	 */
-	timeConnect : function(appName, channel) {
+	timeConnect: function(appName, channel) {
 		var json = {
 			cmd: 'timeConnect',
 			args: 'null',
@@ -684,7 +713,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback de la commande {@link #timeConnect timeConnect}
 	 * @param {Object} args True or False
 	 */
-	onTimeConnect : function(args) {
+	onTimeConnect: function(args) {
 	},
 
 	/**
@@ -693,7 +722,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} channel Le nom d'un salon
 	 * @param {String} password Le mot de passe
 	 */
-	chanMasterPwd : function(appName, channel, password) {
+	chanMasterPwd: function(appName, channel, password) {
 		var json = {
 			cmd: 'chanMasterPwd',
 			args: password,
@@ -709,7 +738,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback {@link #chanMasterPwd chanMasterPwd}
 	 * @param {Object} args True or false
 	 */
-	onChanMasterPwd : function(args) {
+	onChanMasterPwd: function(args) {
 	},
 
 	/**
@@ -717,7 +746,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Callback sur l'erreur d'execution d'une des methodes de l'API
 	 * @param {String} error Le message d'erreur
 	 */
-	onError : function(error) {
+	onError: function(error) {
 	},
 
 	/**
@@ -727,10 +756,10 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * la methode de dialogue avec le serveur par HTTP.
 	 * @param {String} error Le message d'erreur
 	 */
-	onTCPError : function(error) {
+	onTCPError: function(error) {
 		if (jsocket.core.http.isWorking == false) {
 			jsocket.api.method(jsocket.core.http);
-			jsocket.api.init(jsocket.api.host, jsocket.api.port);
+			jsocket.api.init();
 		}
 	},
 
@@ -739,7 +768,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * Une fois que le client recupere son uid, alors les commandes
 	 * en queue sont envoyes au serveur.
 	 */
-	sendPool : function() {
+	sendPool: function() {
 		for (var i = 0; i < jsocket.api.commands.length; ++i) {
 			console.log('jsocket.api.send: ', jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
 			jsocket.api.core.send(jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
@@ -753,7 +782,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * commands puis on les envoie lorsque l'uid est renseigne.
 	 * @param {String} msg Le message (commande JSON) a envoyer
 	 */
-	send : function(msg) {
+	send: function(msg) {
 		if (jsocket.api.uid != '') {
 			console.log('jsocket.api.send: ', msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
 			jsocket.api.core.send(msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));

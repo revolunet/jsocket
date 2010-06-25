@@ -10,14 +10,12 @@ jsocket.core.http = {
 	 * <p><b><u>Settings:</u></b></p>
 	 * <div class="mdetail-params"><ul>
 	 * <li><b><tt>refreshTimer: Temps de rafraichissement entre chaque requetes</tt></b></li>
-	 * <li><b><tt>url: URL pour le _POST[json] (default: api.server:81)</tt></b></li>
 	 * </ul></div></p>
 	 * @public
 	 * @type Object
 	 */
 	settings: {
-		refreshTimer: 2000,
-		url: ''
+		refreshTimer: 2000
 	},
 
 	/**
@@ -42,35 +40,35 @@ jsocket.core.http = {
 	 * @private
 	 * @type {@link jsocket.api}
 	 */
-	api : null,
+	api: null,
 
 	/**
 	 * True si le core a ete initialize sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	initialized : false,
+	initialized: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	connectedToServer : false,
+	connectedToServer: false,
 
 	/**
 	 * Liste des commandes en attente
 	 * @private
 	 * @type Array
 	 */
-	commands : [ ],
+	commands: [ ],
 
 	/**
 	 * Objet comprenant la connection AJAX
 	 * @private
 	 * @type Object
 	 */
-	socket : null,
+	socket: null,
 
 	/**
 	 * True si ce core est utilise par l'API sinon False
@@ -83,9 +81,8 @@ jsocket.core.http = {
 	 * Initialisation du core HTTP
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
-	loaded : function()	{
+	loaded: function()	{
 		jsocket.core.http.initialized = true;
-		jsocket.core.http.settings.url = jsocket.core.http.api.urlFailOver;
 		return (true);
 	},
 
@@ -94,7 +91,7 @@ jsocket.core.http = {
 	 * @param {String} parameters La commande JSON a envoyee
 	 * @return {Boolean} True si la commande a ete envoyee sinon False
 	 */
-	_post : function(parameters) {
+	_post: function(parameters) {
 		parameters = encodeURI('json=' + parameters);
 		if (window.XMLHttpRequest) {
 			jsocket.core.http.socket = new XMLHttpRequest();
@@ -106,7 +103,7 @@ jsocket.core.http = {
 			return (false);
 		}
 		jsocket.core.http.socket.onreadystatechange = jsocket.core.http.receive;
-		jsocket.core.http.socket.open('POST', jsocket.core.http.settings.url, true);
+		jsocket.core.http.socket.open('POST', jsocket.api.settings.http.url, true);
 		jsocket.core.http.socket.send(parameters);
 		jsocket.core.http.response.waiting = true;
 		return (true);
@@ -114,20 +111,11 @@ jsocket.core.http = {
 
 	/**
 	 * Initialise une connection via une socket sur le server:port
-	 * @param {String} server Le nom de domaine ou adresse IP du serveur
-	 * @param {Int} port Le numero du port du serveur
 	 */
-	connect : function(server, port) {
+	connect: function() {
 		jsocket.core.http.loaded();
 		jsocket.core.http.send('{"cmd": "connected", "args": "null", "app": ""}');
 		jsocket.core.http.pool();
-	},
-
-	/**
-	 * Alias de {@link #connect connect} sans avoir a repreciser les parametres de connection
-	 */
-	reconnect : function() {
-		jsocket.core.http.connect(jsocket.core.http.api.host, jsocket.core.http.api.port);
 	},
 
 	/**
@@ -135,7 +123,7 @@ jsocket.core.http = {
 	 * @param {String} str Le texte a addslasher
 	 * @return {String} La chaine avec les caracteres echapes
 	 */
-	addslashes : function(str) {
+	addslashes: function(str) {
 		if (typeof(str) == 'string') {
 			str = encodeURIComponent(str);
 			str = str.replace(/\'/g, "%27");
@@ -153,7 +141,7 @@ jsocket.core.http = {
 	 * @param {String} str Le texte a stripslasher
      * @return {String} La chaine avec les caracteres non echapes
 	 */
-	stripslashes : function (str) {
+	stripslashes: function (str) {
 		if (typeof(str) == 'string') {
 			str = str.replace(/\%27/g, "'");
 			str = decodeURIComponent(str);
@@ -208,7 +196,7 @@ jsocket.core.http = {
 	 * Envoie les commandes stockees prealablement au serveur.
 	 * @return {Boolean} True si les commandes ont ete envoyees sinon False
 	 */
-	write : function() {
+	write: function() {
 		if (typeof jsocket.core.http.api != 'object' ||
 			jsocket.core.http.checkResponse() == false) {
 			return (false);
@@ -230,7 +218,7 @@ jsocket.core.http = {
 	 * @param {String} msg Le message a envoye au serveur
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
-	send : function(msg) {
+	send: function(msg) {
 		if (msg.length > 0) {
 			return (jsocket.core.http.commands.push(msg));
 		}
@@ -242,7 +230,7 @@ jsocket.core.http = {
 	 * Callback appele par flash lorsque la socket est connectee au serveur
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
-	connected : function() {
+	connected: function() {
 		if (typeof jsocket.core.http.api != 'object') {
 			return (false);
 		}
@@ -256,13 +244,13 @@ jsocket.core.http = {
 	 * Callback appele par flash lorsqu'une deconnection a ete effectuee
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
-	disconnected : function() {
+	disconnected: function() {
 		if (typeof jsocket.core.http.api != 'object') {
 			return (false);
 		}
 		jsocket.core.http.api.parser('{"from": "disconnect", "value": true}');
 		jsocket.core.http.connectedToServer = false;
-		jsocket.core.http.reconnect();
+		jsocket.core.http.connect();
 		return (true);
 	},
 

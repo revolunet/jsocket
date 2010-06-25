@@ -11,42 +11,42 @@ jsocket.core.tcp = {
 	 * @private
 	 * @type {@link jsocket.api}
 	 */
-	api : null,
+	api: null,
 
 	/**
 	 * True si le core a ete initialize sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	initialized : false,
+	initialized: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	connectedToServer : false,
+	connectedToServer: false,
 
 	/**
 	 * True si ce core est utilise par l'API sinon False
 	 * @private
 	 * @type Boolean
 	 */
-	isWorking : false,
+	isWorking: false,
 
 	/**
 	 * Determine si la deconnection a ete forcer ou non
 	 * @private
 	 * @type Boolean
 	 */
-	manuallyDisconnected : false,
+	manuallyDisconnected: false,
 
 	/**
 	 * @event loaded
 	 * Callback appele par flash lorsque le swf est charge
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
-	loaded : function() {
+	loaded: function() {
 		jsocket.core.tcp.initialized = true;
 		jsocket.core.tcp.connectedToServer = false;
 		jsocket.core.tcp.socket = document.getElementById("socketBridge");
@@ -56,23 +56,14 @@ jsocket.core.tcp = {
 
 	/**
 	 * Initialise une connection via une socket sur le server:port
-	 * @param {String} server Le nom de domaine ou adresse IP du serveur
-	 * @param {Int} port Le numero du port du serveur
 	 */
-	connect : function(server, port) {
+	connect: function() {
 		if (jsocket.core.tcp.initialized == true && jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.socket.connect(server, port);
+			jsocket.core.tcp.socket.connect(jsocket.api.settings.tcp.host, jsocket.api.settings.tcp.port);
 		}
 		else if (jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.setTimeout("jsocket.core.tcp.reconnect();", 500);
+			jsocket.core.tcp.setTimeout("jsocket.core.tcp.connect();", 500);
 		}
-	},
-
-	/**
-	 * Alias de {@link #connect connect} sans avoir a repreciser les parametres de connection
-	 */
-	reconnect : function() {
-		jsocket.core.tcp.connect(jsocket.core.tcp.api.host, jsocket.core.tcp.api.port);
 	},
 
 	/**
@@ -81,7 +72,7 @@ jsocket.core.tcp = {
 	 * @param {String} cmd La commande a lancer
 	 * @param {Int} delay Le temps d'attente
 	 */
-	setTimeout : function(cmd, delay) {
+	setTimeout: function(cmd, delay) {
 		if (jsocket.core.tcp.isWorking == true) {
 			setTimeout(cmd, delay);
 		}
@@ -92,7 +83,7 @@ jsocket.core.tcp = {
 	 * @param {String} str Le texte a addslasher
 	 * @return {String} La chaine avec les caracteres echapes
 	 */
-	addslashes : function(str) {
+	addslashes: function(str) {
 		if (typeof(str) == 'string') {
 			str = encodeURIComponent(str);
 			str = str.replace(/\'/g, "%27");
@@ -110,7 +101,7 @@ jsocket.core.tcp = {
 	 * @param {String} str Le texte a stripslasher
 	 * @return {String} La chaine avec les caracteres non echapes
 	 */
-	stripslashes : function (str) {
+	stripslashes: function (str) {
 		if (typeof(str) == 'string') {
 			str = str.replace(/\%27/g, "'");
 			str = decodeURIComponent(str);
@@ -129,9 +120,9 @@ jsocket.core.tcp = {
 	 * @param {String} msg Le texte a envoyer au serveur
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
-	write : function(msg) {
+	write: function(msg) {
 		if (jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.reconnect();
+			jsocket.core.tcp.connect();
 		}
 		if (jsocket.core.tcp.connectedToServer) {
 			jsocket.core.tcp.socket.write(msg + "\n");
@@ -150,7 +141,7 @@ jsocket.core.tcp = {
 	 * @param {String} msg Le message a envoye au serveur
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
-	send : function(msg) {
+	send: function(msg) {
 		return (jsocket.core.tcp.write(msg));
 	},
 
@@ -159,7 +150,7 @@ jsocket.core.tcp = {
 	 * Callback appele par flash lorsque la socket est connectee au serveur
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
-	connected : function() {
+	connected: function() {
 		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
@@ -173,7 +164,7 @@ jsocket.core.tcp = {
 	 * Ferme la connection au serveur
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
-	close : function() {
+	close: function() {
 		jsocket.core.tcp.socket.close();
 		jsocket.core.tcp.manuallyDisconnected = true;
 		return (true);
@@ -184,7 +175,7 @@ jsocket.core.tcp = {
 	 * Callback appele par flash lorsqu'une deconnection a ete effectuee
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
-	disconnected : function() {
+	disconnected: function() {
 		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
@@ -194,7 +185,7 @@ jsocket.core.tcp = {
 		if (jsocket.core.tcp.manuallyDisconnected == true) {
 			jsocket.core.tcp.manuallyDisconnected = false;
 		} else {
-			jsocket.core.tcp.reconnect();
+			jsocket.core.tcp.connect();
 		}
 		return (true);
 	},
