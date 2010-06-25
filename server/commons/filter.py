@@ -73,7 +73,7 @@ class Filter(object):
 		
 		json_cmd = {'json': cmd, 'time': time.time(), 'uid': None}
 		filter_history = []
-		filter_history.append(cmd)
+		filter_history.append(json_cmd)
 		for filter in self.__filters:
 			method = filter.get('handler', None)
 			match = filter.get('match', None)
