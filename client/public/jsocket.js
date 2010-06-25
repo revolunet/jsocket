@@ -2082,7 +2082,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	onTCPError: function(error) {
 		if (jsocket.core.http.isWorking == false) {
 			jsocket.api.method(jsocket.core.http);
-			jsocket.api.init();
+			jsocket.api.connect();
 		}
 	},
 
