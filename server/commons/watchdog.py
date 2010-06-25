@@ -51,6 +51,11 @@ class WatchDog(threading.Thread):
 			room.applications.pop(app)
 			Log().add('[i] WatchDog: Deleted %s application' % app, 'blue')
 
+	def checkHttpClient(self, current_time, client):
+		if client.type is 'http' and int(current_time - client.last_action) > SETTINGS.WATCHDOG_HTTP_DISCONNECT_TIME:
+			return False
+		return True
+
 	def removeClients(self, total_client):
 		current_time = int(time.time())
 		clients = Session().gets()
@@ -59,7 +64,9 @@ class WatchDog(threading.Thread):
 			total_client = len(clients)
 			Log().add('[i] WatchDog: Server hosts %d clients' % len(clients), 'yellow')
 		for (uid, client) in clients:
-			if int(current_time - client.last_action) > SETTINGS.WATCHDOG_MAX_IDLE_TIME:
+			if self.checkHttpClient(current_time, client) is False:
+				uidToDelete.append(client.unique_key)
+			elif int(current_time - client.last_action) > SETTINGS.WATCHDOG_MAX_IDLE_TIME:
 				uidToDelete.append(client.unique_key)
 		if len(uidToDelete) > 0:
 			Log().add('[i] WatchDog: Deleted %d clients' % len(uidToDelete), 'blue')

@@ -78,8 +78,8 @@ class Approval(object):
 		if len(valid_cmd) > 0:
 			uid = valid_cmd[0].get('uid', None)
 			if uid is None:
-				uid = Session().create(callback)
-			self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid})
+				uid = Session().create(callback, type)
+			self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid, 'type': type})
 			return uid
 		return None
 

@@ -21,7 +21,6 @@ class WorkerLog(threading.Thread):
 
 		while True:
 			item = self.__queue.get()
-			
 			Log().dprint(item[0], item[1])
 			self.__queue.task_done()
 
@@ -50,6 +49,8 @@ class WorkerParser(threading.Thread):
 					client = self.session.get(item['uid'])
 					if client is None:
 						continue
+					if item.get('type', None) is not None:
+						client.type = item['type']
 					client.addResponse(self.protocol.parse(client, json))
 					if callable(item.get('callback', None)):
 						reactor.callFromThread(item['callback'], client.getResponse())
