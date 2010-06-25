@@ -48,7 +48,7 @@ class Filter(object):
 			'handler' : self.remove, 'type': 'in'
 		})
 		self.__filters.append({ 'name': 'addImage', 'match' : r"""this.scene.addImage""",
-			'handler' : self.untilLast, 'type': 'out'
+			'handler' : self.removeTo, 'type': 'out'
 		})
 
 	def Run(self, history):
@@ -109,4 +109,18 @@ class Filter(object):
 		toDelete = toDelete[:-1]
 		for delete in toDelete:
 			history.pop(history.index(delete))
+		return history
+		
+	def removeTo(self, history, match):
+		"""
+		Efface tous l'historique jusqu'a la derniere occurence de match
+		"""
+		
+		for h in history:
+			if re.search(match, h.get('json'), re.MULTILINE | re.DOTALL) is not None:
+				toDelete.append(h)
+		toDelete = toDelete[-1]
+		index = history.index(toDelete)
+		if index is not None:
+			return history[index:]
 		return history
