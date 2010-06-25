@@ -369,6 +369,8 @@ class Protocol(object):
 
 		if client.room_name:
 			channel = client.room.Channel(channelName=client.room_name, appName=appName)
+			if channel and client.unique_key in channel.masters():
+				master = True
 			if channel and master == False:
 				masters = channel.masters()
 				for master in masters:
@@ -388,7 +390,7 @@ class Protocol(object):
 			elif channel is not None:
 				for u in channel.users():
 					user = Session().get(u)
-					if user is not None and user.master != client:
+					if user is not None:
 						status = client.status
 						key = client.unique_key
 						name = client.getName()
