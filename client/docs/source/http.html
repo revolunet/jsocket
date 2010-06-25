@@ -9,7 +9,7 @@
  * @class jsocket.core.http
  * Javascript event's interface fail over HTTP
  * @author Revolunet
- * @version 0.2.5
+ * @version 0.2.6
  * @singleton
  */
 jsocket.core.http = {
@@ -185,6 +185,15 @@ jsocket.core.http = {
 		}
 		jsocket.core.http.write();
 		setTimeout("jsocket.core.http.pool();", jsocket.core.http.settings.refreshTimer);
+	},
+
+	<div id="method-jsocket.core.http-close"></div>/**
+	 * Ferme la connection au serveur
+	 * @return {Boolean} True si la connection a ete fermee sinon False
+	 */
+	close: function() {
+		jsocket.core.http.connectedToServer = false;
+		return (true);
 	},
 
 	<div id="method-jsocket.core.http-checkResponse"></div>/**

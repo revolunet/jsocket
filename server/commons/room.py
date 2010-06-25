@@ -46,8 +46,8 @@ class Room(object):
 				return channel.users()
 		users = []
 		for app in self.applications:
-			for c in self.applications[app]:
-				self.merge(users, c.get('object').users())
+			for c in self.applications.get(app, []):
+				self.merge(users, c.get('channel').users())
 		return users
 
 	def create(self, channelName, uid, appName, password = None):
@@ -114,7 +114,7 @@ class Room(object):
 			for c in self.applications[application]:
 				channel = c.get('channel')
 				if channel is not None:
-					if client is not None:
+					if client is not None and client.unique_key in channel.users():
 						self.status(client, application, channel.name)
 					channel.delete(uid)
 
@@ -241,7 +241,7 @@ class Room(object):
 			else:
 				users = channel.users()
 				for user in users:
-					u = Session().get(users)
+					u = Session().get(user)
 					if u is not None:
 						Log().add("[+] Client (room.py) : envoie du status master vers l'utilisateur : " + u.getName())
 						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel.name})

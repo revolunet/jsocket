@@ -261,7 +261,6 @@ class Protocol(object):
 	def __cmd_message(self, args):
 		"""Envoie un message a une liste d'utilisateurs"""
 
-		import urllib
 		from log.logger import Log
 
 		message = args.get('args', '')
