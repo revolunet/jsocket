@@ -30,7 +30,7 @@ class ClientWebSocket(WebSocketHandler):
 		commands = frame.split("\n")
 		for cmd in commands:
 			if '{"cmd": "connected", "args": "null"' in cmd:
-				uid = Approval().validate(cmd)
+				uid = Approval().validate(cmd, None, 'websocket')
 				if uid is not None:
 					self.uid = uid
 				self.send('{"from": "connected", "value": "%s"}' % uid)

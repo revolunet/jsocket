@@ -57,7 +57,7 @@ class Approval(object):
 			this.protocol = ApprovalProtocol()
 		return this.instance
 
-	def validate(self, datas, callback = None):
+	def validate(self, datas, callback = None, type = None):
 		""" Valide la/les commande(s) json envoyees """
 		if len(datas) == 0:
 			pass
