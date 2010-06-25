@@ -64,13 +64,13 @@ class Filter(object):
 			if method is not None and inout is not None and inout == 'out':
 				filter_history = method(filter_history, match)
 		return filter_history
-		
+
 	def RunIn(self, cmd):
 		"""
 		Filtre les commandes en entree d historique
 		"""
 		import time
-		
+
 		json_cmd = {'json': cmd, 'time': time.time(), 'uid': None}
 		filter_history = []
 		filter_history.append(json_cmd)
@@ -83,7 +83,7 @@ class Filter(object):
 		if len(filter_history) == 1:
 			return True
 		return False
-		
+
 
 	def remove(self, history, match):
 		"""
@@ -110,12 +110,13 @@ class Filter(object):
 		for delete in toDelete:
 			history.pop(history.index(delete))
 		return history
-		
+
 	def removeTo(self, history, match):
 		"""
 		Efface tous l'historique jusqu'a la derniere occurence de match
 		"""
-		
+
+		toDelete = []
 		for h in history:
 			if re.search(match, h.get('json'), re.MULTILINE | re.DOTALL) is not None:
 				toDelete.append(h)
