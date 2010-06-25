@@ -146,7 +146,8 @@ class Room(object):
 				master = Session().get(uid)
 				json = Protocol.forgeJSON('forward', '["' + master.getName() + '", "' + commande + '"]',
 										  {'channel': channelName, 'app': appName})
-				channel.history.add(uid, json)
+			  	if self.filter.RunIn(json) == True:
+					channel.history.add(uid, json)
 				for u in users:
 					user = Session().get(u)
 					if user is not None:
