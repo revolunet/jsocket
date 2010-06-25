@@ -108,7 +108,7 @@ class Room(object):
 
 	def leaveRooms(self, uid):
 		from commons.session import Session
-		
+
 		client = Session().get(uid)
 		for application in self.applications:
 			for c in self.applications[application]:
@@ -145,7 +145,7 @@ class Room(object):
 				users = channel.users()
 				master = Session().get(uid)
 				json = Protocol.forgeJSON('forward', '["' + master.getName() + '", "' + commande + '"]',
-										  {'channel': channelName, 'app': appName, 'toUid': uid})
+										  {'channel': channelName, 'app': appName})
 				channel.history.add(uid, json)
 				for u in users:
 					user = Session().get(u)
@@ -217,11 +217,11 @@ class Room(object):
 				if c.get('name') == channelName:
 					return True
 		return False
-		
+
 	def status(self, client, appName, channelName):
 		from log.logger import Log
 		from commons.session import Session
-		
+
 		if self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName, appName)
 			key = client.unique_key

@@ -33,8 +33,6 @@ class Protocol(object):
 			json += ', "channel": "' + param['channel'] + '"'
 		if param.get('app', None) is not None:
 			json += ', "app": "' + param['app'] + '"'
-		if param.get('toUid', None) is not None:
-			json += ', "toUid": "' + param['toUid'] + '"'
 		json += '}'
 		return json
 

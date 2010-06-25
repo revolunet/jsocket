@@ -61,9 +61,9 @@ class Log(object):
 			msgTime = '[%s]' % strftime('%d-%m-%Y %H:%M:%S', gmtime())
 			if SETTINGS.IS_DEBUG:
 				if 'nt' not in os.name:
-					print msgTime + self.get_color(color).replace('$msg$', msg)
+					print msgTime + self.get_color(color).replace('$msg$', msg.strip(' \n'))
 				else:
-					print msgTime + msg
+					print msgTime + msg.strip(' \n')
 			self.__logs.debug(msg)
 
 		def __logTraceback(self):
