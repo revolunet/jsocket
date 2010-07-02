@@ -115,13 +115,14 @@ class Filter(object):
 		"""
 		Efface tous l'historique jusqu'a la derniere occurence de match
 		"""
-
+		index = None
 		toDelete = []
 		for h in history:
 			if re.search(match, h.get('json'), re.MULTILINE | re.DOTALL) is not None:
 				toDelete.append(h)
-		toDelete = toDelete[-1]
-		index = history.index(toDelete)
+		if toDelete:
+			toDelete = toDelete[-1]
+			index = history.index(toDelete)
 		if index is not None:
 			return history[index:]
 		return history
