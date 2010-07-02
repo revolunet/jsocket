@@ -106,13 +106,16 @@ class Filter(object):
 		"""
 
 		toDelete = []
+		index = None
 		for h in history:
 			if re.search(match, h.get('json'), re.MULTILINE | re.DOTALL) is not None:
 				toDelete.append(h)
 		if toDelete:
 			toDelete = toDelete[:-1]
 			for delete in toDelete:
-				history.pop(history.index(delete))
+				index = history.index(delete)		
+				if index is not None:
+					history.pop(index)
 		return history
 
 	def removeTo(self, history, match):
