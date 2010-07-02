@@ -7,18 +7,6 @@
  */
 jsocket.core.http = {
 	/**
-	 * <p><b><u>Settings:</u></b></p>
-	 * <div class="mdetail-params"><ul>
-	 * <li><b><tt>refreshTimer: Temps de rafraichissement entre chaque requetes</tt></b></li>
-	 * </ul></div></p>
-	 * @public
-	 * @type Object
-	 */
-	settings: {
-		refreshTimer: 1000
-	},
-
-	/**
 	 * <p><b><u>Response:</u></b></p>
 	 * <div class="mdetail-params"><ul>
 	 * <li><b><tt>waiting: true si une requete est en attente de reponse sinon false</tt></b></li>
@@ -165,7 +153,7 @@ jsocket.core.http = {
 			return (false);
 		}
 		jsocket.core.http.write();
-		setTimeout("jsocket.core.http.pool();", jsocket.core.http.settings.refreshTimer);
+		setTimeout("jsocket.core.http.pool();", jsocket.api.settings.http.refreshTimer);
 	},
 
 	/**

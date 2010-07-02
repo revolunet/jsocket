@@ -85,11 +85,12 @@ jsocket.api = {
 	/**
 	 * <p>Parametres de configuration:</p>
 	 * <p><div class="mdetail-params"><ul>
-	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp}</tt></b></li>
-	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp}</tt></b></li>
-	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http}</tt></b></li>
-	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket}</tt></b></li>
-	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket}</tt></b></li>
+	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
+	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
+	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http#loaded}</tt></b></li>
+	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#loaded}</tt></b></li>
+	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
 	 * </ul></div></p>
 	 * Ce parametre peut etre changer directement comme dans l'exemple ci-dessous
 	 * ou via la methode {@link jsocket.api.configure}
@@ -101,7 +102,8 @@ jsocket.api.settings = {
 	port: 8080
   },
   http: {
-    url: 'http://localhost:8081/'
+    url: 'http://localhost:8081/',
+	refreshTimer: 1000
   },
   websocket: {
     host: 'localhost',
@@ -116,7 +118,8 @@ jsocket.api.settings = {
 			port: 8080
 		},
 		http: {
-			url: 'http://localhost:8081/'
+			url: 'http://localhost:8081/',
+			refreshTimer: 1000
 		},
 		websocket: {
 			host: 'localhost',
@@ -141,10 +144,20 @@ jsocket.api.settings = {
 
 	/**
 	 * <p>Permet de changer la configuration de l'api</p>
+	 * <p>La configuration donnee en parametre peut etre partielle mais doit
+	 * tout de meme respecter l'arborescence de {@link jsocket.api.settings}<p>
 	 * @param {Object} Configuration {@link jsocket.api.settings}
 	 */
 	configure: function(settings) {
-		jsocket.api.settings = settings;
+		for (core in jsocket.api.settings) {
+			if (typeof settings[core] != 'undefined') {
+				for (opt in jsocket.api.settings[core]) {
+					if (typeof settings[core][opt] != 'undefined') {
+						jsocket.api.settings[core][opt] = settings[core][opt];
+					}
+				}
+			}
+		}
 	},
 
 	/**
@@ -612,6 +625,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Le retour de la commande {@link #history history}
 	 */
 	onHistory: function(args) {
+		console.log(args);
 	},
 
 	/**
