@@ -228,6 +228,9 @@ jsocket.api.register('myApplicationName', myApplication);
 		var newApp = appObject || { };
 		jsocket.api.app[appName] = newApp;
 		jsocket.api.app[appName].isMaster = false;
+		if (typeof jsocket.api.app[appName].onHistory == 'undefined') {
+			jsocket.api.app[appName].onHistory = jsocket.api.onHistory;
+		}
 	},
 
 	/**
@@ -302,7 +305,12 @@ jsocket.api.register('myApplicationName', myApplication);
 			args.value = (j.value != null ? j.value: '');
 			args.channel = (j.channel != null ? j.channel: '');
 			args.app = (j.app != null ? j.app: '');
-			args = jsocket.api.core.stripslashes(args);
+			if (j.from == 'history') {
+				args.channel = decodeURIComponent(args.channel.replace(/%27/g, "'"));
+				args.app = decodeURIComponent(args.app.replace(/%27/g, "'"));
+			} else {
+				args = jsocket.api.core.stripslashes(args);
+			}
 			if (j.app != null && j.app.length > 0 &&
 				jsocket.api.appExists(j.app) == true) {
 				try {
@@ -625,7 +633,18 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Le retour de la commande {@link #history history}
 	 */
 	onHistory: function(args) {
-		console.log(args);
+		values = args.value;
+		if (!(typeof values == 'object' && values.length > 1)) {
+			return (false);
+		}
+		for (i in values) {
+			if (typeof values[i]['json'] != 'undefined') {
+				var cmd = values[i]['json'].replace(/\%27/g, "'");
+				cmd = decodeURIComponent(cmd);
+				console.log('onHistory execute: ', cmd);
+				jsocket.api.parser(cmd);
+			}
+		}
 	},
 
 	/**

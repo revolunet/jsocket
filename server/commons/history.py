@@ -19,7 +19,7 @@ class History(object):
 		self.__history.append({
 			'time': time.time(),
 			'uid': uid,
-			'json': urllib.quote_plus(str(json))
+			'json': urllib.quote(str(json))
 		})
 
 	def get(self):
