@@ -8,16 +8,37 @@ class TwistedTCPClient(Protocol):
 	"""
 	Classe TCP utilisee par twisted.
 	"""
+	
+	DELIMITER_FROM = '\x00'
+	DELIMITER_TO = '\xFF'
 
 	def __init__(self):
 		self.uid = None
 		self.connected = False
+		self.buffer = None
 
 	def callbackSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
 
 		for json in responses:
 			self.send(str(json))
+
+	def __received(self, data):
+		if self.buffer is None:
+			index_from = data.find(TwistedTCPClient.DELIMITER_FROM)
+			index_to = data.find(TwistedTCPClient.DELIMITER_TO)
+			if index_from != -1 and index_to != -1:
+				return data[index_from + 1 : index_to]
+			if index_from != -1 and index_to == -1:
+				self.buffer = data[1:]
+				return None
+		index_to = data.find(TwistedTCPClient.DELIMITER_TO)
+		if index_to != -1:
+			new_data = "%s%s" % (self.buffer, data[:index_to])
+			self.buffer = None
+			return new_data
+		self.buffer = None
+		return None
 
 	def dataReceived(self, data):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
@@ -26,11 +47,13 @@ class TwistedTCPClient(Protocol):
 		if '<policy-file-request/>' in data:
 			self.send('<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd"><cross-domain-policy><allow-access-from domain="*" to-ports="*" secure="false" /></cross-domain-policy>')
 		else:
-			commands = data.split("\n")
-			for cmd in commands:
-				uid = Approval().validate(cmd, self.callbackSend, 'tcp')
-				if uid is not None:
-					self.uid = uid
+			valid_data = self.__received(data)
+			if valid_data is not None:
+				commands = valid_data.split("\n")
+				for cmd in commands:
+					uid = Approval().validate(cmd, self.callbackSend, 'tcp')
+					if uid is not None:
+						self.uid = uid
 
 	def connectionMade(self):
 		""" Methode appelee lorsqu'un nouvel utilisateur se connecte """
