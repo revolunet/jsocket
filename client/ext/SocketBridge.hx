@@ -128,7 +128,9 @@ class SocketBridge {
   static function write(msg) {
 	if (socket.connected) {
 	  trace("Writing '" + msg + "' to server");
-	  socket.writeUTFBytes("\x00" + msg + "\xff");
+	  socket.writeByte(0x00);
+      socket.writeUTFBytes(msg);
+      socket.writeByte(0xff);
 	  socket.flush();
 	} else {
 	  trace("[!] Cannot write to server because there is no connection.");

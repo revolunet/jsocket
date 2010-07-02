@@ -8,9 +8,9 @@ class TwistedTCPClient(Protocol):
 	"""
 	Classe TCP utilisee par twisted.
 	"""
-	
-	DELIMITER_FROM = '\x00'
-	DELIMITER_TO = '\xFF'
+
+	DELIMITER_FROM = "\x00"
+	DELIMITER_TO = "\xff"
 
 	def __init__(self):
 		self.uid = None
@@ -43,14 +43,16 @@ class TwistedTCPClient(Protocol):
 	def dataReceived(self, data):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
 
-		Log().add('[TCP] Received: %s' % data)
+		#print repr(data)
 		if '<policy-file-request/>' in data:
+			Log().add('[TCP] Received: %s' % data)
 			self.send('<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd"><cross-domain-policy><allow-access-from domain="*" to-ports="*" secure="false" /></cross-domain-policy>')
 		else:
 			valid_data = self.__received(data)
 			if valid_data is not None:
 				commands = valid_data.split("\n")
 				for cmd in commands:
+					Log().add('[TCP] Received: %s' % cmd)
 					uid = Approval().validate(cmd, self.callbackSend, 'tcp')
 					if uid is not None:
 						self.uid = uid
