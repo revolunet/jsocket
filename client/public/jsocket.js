@@ -814,7 +814,7 @@ jsocket.core.http = {
 	 * @type Object
 	 */
 	settings: {
-		refreshTimer: 2000
+		refreshTimer: 1000
 	},
 
 	/**
