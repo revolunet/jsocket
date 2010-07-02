@@ -13,18 +13,6 @@
  * @singleton
  */
 jsocket.core.http = {
-	<div id="prop-jsocket.core.http-settings"></div>/**
-	 * <p><b><u>Settings:</u></b></p>
-	 * <div class="mdetail-params"><ul>
-	 * <li><b><tt>refreshTimer: Temps de rafraichissement entre chaque requetes</tt></b></li>
-	 * </ul></div></p>
-	 * @public
-	 * @type Object
-	 */
-	settings: {
-		refreshTimer: 2000
-	},
-
 	<div id="prop-jsocket.core.http-response"></div>/**
 	 * <p><b><u>Response:</u></b></p>
 	 * <div class="mdetail-params"><ul>
@@ -172,7 +160,7 @@ jsocket.core.http = {
 			return (false);
 		}
 		jsocket.core.http.write();
-		setTimeout("jsocket.core.http.pool();", jsocket.core.http.settings.refreshTimer);
+		setTimeout("jsocket.core.http.pool();", jsocket.api.settings.http.refreshTimer);
 	},
 
 	<div id="method-jsocket.core.http-close"></div>/**
