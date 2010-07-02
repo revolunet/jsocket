@@ -47,6 +47,9 @@ class Filter(object):
 		self.__filters.append({ 'name': 'window.open', 'match' : r"""window.open""",
 			'handler' : self.remove, 'type': 'in'
 		})
+		self.__filters.append({ 'name': 'gotRemoteSize', 'match' : r"""this.scene.gotRemoteSize""",
+			'handler' : self.remove, 'type': 'in'
+		})
 		self.__filters.append({ 'name': 'addImage', 'match' : r"""this.scene.addImage""",
 			'handler' : self.removeTo, 'type': 'out'
 		})
