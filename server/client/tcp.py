@@ -44,11 +44,13 @@ class TwistedTCPClient(Protocol):
 					all_data.append(self.buffer)
 					self.buffer = None
 					return all_data
-				if index_from != -1 and index_to < index_from:
+				elif index_from != -1 and index_to < index_from:
 					self.buffer = "%s%s" % (self.buffer, data[:index_to])
 					all_data.append(self.buffer)
 					self.buffer = None
 					pos = index_from
+				else:
+					self.buffer = None
 			else:
 				self.buffer = None
 		while res is not None:
