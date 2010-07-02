@@ -92,11 +92,12 @@ jsocket.api = {
 	<div id="prop-jsocket.api-settings"></div>/**
 	 * <p>Parametres de configuration:</p>
 	 * <p><div class="mdetail-params"><ul>
-	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp}</tt></b></li>
-	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp}</tt></b></li>
-	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http}</tt></b></li>
-	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket}</tt></b></li>
-	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket}</tt></b></li>
+	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
+	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
+	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http#loaded}</tt></b></li>
+	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#loaded}</tt></b></li>
+	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
 	 * </ul></div></p>
 	 * Ce parametre peut etre changer directement comme dans l'exemple ci-dessous
 	 * ou via la methode {@link jsocket.api.configure}
@@ -108,7 +109,8 @@ jsocket.api.settings = {
 	port: 8080
   },
   http: {
-    url: 'http://localhost:8081/'
+    url: 'http://localhost:8081/',
+	refreshTimer: 1000
   },
   websocket: {
     host: 'localhost',
@@ -123,7 +125,8 @@ jsocket.api.settings = {
 			port: 8080
 		},
 		http: {
-			url: 'http://localhost:8081/'
+			url: 'http://localhost:8081/',
+			refreshTimer: 1000
 		},
 		websocket: {
 			host: 'localhost',
@@ -148,10 +151,20 @@ jsocket.api.settings = {
 
 	<div id="method-jsocket.api-configure"></div>/**
 	 * <p>Permet de changer la configuration de l'api</p>
+	 * <p>La configuration donnee en parametre peut etre partielle mais doit
+	 * tout de meme respecter l'arborescence de {@link jsocket.api.settings}<p>
 	 * @param {Object} Configuration {@link jsocket.api.settings}
 	 */
 	configure: function(settings) {
-		jsocket.api.settings = settings;
+		for (core in jsocket.api.settings) {
+			if (typeof settings[core] != 'undefined') {
+				for (opt in jsocket.api.settings[core]) {
+					if (typeof settings[core][opt] != 'undefined') {
+						jsocket.api.settings[core][opt] = settings[core][opt];
+					}
+				}
+			}
+		}
 	},
 
 	/**
@@ -222,6 +235,9 @@ jsocket.api.register('myApplicationName', myApplication);
 		var newApp = appObject || { };
 		jsocket.api.app[appName] = newApp;
 		jsocket.api.app[appName].isMaster = false;
+		if (typeof jsocket.api.app[appName].onHistory == 'undefined') {
+			jsocket.api.app[appName].onHistory = jsocket.api.onHistory;
+		}
 	},
 
 	/**
@@ -296,7 +312,12 @@ jsocket.api.register('myApplicationName', myApplication);
 			args.value = (j.value != null ? j.value: '');
 			args.channel = (j.channel != null ? j.channel: '');
 			args.app = (j.app != null ? j.app: '');
-			args = jsocket.api.core.stripslashes(args);
+			if (j.from == 'history') {
+				args.channel = decodeURIComponent(args.channel.replace(/%27/g, "'"));
+				args.app = decodeURIComponent(args.app.replace(/%27/g, "'"));
+			} else {
+				args = jsocket.api.core.stripslashes(args);
+			}
 			if (j.app != null && j.app.length > 0 &&
 				jsocket.api.appExists(j.app) == true) {
 				try {
@@ -615,10 +636,25 @@ jsocket.api.register('myApplicationName', myApplication);
 
 	<div id="event-jsocket.api-onHistory"></div>/**
 	 * @event onHistory
-	 * Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+	 * <p>Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+	 * Toutes les commandes recues en value seront alors repassee au parser de l'API (et donc
+	 * les callbacks du client correspondant aux commandes seront rappeles).</p>
+	 * <p>Si par defaut une interface n'a pas cet evenement d'implementer, c'est celui de l'API
+	 * qui lui sera affectee.</p>
 	 * @param {Object} args Le retour de la commande {@link #history history}
 	 */
 	onHistory: function(args) {
+		values = args.value;
+		if (!(typeof values == 'object' && values.length > 1)) {
+			return (false);
+		}
+		for (i in values) {
+			if (typeof values[i]['json'] != 'undefined') {
+				var cmd = values[i]['json'].replace(/\%27/g, "'");
+				cmd = decodeURIComponent(cmd);
+				jsocket.api.parser(cmd);
+			}
+		}
 	},
 
 	<div id="method-jsocket.api-message"></div>/**
@@ -754,6 +790,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onError: function(error) {
+		console.log('jsocket.api.onError: ', error);
 	},
 
 	/**
@@ -766,7 +803,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	onTCPError: function(error) {
 		if (jsocket.core.http.isWorking == false) {
 			jsocket.api.method(jsocket.core.http);
-			jsocket.api.init();
+			jsocket.api.connect();
 		}
 	},
 

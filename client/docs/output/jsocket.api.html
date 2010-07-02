@@ -13,14 +13,15 @@ suivants:
   args.channel = <em>'myapp_channel'</em>;
 };</code></pre><br><br><i>This class is a singleton and cannot be created directly.</i></div><div class="hr"></div><a id="jsocket.api-props"></a><h2>Public Properties</h2><table cellspacing="0" class="member-table"><tbody><tr><th colspan="2" class="sig-header">Property</th><th class="msource-header">Defined By</th></tr><tr class="property-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-settings"></a><b><a href="source/api.html#prop-jsocket.api-settings">settings</a></b> : Object<div class="mdesc"><div class="short">Parametres de configuration:
 &lt;div class="mdetail-params"&gt;
-tcp.host: Host pour le core jsocket.core.tcp
-tcp.port: Port...</div><div class="long"><p>Parametres de configuration:</p>
+tcp.host: Host pour le core jsocket.core.tcp.loaded
+tcp.por...</div><div class="long"><p>Parametres de configuration:</p>
 <p><div class="mdetail-params"><ul>
-<li><b><tt>tcp.host: Host pour le core <a href="output/jsocket.core.tcp.html" ext:cls="jsocket.core.tcp">jsocket.core.tcp</a></tt></b></li>
-<li><b><tt>tcp.port: Port pour le core <a href="output/jsocket.core.tcp.html" ext:cls="jsocket.core.tcp">jsocket.core.tcp</a></tt></b></li>
-<li><b><tt>http.url: Url pour le core <a href="output/jsocket.core.http.html" ext:cls="jsocket.core.http">jsocket.core.http</a></tt></b></li>
-<li><b><tt>websocket.host: Host pour le core <a href="output/jsocket.core.websocket.html" ext:cls="jsocket.core.websocket">jsocket.core.websocket</a></tt></b></li>
-<li><b><tt>websocket.port: Port pour le core <a href="output/jsocket.core.websocket.html" ext:cls="jsocket.core.websocket">jsocket.core.websocket</a></tt></b></li>
+<li><b><tt>tcp.host: Host pour le core <a href="output/jsocket.core.tcp.html#jsocket.core.tcp-loaded" ext:member="loaded" ext:cls="jsocket.core.tcp">jsocket.core.tcp.loaded</a></tt></b></li>
+<li><b><tt>tcp.port: Port pour le core <a href="output/jsocket.core.tcp.html#jsocket.core.tcp-loaded" ext:member="loaded" ext:cls="jsocket.core.tcp">jsocket.core.tcp.loaded</a></tt></b></li>
+<li><b><tt>http.url: Url pour le core <a href="output/jsocket.core.http.html#jsocket.core.http-loaded" ext:member="loaded" ext:cls="jsocket.core.http">jsocket.core.http.loaded</a></tt></b></li>
+<li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core <a href="output/jsocket.core.http.html#jsocket.core.http-loaded" ext:member="loaded" ext:cls="jsocket.core.http">jsocket.core.http.loaded</a></tt></b></li>
+<li><b><tt>websocket.host: Host pour le core <a href="output/jsocket.core.websocket.html#jsocket.core.websocket-loaded" ext:member="loaded" ext:cls="jsocket.core.websocket">jsocket.core.websocket.loaded</a></tt></b></li>
+<li><b><tt>websocket.port: Port pour le core <a href="output/jsocket.core.websocket.html#jsocket.core.websocket-loaded" ext:member="loaded" ext:cls="jsocket.core.websocket">jsocket.core.websocket.loaded</a></tt></b></li>
 </ul></div></p>
 Ce parametre peut etre changer directement comme dans l'exemple ci-dessous
 ou via la methode <a href="output/jsocket.api.configure.html" ext:cls="jsocket.api.configure">jsocket.api.configure</a>
@@ -31,7 +32,8 @@ ou via la methode <a href="output/jsocket.api.configure.html" ext:cls="jsocket.a
 	port: 8080
   },
   http: {
-    url: <em>'http:<i>//localhost:8081/'</em></i>
+    url: <em>'http:<i>//localhost:8081/'</em>,</i>
+	refreshTimer: 1000
   },
   websocket: {
     host: <em>'localhost'</em>,
@@ -45,7 +47,11 @@ ou via la methode <a href="output/jsocket.api.configure.html" ext:cls="jsocket.a
     :
                                         void<div class="mdesc"><div class="short">Change le mot de passe d'un salon</div><div class="long">Change le mot de passe d'un salon<div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>appName</code> : String<div class="sub-desc">Le nom de l'application</div></li><li><code>channel</code> : String<div class="sub-desc">Le nom d'un salon</div></li><li><code>password</code> : String<div class="sub-desc">Le mot de passe</div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-configure"></a><b><a href="source/api.html#method-jsocket.api-configure">configure</a></b>(&nbsp;<code>Object&nbsp;Configuration</code>&nbsp;)
     :
-                                        void<div class="mdesc"><div class="short">Permet de changer la configuration de l'api</div><div class="long"><p>Permet de changer la configuration de l'api</p><div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>Configuration</code> : Object<div class="sub-desc"><a href="output/jsocket.api.settings.html" ext:cls="jsocket.api.settings">jsocket.api.settings</a></div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-connect"></a><b><a href="source/api.html#method-jsocket.api-connect">connect</a></b>(&nbsp;<code>Object&nbsp;Parametre</code>&nbsp;)
+                                        void<div class="mdesc"><div class="short">Permet de changer la configuration de l'api
+La configuration donnee en parametre peut etre partielle mais doit
+tout d...</div><div class="long"><p>Permet de changer la configuration de l'api</p>
+<p>La configuration donnee en parametre peut etre partielle mais doit
+tout de meme respecter l'arborescence de <a href="output/jsocket.api.settings.html" ext:cls="jsocket.api.settings">jsocket.api.settings</a><p><div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>Configuration</code> : Object<div class="sub-desc"><a href="output/jsocket.api.settings.html" ext:cls="jsocket.api.settings">jsocket.api.settings</a></div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-connect"></a><b><a href="source/api.html#method-jsocket.api-connect">connect</a></b>(&nbsp;<code>Object&nbsp;Parametre</code>&nbsp;)
     :
                                         void<div class="mdesc"><div class="short">Connection au serveur via le jsocket.core</div><div class="long"><p>Connection au serveur via le jsocket.core</p><div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>Parametre</code> : Object<div class="sub-desc">optionnel de configuration <a href="output/jsocket.api.settings.html" ext:cls="jsocket.api.settings">jsocket.api.settings</a></div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-create"></a><b><a href="source/api.html#method-jsocket.api-create">create</a></b>(&nbsp;<code>String&nbsp;appName</code>,&nbsp;<code>String&nbsp;channel</code>,&nbsp;<code>String&nbsp;password</code>&nbsp;)
     :
@@ -135,7 +141,12 @@ commands puis on les envoie lorsque l'uid est renseigne.<div class="mdetail-para
                                       (&nbsp;<code>Object&nbsp;args</code>&nbsp;)
     <div class="mdesc"><div class="short">Callback reception status getStatus</div><div class="long">Callback reception status <a href="output/jsocket.api.html#jsocket.api-getStatus" ext:member="getStatus" ext:cls="jsocket.api">getStatus</a><div class="mdetail-params"><strong style="font-weight: normal;">Listeners will be called with the following arguments:</strong><ul><li><code>args</code> : Object<div class="sub-desc">Status de l'utilisateur courant</div></li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-onHistory"></a><b><a href="source/api.html#event-jsocket.api-onHistory">onHistory</a></b> :
                                       (&nbsp;<code>Object&nbsp;args</code>&nbsp;)
-    <div class="mdesc"><div class="short">Callback appeler contenant la liste des dernieres commandes effectuees par le master.</div><div class="long">Callback appeler contenant la liste des dernieres commandes effectuees par le master.<div class="mdetail-params"><strong style="font-weight: normal;">Listeners will be called with the following arguments:</strong><ul><li><code>args</code> : Object<div class="sub-desc">Le retour de la commande <a href="output/jsocket.api.html#jsocket.api-history" ext:member="history" ext:cls="jsocket.api">history</a></div></li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-onJoin"></a><b><a href="source/api.html#event-jsocket.api-onJoin">onJoin</a></b> :
+    <div class="mdesc"><div class="short">Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+Toutes les commandes recues en ...</div><div class="long"><p>Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+Toutes les commandes recues en value seront alors repassee au parser de l'API (et donc
+les callbacks du client correspondant aux commandes seront rappeles).</p>
+<p>Si par defaut une interface n'a pas cet evenement d'implementer, c'est celui de l'API
+qui lui sera affectee.</p><div class="mdetail-params"><strong style="font-weight: normal;">Listeners will be called with the following arguments:</strong><ul><li><code>args</code> : Object<div class="sub-desc">Le retour de la commande <a href="output/jsocket.api.html#jsocket.api-history" ext:member="history" ext:cls="jsocket.api">history</a></div></li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-onJoin"></a><b><a href="source/api.html#event-jsocket.api-onJoin">onJoin</a></b> :
                                       (&nbsp;<code>Object&nbsp;args</code>&nbsp;)
     <div class="mdesc"><div class="short">Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction join</div><div class="long">Callback lorsque le serveur renvoie des informations suite a l'appel de la fonction join<div class="mdetail-params"><strong style="font-weight: normal;">Listeners will be called with the following arguments:</strong><ul><li><code>args</code> : Object<div class="sub-desc">Le retour de l'appel a la methode join</div></li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-onList"></a><b><a href="source/api.html#event-jsocket.api-onList">onList</a></b> :
                                       (&nbsp;<code>Object&nbsp;args</code>&nbsp;)

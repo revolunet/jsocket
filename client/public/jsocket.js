@@ -1939,7 +1939,11 @@ jsocket.api.register('myApplicationName', myApplication);
 
 	/**
 	 * @event onHistory
-	 * Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+	 * <p>Callback appeler contenant la liste des dernieres commandes effectuees par le master.
+	 * Toutes les commandes recues en value seront alors repassee au parser de l'API (et donc
+	 * les callbacks du client correspondant aux commandes seront rappeles).</p>
+	 * <p>Si par defaut une interface n'a pas cet evenement d'implementer, c'est celui de l'API
+	 * qui lui sera affectee.</p>
 	 * @param {Object} args Le retour de la commande {@link #history history}
 	 */
 	onHistory: function(args) {
@@ -1951,7 +1955,6 @@ jsocket.api.register('myApplicationName', myApplication);
 			if (typeof values[i]['json'] != 'undefined') {
 				var cmd = values[i]['json'].replace(/\%27/g, "'");
 				cmd = decodeURIComponent(cmd);
-				console.log('onHistory execute: ', cmd);
 				jsocket.api.parser(cmd);
 			}
 		}
