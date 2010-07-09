@@ -234,7 +234,7 @@ jsocket.core.tcp = {
 		if (typeof jsocket.core.tcp.api != 'object') {
 			return (false);
 		}
-		var tab = msg.split("\n");
+		var tab = decodeURIComponent(msg).split("\n");
 		for (var i = 0; i < tab.length; ++i) {
 			jsocket.core.tcp.api.onReceive(tab[i]);
 		}

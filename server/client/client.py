@@ -61,5 +61,5 @@ class Client(object):
 		res = self.response
 		self.response = [ ]
 		if len(res) > 0:
-			Log().add('[JSON][Responses] ' + str(res), 'red')
+			Log().add('[JSON][Responses] ' + str(res), 'green')
 		return res

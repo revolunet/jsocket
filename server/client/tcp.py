@@ -75,7 +75,7 @@ class TwistedTCPClient(Protocol):
 
 		if '<policy-file-request/>' in data:
 			Log().add('[TCP] Received: %s' % data)
-			self.send('<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd"><cross-domain-policy><allow-access-from domain="*" to-ports="*" secure="false" /></cross-domain-policy>')
+			self.send('<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd"><cross-domain-policy><allow-access-from domain="*" to-ports="*" secure="false" /></cross-domain-policy>' + "\x00", False)
 		else:
 			valid_data = self.__findReceived(data)
 			for v_data in valid_data:
@@ -105,11 +105,13 @@ class TwistedTCPClient(Protocol):
 			Session().delete(self.uid)
 		self.transport.loseConnection()
 
-	def send(self, msg):
+	def send(self, msg, setDelimiters = True):
 		""" Methode permettant d'ecrire le message sur la socket si l'utilisateur est connecte """
 
 		if self.connected is True:
-			self.transport.getHandle().send(msg + "\0")
+			if setDelimiters is True:
+				msg = TwistedTCPClient.DELIMITER_FROM + msg + TwistedTCPClient.DELIMITER_TO
+			self.transport.getHandle().send(msg)
 
 	@property
 	def socket(self):
