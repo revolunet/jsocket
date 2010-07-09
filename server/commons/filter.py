@@ -53,6 +53,12 @@ class Filter(object):
 		self.__filters.append({ 'name': 'addImage', 'match' : r"""this.scene.addImage""",
 			'handler' : self.removeTo, 'type': 'out'
 		})
+		self.__filters.append({ 'name': 'addImage', 'match' : r"""this.scene.newPos""",
+			'handler' : self.untilLast, 'type': 'out'
+		})
+		self.__filters.append({ 'name': 'addImage', 'match' : r"""this.scene.overlayTrace""",
+			'handler' : self.untilLast, 'type': 'out'
+		})
 
 	def Run(self, history):
 		"""
