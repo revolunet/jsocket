@@ -91,9 +91,4 @@ class Approval(object):
 
 	def _split(self, datas):
 		datas = datas.split("\n")
-		commands = []
-		for data in datas:
-			data = data.strip()
-			if len(data) > 0:
-				commands.append(data)
-		return commands
+		return [cmd for cmd in datas if len(cmd.strip()) > 0]

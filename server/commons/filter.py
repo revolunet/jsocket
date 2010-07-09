@@ -18,7 +18,7 @@ import re
 
 class Filter(object):
 	"""
-	Class pour filtrer l'historique, via des regexp.
+	Class pour filtrer l'historique, via des regexp. 
 	"""
 	def __init__(self):
 		self.__filters = []
@@ -26,7 +26,7 @@ class Filter(object):
 
 	def init_filters(self):
 		"""
-		Liste des filtres pour l'history.
+		Liste des filtres pour l'history. 
 		"""
 
 		self.__filters.append({ 'name': 'sendClientSize', 'match' : r"""this.scene.sendClientSize""",
@@ -128,6 +128,7 @@ class Filter(object):
 		"""
 		Efface tous l'historique jusqu'a la derniere occurence de match
 		"""
+		
 		index = None
 		toDelete = []
 		for h in history:
