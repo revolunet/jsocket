@@ -1958,7 +1958,8 @@ jsocket.api.register('myApplicationName', myApplication);
 		if (!(typeof values == 'object' && values.length > 1)) {
 			return (false);
 		}
-		for (i in values) {
+		var length = values.length;
+		for (var i = 0; i < length; ++i) {
 			if (typeof values[i]['json'] != 'undefined') {
 				var cmd = values[i]['json'].replace(/\%27/g, "'");
 				cmd = decodeURIComponent(cmd);
