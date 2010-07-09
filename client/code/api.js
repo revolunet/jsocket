@@ -644,12 +644,12 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Le retour de la commande {@link #history history}
 	 */
 	onHistory: function(args) {
-		values = args.value;
-		if (!(typeof values == 'object' && values.length > 1)) {
+		var values = args.value;
+		var length = values.length;
+		if (!(typeof values == 'object' && length > 0)) {
 			return (false);
 		}
-		var length = values.length;
-		for (var i = 0; i < length; ++i) {
+		for (var i in values) {
 			if (typeof values[i]['json'] != 'undefined') {
 				var cmd = values[i]['json'].replace(/\%27/g, "'");
 				cmd = decodeURIComponent(cmd);

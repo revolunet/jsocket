@@ -60,8 +60,7 @@ jsocket.core.tcp = {
 	connect: function() {
 		if (jsocket.core.tcp.initialized == true && jsocket.core.tcp.connectedToServer == false) {
 			jsocket.core.tcp.socket.connect(jsocket.api.settings.tcp.host, jsocket.api.settings.tcp.port);
-		}
-		else if (jsocket.core.tcp.connectedToServer == false) {
+		} else if (jsocket.core.tcp.connectedToServer == false) {
 			jsocket.core.tcp.setTimeout("jsocket.core.tcp.connect();", 500);
 		}
 	},
