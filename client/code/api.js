@@ -193,6 +193,7 @@ jsocket.api.settings = {
 	method: function(newCore) {
 		if (jsocket.api.core != null) {
 			jsocket.api.disconnect();
+			jsocket.api.uid = '';
 			jsocket.api.core.isWorking = false;
 			jsocket.api.core = newCore;
 			jsocket.api.core.isWorking = true;

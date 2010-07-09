@@ -149,7 +149,7 @@ jsocket.core.http = {
 	 * @return {Boolean} False si l'API n'est pas definie
 	 */
 	pool: function() {
-		if (typeof jsocket.core.http.api != 'object') {
+		if (typeof jsocket.core.http.api != 'object' || jsocket.core.http.isWorking == false) {
 			return (false);
 		}
 		jsocket.core.http.write();

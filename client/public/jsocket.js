@@ -590,13 +590,6 @@ jsocket.core.tcp = {
 	isWorking: false,
 
 	/**
-	 * Determine si la deconnection a ete forcer ou non
-	 * @private
-	 * @type Boolean
-	 */
-	manuallyDisconnected: false,
-
-	/**
 	 * @event loaded
 	 * Callback appele par flash lorsque le swf est charge
 	 * @return {Boolean} True si l'application a ete chargee
@@ -720,7 +713,7 @@ jsocket.core.tcp = {
 	 */
 	close: function() {
 		jsocket.core.tcp.socket.close();
-		jsocket.core.tcp.manuallyDisconnected = true;
+		jsocket.core.tcp.connectedToServer = false;
 		return (true);
 	},
 
@@ -736,11 +729,7 @@ jsocket.core.tcp = {
 		jsocket.core.tcp.api.uid = '';
 		jsocket.core.tcp.api.parser('{"from": "disconnect", "value": true}');
 		jsocket.core.tcp.connectedToServer = false;
-		if (jsocket.core.tcp.manuallyDisconnected == true) {
-			jsocket.core.tcp.manuallyDisconnected = false;
-		} else {
-			jsocket.core.tcp.connect();
-		}
+		jsocket.core.tcp.connect();
 		return (true);
 	},
 
@@ -947,7 +936,7 @@ jsocket.core.http = {
 	 * @return {Boolean} False si l'API n'est pas definie
 	 */
 	pool: function() {
-		if (typeof jsocket.core.http.api != 'object') {
+		if (typeof jsocket.core.http.api != 'object' || jsocket.core.http.isWorking == false) {
 			return (false);
 		}
 		jsocket.core.http.write();
@@ -1502,6 +1491,7 @@ jsocket.api.settings = {
 	method: function(newCore) {
 		if (jsocket.api.core != null) {
 			jsocket.api.disconnect();
+			jsocket.api.uid = '';
 			jsocket.api.core.isWorking = false;
 			jsocket.api.core = newCore;
 			jsocket.api.core.isWorking = true;
