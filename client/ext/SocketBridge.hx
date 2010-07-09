@@ -2,8 +2,20 @@
  * @class SocketBridge
  */
 class SocketBridge {
-  static var socket = new flash.net.Socket();
-  static var jsScope;
+  /**
+   * @var {flash.net.Socket} socket
+   */
+  static var socket : flash.net.Socket = new flash.net.Socket();
+
+  /**
+   * @var {Object} jsScope
+   */
+  static var jsScope : String = "";
+
+  /**
+   * @var {flash.utils.ByteArray} buffer
+   */
+  static var buffer : flash.utils.ByteArray = new flash.utils.ByteArray();
 
   /**
    * @method main
@@ -69,21 +81,23 @@ class SocketBridge {
 	   * Socket Data
 	   */
 	  socket.addEventListener(flash.events.ProgressEvent.SOCKET_DATA, function(e) : Void {
-		  var i = 0;
-		  var buffer = new flash.utils.ByteArray();
-		  socket.readBytes(buffer, 0);
-		  while (i < buffer.length) {
-			if (buffer[i] == 0x00) {
-			  var msg = buffer.readUTFBytes(i);
-			  trace("Received: " + msg);
-			  flash.external.ExternalInterface.call("setTimeout", jsScope + "receive('" + msg + "')", 0);
-			  buffer.readByte();
-			  var nextBuffer = new flash.utils.ByteArray();
-			  buffer.readBytes(nextBuffer);
-			  buffer = nextBuffer;
-			  i = -1;
+		  var pos : Int = buffer.length;
+
+		  socket.readBytes(buffer, pos);
+		  while (pos < buffer.length) {
+			if (buffer[pos] == 0xff && pos > 0) {
+			  if (buffer[0] != 0x00) {
+				trace("[!] Receive error: data must start with \\x00");
+				return;
+			  }
+			  buffer.position = 1;
+			  var data : String = buffer.readUTFBytes(pos - 1);
+			  trace("[+] Received: " + data);
+			  flash.external.ExternalInterface.call("setTimeout", jsScope + "receive('" + StringTools.urlEncode(data) + "')", 0);
+			  removeBufferBefore(pos + 1);
+			  pos = -1;
 			}
-			++i;
+			++pos;
 		  }
 	  });
 
@@ -135,5 +149,19 @@ class SocketBridge {
 	} else {
 	  trace("[!] Cannot write to server because there is no connection.");
 	}
+  }
+
+  /**
+   * @method removeBufferBefore
+   * @param {int} pos Current buffer position
+   */
+  static function removeBufferBefore(pos : Int) : Void {
+	if (pos == 0) {
+	  return;
+	}
+	var nextBuffer : flash.utils.ByteArray = new flash.utils.ByteArray();
+	buffer.position = pos;
+	buffer.readBytes(nextBuffer);
+	buffer = nextBuffer;
   }
 }

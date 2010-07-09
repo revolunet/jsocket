@@ -298,7 +298,12 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} text Le texte a transformer
 	 */
 	parser: function(text) {
-		var j = JSON.parse(text);
+		var j = { };
+		try {
+			j = JSON.parse(text);
+		} catch(e) {
+			return (false);
+		}
 		if (j.from != null && j.value != null) {
 			func_name = j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
 			var args = { };
@@ -315,14 +320,16 @@ jsocket.api.register('myApplicationName', myApplication);
 				jsocket.api.appExists(j.app) == true) {
 				try {
 					jsocket.api.appCallback(args['app'], 'on' + func_name, args);
-				} catch(e) { }
+				} catch(e) {
+					return (false);
+				}
 			}
 			else {
 				try {
 					jsocket.api.appCallbacks('on' + func_name, args);
 					eval('jsocket.api.on' + func_name + "(args)");
 				} catch(e) {
-					jsocket.api.onError(e);
+					return (jsocket.api.onError(e));
 				}
 			}
 		}
