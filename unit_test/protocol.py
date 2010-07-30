@@ -15,13 +15,13 @@ class CONFIG(object):
 	IS_DEBUG = False
 	SERVER_PORT = 8082
 	#SERVER_PORT = 81
-	CLIENT_NUMBER = 1
+	CLIENT_NUMBER = 1000
 	CLIENT_THREAD = False
 	#CLIENT_TYPE = 'HTTP'
 	CLIENT_TYPE = 'TCP'
 	#SERVER_HOST = socket.gethostbyname(socket.gethostname())
-	#SERVER_HOST = '172.16.174.128'
-	SERVER_HOST = '192.168.1.74'
+	SERVER_HOST = '172.16.174.128'
+	#SERVER_HOST = '192.168.1.74'
 	HTTP_SERVER_PORT = 81
 	SERVER_SELECT_TIMEOUT = 5
 	SERVER_MAX_READ = 1024
@@ -138,10 +138,10 @@ class TCPClient(object):
 
 	def handle(self):
 		self.buffer = self.sock.recv(8096)
-		return self.buffer
+		return self.buffer[1:-1]
 
 	def write(self, json):
-		self.sock.send(json + "\n")
+		self.sock.send("\x00" + json + "\n\xff")
 
 	def disconnect(self):
 		self.sock.close()
