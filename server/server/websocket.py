@@ -1,4 +1,3 @@
-# -*- test-case-name: twisted.web.test.test_websocket -*-
 # Copyright (c) 2009 Twisted Matrix Laboratories.
 # See LICENSE for details.
 
@@ -62,11 +61,11 @@ class WebSocketRequest(Request):
         host    = self.requestHeaders.getRawHeaders("Host",     [None])[0]
         if not origin or not host:
             return
-        
+
         protocol = self.requestHeaders.getRawHeaders("WebSocket-Protocol", [None])[0]
         if protocol and protocol not in self.site.supportedProtocols:
             return
-            
+
         if self.isSecure():
             scheme = "wss"
         else:
@@ -81,15 +80,15 @@ class WebSocketRequest(Request):
             ]
         if protocol is not None:
             handshake.append("WebSocket-Protocol: %s" % protocol)
-                
+
         return handshake
-    
+
     def _handshake76(self):
         origin  = self.requestHeaders.getRawHeaders("Origin",   [None])[0]
         host    = self.requestHeaders.getRawHeaders("Host",     [None])[0]
         if not origin or not host:
             return None, None
-        
+
         protocol = self.requestHeaders.getRawHeaders("Sec-WebSocket-Protocol", [None])[0]
         if protocol and protocol not in self.site.supportedProtocols:
             return None, None
@@ -108,20 +107,20 @@ class WebSocketRequest(Request):
             ]
         if protocol is not None:
             handshake.append("Sec-WebSocket-Protocol: %s" % protocol)
-        
-        self.channel.setRawMode() 
-        
+
+        self.channel.setRawMode()
+
         # Refer to 5.2 4-9 of the draft 76
         key1 = self.requestHeaders.getRawHeaders('Sec-WebSocket-Key1', [None])[0]
         key2 = self.requestHeaders.getRawHeaders('Sec-WebSocket-Key2', [None])[0]
         key3 = self.content.getvalue()
-        
+
         def extract_nums(s): return int(''.join(re.findall(r'[0-9]', s)))
         def count_spaces(s): return len(re.findall(r' ', s))
         part1 = extract_nums(key1) / count_spaces(key1)
         part2 = extract_nums(key2) / count_spaces(key2)
         challenge = hashlib.md5(struct.pack('>ii8s', part1, part2, key3)).digest()
-        
+
         return handshake, challenge
 
     def gotLength(self, length):
@@ -141,13 +140,13 @@ class WebSocketRequest(Request):
         if self.queued:
             self.channel.transport.loseConnection()
             return
-        
+
         if self.requestHeaders.getRawHeaders("Sec-WebSocket-Key1", [None])[0]:
             handshake, challenge_response = self._handshake76()
         else:
             handshake = self._handshake75()
             challenge_response = None
-        
+
         if not handshake:
             self.channel.transport.loseConnection()
             return
@@ -161,14 +160,14 @@ class WebSocketRequest(Request):
         self.handler = handler
 
         self.startedWriting = True
-        
+
         for header in handshake:
             self.write("%s\r\n" % header)
 
         self.write("\r\n")
         if challenge_response:
             self.write(challenge_response)
-        
+
         self.channel.setRawMode()
         # XXX we probably don't want to set _transferDecoder
         self.channel._transferDecoder = WebSocketFrameDecoder(
