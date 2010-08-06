@@ -1124,7 +1124,10 @@ jsocket.core.websocket = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		jsocket.core.websocket.loaded();
+		if (jsocket.core.websocket.loaded() == false) {
+			jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
+			return (false);
+		}
 		if (jsocket.core.websocket.initialized == true && jsocket.core.websocket.connectedToServer == false) {
 			jsocket.core.websocket.socket = new WebSocket('ws://' + jsocket.api.settings.websocket.host + ':' + jsocket.api.settings.websocket.port + '/jsocket');
 			jsocket.core.websocket.socket.onmessage = jsocket.core.websocket.receive;
@@ -1182,7 +1185,7 @@ jsocket.core.websocket = {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
-		jsocket.core.websocket.api.parser('{"from": "error", "value": "' + msg + '"}');
+		jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
 		return (true);
 	},
 
@@ -1463,7 +1466,7 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-		jsocket.api.method(jsocket.core.tcp);
+		jsocket.api.method(jsocket.core.websocket);
 	},
 
 	/**
@@ -2091,6 +2094,19 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	onError: function(error) {
 		console.log('jsocket.api.onError: ', error);
+	},
+
+	/**
+	 * @private
+	 * @event onWebSocketError
+	 * Callback sur l'erreur venant du core WebSocket. On change
+	 * alors la methode de dialogue avec le serveur par TCP.
+	 */
+	onWebSocketError: function() {
+		if (jsocket.core.tcp.isWorking == false) {
+			jsocket.api.method(jsocket.core.tcp);
+			jsocket.api.connect();
+		}
 	},
 
 	/**

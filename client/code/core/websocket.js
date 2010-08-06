@@ -61,7 +61,10 @@ jsocket.core.websocket = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		jsocket.core.websocket.loaded();
+		if (jsocket.core.websocket.loaded() == false) {
+			jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
+			return (false);
+		}
 		if (jsocket.core.websocket.initialized == true && jsocket.core.websocket.connectedToServer == false) {
 			jsocket.core.websocket.socket = new WebSocket('ws://' + jsocket.api.settings.websocket.host + ':' + jsocket.api.settings.websocket.port + '/jsocket');
 			jsocket.core.websocket.socket.onmessage = jsocket.core.websocket.receive;
@@ -119,7 +122,7 @@ jsocket.core.websocket = {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
-		jsocket.core.websocket.api.parser('{"from": "error", "value": "' + msg + '"}');
+		jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
 		return (true);
 	},
 

@@ -165,7 +165,7 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-		jsocket.api.method(jsocket.core.tcp);
+		jsocket.api.method(jsocket.core.websocket);
 	},
 
 	/**
@@ -793,6 +793,19 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	onError: function(error) {
 		console.log('jsocket.api.onError: ', error);
+	},
+
+	/**
+	 * @private
+	 * @event onWebSocketError
+	 * Callback sur l'erreur venant du core WebSocket. On change
+	 * alors la methode de dialogue avec le serveur par TCP.
+	 */
+	onWebSocketError: function() {
+		if (jsocket.core.tcp.isWorking == false) {
+			jsocket.api.method(jsocket.core.tcp);
+			jsocket.api.connect();
+		}
 	},
 
 	/**
