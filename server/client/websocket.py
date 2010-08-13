@@ -28,18 +28,20 @@ class ClientWebSocket(WebSocketHandler):
 		Log().add('[WebSocket] Received: %s' % frame)
 		self.connected = True
 		commands = frame.split("\n")
+		uid = None
 		for cmd in commands:
 			if '{"cmd": "connected", "args": "null"' in cmd:
-				uid = Approval().validate(cmd, None, 'websocket')
-				if uid is not None:
-					self.uid = uid
+				uid = Approval().validate(cmd, self.callbackSend, 'websocket')
 				self.send('{"from": "connected", "value": "%s"}' % uid)
-			else:
-				Approval().validate(cmd, self.callbackSend)
+			elif len(cmd) > 0:
+				uid = Approval().validate(cmd, self.callbackSend, 'websocket')
+			if uid is not None:
+				self.uid = uid
 
 	def connectionLost(self, reason):
 		""" Methode appelee lorsqu'un utilisateur se deconnecte """
 
+		Log().add('[WEBSOCKET] LOST CONNECTION %s // %s // %s' % (str(self.uid), str(self), str(self.connected)))
 		self.connected = False
 		if self.uid is not None:
 			Log().add('[WebSocket] Logout %s' % str(self.uid))
@@ -51,3 +53,7 @@ class ClientWebSocket(WebSocketHandler):
 
 		if self.connected is True:
 			self.transport.write(msg)
+
+	@property
+	def socket(self):
+		return self.transport.getHandle()
