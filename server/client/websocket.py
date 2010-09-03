@@ -11,7 +11,6 @@ class ClientWebSocket(WebSocketHandler):
 	"""
 
 	def __init__(self, transport):
-		Log().add('[WEBSOCKET] __init__ // instance, transport %s, %s' % (str(self), str(transport)), 'ired')
 		WebSocketHandler.__init__(self, transport)
 		self.transport.uid = None
 		self.transport.connected = False
@@ -42,7 +41,6 @@ class ClientWebSocket(WebSocketHandler):
 	def connectionLost(self, reason):
 		""" Methode appelee lorsqu'un utilisateur se deconnecte """
 
-		Log().add('[WEBSOCKET] LOST CONNECTION %s // %s // %s' % (str(self.transport.uid), str(self), str(self.transport.connected)))
 		self.transport.connected = False
 		if self.transport.uid is not None:
 			Log().add('[WebSocket] Logout %s' % str(self.transport.uid))
