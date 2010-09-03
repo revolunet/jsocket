@@ -23,7 +23,7 @@ class ServerTwisted(threading.Thread):
 	def run(self):
 		# TCP Server
 		Log().add("[+] TwistedTCP Server launched on %s:%d" % (SETTINGS.SERVER_HOST, SETTINGS.SERVER_PORT), "green")
-		reactor.listenTCP(SETTINGS.SERVER_PORT, TwistedTCPFactory(), interface=SETTINGS.SERVER_HOST)
+		#reactor.listenTCP(SETTINGS.SERVER_PORT, TwistedTCPFactory(), interface=SETTINGS.SERVER_HOST)
 
 		# WebSocket HTML5 Server
 		Log().add("[+] WebSocket HTML5 Server launched on %s:%s" % (SETTINGS.SERVER_HOST, SETTINGS.SERVER_WEBSOCKET_PORT), "green")
@@ -34,8 +34,8 @@ class ServerTwisted(threading.Thread):
 
 		# HTTP Server
 		Log().add("[+] HTTP Server launched on %s:%d" % (SETTINGS.SERVER_HOST, SETTINGS.SERVER_HTTP_PORT), "green")
-		client = server.Site(ClientHTTP())
-		reactor.listenTCP(SETTINGS.SERVER_HTTP_PORT, client, interface=SETTINGS.SERVER_HOST)
+		#client = server.Site(ClientHTTP())
+		#reactor.listenTCP(SETTINGS.SERVER_HTTP_PORT, client, interface=SETTINGS.SERVER_HOST)
 
 		# Running servers
 		reactor.run(installSignalHandlers=0)

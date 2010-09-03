@@ -11,10 +11,10 @@ class ClientWebSocket(WebSocketHandler):
 	"""
 
 	def __init__(self, transport):
-		Log().add('[WEBSOCKET] __init__', 'ired')
-		self.uid = None
-		self.connected = False
+		Log().add('[WEBSOCKET] __init__ // instance, transport %s, %s' % (str(self), str(transport)), 'ired')
 		WebSocketHandler.__init__(self, transport)
+		self.transport.uid = None
+		self.transport.connected = False
 
 	def callbackSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
@@ -27,7 +27,7 @@ class ClientWebSocket(WebSocketHandler):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
 
 		Log().add('[WebSocket] Received: %s' % frame)
-		self.connected = True
+		self.transport.connected = True
 		commands = frame.split("\n")
 		uid = None
 		for cmd in commands:
@@ -37,22 +37,22 @@ class ClientWebSocket(WebSocketHandler):
 			elif len(cmd) > 0:
 				uid = Approval().validate(cmd, self.callbackSend, 'websocket')
 			if uid is not None:
-				self.uid = uid
+				self.transport.uid = uid
 
 	def connectionLost(self, reason):
 		""" Methode appelee lorsqu'un utilisateur se deconnecte """
 
-		Log().add('[WEBSOCKET] LOST CONNECTION %s // %s // %s' % (str(self.uid), str(self), str(self.connected)))
-		self.connected = False
-		if self.uid is not None:
-			Log().add('[WebSocket] Logout %s' % str(self.uid))
-			Session().delete(self.uid)
+		Log().add('[WEBSOCKET] LOST CONNECTION %s // %s // %s' % (str(self.transport.uid), str(self), str(self.transport.connected)))
+		self.transport.connected = False
+		if self.transport.uid is not None:
+			Log().add('[WebSocket] Logout %s' % str(self.transport.uid))
+			Session().delete(self.transport.uid)
 		self.transport.loseConnection()
 
 	def send(self, msg):
 		""" Methode permettant d'ecrire le message sur la socket si l'utilisateur est connecte """
 
-		if self.connected is True:
+		if self.transport.connected is True:
 			self.transport.write(msg)
 
 	@property
