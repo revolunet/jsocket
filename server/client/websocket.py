@@ -11,6 +11,7 @@ class ClientWebSocket(WebSocketHandler):
 	"""
 
 	def __init__(self, transport):
+		Log().add('[WEBSOCKET] __init__', 'ired')
 		self.uid = None
 		self.connected = False
 		WebSocketHandler.__init__(self, transport)
