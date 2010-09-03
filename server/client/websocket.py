@@ -18,9 +18,12 @@ class ClientWebSocket(WebSocketHandler):
 	def callbackSend(self, responses):
 		""" Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes """
 
+		if responses is None:
+			return False
 		for json in responses:
-			if '{"from": "connected",' not in json:
+			if json is not None and len(json) and '{"from": "connected",' not in json:
 				self.send(json)
+		return True
 
 	def frameReceived(self, frame):
 		""" Methode appelee lorsque l'utilisateur recoit des donnees """
