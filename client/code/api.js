@@ -793,6 +793,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	onError: function(error) {
 		console.log('jsocket.api.onError: ', error);
+		jsocket.api.method(jsocket.core.websocket);
+		jsocket.api.connect();
 	},
 
 	/**
