@@ -111,7 +111,9 @@ class TwistedTCPClient(Protocol):
 		if self.connected is True:
 			if setDelimiters is True:
 				msg = TwistedTCPClient.DELIMITER_FROM + msg + TwistedTCPClient.DELIMITER_TO
-			self.transport.getHandle().send(msg)
+			handle = self.transport.getHandle()
+			if handle:
+				handle.send(msg)
 
 	@property
 	def socket(self):
