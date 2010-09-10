@@ -55,17 +55,34 @@ class Protocol(object):
 			'setStatus' : self.__cmd_setStatus,
 			'timeConnect' : self.__cmd_timeConnect,
 			'chanMasterPwd' : self.__cmd_chanMasterPwd,
-			'history' : self.__cmd_history
+			'history' : self.__cmd_history,
+			'httpCreateChannel' : self.__cmd_httpCreateChannel
 		}
 
 	def parse(self, client, json):
 		"""Parsing de l'entre json sur le serveur"""
+
+		if json['cmd'] == 'httpCreateChannel':
+			self.client = client
+			return self.__cmd_httpCreateChannel(json)
+
 		self.uid = client.unique_key
 
 		if self.__cmd_list.get(json['cmd'], None) is not None:
 			self.client = client
 			return self.__cmd_list[json['cmd']](json)
 		return None
+
+	@jsonPrototype('httpCreateChannel')
+	def __cmd_httpCreateChannel(self, args):
+		params = args.get('args', None)
+		if params is not None:
+			channelName = params.get('chan', None)
+			password = params.get('pwd', None)
+			appName = args.get('app', None)
+			if channelName is not None and appName is not None:
+				self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.client.unique_key)
+		return ('true')
 
 	# {"cmd" : "connected", "args": "null"}
 	@jsonPrototype('connected')

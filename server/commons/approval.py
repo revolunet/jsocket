@@ -29,7 +29,8 @@ class ApprovalProtocol(object):
 			'getStatus':  self.default,
 			'timeConnect':  self.default,
 			'part':  self.default,
-			'remove':  self.default
+			'remove':  self.default,
+			'httpCreateChannel': lambda l:True
 		}
 
 	def default(self, json):
@@ -56,6 +57,15 @@ class Approval(object):
 				WorkerParser(this.queue, this.session, this.jsonProtocol).start()
 			this.protocol = ApprovalProtocol()
 		return this.instance
+
+	def httpCreateChannel(self, cmd):
+		try:
+			uid = Session().create(None, 'http')
+			decoded = simplejson.loads(cmd)
+			if decoded.get('cmd', None) is not None:
+				return self.jsonProtocol.parse(Session().get(uid), decoded)
+		except ValueError:
+			print 'Error'
 
 	def validate(self, datas, callback = None, type = None):
 		""" Valide la/les commande(s) json envoyees """

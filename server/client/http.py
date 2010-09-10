@@ -37,13 +37,18 @@ class ClientHTTP(resource.Resource):
 
 		cuid = None
 		if request.args.get('json', None) is not None:
+			
 			#if '{"cmd": "refresh", "args": "null",' not in request.args['json'][0]:
 			Log().add('[HTTP] Receive: %s' % request.args['json'][0])
 			commands = request.args['json'][0].split("\n")
 			for cmd in commands:
+				if 'httpCreateChannel' in request.args['json'][0]:
+					response = Approval().httpCreateChannel(cmd)
+					return response
 				uid = Approval().validate(cmd, None, 'http')
 				if uid is not None and cuid is None:
 					cuid = uid
+				
 				if '{"cmd": "connected", "args": "null"' in request.args['json'][0]:
 					return '{"from": "connected", "value": "%s"}' % cuid
 			return self.getData(cuid)
