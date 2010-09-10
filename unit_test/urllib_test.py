@@ -5,7 +5,7 @@ host = '192.168.104.179'
 port = 8081
 
 def main():
-	raw_create = urllib.urlencode({ 'json': { "cmd": "httpCreateChannel", "args": { "chan": "monchandeouf", "pwd": "testpwd", "adminPwd": "pouetpouet" }, "app": "whiteboard"} }).replace('%27', '%22')
+	raw_create = urllib.urlencode({ 'json': { "cmd": "httpCreateChannel", "args": { "chan": "monchandeouf", "pwd": "testpwd", "adminPwd": "pouetpouet", "masterPwd": "testMasterPwd" }, "app": "whiteboard"} }).replace('%27', '%22')
 	ressource = urllib.urlopen("http://%s:%d" % (host, port), raw_create)
 	raw_response = ressource.read()
 	print raw_response
