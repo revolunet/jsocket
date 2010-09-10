@@ -50,7 +50,7 @@ class Room(object):
 				self.merge(users, c.get('channel').users())
 		return users
 
-	def create(self, channelName, uid, appName, password = None):
+	def create(self, channelName, uid, appName, password = None, masterPwd = None):
 		"""Return: Ajoute un channel a la liste des rooms  -> bool"""
 
 		import random
@@ -63,7 +63,10 @@ class Room(object):
 			client = Session().get(uid)
 			client.room_name = channelName
 			channel = Channel(channelName)
-			channel.master_password = random.getrandbits(16)
+			if masterPwd is None:
+				channel.master_password = random.getrandbits(16)
+			else:
+				channel.master_password = masterPwd
 			channel.add(uid, channel.master_password)
 			if password is not None:
 				channel.password = password

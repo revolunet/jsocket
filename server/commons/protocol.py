@@ -1,3 +1,4 @@
+from config.settings import SETTINGS
 import simplejson
 
 def isMaster(attrs):
@@ -9,6 +10,19 @@ def isMaster(attrs):
 		return decorated
 	return _isMaster
 
+def isChanMaster(attrs):
+	def _isChanMaster(f):
+		def decorated(self, *args, **kwargs):
+			channelName = args[1]['args']
+			appName = args[1]['app']
+			if self.client.room.chanExists(channelName=channelName, appName=appName):
+				channel = self.client.room.Channel(channelName=channelName, appName=appName)
+				if channel.isMaster(self.client.unique_key):
+					return f(self, *args, **kwargs)
+			return ('{"from": "'+attrs+'", "value": false, "message": "Vous n%22etes pas administrateur du channel."}')
+		return decorated
+	return _isChanMaster
+	
 def jsonPrototype(attrs):
 	def _jsonPrototype(f):
 		def decorated(self, *args, **kwargs):
@@ -55,17 +69,38 @@ class Protocol(object):
 			'setStatus' : self.__cmd_setStatus,
 			'timeConnect' : self.__cmd_timeConnect,
 			'chanMasterPwd' : self.__cmd_chanMasterPwd,
-			'history' : self.__cmd_history
+			'history' : self.__cmd_history,
+			'httpCreateChannel' : self.__cmd_httpCreateChannel
 		}
 
 	def parse(self, client, json):
 		"""Parsing de l'entre json sur le serveur"""
+
+		if json['cmd'] == 'httpCreateChannel':
+			self.client = client
+			return self.__cmd_httpCreateChannel(json)
+
 		self.uid = client.unique_key
 
 		if self.__cmd_list.get(json['cmd'], None) is not None:
 			self.client = client
 			return self.__cmd_list[json['cmd']](json)
 		return None
+
+	# {"cmd" : "httpCreateChannel", "args": {"chan": "", "pwd": "", adminPwd:"" }"
+	@jsonPrototype('httpCreateChannel')
+	def __cmd_httpCreateChannel(self, args):
+		params = args.get('args', None)
+		if params is not None:
+			channelName = params.get('chan', None)
+			password = params.get('pwd', None)
+			appName = args.get('app', None)
+			adminPwd = params.get('adminPwd', None)
+			masterPwd = params.get('masterPwd', None)
+			if channelName is not None and appName is not None and adminPwd == SETTINGS.MASTER_PASSWORD:
+				self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.client.unique_key, masterPwd=masterPwd)
+				return ('true')
+		return ('false')
 
 	# {"cmd" : "connected", "args": "null"}
 	@jsonPrototype('connected')
