@@ -10,6 +10,19 @@ def isMaster(attrs):
 		return decorated
 	return _isMaster
 
+def isChanMaster(attrs):
+	def _isChanMaster(f):
+		def decorated(self, *args, **kwargs):
+			channelName = args[1]['args']
+			appName = args[1]['app']
+			if self.client.room.chanExists(channelName=channelName, appName=appName):
+				channel = self.client.room.Channel(channelName=channelName, appName=appName)
+				if channel.isMaster(self.client.unique_key):
+					return f(self, *args, **kwargs)
+			return ('{"from": "'+attrs+'", "value": false, "message": "Vous n%22etes pas administrateur du channel."}')
+		return decorated
+	return _isChanMaster
+	
 def jsonPrototype(attrs):
 	def _jsonPrototype(f):
 		def decorated(self, *args, **kwargs):
