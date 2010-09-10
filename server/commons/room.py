@@ -8,6 +8,8 @@ from config.settings import SETTINGS
 from commons.channel import Channel
 from commons.filter import Filter
 
+from log.logger import Log
+
 class Room(object):
 	"""
 	Liste des channels disponnible sur le server.
@@ -96,7 +98,8 @@ class Room(object):
 			return False
 		channel = self.Channel(channelName=channelName, appName=appName)
 		if password is not None:
-			if channel.password != password:
+			if str(channel.password) != str(password):
+				Log().add("[!] Client (room.py) : Mauvais mot de passe pour le channel %s " % channelName)
 				return False
 		channel.add(uid)
 		return True
@@ -215,7 +218,6 @@ class Room(object):
 		return appName in self.applications
 
 	def chanExists(self, channelName, appName):
-
 		if appName in self.applications:
 			for c in self.applications[appName]:
 				if c.get('name') == channelName:

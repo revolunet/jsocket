@@ -13,11 +13,15 @@ def isMaster(attrs):
 def isChanMaster(attrs):
 	def _isChanMaster(f):
 		def decorated(self, *args, **kwargs):
-			channelName = args[1]['args']
-			appName = args[1]['app']
+			#print args, '---'
+			channelName = args[0]['channel']
+			appName = args[0]['app']
+			
 			if self.client.room.chanExists(channelName=channelName, appName=appName):
+				#print 'channel exists %s %s ' % (channelName, appName)
 				channel = self.client.room.Channel(channelName=channelName, appName=appName)
 				if channel.isMaster(self.client.unique_key):
+					#print 'channel ISMASTER'
 					return f(self, *args, **kwargs)
 			return ('{"from": "'+attrs+'", "value": false, "message": "Vous n%22etes pas administrateur du channel."}')
 		return decorated
@@ -270,7 +274,7 @@ class Protocol(object):
 			return ('false')
 
 	# {"cmd": "forward", "args": "message", "channel": "channelName", "app" : ""}
-	@isMaster('forward')
+	@isChanMaster('forward')
 	@jsonPrototype('forward')
 	def __cmd_forward(self, args):
 		"""Envoie une commande a tous les clients presents dans le channel"""

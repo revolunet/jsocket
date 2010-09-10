@@ -56,7 +56,7 @@ class Channel(object):
 			Log().add("[+] Channel : client " + str(uid) + " joined " + self.name)
 			return True
 		elif pwd is not None and\
-			pwd == self.master_password and\
+			str(pwd) == str(self.master_password) and\
 			uid not in self.__masters:
 			self.__masters.append(uid)
 			Log().add("[+] Channel : master " + str(uid) + " joined " + self.name)
