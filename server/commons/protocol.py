@@ -1,3 +1,4 @@
+from config.settings import SETTINGS
 import simplejson
 
 def isMaster(attrs):
@@ -73,6 +74,7 @@ class Protocol(object):
 			return self.__cmd_list[json['cmd']](json)
 		return None
 
+	# {"cmd" : "httpCreateChannel", "args": {"chan": "", "pwd": "", adminPwd:"" }"
 	@jsonPrototype('httpCreateChannel')
 	def __cmd_httpCreateChannel(self, args):
 		params = args.get('args', None)
@@ -80,9 +82,11 @@ class Protocol(object):
 			channelName = params.get('chan', None)
 			password = params.get('pwd', None)
 			appName = args.get('app', None)
-			if channelName is not None and appName is not None:
+			adminPwd = params.get('adminPwd', None)
+			if channelName is not None and appName is not None and adminPwd == SETTINGS.MASTER_PASSWORD:
 				self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.client.unique_key)
-		return ('true')
+				return ('true')
+		return ('false')
 
 	# {"cmd" : "connected", "args": "null"}
 	@jsonPrototype('connected')
