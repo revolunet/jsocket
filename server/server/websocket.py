@@ -1,4 +1,3 @@
-# -*- test-case-name: twisted.web.test.test_websocket -*-
 # Copyright (c) 2009 Twisted Matrix Laboratories.
 # See LICENSE for details.
 
@@ -134,10 +133,9 @@ class WebSocketRequest(Request):
             else:
                 protocolHeader = None
 
-            handler = handlerFactory(transport)
-            check = originHeaders[0], hostHeaders[0], protocolHeader, handler
+            originHeader = originHeaders[0]
+            hostHeader = hostHeaders[0]
 
-            originHeader, hostHeader, protocolHeader, handler = check
             self.startedWriting = True
             handshake = [
                 "HTTP/1.1 101 Web Socket Protocol Handshake",
