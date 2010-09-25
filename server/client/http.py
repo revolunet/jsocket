@@ -42,6 +42,8 @@ class ClientHTTP(resource.Resource):
 			for cmd in commands:
 				if 'httpCreateChannel' in request.args['json'][0]:
 					return Approval().httpCreateChannel(cmd)
+				elif 'httpSendMessage' in request.args['json'][0]:
+					return Approval().httpSendMessage(cmd)
 				uid = Approval().validate(cmd, None, 'http')
 				if uid is not None and cuid is None:
 					cuid = uid

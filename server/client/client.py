@@ -40,7 +40,6 @@ class Client(object):
 		"""Ajoute une commande reponse a la Queue en cours"""
 
 		from log.logger import Log
-
 		self.last_action = time.time()
 		if self.callback is not None:
 			if callable(self.callback):

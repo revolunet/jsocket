@@ -37,403 +37,426 @@ def jsonPrototype(attrs):
 	return _jsonPrototype
 
 class Protocol(object):
-	"""docstring for Protocol"""
-	def __init__(self):
-		from log.logger import Log
-		self.client = None
-		self.__init_cmd()
+    """docstring for Protocol"""
+    def __init__(self):
+        from log.logger import Log
+        self.client = None
+        self.__init_cmd()
 
-	@staticmethod
-	def forgeJSON(methodName, value, param):
-		json = '{"from": "' + methodName + '"'
-		json += ', "value": ' + value
-		if param.get('channel', None) is not None:
-			json += ', "channel": "' + param['channel'] + '"'
-		if param.get('app', None) is not None:
-			json += ', "app": "' + param['app'] + '"'
-		json += '}'
-		return json
+    @staticmethod
+    def forgeJSON(methodName, value, param):
+        json = '{"from": "' + methodName + '"'
+        json += ', "value": ' + value
+        if param.get('channel', None) is not None:
+            json += ', "channel": "' + param['channel'] + '"'
+        if param.get('app', None) is not None:
+            json += ', "app": "' + param['app'] + '"'
+        json += '}'
+        return json
 
-	def __init_cmd(self):
-		"""On initialise la liste des commandes disponnible"""
+    def __init_cmd(self):
+        """On initialise la liste des commandes disponnible"""
 
-		self.__cmd_list = {
-			'auth' : self.__cmd_auth,
-			'create' : self.__cmd_create,
-			'join' : self.__cmd_join,
-			'part' : self.__cmd_part,
-			'chanAuth' : self.__cmd_chanAuth,
-			'connected' : self.__cmd_connected,
-			'forward' : self.__cmd_forward,
-			'remove' : self.__cmd_remove,
-			'message' : self.__cmd_message,
-			'list' : self.__cmd_list,
-			'nick' : self.__cmd_nick,
-			'getStatus' : self.__cmd_getStatus,
-			'setStatus' : self.__cmd_setStatus,
-			'timeConnect' : self.__cmd_timeConnect,
-			'chanMasterPwd' : self.__cmd_chanMasterPwd,
-			'history' : self.__cmd_history,
-			'httpCreateChannel' : self.__cmd_httpCreateChannel
-		}
+        self.__cmd_list = {
+            'auth' : self.__cmd_auth,
+            'create' : self.__cmd_create,
+            'join' : self.__cmd_join,
+            'part' : self.__cmd_part,
+            'chanAuth' : self.__cmd_chanAuth,
+            'connected' : self.__cmd_connected,
+            'forward' : self.__cmd_forward,
+            'remove' : self.__cmd_remove,
+            'message' : self.__cmd_message,
+            'list' : self.__cmd_list,
+            'nick' : self.__cmd_nick,
+            'getStatus' : self.__cmd_getStatus,
+            'setStatus' : self.__cmd_setStatus,
+            'timeConnect' : self.__cmd_timeConnect,
+            'chanMasterPwd' : self.__cmd_chanMasterPwd,
+            'history' : self.__cmd_history,
+            'httpCreateChannel' : self.__cmd_httpCreateChannel,
+            'httpSendMessage': self.__cmd_httpSendMessage
+            
+        }
 
-	def parse(self, client, json):
-		"""Parsing de l'entre json sur le serveur"""
+    def parse(self, client, json):
+        """Parsing de l'entre json sur le serveur"""
 
-		if json['cmd'] == 'httpCreateChannel':
-			self.client = client
-			return self.__cmd_httpCreateChannel(json)
+        if json['cmd'] == 'httpCreateChannel':
+            self.client = client
+            return self.__cmd_httpCreateChannel(json)
+        elif json['cmd'] == 'httpSendMessage':
+            self.client = client
+            return self.__cmd_httpSendMessage(json)
 
-		self.uid = client.unique_key
+        self.uid = client.unique_key
 
-		if self.__cmd_list.get(json['cmd'], None) is not None:
-			self.client = client
-			return self.__cmd_list[json['cmd']](json)
-		return None
+        if self.__cmd_list.get(json['cmd'], None) is not None:
+            self.client = client
+            return self.__cmd_list[json['cmd']](json)
+        return None
 
-	# {"cmd" : "httpCreateChannel", "args": {"chan": "", "pwd": "", adminPwd:"" }"
-	@jsonPrototype('httpCreateChannel')
-	def __cmd_httpCreateChannel(self, args):
-		params = args.get('args', None)
-		if params is not None:
-			channelName = params.get('chan', None)
-			password = params.get('pwd', None)
-			appName = args.get('app', None)
-			adminPwd = params.get('adminPwd', None)
-			masterPwd = params.get('masterPwd', None)
-			if channelName is not None and appName is not None and adminPwd == SETTINGS.MASTER_PASSWORD:
-				self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.client.unique_key, masterPwd=masterPwd)
-				return ('true')
-		return ('false')
+    # {"cmd" : "httpCreateChannel", "args": {"chan": "", "pwd": "", adminPwd:"" }"
+    @jsonPrototype('httpCreateChannel')
+    def __cmd_httpCreateChannel(self, args):
+        params = args.get('args', None)
+        if params is not None:
+            channelName = params.get('chan', None)
+            password = params.get('pwd', None)
+            appName = args.get('app', None)
+            adminPwd = params.get('adminPwd', None)
+            masterPwd = params.get('masterPwd', None)
+            if channelName is not None and appName is not None and adminPwd == SETTINGS.MASTER_PASSWORD:
+                self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.client.unique_key, masterPwd=masterPwd)
+                return ('true')
+        return ('false')
 
-	# {"cmd" : "connected", "args": "null"}
-	@jsonPrototype('connected')
-	def __cmd_connected(self, args = None):
-		"""Le client est connecte, sa cle unique lui est send"""
+    #  { "cmd": "httpSendMessage", "args": { "channel": "system", "adminPwd":"pouetpouet", "to":["0xc5a7ebfcca23b0fL","xxx"], "message":"alert(1111)" } , "app": "system" } 
+    @jsonPrototype('httpSendMessage')
+    def __cmd_httpSendMessage(self, args):
+            params = args.get('args', None)
+            if params is not None:
+                password = params.get('adminPwd', None)
+                if password == SETTINGS.MASTER_PASSWORD:
+                    from commons.session import Session
+                    for item in params.get('to'):
+                        sess = Session().get(str(item))
+                        if sess:
+                            json = Protocol.forgeJSON('message', '["system", "' + params.get('message', '')  + '"]', {'channel': 'system', 'app':'system'})
+                            sess.addResponse( json )
+                    return ('true')
+            return ('false')
 
-		return ('"' + str(self.client.unique_key) + '"')
 
-	# {"cmd" : "auth", "args": "masterpassword", "channel": "", "app" : ""}
-	@jsonPrototype('auth')
-	def __cmd_auth(self, args):
-		"""
-		Authentifie un client en tant que master du server.
-		"""
 
-		from log.logger import Log
+    # {"cmd" : "connected", "args": "null"}
+    @jsonPrototype('connected')
+    def __cmd_connected(self, args = None):
+        """Le client est connecte, sa cle unique lui est send"""
 
-		if args['args'] == self.client.master_password:
-			self.client.master = True
-			Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du serveur")
-			return ('true')
-		return ('false')
+        return ('"' + str(self.client.unique_key) + '"')
 
-	# {"cmd": "list", "args": "channelName", "channel": "", "app" : ""}
-	@jsonPrototype('list')
-	def __cmd_list(self, args):
-		""" Retourne la liste d'utilisateurs d'un channel """
+    # {"cmd" : "auth", "args": "masterpassword", "channel": "", "app" : ""}
+    @jsonPrototype('auth')
+    def __cmd_auth(self, args):
+        """
+        Authentifie un client en tant que master du server.
+        """
 
-		from commons.session import Session
+        from log.logger import Log
 
-		str = [ ]
-		channelName = args['channel']
-		appName = args['app']
-		if args['channel'] is None:
-			users = self.client.room.list_users(channelName=args, appName=appName)
-		else:
-			users = self.client.room.list_users(channelName=channelName, appName=appName)
-		for u in users:
-			user = Session().get(u)
-			if user is not None:
-				status = user.status
-				key = user.unique_key
-				name = user.getName()
-				to_send = {"name": name, "key": key, "status": status}
-				str.append(to_send)
-		return (simplejson.JSONEncoder().encode(str))
+        if args['args'] == self.client.master_password:
+            self.client.master = True
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du serveur")
+            return ('true')
+        return ('false')
 
-	# flash-player send <policy-file-request/>
-	def __cmd_policy(self):
-		"""
-		Retourne la policy pour un client flash.
-		"""
+    # {"cmd": "list", "args": "channelName", "channel": "", "app" : ""}
+    @jsonPrototype('list')
+    def __cmd_list(self, args):
+        """ Retourne la liste d'utilisateurs d'un channel """
 
-		from log.logger import Log
+        from commons.session import Session
 
-		Log().add("[+] Send policy file request to " + str(self.client.getName()))
-		return ("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
+        str = [ ]
+        channelName = args['channel']
+        appName = args['app']
+        if args['channel'] is None:
+            users = self.client.room.list_users(channelName=args, appName=appName)
+        else:
+            users = self.client.room.list_users(channelName=channelName, appName=appName)
+        for u in users:
+            user = Session().get(u)
+            if user is not None:
+                status = user.status
+                key = user.unique_key
+                name = user.getName()
+                to_send = {"name": name, "key": key, "status": status}
+                str.append(to_send)
+        return (simplejson.JSONEncoder().encode(str))
 
-	# {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
-	@isMaster('remove')
-	@jsonPrototype('remove')
-	def __cmd_remove(self, args):
-		"""On supprimet un channel, si celui si existe et que Client est Master"""
+    # flash-player send <policy-file-request/>
+    def __cmd_policy(self):
+        """
+        Retourne la policy pour un client flash.
+        """
 
-		from log.logger import Log
+        from log.logger import Log
 
-		channelName = args['args']
-		appName = args['app']
-		if self.client.room.remove(channelName=channelName, appName=appName):
-			Log().add("[+] Le channel " + channelName + " a ete supprime par : " + str(self.client.getName()))
-			return ('true')
-		else:
-			Log().add("[!] Command error : la commande delete a echoue ( le channel " + channelName + " n'existe pas )", 'yellow')
-			return ('false')
+        Log().add("[+] Send policy file request to " + str(self.client.getName()))
+        return ("<cross-domain-policy><allow-access-from domain='*' to-ports='*' secure='false' /></cross-domain-policy>")
 
-	# {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
-	@isMaster('create')
-	@jsonPrototype('create')
-	def __cmd_create(self, args):
-		"""Creation d'un nouveau channel si le Client est Master"""
+    # {"cmd": "delete", "args": "irc", "channel": "", "app" : ""}
+    @isMaster('remove')
+    @jsonPrototype('remove')
+    def __cmd_remove(self, args):
+        """On supprimet un channel, si celui si existe et que Client est Master"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		appName = args['app']
-		channelName = args['args'][0]
-		password = args['args'][1]
-		if self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.uid):
-			Log().add("[+] Le channel %s a ete ajoute par : %s"  % ( channelName,  str(self.client.getName())))
-			return ('"' + str(self.client.room.Channel(channelName=channelName, appName=appName).master_password) + '"')
-		else:
-			Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
-			return ('false')
+        channelName = args['args']
+        appName = args['app']
+        if self.client.room.remove(channelName=channelName, appName=appName):
+            Log().add("[+] Le channel " + channelName + " a ete supprime par : " + str(self.client.getName()))
+            return ('true')
+        else:
+            Log().add("[!] Command error : la commande delete a echoue ( le channel " + channelName + " n'existe pas )", 'yellow')
+            return ('false')
 
-	# {"cmd": "history", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
-	@jsonPrototype('history')
-	def __cmd_history(self, args):
+    # {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
+    @isMaster('create')
+    @jsonPrototype('create')
+    def __cmd_create(self, args):
+        """Creation d'un nouveau channel si le Client est Master"""
 
-		appName = args['app']
-		channelName = args['channel']
+        from log.logger import Log
 
-		history = self.client.room.history(appName=appName, channelName=channelName)
-		if len(history) > 0:
-			return (simplejson.JSONEncoder().encode(history))
-		return (simplejson.JSONEncoder().encode([]))
+        appName = args['app']
+        channelName = args['args'][0]
+        password = args['args'][1]
+        if self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.uid):
+            Log().add("[+] Le channel %s a ete ajoute par : %s"  % ( channelName,  str(self.client.getName())))
+            return ('"' + str(self.client.room.Channel(channelName=channelName, appName=appName).master_password) + '"')
+        else:
+            Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
+            return ('false')
 
-	# {"cmd": "join", "args": ["irc", ""]}
-	@jsonPrototype('join')
-	def __cmd_join(self, args):
-		"""Ajoute un client dans le salon specifie"""
+    # {"cmd": "history", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
+    @jsonPrototype('history')
+    def __cmd_history(self, args):
 
-		from log.logger import Log
+        appName = args['app']
+        channelName = args['channel']
 
-		appName = args['app']
-		channelName = args['args'][0]
-		password = args['args'][1]
-		if len(password) == 0:
-			password = None
-		if self.client.room.join(channelName=channelName, appName=appName, uid=self.uid, password=password):
-			self.client.room_name = channelName
-			Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + channelName, 'yellow')
-			if self.client.master == False:
-				self.status(client=self.client, appName=appName, master=False)
-			else:
-				self.status(client=self.client, appName=appName, master=True)
-			return ('true')
-		else:
-			Log().add("[!] Command error : le channel " + channelName + " n'existe pas ", 'yellow')
-			return ('false')
+        history = self.client.room.history(appName=appName, channelName=channelName)
+        if len(history) > 0:
+            return (simplejson.JSONEncoder().encode(history))
+        return (simplejson.JSONEncoder().encode([]))
 
-	# {"cmd": "part", "args": "irc"}
-	@jsonPrototype('part')
-	def __cmd_part(self, args):
-		"""Supprime un client du salon specifie"""
+    # {"cmd": "join", "args": ["irc", ""]}
+    @jsonPrototype('join')
+    def __cmd_join(self, args):
+        """Ajoute un client dans le salon specifie"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		channelName = args['args']
-		appName = args['app']
-		if self.client.room_name and self.client.room.part(channelName=channelName, appName=appName, uid=self.uid):
-			self.client.status = "offline"
-			self.client.room_name = channelName
-			Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + channelName)
-			if self.client.master == False:
-				self.status(client=self.client, appName=appName, master=False)
-			else:
-				self.status(client=self.client, appName=appName, master=True)
-			self.client.room_name = None
-			return ('true')
-		else:
-			Log().add("[!] Command error : l'utilisateur n'est pas dans le channel : " + channelName)
-			return ('false')
+        appName = args['app']
+        channelName = args['args'][0]
+        password = args['args'][1]
+        if len(password) == 0:
+            password = None
+        if self.client.room.join(channelName=channelName, appName=appName, uid=self.uid, password=password):
+            self.client.room_name = channelName
+            Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + channelName, 'yellow')
+            if self.client.master == False:
+                self.status(client=self.client, appName=appName, master=False)
+            else:
+                self.status(client=self.client, appName=appName, master=True)
+            return ('true')
+        else:
+            Log().add("[!] Command error : le channel " + channelName + " n'existe pas ", 'yellow')
+            return ('false')
 
-	# {"cmd": "chanAuth", "args": "passphrase", "channel": "channelName", "app" : ""}
-	@jsonPrototype('chanAuth')
-	def __cmd_chanAuth(self, args):
-		"""Auth pour definir si le Client est desormais master ou non d'une application"""
+    # {"cmd": "part", "args": "irc"}
+    @jsonPrototype('part')
+    def __cmd_part(self, args):
+        """Supprime un client du salon specifie"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		appName = args['app']
-		channelName = args['channel']
-		password = args['args']
-		if self.client.room.appAuth(channelName=channelName, appName=appName, password=password, uid=self.uid):
-			Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du channel : " + channelName)
-			return ('true')
-		else:
-			return ('false')
+        channelName = args['args']
+        appName = args['app']
+        if self.client.room_name and self.client.room.part(channelName=channelName, appName=appName, uid=self.uid):
+            self.client.status = "offline"
+            self.client.room_name = channelName
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + channelName)
+            if self.client.master == False:
+                self.status(client=self.client, appName=appName, master=False)
+            else:
+                self.status(client=self.client, appName=appName, master=True)
+            self.client.room_name = None
+            return ('true')
+        else:
+            Log().add("[!] Command error : l'utilisateur n'est pas dans le channel : " + channelName)
+            return ('false')
 
-	# {"cmd": "forward", "args": "message", "channel": "channelName", "app" : ""}
-	@isChanMaster('forward')
-	@jsonPrototype('forward')
-	def __cmd_forward(self, args):
-		"""Envoie une commande a tous les clients presents dans le channel"""
+    # {"cmd": "chanAuth", "args": "passphrase", "channel": "channelName", "app" : ""}
+    @jsonPrototype('chanAuth')
+    def __cmd_chanAuth(self, args):
+        """Auth pour definir si le Client est desormais master ou non d'une application"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		channelName = args['channel']
-		appName = args['app']
-		commande = args['args']
-		app = args['app']
-		if args['channel'] and args['app'] and self.client.room.forward(channelName=channelName, appName=appName, commande=commande, uid=self.uid, app=app):
-			Log().add("[+] La commande : "+ args['args'] + " a ete envoye a tous les utilisateurs du channel : " + str(args['channel']))
-			return ('true')
-		else:
-			if self.client.room_name is None:
-				Log().add("[!] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
-			else:
-				Log().add("[!] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
-			return ('false')
+        appName = args['app']
+        channelName = args['channel']
+        password = args['args']
+        if self.client.room.appAuth(channelName=channelName, appName=appName, password=password, uid=self.uid):
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du channel : " + channelName)
+            return ('true')
+        else:
+            return ('false')
 
-	# {"cmd": "message", "args": ['mon message', ['*']], "channel": "channelName", "app" : "" }
-	@jsonPrototype('message')
-	def __cmd_message(self, args):
-		"""Envoie un message a une liste d'utilisateurs"""
+    # {"cmd": "forward", "args": "message", "channel": "channelName", "app" : ""}
+    @isChanMaster('forward')
+    @jsonPrototype('forward')
+    def __cmd_forward(self, args):
+        """Envoie une commande a tous les clients presents dans le channel"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		message = args.get('args', '')
-		channelName = args['channel']
-		appName = args['app']
-		if len(message) == 0:
-			return ('false')
-		else:
-			ret = False
-			if len(message[0]) != 0:
-				if len(message[1]) > 0:
-					if len(message[1][0]) == 0:
-						ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['master'], message=message[0])
-					elif message[1][0] == '*':
-						ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['all'], message=message[0])
-					elif message[1][0] == 'master':
-						ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['master'], message=message[0])
-					else:
-						ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=message[1], message=message[0])
-				else:
-					ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['master'], message=message[0])
-			if ret:
-				return ('true')
-			else:
-				return ('false')
+        channelName = args['channel']
+        appName = args['app']
+        commande = args['args']
+        app = args['app']
+        if args['channel'] and args['app'] and self.client.room.forward(channelName=channelName, appName=appName, commande=commande, uid=self.uid, app=app):
+            Log().add("[+] La commande : "+ args['args'] + " a ete envoye a tous les utilisateurs du channel : " + str(args['channel']))
+            return ('true')
+        else:
+            if self.client.room_name is None:
+                Log().add("[!] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
+            else:
+                Log().add("[!] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
+            return ('false')
 
-	# {"cmd": "nick", "args": "nickName", "app": "appName"}
-	@jsonPrototype('nick')
-	def __cmd_nick(self, args):
-		"""Permet au client de change de pseudo"""
+    # {"cmd": "message", "args": ['mon message', ['*']], "channel": "channelName", "app" : "" }
+    @jsonPrototype('message')
+    def __cmd_message(self, args):
+        """Envoie un message a une liste d'utilisateurs"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son nickname en : " + args['args'])
-		self.client.nickName = args['args']
-		return ('true')
+        message = args.get('args', '')
+        channelName = args['channel']
+        appName = args['app']
+        if len(message) == 0:
+            return ('false')
+        else:
+            ret = False
+            if len(message[0]) != 0:
+                if len(message[1]) > 0:
+                    if len(message[1][0]) == 0:
+                        ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['master'], message=message[0])
+                    elif message[1][0] == '*':
+                        ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['all'], message=message[0])
+                    elif message[1][0] == 'master':
+                        ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['master'], message=message[0])
+                    else:
+                        ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=message[1], message=message[0])
+                else:
+                    ret = self.client.room.message(channelName=channelName, appName=appName, sender=self.uid, users=['master'], message=message[0])
+            if ret:
+                return ('true')
+            else:
+                return ('false')
 
-	# {"cmd": "getStatus", "args": "null"}
-	@jsonPrototype('getStatus')
-	def __cmd_getStatus(self, args):
-		"""Retourne le status de l'utilisateur"""
+    # {"cmd": "nick", "args": "nickName", "app": "appName"}
+    @jsonPrototype('nick')
+    def __cmd_nick(self, args):
+        """Permet au client de change de pseudo"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande son status")
-		return ('"' + self.client.status + '"')
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son nickname en : " + args['args'])
+        self.client.nickName = args['args']
+        return ('true')
 
-	# {"cmd": "setStatus", "args": "newStatus"}
-	@jsonPrototype('setStatus')
-	def __cmd_setStatus(self, args):
-		"""Change le status de l'utilisateur"""
+    # {"cmd": "getStatus", "args": "null"}
+    @jsonPrototype('getStatus')
+    def __cmd_getStatus(self, args):
+        """Retourne le status de l'utilisateur"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		appName = args['app']
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande son status")
+        return ('"' + self.client.status + '"')
 
-		Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args))
-		self.client.status = args['args']
-		if self.client.master == False:
-			self.status(client=self.client, appName=appName, master=False)
-		else:
-			self.status(client=self.client, appName=appName, master=True)
-		return ('true')
+    # {"cmd": "setStatus", "args": "newStatus"}
+    @jsonPrototype('setStatus')
+    def __cmd_setStatus(self, args):
+        """Change le status de l'utilisateur"""
 
-	# {"cmd": "timeConnect", "args": "null"}
-	@jsonPrototype('timeConnect')
-	def __cmd_timeConnect(self, args):
-		"""Retourne l'heure a laquelle c'est connecte le client"""
+        from log.logger import Log
 
-		from log.logger import Log
+        appName = args['app']
 
-		Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande l'heure de connection")
-		return ('"' + str(self.client.connection_time) + '"')
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args))
+        self.client.status = args['args']
+        if self.client.master == False:
+            self.status(client=self.client, appName=appName, master=False)
+        else:
+            self.status(client=self.client, appName=appName, master=True)
+        return ('true')
 
-	# {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "channel": "channelName", "app" : ""}
-	@jsonPrototype('chanMasterPwd')
-	def __cmd_chanMasterPwd(self, args):
-		"""Change le mot de passe master d'un channel"""
+    # {"cmd": "timeConnect", "args": "null"}
+    @jsonPrototype('timeConnect')
+    def __cmd_timeConnect(self, args):
+        """Retourne l'heure a laquelle c'est connecte le client"""
 
-		from log.logger import Log
+        from log.logger import Log
 
-		channelName = args['channel']
-		password = args['args']
-		appName = args['app']
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande l'heure de connection")
+        return ('"' + str(self.client.connection_time) + '"')
 
-		if self.client.master and self.client.room.changeAppMasterPwd(channelName=channelName, appName=appName, password=password):
-			Log().add("[+] Client : le client " + str(self.client.getName()) + " a changer le mot de passe master du channel : " + channelName)
-			return ('true')
-		else:
-			if self.client.master == False:
-				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
-			elif self.client.room.chanExists(channelName=channelName, appName=appName) == False:
-				Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
-			else:
-				Log().add("[!] Command error : la commande chanMasterPwd a echoue", 'yellow')
-			return ('false')
+    # {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "channel": "channelName", "app" : ""}
+    @jsonPrototype('chanMasterPwd')
+    def __cmd_chanMasterPwd(self, args):
+        """Change le mot de passe master d'un channel"""
 
-	def status(self, client, appName, master = False):
-		"""
-		Envoie le status aux clients lors d'une action ( join / part ... connect ...)
-		"""
+        from log.logger import Log
 
-		from log.logger import Log
-		from commons.session import Session
+        channelName = args['channel']
+        password = args['args']
+        appName = args['app']
 
-		if client.room_name:
-			channel = client.room.Channel(channelName=client.room_name, appName=appName)
-			if channel and client.unique_key in channel.masters():
-				master = True
-			if channel and master == False:
-				masters = channel.masters()
-				for master in masters:
-					if client.room_name:
-						channel = client.room_name
-					else:
-						channel = "none"
-					master = Session().get(master)
-					if master is not None:
-						status = client.status
-						key = client.unique_key
-						name = client.getName()
-						to_send = {"name": name, "key": key, "status": status}
-						Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName())
-						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
-						master.addResponse(json)
-			elif channel is not None:
-				for u in channel.users():
-					user = Session().get(u)
-					if user is not None:
-						status = client.status
-						key = client.unique_key
-						name = client.getName()
-						to_send = {"name": name, "key": key, "status": status}
-						Log().add("[+] Client : envoie du status master vers l'utilisateur : " + name)
-						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': client.room_name})
-						if user is not None:
-							user.addResponse(json)
+        if self.client.master and self.client.room.changeAppMasterPwd(channelName=channelName, appName=appName, password=password):
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " a changer le mot de passe master du channel : " + channelName)
+            return ('true')
+        else:
+            if self.client.master == False:
+                Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
+            elif self.client.room.chanExists(channelName=channelName, appName=appName) == False:
+                Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
+            else:
+                Log().add("[!] Command error : la commande chanMasterPwd a echoue", 'yellow')
+            return ('false')
+
+    def status(self, client, appName, master = False):
+        """
+        Envoie le status aux clients lors d'une action ( join / part ... connect ...)
+        """
+
+        from log.logger import Log
+        from commons.session import Session
+
+        if client.room_name:
+            channel = client.room.Channel(channelName=client.room_name, appName=appName)
+            if channel and client.unique_key in channel.masters():
+                master = True
+            if channel and master == False:
+                masters = channel.masters()
+                for master in masters:
+                    if client.room_name:
+                        channel = client.room_name
+                    else:
+                        channel = "none"
+                    master = Session().get(master)
+                    if master is not None:
+                        status = client.status
+                        key = client.unique_key
+                        name = client.getName()
+                        to_send = {"name": name, "key": key, "status": status}
+                        Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName())
+                        json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
+                        master.addResponse(json)
+            elif channel is not None:
+                for u in channel.users():
+                    user = Session().get(u)
+                    if user is not None:
+                        status = client.status
+                        key = client.unique_key
+                        name = client.getName()
+                        to_send = {"name": name, "key": key, "status": status}
+                        Log().add("[+] Client : envoie du status master vers l'utilisateur : " + name)
+                        json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': client.room_name})
+                        if user is not None:
+                            user.addResponse(json)
