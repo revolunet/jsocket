@@ -58,7 +58,7 @@ class Log(object):
 		def dprint(self, msg, color = 'white'):
 			""" Affiche un message sur le sortie standard et le log dans un fichier """
 
-			msgTime = '[%s]' % strftime('%d-%m-%Y %H:%M:%S', gmtime())
+			msgTime = '[%s]' % strftime('%A %d %B %Y %H:%M:%S, (UTC+0200)', gmtime())
 			if SETTINGS.IS_DEBUG:
 				if 'nt' not in os.name:
 					print msgTime + self.get_color(color).replace('$msg$', msg.strip(' \n'))
