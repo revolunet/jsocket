@@ -4,6 +4,8 @@
 
 from config.settings import SETTINGS
 from commons.history import History
+import time
+
 
 class Channel(object):
 	"""
@@ -25,6 +27,7 @@ class Channel(object):
 		self.master_password = SETTINGS.CHANNEL_MASTER_PASSWORD
 		self.name = name
 		self.history = History()
+		self.last_action = int(time.time())
 
 	def isMaster(self, uid):
 		"""Return: si cet uid est un uid d'administrateur du channel ou non -> bool."""
@@ -39,10 +42,12 @@ class Channel(object):
 		if uid in self.__users:
 			self.__users.remove(uid)
 			Log().add("[+] Channel : client " + str(uid) + " left " + self.name)
+			self.last_action = time.time()
 			return True
 		if uid in self.__masters:
 			self.__masters.remove(uid)
 			Log().add("[+] Channel : master " + str(uid) + " left " + self.name)
+			self.last_action = time.time()
 			return True
 		return False
 
@@ -54,12 +59,14 @@ class Channel(object):
 		if pwd is None and uid not in self.__users:
 			self.__users.append(uid)
 			Log().add("[+] Channel : client " + str(uid) + " joined " + self.name)
+			self.last_action = time.time()
 			return True
 		elif pwd is not None and\
 			str(pwd) == str(self.master_password) and\
 			uid not in self.__masters:
 			self.__masters.append(uid)
 			Log().add("[+] Channel : master " + str(uid) + " joined " + self.name)
+			self.last_action = time.time()
 			return True
 		return False
 

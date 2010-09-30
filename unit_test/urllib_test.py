@@ -1,7 +1,7 @@
 import urllib
 import simplejson
 
-host = '192.168.104.179'
+host = '192.168.104.182'
 port = 8081
 
 def main():

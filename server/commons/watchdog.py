@@ -39,12 +39,14 @@ class WatchDog(threading.Thread):
 
 	def removeRooms(self, room):
 		appToRemove = []
+		current_time = int(time.time())
 		for application in room.applications:
 			for c in room.applications[application]:
 				channel = c.get('channel')
 				if len(channel.users()) == 0 and len(channel.masters()) == 0:
-					room.remove(channelName=channel.name, appName=application)
-					Log().add('[i] WatchDog: Deleted %s channel' % channel.name, 'blue')
+					if int(current_time - channel.last_action) > SETTINGS.ROOM_EMPTY_TIME:
+						room.remove(channelName=channel.name, appName=application)
+						Log().add('[i] WatchDog: Deleted %s channel' % channel.name, 'blue')
 				if len(room.applications[application]) == 0:
 					appToRemove.append(application)
 		for app in appToRemove:

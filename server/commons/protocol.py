@@ -107,7 +107,7 @@ class Protocol(object):
             adminPwd = params.get('adminPwd', None)
             masterPwd = params.get('masterPwd', None)
             if channelName is not None and appName is not None and adminPwd == SETTINGS.MASTER_PASSWORD:
-                self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.client.unique_key, masterPwd=masterPwd)
+                self.client.room.create(channelName=channelName, appName=appName, password=password, uid=self.client.unique_key, masterPwd=masterPwd, forceJoin=False)
                 return ('true')
         return ('false')
 
