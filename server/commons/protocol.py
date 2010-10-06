@@ -246,6 +246,7 @@ class Protocol(object):
         if len(password) == 0:
             password = None
         if self.client.room.join(channelName=channelName, appName=appName, uid=self.uid, password=password):
+            self.client.status = 'online'
             self.client.room_name = channelName
             Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + channelName, 'yellow')
             if self.client.master == False:
