@@ -45,11 +45,12 @@ class Room(object):
 		if appName in self.applications and self.chanExists(channelName=channelName, appName=appName):
 			channel = self.Channel(channelName=channelName, appName=appName)
 			if channel is not None:
-				return channel.users()
+				return channel.users() + channel.masters() 
 		users = []
 		for app in self.applications:
 			for c in self.applications.get(app, []):
 				self.merge(users, c.get('channel').users())
+				self.merge(users, c.get('channel').masters())
 		return users
 
 	def create(self, channelName, uid, appName, password = None, masterPwd = None, forceJoin=True):

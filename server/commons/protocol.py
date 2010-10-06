@@ -267,13 +267,20 @@ class Protocol(object):
 
         channelName = args['args']
         appName = args['app']
+        
+        channel = self.client.room.Channel(channelName=channelName, appName=appName)
+        isMaster = self.uid in channel.masters()
         if self.client.room_name and self.client.room.part(channelName=channelName, appName=appName, uid=self.uid):
             self.client.status = "offline"
             self.client.room_name = channelName
+            
             Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + channelName)
-            if self.client.master == False:
+           # print  self.uid, channel.masters() 
+            if not  isMaster:
+ #               print 'NOT MASTER'
                 self.status(client=self.client, appName=appName, master=False)
             else:
+  #              print 'IS MASTER'
                 self.status(client=self.client, appName=appName, master=True)
             self.client.room_name = None
             return ('true')
@@ -288,11 +295,14 @@ class Protocol(object):
 
         from log.logger import Log
 
-        appName = args['app']
+        appName = args['app']   
         channelName = args['channel']
         password = args['args']
         if self.client.room.appAuth(channelName=channelName, appName=appName, password=password, uid=self.uid):
             Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du channel : " + channelName)
+            self.client.status = 'online'
+            self.client.room_name = channelName
+            self.status(client=self.client, appName=appName, master=True)
             return ('true')
         else:
             return ('false')
