@@ -147,8 +147,7 @@ class Room(object):
 		from log.logger import Log
 
 		if self.chanExists(channelName=channelName, appName=appName):
-			channel = self.Channel(channelName=channelName, appName=appName)
-
+			channel = self.Channel(channelName=channelName, appName=appName)  
 			if uid in channel.masters():
 				users = channel.users()
 				master = Session().get(uid)
@@ -160,7 +159,7 @@ class Room(object):
 					user = Session().get(u)
 					if user is not None:
 						user.addResponse(json)
-				if len(users) > 1:
+				if len(users) > 0:
 					return True
 		return False
 

@@ -46,12 +46,12 @@ class WatchDog(threading.Thread):
 				if len(channel.users()) == 0 and len(channel.masters()) == 0:
 					if int(current_time - channel.last_action) > SETTINGS.ROOM_EMPTY_TIME:
 						room.remove(channelName=channel.name, appName=application)
-						Log().add('[i] WatchDog: Deleted %s channel' % channel.name, 'blue')
+						Log().add('[i] WatchDog: Deleted %s channel' % channel.name, 'red')
 				if len(room.applications[application]) == 0:
 					appToRemove.append(application)
 		for app in appToRemove:
 			room.applications.pop(app)
-			Log().add('[i] WatchDog: Deleted %s application' % app, 'blue')
+			Log().add('[i] WatchDog: Deleted %s application' % app, 'red')
 
 	def checkHttpClient(self, current_time, client):
 		if client.type is 'http' and int(current_time - client.last_action) > SETTINGS.WATCHDOG_HTTP_DISCONNECT_TIME:
@@ -71,7 +71,7 @@ class WatchDog(threading.Thread):
 			elif int(current_time - client.last_action) > SETTINGS.WATCHDOG_MAX_IDLE_TIME:
 				uidToDelete.append(client.unique_key)
 		if len(uidToDelete) > 0:
-			Log().add('[i] WatchDog: Deleted %d clients' % len(uidToDelete), 'blue')
+			Log().add('[i] WatchDog: Deleted %d clients' % len(uidToDelete), 'yellow')
 			self.lock.acquire()
 			for uid in uidToDelete:
 				Session().delete(uid)

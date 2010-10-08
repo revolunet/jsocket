@@ -147,7 +147,7 @@ class Protocol(object):
 
         if args['args'] == self.client.master_password:
             self.client.master = True
-            Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du serveur")
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du serveur", 'yellow')
             return ('true')
         return ('false')
 
@@ -200,7 +200,7 @@ class Protocol(object):
             Log().add("[+] Le channel " + channelName + " a ete supprime par : " + str(self.client.getName()))
             return ('true')
         else:
-            Log().add("[!] Command error : la commande delete a echoue ( le channel " + channelName + " n'existe pas )", 'yellow')
+            Log().add("[!] Command error : la commande delete a echoue ( le channel " + channelName + " n'existe pas )", 'red')
             return ('false')
 
     # {"cmd": "create", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
@@ -218,7 +218,7 @@ class Protocol(object):
             Log().add("[+] Le channel %s a ete ajoute par : %s"  % ( channelName,  str(self.client.getName())))
             return ('"' + str(self.client.room.Channel(channelName=channelName, appName=appName).master_password) + '"')
         else:
-            Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'yellow')
+            Log().add("[!] Command error : la commande create a echoue ( le channel existe deja )", 'red')
             return ('false')
 
     # {"cmd": "history", "args": ["irc", "appPwd"], "channel": "", "app" : ""}
@@ -248,14 +248,14 @@ class Protocol(object):
         if self.client.room.join(channelName=channelName, appName=appName, uid=self.uid, password=password):
             self.client.status = 'online'
             self.client.room_name = channelName
-            Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " a rejoin le channel : " + channelName, 'yellow')
+            Log().add("[+] Client : l'utilisateur " + str(self.client.getName()) + " (" + self.uid + ") a rejoin le channel : " + channelName, 'yellow')
             if self.client.master == False:
                 self.status(client=self.client, appName=appName, master=False)
             else:
                 self.status(client=self.client, appName=appName, master=True)
             return ('true')
         else:
-            Log().add("[!] Command error : le channel " + channelName + " n'existe pas ", 'yellow')
+            Log().add("[!] Command error : le channel " + channelName + " n'existe pas ", 'red')
             return ('false')
 
     # {"cmd": "part", "args": "irc"}
@@ -269,12 +269,13 @@ class Protocol(object):
         appName = args['app']
         
         channel = self.client.room.Channel(channelName=channelName, appName=appName)
-        isMaster = self.uid in channel.masters()
+        
+        isMaster = channel and self.uid in channel.masters()
         if self.client.room_name and self.client.room.part(channelName=channelName, appName=appName, uid=self.uid):
             self.client.status = "offline"
             self.client.room_name = channelName
             
-            Log().add("[+] Client : le client " + str(self.client.getName()) + " a quitte le channel : " + channelName)
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " (" + self.uid + ") a quitte le channel : " + channelName)
            # print  self.uid, channel.masters() 
             if not  isMaster:
  #               print 'NOT MASTER'
@@ -285,7 +286,7 @@ class Protocol(object):
             self.client.room_name = None
             return ('true')
         else:
-            Log().add("[!] Command error : l'utilisateur n'est pas dans le channel : " + channelName)
+            Log().add("[!] Command error : l'utilisateur (" + self.uid + ") n'est pas dans le channel : " + channelName, 'red')
             return ('false')
 
     # {"cmd": "chanAuth", "args": "passphrase", "channel": "channelName", "app" : ""}
@@ -299,7 +300,7 @@ class Protocol(object):
         channelName = args['channel']
         password = args['args']
         if self.client.room.appAuth(channelName=channelName, appName=appName, password=password, uid=self.uid):
-            Log().add("[+] Client : le client " + str(self.client.getName()) + " est a present master du channel : " + channelName)
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " (" + self.uid + ") est a present master du channel : " + channelName, 'yellow')
             self.client.status = 'online'
             self.client.room_name = channelName
             self.status(client=self.client, appName=appName, master=True)
@@ -320,13 +321,13 @@ class Protocol(object):
         commande = args['args']
         app = args['app']
         if args['channel'] and args['app'] and self.client.room.forward(channelName=channelName, appName=appName, commande=commande, uid=self.uid, app=app):
-            Log().add("[+] La commande : "+ args['args'] + " a ete envoye a tous les utilisateurs du channel : " + str(args['channel']))
+            Log().add("[+] La commande : "+ args['args'] + " a ete envoye a tous les utilisateurs du channel : " + str(args['channel']), 'yellow')
             return ('true')
         else:
             if self.client.room_name is None:
-                Log().add("[!] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'yellow')
+                Log().add("[!] Command error : la commande forward a echoue ( le Client n'est dans aucun channel )", 'red')
             else:
-                Log().add("[!] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'yellow')
+                Log().add("[!] Command error : la commande forward a echoue ( Aucun autre client dans le salon )", 'red')
             return ('false')
 
     # {"cmd": "message", "args": ['mon message', ['*']], "channel": "channelName", "app" : "" }
@@ -367,7 +368,7 @@ class Protocol(object):
 
         from log.logger import Log
 
-        Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son nickname en : " + args['args'])
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son nickname en : " + args['args'], 'yellow')
         self.client.nickName = args['args']
         return ('true')
 
@@ -378,7 +379,7 @@ class Protocol(object):
 
         from log.logger import Log
 
-        Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande son status")
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande son status", 'yellow')
         return ('"' + self.client.status + '"')
 
     # {"cmd": "setStatus", "args": "newStatus"}
@@ -390,7 +391,7 @@ class Protocol(object):
 
         appName = args['app']
 
-        Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args))
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a change son status en : " + str(args), 'yellow')
         self.client.status = args['args']
         if self.client.master == False:
             self.status(client=self.client, appName=appName, master=False)
@@ -405,7 +406,7 @@ class Protocol(object):
 
         from log.logger import Log
 
-        Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande l'heure de connection")
+        Log().add("[+] Client : le client " + str(self.client.getName()) + " a demande l'heure de connection", 'yellow')
         return ('"' + str(self.client.connection_time) + '"')
 
     # {"cmd": "chanMasterPwd", "args": "NEWPASSWORD", "channel": "channelName", "app" : ""}
@@ -420,15 +421,15 @@ class Protocol(object):
         appName = args['app']
 
         if self.client.master and self.client.room.changeAppMasterPwd(channelName=channelName, appName=appName, password=password):
-            Log().add("[+] Client : le client " + str(self.client.getName()) + " a changer le mot de passe master du channel : " + channelName)
+            Log().add("[+] Client : le client " + str(self.client.getName()) + " a changer le mot de passe master du channel : " + channelName, 'yellow')
             return ('true')
         else:
             if self.client.master == False:
-                Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'yellow')
+                Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le Client n'est pas master )", 'red')
             elif self.client.room.chanExists(channelName=channelName, appName=appName) == False:
-                Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'yellow')
+                Log().add("[!] Command error : la commande chanMasterPwd a echoue ( le channel n'existe pas )", 'red')
             else:
-                Log().add("[!] Command error : la commande chanMasterPwd a echoue", 'yellow')
+                Log().add("[!] Command error : la commande chanMasterPwd a echoue", 'red')
             return ('false')
 
     def status(self, client, appName, master = False):
@@ -456,7 +457,7 @@ class Protocol(object):
                         key = client.unique_key
                         name = client.getName()
                         to_send = {"name": name, "key": key, "status": status}
-                        Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName())
+                        Log().add("[+] Client : envoie du status de " + name + " vers l'utilisateur : " + master.getName(), 'yellow')
                         json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel})
                         master.addResponse(json)
             elif channel is not None:
@@ -467,7 +468,7 @@ class Protocol(object):
                         key = client.unique_key
                         name = client.getName()
                         to_send = {"name": name, "key": key, "status": status}
-                        Log().add("[+] Client : envoie du status master vers l'utilisateur : " + name)
+                        Log().add("[+] Client : envoie du status master vers l'utilisateur : " + name, 'yellow')
                         json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': client.room_name})
                         if user is not None:
                             user.addResponse(json)
