@@ -1466,7 +1466,7 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-		jsocket.api.method(jsocket.core.websocket);
+		jsocket.api.method(jsocket.core.tcp);
 	},
 
 	/**
@@ -1673,7 +1673,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * plusieurs commandes JSON. (Si plusieurs, elle sont alors separees par des \n)
 	 */
 	onReceive: function(message) {
-		console.log('jsocket.api.receive: ', message);
+		//console.log('jsocket.api.receive: ', message);
 		jsocket.api.parser(message);
 	},
 
@@ -2093,7 +2093,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onError: function(error) {
-		console.log('jsocket.api.onError: ', error);
+		//console.log('jsocket.api.onError: ', error);
 	},
 
 	/**
@@ -2130,7 +2130,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	sendPool: function() {
 		for (var i = 0; i < jsocket.api.commands.length; ++i) {
-			console.log('jsocket.api.send: ', jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
+			//console.log('jsocket.api.send: ', jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
 			jsocket.api.core.send(jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
 		}
 		jsocket.api.commands = [ ];
@@ -2144,7 +2144,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	send: function(msg) {
 		if (jsocket.api.uid != '') {
-			console.log('jsocket.api.send: ', msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
+			//console.log('jsocket.api.send: ', msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
 			jsocket.api.core.send(msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
 		} else if (jsocket.api.commands.length < 10) {
 			jsocket.api.commands.push(msg);
@@ -2158,8 +2158,8 @@ jsocket.api.register('myApplicationName', myApplication);
 function createSwf() {
 	if (typeof swfobject != 'undefined' && typeof jsocket.core.tcp != 'undefined') {
 		swfobject.embedSWF(jsocketBridgeDomain, "flashcontent", "900", "200", "8.0.0", "expressInstall.swf",
-						   {scope: 'jsocket.core.tcp'}, {menu: false},
-						   {id:'socketBridge', name:'socketBridge', style:'position:absolute;top:-1000px;'});
+						   {scope: 'jsocket.core.tcp', allowScriptAccess :'always'}, {menu: false, allowScriptAccess :'always'},
+						   {id:'socketBridge', name:'socketBridge', style:'position:absolute;top:-1000px;', allowScriptAccess :'always'});
 	} else {
 		setTimeout('createSwf()', 200);
 	}
