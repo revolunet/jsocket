@@ -101,7 +101,7 @@ class Approval(object):
                 cargs = valid_cmd[0].get('args', {} )
                 if not type(cargs) is dict:
                     cargs = {}
-                vhost = None
+                vhost = cargs.get( 'vhost' )
                 uid = Session().create(callback, atype, vhost )
             self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid, 'type': atype})
             return uid

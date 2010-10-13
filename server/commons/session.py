@@ -18,7 +18,7 @@ class Session(object):
 		client.callback = callback
 		client.type = connectionType
 		if vhost:
-			client.vhost = vhost        
+			client.vhost = vhost       
 		self.clientList[client.unique_key] = client
 		return client.unique_key
 
