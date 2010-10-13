@@ -41,12 +41,12 @@ class Channel(object):
 
 		if uid in self.__users:
 			self.__users.remove(uid)
-			#Log().add("[+] Channel : client " + str(uid) + " left " + self.name)
+			Log().add("[+] Channel : client " + str(uid) + " left " + self.name, 'yellow')
 			self.last_action = time.time()
 			return True
 		if uid in self.__masters:
 			self.__masters.remove(uid)
-			#Log().add("[+] Channel : master " + str(uid) + " left " + self.name)
+			Log().add("[+] Channel : master " + str(uid) + " left " + self.name, 'yellow')
 			self.last_action = time.time()
 			return True
 		return False

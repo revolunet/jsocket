@@ -122,8 +122,8 @@ class Room(object):
 			for c in self.applications[application]:
 				channel = c.get('channel')
 				if channel is not None:
-					if client is not None and client.unique_key in channel.users():
-						self.status(client, application, channel.name)
+					if client is not None and client.unique_key in channel.users()+channel.masters() :
+						self.status(client, application, channel.name)                       
 					channel.delete(uid)
 
 	def Channel(self, channelName, appName):
@@ -230,7 +230,7 @@ class Room(object):
 		from commons.session import Session
 
 		master = False
-		if self.chanExists(channelName=channelName, appName=appName):
+		if self.chanExists(channelName=channelName, appName=appName):   
 			channel = self.Channel(channelName, appName)
 			if channel and client.unique_key in channel.masters():
 				master = True
@@ -246,7 +246,7 @@ class Room(object):
 						json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': channel.name})
 						m.addResponse(json)
 			else:
-				users = channel.users()
+				users = channel.users()                
 				for user in users:
 					u = Session().get(user)
 					if u is not None:
