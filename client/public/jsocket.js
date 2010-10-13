@@ -1303,7 +1303,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		jsocket.core.websocket.socket.close();
+		if (typeof(jsocket.core.websocket.socket) == 'WebSocket') jsocket.core.websocket.socket.close();
 		return (true);
 	}
 };
