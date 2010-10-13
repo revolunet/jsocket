@@ -33,7 +33,7 @@ class ClientWebSocket(WebSocketHandler):
 		commands = frame.split("\n")
 		uid = None
 		for cmd in commands:
-			if '{"cmd": "connected", "args": "null"' in cmd:
+			if '{"cmd": "connected",' in cmd:
 				uid = Approval().validate(cmd, self.callbackSend, 'websocket')
 				self.send('{"from": "connected", "value": "%s"}' % uid)
 			elif len(cmd) > 0:
@@ -54,6 +54,7 @@ class ClientWebSocket(WebSocketHandler):
 		""" Methode permettant d'ecrire le message sur la socket si l'utilisateur est connecte """
 
 		if self.connected is True:
+			msg = msg.encode('utf8')
 			self.transport.write(msg)
 
 	@property

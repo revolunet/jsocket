@@ -86,9 +86,11 @@ jsocket.core.websocket = {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
+        //console.log('COONECTED');
 		jsocket.core.websocket.connectedToServer = true;
-		jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
+		
 		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": "" }');
+        jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
 
@@ -101,6 +103,7 @@ jsocket.core.websocket = {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
+        //console.log('DISCOONECTED');
 		jsocket.core.websocket.api.uid = '';
 		jsocket.core.websocket.api.parser('{"from": "disconnect", "value": true}');
 		if (jsocket.core.websocket.connectedToServer == false) {
@@ -126,6 +129,7 @@ jsocket.core.websocket = {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
+        //console.log('ERROR', msg);
 		jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
 		return (true);
 	},
@@ -140,6 +144,7 @@ jsocket.core.websocket = {
 		if (typeof jsocket.core.websocket.api != 'object') {
 			return (false);
 		}
+        //console.log('RECEIVE', msg);
 		msg = msg.data;
 		if (msg.data == '{"from": "connect", "value": "true"}') {
 			jsocket.core.websocket.send('{"cmd": "connected", "args": "null", "app": ""}');
