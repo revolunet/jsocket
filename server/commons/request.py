@@ -1,13 +1,16 @@
 import urllib
-
+import threading
 from log.logger import Log
-class Request(object):
+
+
+class Request(threading.Thread):
     def __init__(self, vhost, uid, status):
         self.vhost = vhost
         self.uid = uid
         self.status = status
+        threading.Thread.__init__(self)
 
-    def send(self):
+    def run(self):
         if self.vhost and self.uid and self.status:
             Log().add("[+] Channel : send status %s for %s to %s" % (self.status, self.uid, self.vhost), 'blue')
             try:
@@ -19,4 +22,3 @@ class Request(object):
                     Log().add("[!] cannot send http status : %s" % e.code, 'red')
                 else:
                     Log().add("[!] cannot send http status", 'red')
-                

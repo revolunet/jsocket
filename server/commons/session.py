@@ -36,7 +36,7 @@ class Session(object):
 			client.room.leaveRooms(uid)
 			request = Request(client.vhost, uid, 'offline')
 			del self.clientList[uid]
-			request.send()
+			request.start()
 			# envoie du packet tcp
 			return True
 		return False
