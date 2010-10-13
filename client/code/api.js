@@ -349,7 +349,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Tableau contenant l'identifiant unique de l'utilisateur
 	 */
 	onConnected: function(args) {
-        console.log('onConnected', args);
+        //console.log('onConnected', args);
 		jsocket.api.uid = args.value;
 		jsocket.api.sendPool();
 	},
