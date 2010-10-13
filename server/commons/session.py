@@ -1,4 +1,5 @@
 from commons.room import Room
+from commons.request import Request
 
 class Session(object):
 	instance = None
@@ -33,6 +34,9 @@ class Session(object):
 		if self.clientList.get(uid, None) is not None:
 			client = self.clientList.get(uid, None)
 			client.room.leaveRooms(uid)
+			request = Request(client.vhost, uid, 'offline')
 			del self.clientList[uid]
+			request.send()
+			# envoie du packet tcp
 			return True
 		return False
