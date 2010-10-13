@@ -147,7 +147,7 @@ jsocket.core.tcp = {
 			return (false);
 		}
 		jsocket.core.tcp.connectedToServer = true;
-		jsocket.core.tcp.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
+		jsocket.core.tcp.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": ""}');
 		jsocket.core.tcp.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},

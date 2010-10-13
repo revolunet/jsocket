@@ -108,8 +108,8 @@ jsocket.api.settings = {
   websocket: {
     host: 'localhost',
     port: 8082
-  }
-  ,vhost:'test.quickprez.com'
+  },
+  vhost:'test.quickprez.com'
 };
 </code></pre>
 	 */
@@ -163,7 +163,6 @@ jsocket.api.settings = {
                 jsocket.api.settings[core] = settings[core];
             }
 		}
-        console.log('new settings: ', jsocket.api.settings);
 	},
 
 	/**
@@ -171,7 +170,7 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-		jsocket.api.method(jsocket.core.websocket);
+		jsocket.api.method(jsocket.core.tcp);
 	},
 
 	/**

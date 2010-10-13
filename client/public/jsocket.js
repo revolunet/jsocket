@@ -702,7 +702,7 @@ jsocket.core.tcp = {
 			return (false);
 		}
 		jsocket.core.tcp.connectedToServer = true;
-		jsocket.core.tcp.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
+		jsocket.core.tcp.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": ""}');
 		jsocket.core.tcp.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
@@ -889,7 +889,7 @@ jsocket.core.http = {
 	 */
 	connect: function() {
 		jsocket.core.http.loaded();
-		jsocket.core.http.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
+		jsocket.core.http.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": ""}');
 		jsocket.core.http.pool();
 	},
 
@@ -1151,7 +1151,7 @@ jsocket.core.websocket = {
 		}
 		jsocket.core.websocket.connectedToServer = true;
 		jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
-		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
+		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": "" }');
 		return (true);
 	},
 
@@ -1413,8 +1413,8 @@ jsocket.api.settings = {
   websocket: {
     host: 'localhost',
     port: 8082
-  }
-  ,vhost:'test.quickprez.com'
+  },
+  vhost:'test.quickprez.com'
 };
 </code></pre>
 	 */
@@ -1468,7 +1468,6 @@ jsocket.api.settings = {
                 jsocket.api.settings[core] = settings[core];
             }
 		}
-        console.log('new settings: ', jsocket.api.settings);
 	},
 
 	/**
@@ -1476,7 +1475,7 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-		jsocket.api.method(jsocket.core.websocket);
+		jsocket.api.method(jsocket.core.tcp);
 	},
 
 	/**
