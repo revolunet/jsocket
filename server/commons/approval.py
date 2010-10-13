@@ -77,7 +77,7 @@ class Approval(object):
             except ValueError:
                     pass
 
-    def validate(self, datas, callback = None, type = None):
+    def validate(self, datas, callback = None, atype = None):
         """ Valide la/les commande(s) json envoyees """
         if len(datas) == 0:
             pass
@@ -98,8 +98,12 @@ class Approval(object):
         if len(valid_cmd) > 0:
             uid = valid_cmd[0].get('uid', None)
             if uid is None:
-                uid = Session().create(callback, type)
-            self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid, 'type': type})
+                cargs = valid_cmd[0].get('args', {} )
+                if not type(cargs) is dict:
+                    cargs = {}
+                vhost = None
+                uid = Session().create(callback, atype, vhost )
+            self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid, 'type': atype})
             return uid
         return None
 

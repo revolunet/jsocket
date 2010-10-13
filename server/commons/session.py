@@ -10,12 +10,14 @@ class Session(object):
 			this.clientList = { }
 		return this.instance
 
-	def create(self, callback = None, connectionType = None):
+	def create(self, callback = None, connectionType = None, vhost = None):
 		from client.client import Client
 
 		client = Client(self.room)
 		client.callback = callback
 		client.type = connectionType
+		if vhost:
+			client.vhost = vhost        
 		self.clientList[client.unique_key] = client
 		return client.unique_key
 

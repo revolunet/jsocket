@@ -28,6 +28,7 @@ class Client(object):
 		self.callback = None
 		self.response = [ ]
 		self.type = None
+		self.vhost = None
 
 	def getName(self):
 		"""Return : Si l utilisateur n a pas de nickname on retourne la unique_key sinon son nickname -> string """
