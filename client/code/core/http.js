@@ -102,7 +102,7 @@ jsocket.core.http = {
 	 */
 	connect: function() {
 		jsocket.core.http.loaded();
-		jsocket.core.http.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.http.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
 		jsocket.core.http.pool();
 	},
 

@@ -28,3 +28,5 @@ $script = $packer->pack();
 
 file_put_contents($outMin, $script);
 file_put_contents($out, implode(chr(10), $src));
+
+echo "created $outMin and $out\n";

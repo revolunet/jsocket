@@ -702,7 +702,7 @@ jsocket.core.tcp = {
 			return (false);
 		}
 		jsocket.core.tcp.connectedToServer = true;
-		jsocket.core.tcp.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.tcp.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
 		jsocket.core.tcp.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
@@ -889,7 +889,7 @@ jsocket.core.http = {
 	 */
 	connect: function() {
 		jsocket.core.http.loaded();
-		jsocket.core.http.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.http.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
 		jsocket.core.http.pool();
 	},
 
@@ -1151,7 +1151,7 @@ jsocket.core.websocket = {
 		}
 		jsocket.core.websocket.connectedToServer = true;
 		jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
-		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
 		return (true);
 	},
 
@@ -1414,6 +1414,7 @@ jsocket.api.settings = {
     host: 'localhost',
     port: 8082
   }
+  ,vhost:'test.quickprez.com'
 };
 </code></pre>
 	 */
@@ -1429,7 +1430,8 @@ jsocket.api.settings = {
 		websocket: {
 			host: 'localhost',
 			port: 8082
-		}
+		},
+        vhost:''
 	},
 
 	/**
@@ -1455,14 +1457,18 @@ jsocket.api.settings = {
 	 */
 	configure: function(settings) {
 		for (core in jsocket.api.settings) {
-			if (typeof settings[core] != 'undefined') {
+			if (typeof settings[core] == 'object') {
 				for (opt in jsocket.api.settings[core]) {
 					if (typeof settings[core][opt] != 'undefined') {
 						jsocket.api.settings[core][opt] = settings[core][opt];
 					}
 				}
 			}
+            else if (typeof settings[core] == 'string') {
+                jsocket.api.settings[core] = settings[core];
+            }
 		}
+        console.log('new settings: ', jsocket.api.settings);
 	},
 
 	/**

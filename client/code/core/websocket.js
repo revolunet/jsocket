@@ -88,7 +88,7 @@ jsocket.core.websocket = {
 		}
 		jsocket.core.websocket.connectedToServer = true;
 		jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
-		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": "null", "app": ""}');
+		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": "null", "app": "", "vhost":"' + jsocket.api.settings.vhost + '"}');
 		return (true);
 	},
 
