@@ -23,6 +23,7 @@ from twisted.web.server import Request, Site, version, unquote
 
 _ascii_numbers = frozenset(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
 
+
 class WebSocketRequest(Request):
     """
     A general purpose L{Request} supporting connection upgrade for WebSocket.
@@ -50,7 +51,6 @@ class WebSocketRequest(Request):
         self.prepath = []
         self.postpath = map(unquote, self.path[1:].split("/"))
         self.renderWebSocket()
-
 
     def _clientHandshake76(self):
         """
@@ -121,10 +121,12 @@ class WebSocketRequest(Request):
         self.channel.setRawMode()
 
         def finishHandshake(nonce):
-            """ Receive nonce value from request body, and calculate repsonse. """
+            """
+            Receive nonce value from request body, and calculate repsonse.
+            """
             protocolHeaders = self.requestHeaders.getRawHeaders(
                 "WebSocket-Protocol", [])
-            if len(protocolHeaders) not in (0,  1):
+            if len(protocolHeaders) not in (0, 1):
                 return finish()
             if protocolHeaders:
                 if protocolHeaders[0] not in self.site.supportedProtocols:
@@ -170,7 +172,6 @@ class WebSocketRequest(Request):
         # we need the nonce from the request body
         self.channel._transferDecoder = _IdentityTransferDecoder(0, lambda _ : None, finishHandshake)
 
-
     def _checkClientHandshake(self):
         """
         Verify client handshake, closing the connection in case of problem.
@@ -200,7 +201,7 @@ class WebSocketRequest(Request):
 
         protocolHeaders = self.requestHeaders.getRawHeaders(
             "WebSocket-Protocol", [])
-        if len(protocolHeaders) not in (0,  1):
+        if len(protocolHeaders) not in (0, 1):
             return finish()
         if protocolHeaders:
             if protocolHeaders[0] not in self.site.supportedProtocols:
@@ -209,7 +210,6 @@ class WebSocketRequest(Request):
         else:
             protocolHeader = None
         return originHeaders[0], hostHeaders[0], protocolHeader, handler
-
 
     def renderWebSocket(self):
         """
@@ -446,6 +446,4 @@ class WebSocketFrameDecoder(object):
                 break
 
 
-
 ___all__ = ["WebSocketHandler", "WebSocketSite"]
-

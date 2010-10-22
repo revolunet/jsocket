@@ -884,6 +884,23 @@ jsocket.core.http = {
 		return (true);
 	},
 
+    /**
+     * Permet d'effectuer une request HTTP GET sur le server (host, port)
+     * @param {String} parameters La commande JSON a envoyee
+     * @return {Boolean} True si la commande a ete envoyee sinon False
+     */
+    _get: function(parameters) {
+        parameters = encodeURI('json=' + parameters);
+        var el = document.createElement('script');
+        el.type = 'text/javascript';
+        el.onload = jsocket.core.http.receive_get;
+        el.onreadystatechange = jsocket.core.http.receive_get;
+        el.src = jsocket.api.settings.http.url + '?' + parameters + '&ts=' + new Date().getTime();
+        document.body.appendChild(el);
+		jsocket.core.http.response.waiting = true;
+        return (true);
+    },
+
 	/**
 	 * Initialise une connection via une socket sur le server:port
 	 */
@@ -980,10 +997,10 @@ jsocket.core.http = {
 		if (jsocket.core.http.commands.length > 0) {
 			msg = jsocket.core.http.commands.join("\n");
 			jsocket.core.http.commands = [ ];
-			jsocket.core.http._post(msg + "\n");
+            jsocket.core.http._get(msg + "\n");
 		} else {
-			jsocket.core.http._post('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
-			  jsocket.core.http.api.uid + '"}\n');
+            jsocket.core.http._get('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
+                                   jsocket.core.http.api.uid + '"}\n');
 		}
 		return (true);
 	},
@@ -1054,11 +1071,28 @@ jsocket.core.http = {
 				}
 			} else {
 				jsocket.core.http.api.parser('{"from": "error", "value": "HTTP request error: ' +
-					jsocket.core.http.socket.status + '"}');
+                                             jsocket.core.http.socket.status + '"}');
 			}
 		}
 		return (true);
-	}
+	},
+
+	/**
+	 * @event receive_get
+	 * Callback appele par socket lors de la reception d'un message
+	 * @return {Boolean} True si la commande a ete envoyee a l'API sinon False
+	 */
+    receive_get: function() {
+		if (typeof jsocket.core.http.api != 'object') {
+			return (false);
+		}
+        if (jsocket.core.http.connectedToServer == false) {
+            jsocket.core.http.connected();
+        }
+        jsocket.core.http.response.waiting = false;
+        jsocket.core.http.response.lastTime = Math.floor(new Date().getTime() / 1000);
+		return (true);
+    }
 };
 
 /**
@@ -1151,7 +1185,7 @@ jsocket.core.websocket = {
 		}
         //console.log('COONECTED');
 		jsocket.core.websocket.connectedToServer = true;
-		
+
 		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": "" }');
         jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
@@ -1303,7 +1337,10 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		if (typeof(jsocket.core.websocket.socket) == 'WebSocket') jsocket.core.websocket.socket.close();
+		if (jsocket.core.websocket.socket != null) {
+			jsocket.core.websocket.manuallyDisconnected = true;
+            jsocket.core.websocket.socket.close();
+        }
 		return (true);
 	}
 };

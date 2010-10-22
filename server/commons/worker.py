@@ -3,9 +3,8 @@
 ##
 
 import threading
-import Queue
-import time
-from jexception import JException
+
+
 class WorkerLog(threading.Thread):
 	""" Gestion de l'affichage des logs """
 

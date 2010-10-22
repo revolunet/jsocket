@@ -88,7 +88,7 @@ jsocket.core.websocket = {
 		}
         //console.log('COONECTED');
 		jsocket.core.websocket.connectedToServer = true;
-		
+
 		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": "" }');
         jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
@@ -240,7 +240,10 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		if (typeof(jsocket.core.websocket.socket) == 'WebSocket') jsocket.core.websocket.socket.close();
+		if (jsocket.core.websocket.socket != null) {
+			jsocket.core.websocket.manuallyDisconnected = true;
+            jsocket.core.websocket.socket.close();
+        }
 		return (true);
 	}
 };

@@ -9,6 +9,7 @@ from threading import Lock
 from config.settings import SETTINGS
 from commons.session import Session
 
+
 class WatchDog(threading.Thread):
 	"""
 	Classe permettant de nettoyer les clients inactifs.

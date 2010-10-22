@@ -6,40 +6,44 @@ from log.logger import Log
 from config.settings import SETTINGS
 from commons.protocol import Protocol
 
+
 class ApprovalProtocol(object):
-	"""
-	Classe permettant de valider les commandes JSON envoyee par le client
-	"""
+    """
+    Classe permettant de valider les commandes JSON envoyee par le client
+    """
 
-	def __init__(self):
-		self.commands = {
-			'refresh': lambda l:True,
-			'connected':  lambda l:True,
-			'history':  self.default,
-			'auth':  self.default,
-			'create':  self.default,
-			'join':  self.default,
-			'chanMasterPwd':  self.default,
-			'chanAuth':  self.default,
-			'nick':  self.default,
-			'forward':  self.default,
-			'list':  self.default,
-			'message':  self.default,
-			'setStatus':  self.default,
-			'getStatus':  self.default,
-			'timeConnect':  self.default,
-			'part':  self.default,
-			'remove':  self.default,
-			'httpCreateChannel': lambda l:True,
-			'httpSendMessage': lambda l:True
-		}
+    def __init__(self):
+        self.commands = {
+            'refresh': lambda l: True,
+            'connected': lambda l: True,
+            'history': self.default,
+            'auth': self.default,
+            'create': self.default,
+            'join': self.default,
+            'chanMasterPwd': self.default,
+            'chanAuth': self.default,
+            'nick': self.default,
+            'forward': self.default,
+            'list': self.default,
+            'message': self.default,
+            'setStatus': self.default,
+            'getStatus': self.default,
+            'timeConnect': self.default,
+            'part': self.default,
+            'remove': self.default,
+            'httpCreateChannel': lambda l: True,
+            'httpSendMessage': lambda l: True
+        }
 
-	def default(self, json):
-		""" Retourne True si la commande json comprend toute les keys obligatoires """
-		return  json.get('args', None) is not None and \
-				json.get('uid', None) is not None and \
-				json.get('channel', None) is not None and \
-				json.get('app', None) is not None
+    def default(self, json):
+        """
+        Retourne True si la commande json comprend toute les keys obligatoires
+        """
+        return json.get('args', None) is not None and \
+               json.get('uid', None) is not None and \
+               json.get('channel', None) is not None and \
+               json.get('app', None) is not None
+
 
 class Approval(object):
     """
@@ -55,7 +59,8 @@ class Approval(object):
             this.jsonProtocol = Protocol()
             this.queue = Queue.Queue(SETTINGS.WORKER_QUEUE_SIZE)
             for i in range(0, SETTINGS.WORKER_THREADING_SIZE):
-                WorkerParser(this.queue, this.session, this.jsonProtocol).start()
+                WorkerParser(this.queue, this.session,
+                             this.jsonProtocol).start()
             this.protocol = ApprovalProtocol()
         return this.instance
 
@@ -67,24 +72,25 @@ class Approval(object):
                 return self.jsonProtocol.parse(Session().get(uid), decoded)
         except ValueError:
             pass
-            
+
     def httpSendMessage(self, cmd):
             try:
                     uid = Session().create(None, 'http')
                     decoded = simplejson.loads(cmd)
                     if decoded.get('cmd', None) is not None:
-                            return self.jsonProtocol.parse(Session().get(uid), decoded)
+                        return self.jsonProtocol.parse(Session().get(uid),
+                                                       decoded)
             except ValueError:
                     pass
 
-    def validate(self, datas, callback = None, atype = None):
-        """ Valide la/les commande(s) json envoyees """
+    def validate(self, datas, callback=None, atype=None):
+        """
+        Valide la/les commande(s) json envoyees
+        """
         if len(datas) == 0:
             pass
-
         data_list = self._split(datas)
         valid_cmd = []
-
         for cmd in data_list:
             try:
                 decoded = simplejson.loads(cmd)
@@ -101,15 +107,19 @@ class Approval(object):
                 cargs = valid_cmd[0].get('args', {} )
                 if not type(cargs) is dict:
                     cargs = {}
-                vhost = cargs.get( 'vhost' )
+                vhost = cargs.get('vhost')
                 uid = Session().create(callback, atype, vhost )
-            self.queue.put({'json': valid_cmd, 'callback': callback, 'uid': uid, 'type': atype})
+            self.queue.put({'json': valid_cmd, 'callback': callback,
+                            'uid': uid, 'type': atype})
             return uid
         return None
 
     def validate_protocol(self, decoded):
-        """ Valide la commande via l':func:`ApprovalProtocol` """
-        if decoded.get('cmd', None) is not None and self.protocol.commands.get(decoded['cmd'], None) is not None:
+        """
+        Valide la commande via l':func:`ApprovalProtocol`
+        """
+        if decoded.get('cmd', None) is not None and \
+               self.protocol.commands.get(decoded['cmd'], None) is not None:
             return self.protocol.commands[decoded.get('cmd')](decoded)
         return False
 
