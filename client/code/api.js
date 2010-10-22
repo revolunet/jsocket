@@ -18,7 +18,7 @@ jsocket.api.app['myapp'].onJoin(args) {
 };
 </code></pre>
  * @author Revolunet
- * @version 0.2.6
+ * @version 0.3.0
  * @singleton
  */
 jsocket.api = {

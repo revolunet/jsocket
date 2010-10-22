@@ -1,7 +1,7 @@
 Jus de Chaussette
 =================
 
-version 0.2.5
+version 0.3.0
 
 **Requirements:**
 

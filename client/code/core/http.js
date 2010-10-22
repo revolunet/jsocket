@@ -2,7 +2,7 @@
  * @class jsocket.core.http
  * Javascript event's interface fail over HTTP
  * @author Revolunet
- * @version 0.2.6
+ * @version 0.3.0
  * @singleton
  */
 jsocket.core.http = {
@@ -52,13 +52,6 @@ jsocket.core.http = {
 	commands: [ ],
 
 	/**
-	 * Objet comprenant la connection AJAX
-	 * @private
-	 * @type Object
-	 */
-	socket: null,
-
-	/**
 	 * True si ce core est utilise par l'API sinon False
 	 * @private
 	 * @type Boolean
@@ -74,29 +67,6 @@ jsocket.core.http = {
 		return (true);
 	},
 
-	/**
-	 * Permet d'effectuer une requete HTTP POST sur le serveur (host, port)
-	 * @param {String} parameters La commande JSON a envoyee
-	 * @return {Boolean} True si la commande a ete envoyee sinon False
-	 */
-	_post: function(parameters) {
-		parameters = encodeURI('json=' + parameters);
-		if (window.XMLHttpRequest) {
-			jsocket.core.http.socket = new XMLHttpRequest();
-		} else {
-			jsocket.core.http.socket = new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		if (!jsocket.core.http.socket) {
-			alert('Cannot create XMLHTTP instance');
-			return (false);
-		}
-		jsocket.core.http.socket.onreadystatechange = jsocket.core.http.receive;
-		jsocket.core.http.socket.open('POST', jsocket.api.settings.http.url, true);
-		jsocket.core.http.socket.send(parameters);
-		jsocket.core.http.response.waiting = true;
-		return (true);
-	},
-
     /**
      * Permet d'effectuer une request HTTP GET sur le server (host, port)
      * @param {String} parameters La commande JSON a envoyee
@@ -106,8 +76,8 @@ jsocket.core.http = {
         parameters = encodeURI('json=' + parameters);
         var el = document.createElement('script');
         el.type = 'text/javascript';
-        el.onload = jsocket.core.http.receive_get;
-        el.onreadystatechange = jsocket.core.http.receive_get;
+        el.onload = jsocket.core.http.receive;
+        el.onreadystatechange = jsocket.core.http.receive;
         el.src = jsocket.api.settings.http.url + '?' + parameters + '&ts=' + new Date().getTime();
         document.body.appendChild(el);
 		jsocket.core.http.response.waiting = true;
@@ -264,38 +234,8 @@ jsocket.core.http = {
 	 * Callback appele par socket lors de la reception d'un message
 	 * @return {Boolean} True si la commande a ete envoyee a l'API sinon False
 	 */
-	receive: function()	{
-		if (typeof jsocket.core.http.api != 'object') {
-			return (false);
-		}
-		if (jsocket.core.http.socket.readyState == 4) {
-			if (jsocket.core.http.socket.status == 200) {
-				if (jsocket.core.http.connectedToServer == false) {
-					jsocket.core.http.connected();
-				}
-				jsocket.core.http.response.waiting = false;
-				jsocket.core.http.response.lastTime = Math.floor(new Date().getTime() / 1000);
-				msg = jsocket.core.http.socket.responseText;
-				if (msg != '') {
-					res = msg.split("\n");
-					for (var i = 0; res[i]; ++i) {
-						jsocket.core.http.api.onReceive(res[i]);
-					}
-				}
-			} else {
-				jsocket.core.http.api.parser('{"from": "error", "value": "HTTP request error: ' +
-                                             jsocket.core.http.socket.status + '"}');
-			}
-		}
-		return (true);
-	},
-
-	/**
-	 * @event receive_get
-	 * Callback appele par socket lors de la reception d'un message
-	 * @return {Boolean} True si la commande a ete envoyee a l'API sinon False
-	 */
-    receive_get: function() {
+    receive: function() {
+        this.parentNode.removeChild(this);
 		if (typeof jsocket.core.http.api != 'object') {
 			return (false);
 		}
