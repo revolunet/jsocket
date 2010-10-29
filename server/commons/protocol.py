@@ -373,7 +373,7 @@ class Protocol(object):
             return ('false')
         else:
             ret = False
-            if message and len(message[0]) != 0:
+            if message != '' and len(message[0]) != 0:
                 if len(message) > 1 and len(message[1]) > 0:
                     if len(message[1][0]) == 0:
                         ret = self.client.room.message(channelName=channelName,
