@@ -22,6 +22,8 @@ tcp.por...</div><div class="long"><p>Parametres de configuration:</p>
 <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core <a href="output/jsocket.core.http.html#jsocket.core.http-loaded" ext:member="loaded" ext:cls="jsocket.core.http">jsocket.core.http.loaded</a></tt></b></li>
 <li><b><tt>websocket.host: Host pour le core <a href="output/jsocket.core.websocket.html#jsocket.core.websocket-loaded" ext:member="loaded" ext:cls="jsocket.core.websocket">jsocket.core.websocket.loaded</a></tt></b></li>
 <li><b><tt>websocket.port: Port pour le core <a href="output/jsocket.core.websocket.html#jsocket.core.websocket-loaded" ext:member="loaded" ext:cls="jsocket.core.websocket">jsocket.core.websocket.loaded</a></tt></b></li>
+<li><b><tt>vhost (optional): Vhost</tt></b></li>
+<li><b><tt>keepAliveTimer: Timer pour le keepalive</tt></b></li>
 </ul></div></p>
 Ce parametre peut etre changer directement comme dans l'exemple ci-dessous
 ou via la methode <a href="output/jsocket.api.configure.html" ext:cls="jsocket.api.configure">jsocket.api.configure</a>
@@ -39,7 +41,8 @@ ou via la methode <a href="output/jsocket.api.configure.html" ext:cls="jsocket.a
     host: <em>'localhost'</em>,
     port: 8082
   },
-  vhost:<em>'test.quickprez.com'</em>
+  vhost:<em>'test.quickprez.com'</em>,
+  keepAliveTimer: 60000
 };</code></pre></div></div></td><td class="msource">api</td></tr><tr class="property-row  "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-uid"></a><b><a href="source/api.html#prop-jsocket.api-uid">uid</a></b> : String<div class="mdesc">L'uid du client une fois connecte</div></td><td class="msource">api</td></tr></tbody></table><a id="jsocket.api-methods"></a><h2>Public Methods</h2><table cellspacing="0" class="member-table"><tbody><tr><th colspan="2" class="sig-header">Method</th><th class="msource-header">Defined By</th></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-auth"></a><b><a href="source/api.html#method-jsocket.api-auth">auth</a></b>(&nbsp;<code>String&nbsp;appName</code>,&nbsp;<code>String&nbsp;channel</code>,&nbsp;<code>String&nbsp;password</code>&nbsp;)
     :
                                         void<div class="mdesc"><div class="short">Cette fonction permet d'obtenir des droits supplementaire sur le serveur.</div><div class="long">Cette fonction permet d'obtenir des droits supplementaire sur le serveur.<div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>appName</code> : String<div class="sub-desc">Le nom de l'application</div></li><li><code>channel</code> : String<div class="sub-desc">Le nom d'un salon</div></li><li><code>password</code> : String<div class="sub-desc">Le mot de passe pour passer admin sur le serveur</div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-chanAuth"></a><b><a href="source/api.html#method-jsocket.api-chanAuth">chanAuth</a></b>(&nbsp;<code>String&nbsp;appName</code>,&nbsp;<code>String&nbsp;channel</code>,&nbsp;<code>String&nbsp;password</code>&nbsp;)
@@ -113,9 +116,9 @@ jsocket.api.register(<em>'myApplicationName'</em>, myApplication);</code></pre><
                                         void<div class="mdesc"><div class="short">Cette fonction permet d'effacer un channel du serveur.</div><div class="long">Cette fonction permet d'effacer un channel du serveur.<div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>appName</code> : String<div class="sub-desc">Le nom de l'application</div></li><li><code>channel</code> : String<div class="sub-desc">Le nom d'un salon</div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-send"></a><b><a href="source/api.html#method-jsocket.api-send">send</a></b>(&nbsp;<code>String&nbsp;msg</code>&nbsp;)
     :
                                         void<div class="mdesc"><div class="short">Gestion de queue pour les commandes a envoyer.
-Si jsocket.api.uid est null/empty alors on stock les
-commands puis on ...</div><div class="long">Gestion de queue pour les commandes a envoyer.
-Si jsocket.api.uid est null/empty alors on stock les
+Si this.uid est null/empty alors on stock les
+commands puis on les env...</div><div class="long">Gestion de queue pour les commandes a envoyer.
+Si this.uid est null/empty alors on stock les
 commands puis on les envoie lorsque l'uid est renseigne.<div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>msg</code> : String<div class="sub-desc">Le message (commande JSON) a envoyer</div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-setStatus"></a><b><a href="source/api.html#method-jsocket.api-setStatus">setStatus</a></b>(&nbsp;<code>String&nbsp;appName</code>,&nbsp;<code>String&nbsp;channel</code>,&nbsp;<code>String&nbsp;status</code>&nbsp;)
     :
                                         void<div class="mdesc"><div class="short">Remplace le status de l'utilisateur courant</div><div class="long">Remplace le status de l'utilisateur courant<div class="mdetail-params"><strong>Parameters:</strong><ul><li><code>appName</code> : String<div class="sub-desc">Le nom de l'application</div></li><li><code>channel</code> : String<div class="sub-desc">Le nom d'un salon</div></li><li><code>status</code> : String<div class="sub-desc">Le status de l'utilisateur</div></li></ul><strong>Returns:</strong><ul><li>void</li></ul></div></div></div></td><td class="msource">api</td></tr><tr class="method-row expandable "><td class="micon"><a href="#expand" class="exi">&nbsp;</a></td><td class="sig"><a id="jsocket.api-timeConnect"></a><b><a href="source/api.html#method-jsocket.api-timeConnect">timeConnect</a></b>(&nbsp;<code>String&nbsp;appName</code>,&nbsp;<code>String&nbsp;channel</code>&nbsp;)

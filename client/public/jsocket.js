@@ -532,14 +532,14 @@ replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
 }());
 
 /**
- * @class jsocket.protocol
- * <p><b><u>jsocket Protocol</u></b></p>
+ * @class jsocket.utils
+ * <p><b><u>jsocket utils</u></b></p>
  * <p>Valide et forge le JSON des commandes a partir d'un objet.</p>
  * @author Revolunet
  * @version 0.3.0
  * @singleton
  */
-jsocket.protocol = {
+jsocket.utils = {
 	/**
 	 * Forge une commande JSON a partir d'un objet javascript
 	 * @param {Object} obj Objet javascript
@@ -547,10 +547,80 @@ jsocket.protocol = {
 	 */
 	forge : function(obj) {
 		for (var i in obj) {
-			obj[i] = jsocket.api.core.addslashes(obj[i]);
+			obj[i] = this.addslashes(obj[i]);
 		}
 		return (JSON.stringify(obj));
-	}
+	},
+
+	/**
+	 * Addslashes les caracteres ' " \\ \0
+	 * @param {String} str Le texte a addslasher
+	 * @return {String} La chaine avec les caracteres echapes
+	 */
+	addslashes: function(str) {
+		if (typeof str == 'string') {
+			str = encodeURIComponent(str);
+			str = str.replace(/\'/g, "%27");
+		}
+		else if (typeof str == 'object') {
+			for (var i in str) {
+				str[i] = this.addslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+	/**
+	 * Supprime tous les slashes des caracteres ' " \\ \0
+	 * @param {String} str Le texte a stripslasher
+	 * @return {String} La chaine avec les caracteres non echapes
+	 */
+	stripslashes: function (str) {
+		if (typeof str == 'string') {
+			str = str.replace(/\%27/g, "'");
+			str = decodeURIComponent(str);
+		}
+		else if (typeof str == 'object') {
+			for (var i in str) {
+				str[i] = this.stripslashes(str[i]);
+			}
+		}
+		return (str);
+	},
+
+    /**
+     * Force scope of given function
+     * @param {function} fn Function
+     * @param {Object} obj Scope
+     * @param {mixed} args (optional) Arguments
+     * @return {function} Delegated function
+     */
+    createDelegate: function(fn, obj, args) {
+        if (typeof fn != 'function') {
+            return fn;
+        }
+        return function() {
+            var callArgs = args || arguments;
+            return fn.apply(obj || window, callArgs);
+        };
+    },
+
+    /**
+     * Defer function calling by given millis.
+     * @param {function} fn Function
+     * @param {Integer} millis Milliseconds
+     * @param {Object} obj Scope
+     * @param {mixed} args (optional) Arguments
+     * @return {Integer} Result
+     */
+    defer: function(fn, millis, obj, args) {
+        fn = this.createDelegate(fn, obj, args);
+        if (millis > 0) {
+            return setTimeout(fn, millis);
+        }
+        fn();
+        return 0;
+    }
 };
 
 /**
@@ -573,7 +643,7 @@ jsocket.core.tcp = {
 	 * @private
 	 * @type Boolean
 	 */
-	initialized: false,
+	available: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
@@ -595,10 +665,10 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function() {
-		jsocket.core.tcp.initialized = true;
-		jsocket.core.tcp.connectedToServer = false;
-		jsocket.core.tcp.socket = document.getElementById("socketBridge");
-		jsocket.core.tcp.output = document.getElementById("jsocketBridgeOutput");
+		this.available = true;
+		this.connectedToServer = false;
+		this.socket = document.getElementById("socketBridge");
+		this.output = document.getElementById("jsocketBridgeOutput");
 		return (true);
 	},
 
@@ -606,11 +676,16 @@ jsocket.core.tcp = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		if (jsocket.core.tcp.initialized == true && jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.socket.connect(jsocket.api.settings.tcp.host, jsocket.api.settings.tcp.port);
-		} else if (jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.setTimeout("jsocket.core.tcp.connect();", 500);
+        if (this.available == false) {
+            this.api.parser('{"from": "TCPError", "value": "TCP is not available"}');
+            return (false);
+        }
+		if (this.connectedToServer == false) {
+			this.socket.connect(this.api.settings.tcp.host, this.api.settings.tcp.port);
+		} else if (this.connectedToServer == false) {
+			this.setTimeout(this.connect, 500);
 		}
+        return (true);
 	},
 
 	/**
@@ -619,46 +694,14 @@ jsocket.core.tcp = {
 	 * @param {String} cmd La commande a lancer
 	 * @param {Int} delay Le temps d'attente
 	 */
-	setTimeout: function(cmd, delay) {
-		if (jsocket.core.tcp.isWorking == true) {
-			setTimeout(cmd, delay);
+	setTimeout: function(method, delay, args) {
+		if (this.isWorking == true) {
+            if (args) {
+                jsocket.utils.defer(method, delay, this, args);
+            } else {
+                jsocket.utils.defer(method, delay, this);
+            }
 		}
-	},
-
-	/**
-	 * Addslashes les caracteres ' " \\ \0
-	 * @param {String} str Le texte a addslasher
-	 * @return {String} La chaine avec les caracteres echapes
-	 */
-	addslashes: function(str) {
-		if (typeof(str) == 'string') {
-			str = encodeURIComponent(str);
-			str = str.replace(/\'/g, "%27");
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.tcp.addslashes(str[i]);
-			}
-		}
-		return (str);
-	},
-
-	/**
-	 * Supprime tous les slashes des caracteres ' " \\ \0
-	 * @param {String} str Le texte a stripslasher
-	 * @return {String} La chaine avec les caracteres non echapes
-	 */
-	stripslashes: function (str) {
-		if (typeof(str) == 'string') {
-			str = str.replace(/\%27/g, "'");
-			str = decodeURIComponent(str);
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.tcp.stripslashes(str[i]);
-			}
-		}
-		return (str);
 	},
 
 	/**
@@ -668,16 +711,16 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	write: function(msg) {
-		if (jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.connect();
+		if (this.connectedToServer == false) {
+			this.connect();
 		}
-		if (jsocket.core.tcp.connectedToServer) {
-			jsocket.core.tcp.socket.write(msg + "\n");
+		if (this.connectedToServer) {
+			this.socket.write(msg + "\n");
 		} else {
-			if (typeof jsocket.core.tcp.api != 'object') {
+			if (typeof this.api != 'object') {
 				return (false);
 			}
-			jsocket.core.tcp.setTimeout("jsocket.core.tcp.send('" + msg + "');", 500);
+			this.setTimeout(this.send, 500, msg);
 			return (false);
 		}
 		return (true);
@@ -689,7 +732,7 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	send: function(msg) {
-		return (jsocket.core.tcp.write(msg));
+		return (this.write(msg));
 	},
 
 	/**
@@ -698,22 +741,36 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof jsocket.core.tcp.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.tcp.connectedToServer = true;
-		jsocket.core.tcp.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": ""}');
-		jsocket.core.tcp.api.onReceive('{"from": "connect", "value": true}');
+		this.connectedToServer = true;
+        this.keepAlive();
+		this.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
 		return (true);
 	},
+
+    /**
+     * Send keep alive request to server to prevent watchdog to delete client.
+     */
+    keepAlive: function() {
+        if (this.connectedToServer && this.isWorking) {
+            this.api.send(jsocket.utils.forge({
+                        cmd: 'keepalive',
+                        uid: '.uid.'}));
+        }
+        if (this.isWorking) {
+            this.setTimeout(this.keepAlive, this.api.settings.keepAliveTimer);
+        }
+    },
 
 	/**
 	 * Ferme la connection au serveur
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		jsocket.core.tcp.socket.close();
-		jsocket.core.tcp.connectedToServer = false;
+		this.socket.close();
+		this.connectedToServer = false;
 		return (true);
 	},
 
@@ -723,13 +780,13 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof jsocket.core.tcp.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.tcp.api.uid = '';
-		jsocket.core.tcp.api.parser('{"from": "disconnect", "value": true}');
-		jsocket.core.tcp.connectedToServer = false;
-		jsocket.core.tcp.connect();
+		this.api.uid = '';
+		this.api.parser('{"from": "disconnect", "value": true}');
+		this.connectedToServer = false;
+		this.connect();
 		return (true);
 	},
 
@@ -740,12 +797,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	ioError: function(msg) {
-		if (typeof jsocket.core.tcp.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.tcp.api.parser('{"from": "error", "value": "' + msg + '"}');
-		if (jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.api.parser('{"from": "TCPError", "value": "Input/Output error"}');
+		this.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (this.connectedToServer == false) {
+			this.api.parser('{"from": "TCPError", "value": "Input/Output error"}');
 		}
 		return (true);
 	},
@@ -757,12 +814,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	securityError: function(msg) {
-		if (typeof jsocket.core.tcp.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.tcp.api.parser('{"from": "error", "value": "' + msg + '"}');
-		if (jsocket.core.tcp.connectedToServer == false) {
-			jsocket.core.tcp.api.parser('{"from": "TCPError", "value": "Security error"}');
+		this.api.parser('{"from": "error", "value": "' + msg + '"}');
+		if (this.connectedToServer == false) {
+			this.api.parser('{"from": "TCPError", "value": "Security error"}');
 		}
 		return (true);
 	},
@@ -774,12 +831,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		if (typeof jsocket.core.tcp.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
 		var tab = decodeURIComponent(msg).split("\n");
 		for (var i = 0; i < tab.length; ++i) {
-			jsocket.core.tcp.api.onReceive(tab[i]);
+			this.api.onReceive(tab[i]);
 		}
 		return (true);
 	}
@@ -822,7 +879,7 @@ jsocket.core.http = {
 	 * @private
 	 * @type Boolean
 	 */
-	initialized: false,
+	available: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
@@ -850,7 +907,7 @@ jsocket.core.http = {
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function()	{
-		jsocket.core.http.initialized = true;
+		this.available = true;
 		return (true);
 	},
 
@@ -863,11 +920,11 @@ jsocket.core.http = {
         parameters = encodeURI('json=' + parameters);
         var el = document.createElement('script');
         el.type = 'text/javascript';
-        el.onload = jsocket.core.http.receive;
-        el.onreadystatechange = jsocket.core.http.receive;
-        el.src = jsocket.api.settings.http.url + '?' + parameters + '&ts=' + new Date().getTime();
+        el.onload = this.receive;
+        el.onreadystatechange = this.receive;
+        el.src = this.api.settings.http.url + '?' + parameters + '&ts=' + new Date().getTime();
         document.body.appendChild(el);
-		jsocket.core.http.response.waiting = true;
+		this.response.waiting = true;
         return (true);
     },
 
@@ -875,45 +932,11 @@ jsocket.core.http = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		jsocket.core.http.loaded();
-		jsocket.core.http.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": ""}');
-		jsocket.core.http.pool();
-	},
-
-	/**
-	 * Addslashes les caracteres ' " \\ \0
-	 * @param {String} str Le texte a addslasher
-	 * @return {String} La chaine avec les caracteres echapes
-	 */
-	addslashes: function(str) {
-		if (typeof(str) == 'string') {
-			str = encodeURIComponent(str);
-			str = str.replace(/\'/g, "%27");
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.http.addslashes(str[i]);
-			}
-		}
-		return (str);
-	},
-
-	/**
-	 * Supprime tous les slashes des caracteres ' " \\ \0
-	 * @param {String} str Le texte a stripslasher
-     * @return {String} La chaine avec les caracteres non echapes
-	 */
-	stripslashes: function (str) {
-		if (typeof(str) == 'string') {
-			str = str.replace(/\%27/g, "'");
-			str = decodeURIComponent(str);
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.http.stripslashes(str[i]);
-			}
-		}
-		return (str);
+		this._get('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
+		this.pool();
+        this.connected();
+        this.response.waiting = false;
+        return (true);
 	},
 
 	/**
@@ -923,11 +946,11 @@ jsocket.core.http = {
 	 * @return {Boolean} False si l'API n'est pas definie
 	 */
 	pool: function() {
-		if (typeof jsocket.core.http.api != 'object' || jsocket.core.http.isWorking == false) {
+		if (typeof this.api != 'object' || this.isWorking == false) {
 			return (false);
 		}
-		jsocket.core.http.write();
-		setTimeout("jsocket.core.http.pool();", jsocket.api.settings.http.refreshTimer);
+		this.write();
+		jsocket.utils.defer(this.pool, this.api.settings.http.refreshTimer, this);
 	},
 
 	/**
@@ -935,7 +958,7 @@ jsocket.core.http = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		jsocket.core.http.connectedToServer = false;
+		this.connectedToServer = false;
 		return (true);
 	},
 
@@ -945,10 +968,10 @@ jsocket.core.http = {
 	 */
 	checkResponse: function() {
 		var now = Math.floor(new Date().getTime() / 1000);
-		if (jsocket.core.http.response.waiting == false) {
+		if (this.response.waiting == false) {
 			return (true);
-		} else if ((now - jsocket.core.http.response.lastTime) > jsocket.core.http.response.timeout) {
-			jsocket.core.http.response.lastTime = now;
+		} else if ((now - this.response.lastTime) > this.response.timeout) {
+			this.response.lastTime = now;
 			return (true);
 		}
 		return (false);
@@ -959,18 +982,18 @@ jsocket.core.http = {
 	 * @return {Boolean} True si les commandes ont ete envoyees sinon False
 	 */
 	write: function() {
-		if (typeof jsocket.core.http.api != 'object' ||
-			jsocket.core.http.checkResponse() == false) {
+		if (typeof this.api != 'object' ||
+			this.checkResponse() == false) {
 			return (false);
 		}
 		msg = '';
-		if (jsocket.core.http.commands.length > 0) {
-			msg = jsocket.core.http.commands.join("\n");
-			jsocket.core.http.commands = [ ];
-            jsocket.core.http._get(msg + "\n");
+		if (this.commands.length > 0) {
+			msg = this.commands.join("\n");
+			this.commands = [ ];
+            this._get(msg + "\n");
 		} else {
-            jsocket.core.http._get('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
-                                   jsocket.core.http.api.uid + '"}\n');
+            this._get('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
+                      this.api.uid + '"}\n');
 		}
 		return (true);
 	},
@@ -982,7 +1005,7 @@ jsocket.core.http = {
 	 */
 	send: function(msg) {
 		if (msg.length > 0) {
-			return (jsocket.core.http.commands.push(msg));
+			return (this.commands.push(msg));
 		}
 		return (false);
 	},
@@ -993,11 +1016,10 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof jsocket.core.http.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.http.connectedToServer = true;
-		jsocket.core.http.api.onReceive('{"from": "connect", "value": true}');
+		this.connectedToServer = true;
 		return (true);
 	},
 
@@ -1007,12 +1029,12 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof jsocket.core.http.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.http.api.parser('{"from": "disconnect", "value": true}');
-		jsocket.core.http.connectedToServer = false;
-		jsocket.core.http.connect();
+		this.api.parser('{"from": "disconnect", "value": true}');
+		this.connectedToServer = false;
+		this.connect();
 		return (true);
 	},
 
@@ -1055,7 +1077,7 @@ jsocket.core.websocket = {
 	 * @private
 	 * @type Boolean
 	 */
-	initialized: false,
+    available: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
@@ -1084,34 +1106,36 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function() {
+        return (false);
+        this.connectedToServer = false;
 		if ('WebSocket' in window) {
-			jsocket.core.websocket.initialized = true;
-			jsocket.core.websocket.connectedToServer = false;
-			return (true);
-		}
-		jsocket.core.websocket.initialized = false;
-		jsocket.core.websocket.connectedToServer = false;
-		return (false);
+			this.available = true;
+		} else {
+            this.available = false;
+        }
+		return (this.available);
 	},
 
 	/**
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		if (jsocket.core.websocket.loaded() == false) {
-			jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
+		if (this.available == false) {
+			this.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
 			return (false);
 		}
-		if (jsocket.core.websocket.initialized == true && jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.socket = new WebSocket('ws://' + jsocket.api.settings.websocket.host + ':' + jsocket.api.settings.websocket.port + '/jsocket');
-			jsocket.core.websocket.socket.onmessage = jsocket.core.websocket.receive;
-			jsocket.core.websocket.socket.onerror = jsocket.core.websocket.error;
-			jsocket.core.websocket.socket.onopen = jsocket.core.websocket.connected;
-			jsocket.core.websocket.socket.onclose = jsocket.core.websocket.disconnected;
+		if (!this.socket) {
+			this.socket = new WebSocket('ws://' + this.api.settings.websocket.host +
+                                        ':' + this.api.settings.websocket.port + '/jsocket');
+			this.socket.onmessage = jsocket.utils.createDelegate(this.receive, this);
+			this.socket.onerror = jsocket.utils.createDelegate(this.error, this);
+			this.socket.onopen = jsocket.utils.createDelegate(this.connected, this);
+			this.socket.onclose = jsocket.utils.createDelegate(this.disconnected, this);
 		}
-		else if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.setTimeout("jsocket.core.websocket.connect();", 500);
+		else if (this.connectedToServer == false) {
+			this.setTimeout(this.connect, 500);
 		}
+        return (true);
 	},
 
 	/**
@@ -1120,16 +1144,28 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('COONECTED');
-		jsocket.core.websocket.connectedToServer = true;
-
-		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": "" }');
-        jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
+		this.connectedToServer = true;
+        this.keepAlive();
+		this.socket.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": "" }');
 		return (true);
 	},
+
+    /**
+     * Send keep alive request to server to prevent watchdog to delete client.
+     */
+    keepAlive: function() {
+        if (this.connectedToServer && this.isWorking) {
+            this.api.send(jsocket.utils.forge({
+                        cmd: 'keepalive',
+                        uid: '.uid.'}));
+        }
+        if (this.isWorking) {
+            this.setTimeout(this.keepAlive, this.api.settings.keepAliveTimer);
+        }
+    },
 
 	/**
 	 * @event disconnected
@@ -1137,21 +1173,19 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('DISCOONECTED');
-		jsocket.core.websocket.api.uid = '';
-		jsocket.core.websocket.api.parser('{"from": "disconnect", "value": true}');
-		if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.api.method(jsocket.core.tcp);
+		this.api.uid = '';
+		this.api.parser('{"from": "disconnect", "value": true}');
+		if (this.connectedToServer == false) {
 			return (false);
 		}
-		jsocket.core.websocket.connectedToServer = false;
-		if (jsocket.core.websocket.manuallyDisconnected == true) {
-			jsocket.core.websocket.manuallyDisconnected = false;
+		this.connectedToServer = false;
+		if (this.manuallyDisconnected == true) {
+			this.manuallyDisconnected = false;
 		} else {
-			jsocket.core.websocket.connect();
+			this.connect();
 		}
 		return (true);
 	},
@@ -1163,11 +1197,10 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	error: function(msg) {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('ERROR', msg);
-		jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
+		this.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
 		return (true);
 	},
 
@@ -1178,17 +1211,13 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('RECEIVE', msg);
 		msg = msg.data;
-		if (msg.data == '{"from": "connect", "value": "true"}') {
-			jsocket.core.websocket.send('{"cmd": "connected", "args": "null", "app": ""}');
-		}
 		var tab = msg.split("\n");
 		for (var i = 0; i < tab.length; ++i) {
-			jsocket.core.websocket.api.onReceive(tab[i]);
+			this.api.onReceive(tab[i]);
 		}
 		return (true);
 	},
@@ -1199,46 +1228,14 @@ jsocket.core.websocket = {
 	 * @param {String} cmd La commande a lancer
 	 * @param {Int} delay Le temps d'attente
 	 */
-	setTimeout: function(cmd, delay) {
-		if (jsocket.core.websocket.isWorking == true) {
-			setTimeout(cmd, delay);
+	setTimeout: function(method, delay, args) {
+		if (this.isWorking == true) {
+            if (args) {
+                jsocket.utils.defer(method, delay, this, args);
+            } else {
+                jsocket.utils.defer(method, delay, this);
+            }
 		}
-	},
-
-	/**
-	 * Addslashes les caracteres ' " \\ \0
-	 * @param {String} str Le texte a addslasher
-	 * @return {String} La chaine avec les caracteres echapes
-	 */
-	addslashes: function(str) {
-		if (typeof(str) == 'string') {
-			str = encodeURIComponent(str);
-			str = str.replace(/\'/g, "%27");
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.websocket.addslashes(str[i]);
-			}
-		}
-		return (str);
-	},
-
-	/**
-	 * Supprime tous les slashes des caracteres ' " \\ \0
-	 * @param {String} str Le texte a stripslasher
-	 * @return {String} La chaine avec les caracteres non echapes
-	 */
-	stripslashes: function (str) {
-		if (typeof(str) == 'string') {
-			str = str.replace(/\%27/g, "'");
-			str = decodeURIComponent(str);
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.websocket.stripslashes(str[i]);
-			}
-		}
-		return (str);
 	},
 
 	/**
@@ -1248,16 +1245,16 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	write: function(msg) {
-		if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.connect();
+		if (this.connectedToServer == false) {
+			this.connect();
 		}
-		if (jsocket.core.websocket.connectedToServer) {
-			jsocket.core.websocket.socket.send(msg + "\n");
+		if (this.connectedToServer) {
+			this.socket.send(msg + "\n");
 		} else {
-			if (typeof jsocket.core.websocket.api != 'object') {
+			if (typeof this.api != 'object') {
 				return (false);
 			}
-			jsocket.core.websocket.setTimeout("jsocket.core.websocket.send('" + msg + "');", 500);
+			this.setTimeout(this.send, 500, msg);
 			return (false);
 		}
 		return (true);
@@ -1269,7 +1266,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	send: function(msg) {
-		return (jsocket.core.websocket.write(msg));
+		return (this.write(msg));
 	},
 
 	/**
@@ -1277,9 +1274,9 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		if (jsocket.core.websocket.socket != null) {
-			jsocket.core.websocket.manuallyDisconnected = true;
-            jsocket.core.websocket.socket.close();
+		if (this.socket != null) {
+			this.manuallyDisconnected = true;
+            this.socket.close();
         }
 		return (true);
 	}
@@ -1312,44 +1309,44 @@ jsocket.api = {
 	/**
 	 * Le core a utiliser par defaut
 	 * @private
-	 * @type Object
+	 * @type {Object}
 	 */
 	core: null,
 
 	/**
 	 * A activer pour afficher les commandes JSON en entree/sortie
 	 * @private
-	 * @type Boolean
+	 * @type {Boolean}
 	 */
 	debug: false,
 
 	/**
 	 * Le tableau des applications enregistrees dans l'API
 	 * @private
-	 * @type Array
+	 * @type {Object}
 	 */
-	app: [ ],
+	app: {},
 
 	/**
 	 * L'uid du client une fois connecte
 	 * @public
-	 * @type String
+	 * @type {String}
 	 */
 	uid: '',
 
 	/**
 	 * La liste des commandes en attente d'envoie
 	 * @private
-	 * @type Array
+	 * @type {Array}
 	 */
-	commands: [ ],
+	commands: [],
 
 	/**
 	 * La liste des cores disponibles.
 	 * Si un core ne fonctionne pas, alors
 	 * le core suivant est teste.
 	 * @private
-	 * @type Object
+	 * @type {Object}
 	 */
 	cores: {
 		tcp: {
@@ -1378,6 +1375,8 @@ jsocket.api = {
 	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#loaded}</tt></b></li>
 	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
 	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>vhost (optional): Vhost</tt></b></li>
+	 * <li><b><tt>keepAliveTimer: Timer pour le keepalive</tt></b></li>
 	 * </ul></div></p>
 	 * Ce parametre peut etre changer directement comme dans l'exemple ci-dessous
 	 * ou via la methode {@link jsocket.api.configure}
@@ -1396,7 +1395,8 @@ jsocket.api.settings = {
     host: 'localhost',
     port: 8082
   },
-  vhost:'test.quickprez.com'
+  vhost:'test.quickprez.com',
+  keepAliveTimer: 60000
 };
 </code></pre>
 	 */
@@ -1413,7 +1413,8 @@ jsocket.api.settings = {
 			host: 'localhost',
 			port: 8082
 		},
-        vhost:''
+        vhost:'',
+        keepAliveTimer: 60000
 	},
 
 	/**
@@ -1421,14 +1422,21 @@ jsocket.api.settings = {
 	 * @param {Object} Parametre optionnel de configuration {@link jsocket.api.settings}
 	 */
 	connect: function(settings) {
-		if (typeof settings != undefined && settings != null) {
-			jsocket.api.configure(settings);
+        if (jsocket.core.websocket.available == false) {
+            jsocket.core.websocket.loaded();
+        }
+        if (jsocket.core.http.available == false) {
+            jsocket.core.http.loaded();
+        }
+		if (typeof settings != 'undefined' && settings != null) {
+			this.configure(settings);
 		}
-		if (jsocket.api.core == null) {
-			jsocket.api.setCore();
-		}
-		jsocket.api.core.api = this;
-		jsocket.api.core.connect();
+		if (this.core == null) {
+			jsocket.utils.defer(this.setCore, 1000, this);
+		} else {
+            this.core.api = this;
+            this.core.connect();
+        }
 	},
 
 	/**
@@ -1438,16 +1446,16 @@ jsocket.api.settings = {
 	 * @param {Object} Configuration {@link jsocket.api.settings}
 	 */
 	configure: function(settings) {
-		for (core in jsocket.api.settings) {
+		for (core in this.settings) {
 			if (typeof settings[core] == 'object') {
-				for (opt in jsocket.api.settings[core]) {
+				for (opt in this.settings[core]) {
 					if (typeof settings[core][opt] != 'undefined') {
-						jsocket.api.settings[core][opt] = settings[core][opt];
+						this.settings[core][opt] = settings[core][opt];
 					}
 				}
 			}
             else if (typeof settings[core] == 'string') {
-                jsocket.api.settings[core] = settings[core];
+                this.settings[core] = settings[core];
             }
 		}
 	},
@@ -1457,7 +1465,13 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-		jsocket.api.method(jsocket.core.websocket);
+        if (jsocket.core.websocket.available == true) {
+            this.method(jsocket.core.websocket);
+        } else if (jsocket.core.tcp.available == true) {
+            this.method(jsocket.core.tcp);
+        } else {
+            this.method(jsocket.core.tcp);
+        }
 	},
 
 	/**
@@ -1465,8 +1479,8 @@ jsocket.api.settings = {
 	 * @return {Boolean} True si la deconnection a reussie sinon False
 	 */
 	disconnect: function() {
-		if (jsocket.api.core != null) {
-			return (jsocket.api.core.close());
+		if (this.core && typeof this.core != 'undefined') {
+			return (this.core.close());
 		}
 		return (false);
 	},
@@ -1483,18 +1497,33 @@ jsocket.api.settings = {
 	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
 	 */
 	method: function(newCore) {
-		if (jsocket.api.core != null) {
-			jsocket.api.disconnect();
-			jsocket.api.uid = '';
-			jsocket.api.core.isWorking = false;
-			jsocket.api.core = newCore;
-			jsocket.api.core.isWorking = true;
-			jsocket.api.core.api = this;
-			jsocket.api.core.connect();
+        if (this.debug) {
+            console.log('[jsocket-api] method: ', newCore);
+        }
+        if (jsocket.core.websocket.available == false) {
+            jsocket.core.websocket.loaded();
+        }
+        if (jsocket.core.http.available == false) {
+            jsocket.core.http.loaded();
+        }
+        if (newCore.available == false) {
+            newCore = jsocket.core.http;
+        }
+		if (this.core != null) {
+			this.disconnect();
+			this.uid = '';
+			this.core.isWorking = false;
+			this.core = newCore;
+			this.core.isWorking = true;
+			this.core.api = this;
+			this.core.connect();
 		} else {
-			jsocket.api.core = newCore;
-			jsocket.api.core.isWorking = true;
-			jsocket.api.core.api = this;
+			this.core = newCore;
+			this.core.isWorking = true;
+			this.core.api = this;
+            if (this.core.connectedToServer == false) {
+                this.core.connect();
+            }
 		}
 	},
 
@@ -1518,11 +1547,11 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} appObject L'application contenant les callbacks
 	 */
 	register: function(appName, appObject) {
-		var newApp = appObject || { };
-		jsocket.api.app[appName] = newApp;
-		jsocket.api.app[appName].isMaster = false;
-		if (typeof jsocket.api.app[appName].onHistory == 'undefined') {
-			jsocket.api.app[appName].onHistory = jsocket.api.onHistory;
+		var newApp = appObject || {};
+		this.app[appName] = newApp;
+		this.app[appName].isMaster = false;
+		if (typeof this.app[appName].onHistory == 'undefined') {
+			this.app[appName].onHistory = this.onHistory;
 		}
 	},
 
@@ -1533,7 +1562,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @return {Boolean} True si l'application exists sinon False
 	 */
 	appExists: function(appName) {
-		if (typeof(jsocket.api.app[appName]) != 'undefined') {
+		if (typeof(this.app[appName]) != 'undefined') {
 			return (true);
 		}
 		return (false);
@@ -1547,8 +1576,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @return {Boolean} True si le callback a ete appele sinon False
 	 */
 	appCallback: function(appName, callName, args) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"].' + callName)) != 'undefined') {
-			eval('jsocket.api.app["' + appName + '"].' + callName + '(args);');
+		if (typeof this.app[appName][callName] != 'undefined') {
+			this.app[appName][callName](args);
 			return (true);
 		}
 		return (false);
@@ -1561,8 +1590,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Mixed} args Les arguments a passer au callback
 	 */
 	appCallbacks: function(callName, args) {
-		for (var i in jsocket.api.app) {
-			jsocket.api.appCallback(i, callName, args);
+		for (var appName in this.app) {
+			this.appCallback(appName, callName, args);
 		}
 	},
 
@@ -1571,16 +1600,16 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Boolean} enable True pour activer la console False pour desactiver
 	 */
 	debug: function(enable) {
-		if (jsocket.api.core.initialized == false) {
-			setTimeout("jsocket.api.debug(" + enable + ");", 1000);
+		if (this.core.available == false) {
+			jsocket.utils.defer(this.debug, 1000, this, enable);
 			return (false);
 		}
 		if (enable == true) {
-			jsocket.api.debug = true;
+			this.debug = true;
 			document.getElementById('socketBridge').style.top = '0px';
 		}
 		else {
-			jsocket.api.debug = false;
+			this.debug = false;
 			document.getElementById('socketBridge').style.top = '-1000px';
 		}
 	},
@@ -1591,6 +1620,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} text Le texte a transformer
 	 */
 	parser: function(text) {
+        if (this.debug) {
+            console.log('[jsocket-api] receive: ', text);
+        }
 		var j = { };
 		try {
 			j = JSON.parse(text);
@@ -1598,31 +1630,31 @@ jsocket.api.register('myApplicationName', myApplication);
 			return (false);
 		}
 		if (j.from != null && j.value != null) {
-			func_name = j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
-			var args = { };
-			args.value = (j.value != null ? j.value: '');
-			args.channel = (j.channel != null ? j.channel: '');
-			args.app = (j.app != null ? j.app: '');
+			func_name = 'on' + j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
+			var args = {
+                value: (j.value ? j.value : ''),
+                channel: (j.channel ? j.channel : ''),
+                app: (j.app ? j.app : '')
+            };
 			if (j.from == 'history') {
-				args.channel = decodeURIComponent(args.channel.replace(/%27/g, "'"));
-				args.app = decodeURIComponent(args.app.replace(/%27/g, "'"));
+				args.channel = jsocket.utils.stripslashes(args.channel);
+				args.app = jsocket.utils.stripslashes(args.app);
 			} else {
-				args = jsocket.api.core.stripslashes(args);
+				args = jsocket.utils.stripslashes(args);
 			}
 			if (j.app != null && j.app.length > 0 &&
-				jsocket.api.appExists(j.app) == true) {
+				this.appExists(j.app) == true) {
 				try {
-					jsocket.api.appCallback(args['app'], 'on' + func_name, args);
+					this.appCallback(args['app'], func_name, args);
 				} catch(e) {
-					return (false);
+					return (this.onError(e));
 				}
-			}
-			else {
+			} else {
 				try {
-					jsocket.api.appCallbacks('on' + func_name, args);
-					eval('jsocket.api.on' + func_name + "(args)");
+					this.appCallbacks(func_name, args);
+					this[func_name].call(this, args);
 				} catch(e) {
-					return (jsocket.api.onError(e));
+					return (this.onError(e));
 				}
 			}
 		}
@@ -1636,9 +1668,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Tableau contenant l'identifiant unique de l'utilisateur
 	 */
 	onConnected: function(args) {
-        //console.log('onConnected', args);
-		jsocket.api.uid = args.value;
-		jsocket.api.sendPool();
+		this.uid = args.value;
+		this.sendPool();
+		this.onReceive('{"from": "connect", "value": true}');
 	},
 
 	/**
@@ -1665,8 +1697,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * plusieurs commandes JSON. (Si plusieurs, elle sont alors separees par des \n)
 	 */
 	onReceive: function(message) {
-		//console.log('jsocket.api.receive: ', message);
-		jsocket.api.parser(message);
+		this.parser(message);
 	},
 
 	/**
@@ -1693,17 +1724,17 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe pour passer admin sur le serveur
 	 */
 	auth: function(appName, channel, password) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
-			jsocket.api.app[appName].isMaster = true;
+		if (typeof this.app[appName] != 'undefined') {
+			this.app[appName].isMaster = true;
 		}
 		var json = {
 			cmd: 'auth',
 			args: password,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1713,17 +1744,17 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe du channel
 	 */
 	chanAuth: function(appName, channel, password) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
-			jsocket.api.app[appName].isMaster = true;
+		if (typeof this.app[appName] != 'undefined') {
+			this.app[appName].isMaster = true;
 		}
 		var json = {
 			cmd: 'chanAuth',
 			args: password,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1754,9 +1785,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: [ channel, password ],
 			channel: channel,
 			app: appName,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1778,9 +1809,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: channel,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1798,17 +1829,17 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe du salon
 	 */
 	create: function(appName, channel, password) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
-			jsocket.api.app[appName].isMaster = true;
+		if (typeof this.app[appName] != 'undefined') {
+			this.app[appName].isMaster = true;
 		}
 		var json = {
 			cmd: 'create',
 			args: [ channel, password ],
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1830,9 +1861,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: channel,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1847,9 +1878,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: nickname,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1874,9 +1905,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: command,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1899,9 +1930,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: channel,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1923,9 +1954,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: 'null',
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1947,7 +1978,7 @@ jsocket.api.register('myApplicationName', myApplication);
 			if (typeof values[i]['json'] != 'undefined') {
 				var cmd = values[i]['json'].replace(/\%27/g, "'");
 				cmd = decodeURIComponent(cmd);
-				jsocket.api.parser(cmd);
+				this.parser(cmd);
 			}
 		}
 	},
@@ -1967,9 +1998,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: tab,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -1992,9 +2023,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: 'null',
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -2017,9 +2048,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: status,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -2041,9 +2072,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: 'null',
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -2066,9 +2097,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: password,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -2085,9 +2116,6 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onError: function(error) {
-		//console.log('jsocket.api.onError: ', error);
-		jsocket.api.method(jsocket.core.websocket);
-		jsocket.api.connect();
 	},
 
 	/**
@@ -2097,10 +2125,13 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * alors la methode de dialogue avec le serveur par TCP.
 	 */
 	onWebSocketError: function() {
-		if (jsocket.core.tcp.isWorking == false) {
-			jsocket.api.method(jsocket.core.tcp);
-			jsocket.api.connect();
-		}
+        if (jsocket.core.tcp.available == true &&
+            jsocket.core.tcp.isWorking == false) {
+            this.method(jsocket.core.tcp);
+        } else if (jsocket.core.http.isWorking == false) {
+            this.method(jsocket.core.http);
+        }
+        this.connect();
 	},
 
 	/**
@@ -2112,9 +2143,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	onTCPError: function(error) {
 		if (jsocket.core.http.isWorking == false) {
-			jsocket.api.method(jsocket.core.http);
-			jsocket.api.connect();
+			this.method(jsocket.core.http);
 		}
+        this.connect();
 	},
 
 	/**
@@ -2123,25 +2154,26 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * en queue sont envoyes au serveur.
 	 */
 	sendPool: function() {
-		for (var i = 0; i < jsocket.api.commands.length; ++i) {
-			//console.log('jsocket.api.send: ', jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
-			jsocket.api.core.send(jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
+		for (var i = 0; i < this.commands.length; ++i) {
+			this.core.send(this.commands[i].replace(/\.uid\./, this.uid));
 		}
-		jsocket.api.commands = [ ];
+		this.commands = [];
 	},
 
 	/**
 	 * Gestion de queue pour les commandes a envoyer.
-	 * Si jsocket.api.uid est null/empty alors on stock les
+	 * Si this.uid est null/empty alors on stock les
 	 * commands puis on les envoie lorsque l'uid est renseigne.
 	 * @param {String} msg Le message (commande JSON) a envoyer
 	 */
 	send: function(msg) {
-		if (jsocket.api.uid != '') {
-			//console.log('jsocket.api.send: ', msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
-			jsocket.api.core.send(msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
-		} else if (jsocket.api.commands.length < 10) {
-			jsocket.api.commands.push(msg);
+        if (this.debug) {
+            console.log('[jsocket-api] send: ', msg);
+        }
+		if (this.uid != '') {
+			this.core.send(msg.replace(/\.uid\./, this.uid));
+		} else if (this.commands.length < 10) {
+			this.commands.push(msg);
 		}
 	}
 };

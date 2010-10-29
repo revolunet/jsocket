@@ -82,16 +82,16 @@ class TwistedTCPClient(Protocol):
         else:
             valid_data = self.__findReceived(data)
             for v_data in valid_data:
-                if v_data is not None:
-                    commands = v_data.split("\n")
-                    for cmd in commands:
-                        if len(cmd) > 0:
-                            # @todo
-                            # Reste a savoir pourquoi on a une commande vide ici parfois ?
-                            Log().add('[TCP] Received: %s' % cmd)
-                            uid = Approval().validate(cmd, self.callbackSend, 'tcp')
-                            if uid is not None:
-                                self.uid = uid
+                if v_data is None:
+                    return
+                commands = v_data.split("\n")
+                for cmd in commands:
+                    if len(cmd) < 1:
+                        continue
+                    Log().add('[TCP] Received: %s' % cmd)
+                    uid = Approval().validate(cmd, self.callbackSend, 'tcp')
+                    if uid is not None:
+                        self.uid = uid
 
     def connectionMade(self):
         """
@@ -114,12 +114,15 @@ class TwistedTCPClient(Protocol):
 
     def send(self, msg, setDelimiters=True):
         """
-        Methode permettant d'ecrire le message sur la socket si l'utilisateur est connecte
+        Methode permettant d'ecrire le message sur
+        la socket si l'utilisateur est connecte
         """
 
         if self.connected is True:
             if setDelimiters is True:
-                msg = TwistedTCPClient.DELIMITER_FROM + msg + TwistedTCPClient.DELIMITER_TO
+                msg = "%s%s%s" % (
+                    TwistedTCPClient.DELIMITER_FROM,
+                    msg, TwistedTCPClient.DELIMITER_TO)
             handle = self.transport.getHandle()
             if handle:
                 handle.send(msg)

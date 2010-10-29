@@ -35,7 +35,7 @@ jsocket.core.http = {
 	 * @private
 	 * @type Boolean
 	 */
-	initialized: false,
+	available: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
@@ -63,7 +63,7 @@ jsocket.core.http = {
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function()	{
-		jsocket.core.http.initialized = true;
+		this.available = true;
 		return (true);
 	},
 
@@ -76,11 +76,11 @@ jsocket.core.http = {
         parameters = encodeURI('json=' + parameters);
         var el = document.createElement('script');
         el.type = 'text/javascript';
-        el.onload = jsocket.core.http.receive;
-        el.onreadystatechange = jsocket.core.http.receive;
-        el.src = jsocket.api.settings.http.url + '?' + parameters + '&ts=' + new Date().getTime();
+        el.onload = this.receive;
+        el.onreadystatechange = this.receive;
+        el.src = this.api.settings.http.url + '?' + parameters + '&ts=' + new Date().getTime();
         document.body.appendChild(el);
-		jsocket.core.http.response.waiting = true;
+		this.response.waiting = true;
         return (true);
     },
 
@@ -88,45 +88,11 @@ jsocket.core.http = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		jsocket.core.http.loaded();
-		jsocket.core.http.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": ""}');
-		jsocket.core.http.pool();
-	},
-
-	/**
-	 * Addslashes les caracteres ' " \\ \0
-	 * @param {String} str Le texte a addslasher
-	 * @return {String} La chaine avec les caracteres echapes
-	 */
-	addslashes: function(str) {
-		if (typeof(str) == 'string') {
-			str = encodeURIComponent(str);
-			str = str.replace(/\'/g, "%27");
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.http.addslashes(str[i]);
-			}
-		}
-		return (str);
-	},
-
-	/**
-	 * Supprime tous les slashes des caracteres ' " \\ \0
-	 * @param {String} str Le texte a stripslasher
-     * @return {String} La chaine avec les caracteres non echapes
-	 */
-	stripslashes: function (str) {
-		if (typeof(str) == 'string') {
-			str = str.replace(/\%27/g, "'");
-			str = decodeURIComponent(str);
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.http.stripslashes(str[i]);
-			}
-		}
-		return (str);
+		this._get('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
+		this.pool();
+        this.connected();
+        this.response.waiting = false;
+        return (true);
 	},
 
 	/**
@@ -136,11 +102,11 @@ jsocket.core.http = {
 	 * @return {Boolean} False si l'API n'est pas definie
 	 */
 	pool: function() {
-		if (typeof jsocket.core.http.api != 'object' || jsocket.core.http.isWorking == false) {
+		if (typeof this.api != 'object' || this.isWorking == false) {
 			return (false);
 		}
-		jsocket.core.http.write();
-		setTimeout("jsocket.core.http.pool();", jsocket.api.settings.http.refreshTimer);
+		this.write();
+		jsocket.utils.defer(this.pool, this.api.settings.http.refreshTimer, this);
 	},
 
 	/**
@@ -148,7 +114,7 @@ jsocket.core.http = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		jsocket.core.http.connectedToServer = false;
+		this.connectedToServer = false;
 		return (true);
 	},
 
@@ -158,10 +124,10 @@ jsocket.core.http = {
 	 */
 	checkResponse: function() {
 		var now = Math.floor(new Date().getTime() / 1000);
-		if (jsocket.core.http.response.waiting == false) {
+		if (this.response.waiting == false) {
 			return (true);
-		} else if ((now - jsocket.core.http.response.lastTime) > jsocket.core.http.response.timeout) {
-			jsocket.core.http.response.lastTime = now;
+		} else if ((now - this.response.lastTime) > this.response.timeout) {
+			this.response.lastTime = now;
 			return (true);
 		}
 		return (false);
@@ -172,18 +138,18 @@ jsocket.core.http = {
 	 * @return {Boolean} True si les commandes ont ete envoyees sinon False
 	 */
 	write: function() {
-		if (typeof jsocket.core.http.api != 'object' ||
-			jsocket.core.http.checkResponse() == false) {
+		if (typeof this.api != 'object' ||
+			this.checkResponse() == false) {
 			return (false);
 		}
 		msg = '';
-		if (jsocket.core.http.commands.length > 0) {
-			msg = jsocket.core.http.commands.join("\n");
-			jsocket.core.http.commands = [ ];
-            jsocket.core.http._get(msg + "\n");
+		if (this.commands.length > 0) {
+			msg = this.commands.join("\n");
+			this.commands = [ ];
+            this._get(msg + "\n");
 		} else {
-            jsocket.core.http._get('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
-                                   jsocket.core.http.api.uid + '"}\n');
+            this._get('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
+                      this.api.uid + '"}\n');
 		}
 		return (true);
 	},
@@ -195,7 +161,7 @@ jsocket.core.http = {
 	 */
 	send: function(msg) {
 		if (msg.length > 0) {
-			return (jsocket.core.http.commands.push(msg));
+			return (this.commands.push(msg));
 		}
 		return (false);
 	},
@@ -206,11 +172,10 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof jsocket.core.http.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.http.connectedToServer = true;
-		jsocket.core.http.api.onReceive('{"from": "connect", "value": true}');
+		this.connectedToServer = true;
 		return (true);
 	},
 
@@ -220,12 +185,12 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof jsocket.core.http.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-		jsocket.core.http.api.parser('{"from": "disconnect", "value": true}');
-		jsocket.core.http.connectedToServer = false;
-		jsocket.core.http.connect();
+		this.api.parser('{"from": "disconnect", "value": true}');
+		this.connectedToServer = false;
+		this.connect();
 		return (true);
 	},
 

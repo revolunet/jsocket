@@ -30,7 +30,8 @@ class Client(object):
 
     def getName(self):
         """
-        Return : Si l utilisateur n a pas de nickname on retourne la unique_key sinon son nickname -> string
+        Return : Si l utilisateur n a pas de nickname
+        on retourne la unique_key sinon son nickname -> string
         """
         if self.nickName == None:
             return self.unique_key
@@ -45,13 +46,21 @@ class Client(object):
         self.last_action = time.time()
         if self.callback is not None:
             if callable(self.callback):
-                Log().add('[JSON][Responses] %s' % str(command), 'green')
+                Log().add('[%s] Send: %s' % (str(self.type),
+                                             str(command)), 'green')
                 reactor.callFromThread(self.callback, [command])
             else:
                 self.callback = None
             command = None
         if command is not None:
             self.response.append(command)
+
+    def updateLastAction(self):
+        """
+        Mets a jour la derniere action utilisateur
+        """
+
+        self.last_action = time.time()
 
     def getResponse(self):
         """
@@ -63,5 +72,5 @@ class Client(object):
         res = self.response
         self.response = []
         if len(res) > 0:
-            Log().add('[JSON][Responses] %s' % str(res), 'green')
+            Log().add('[%s] Send: %s' % (str(self.type), str(res)), 'green')
         return res
