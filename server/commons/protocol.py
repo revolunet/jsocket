@@ -367,13 +367,13 @@ class Protocol(object):
         Envoie un message a une liste d'utilisateurs
         """
         message = args.get('args', '')
-        channelName = args['channel']
-        appName = args['app']
         if len(message) == 0:
             return ('false')
         else:
+            channelName = args['channel']
+            appName = args['app']
             ret = False
-            if message != '' and len(message[0]) != 0:
+            if message[0] and len(message[0]) != 0:
                 if len(message) > 1 and len(message[1]) > 0:
                     if len(message[1][0]) == 0:
                         ret = self.client.room.message(channelName=channelName,
