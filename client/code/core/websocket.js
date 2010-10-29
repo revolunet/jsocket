@@ -18,7 +18,7 @@ jsocket.core.websocket = {
 	 * @private
 	 * @type Boolean
 	 */
-	initialized: false,
+    available: false,
 
 	/**
 	 * True si le core est connecte au server sinon False
@@ -47,34 +47,35 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function() {
+        this.connectedToServer = false;
 		if ('WebSocket' in window) {
-			jsocket.core.websocket.initialized = true;
-			jsocket.core.websocket.connectedToServer = false;
-			return (true);
-		}
-		jsocket.core.websocket.initialized = false;
-		jsocket.core.websocket.connectedToServer = false;
-		return (false);
+			this.available = true;
+		} else {
+            this.available = false;
+        }
+		return (this.available);
 	},
 
 	/**
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		if (jsocket.core.websocket.loaded() == false) {
-			jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
+		if (this.available == false) {
+			this.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
 			return (false);
 		}
-		if (jsocket.core.websocket.initialized == true && jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.socket = new WebSocket('ws://' + jsocket.api.settings.websocket.host + ':' + jsocket.api.settings.websocket.port + '/jsocket');
-			jsocket.core.websocket.socket.onmessage = jsocket.core.websocket.receive;
-			jsocket.core.websocket.socket.onerror = jsocket.core.websocket.error;
-			jsocket.core.websocket.socket.onopen = jsocket.core.websocket.connected;
-			jsocket.core.websocket.socket.onclose = jsocket.core.websocket.disconnected;
+		if (!this.socket) {
+			this.socket = new WebSocket('ws://' + this.api.settings.websocket.host +
+                                        ':' + this.api.settings.websocket.port + '/jsocket');
+			this.socket.onmessage = jsocket.utils.createDelegate(this.receive, this);
+			this.socket.onerror = jsocket.utils.createDelegate(this.error, this);
+			this.socket.onopen = jsocket.utils.createDelegate(this.connected, this);
+			this.socket.onclose = jsocket.utils.createDelegate(this.disconnected, this);
 		}
-		else if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.setTimeout("jsocket.core.websocket.connect();", 500);
+		else if (this.connectedToServer == false) {
+			this.setTimeout(this.connect, 500);
 		}
+        return (true);
 	},
 
 	/**
@@ -83,14 +84,11 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('COONECTED');
-		jsocket.core.websocket.connectedToServer = true;
-
-		jsocket.core.websocket.socket.send('{"cmd": "connected", "args": { "vhost":"' + jsocket.api.settings.vhost + '" }, "app": "" }');
-        jsocket.core.websocket.api.onReceive('{"from": "connect", "value": true}');
+		this.connectedToServer = true;
+		this.socket.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": "" }');
 		return (true);
 	},
 
@@ -100,21 +98,19 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('DISCOONECTED');
-		jsocket.core.websocket.api.uid = '';
-		jsocket.core.websocket.api.parser('{"from": "disconnect", "value": true}');
-		if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.api.method(jsocket.core.tcp);
+		this.api.uid = '';
+		this.api.parser('{"from": "disconnect", "value": true}');
+		if (this.connectedToServer == false) {
 			return (false);
 		}
-		jsocket.core.websocket.connectedToServer = false;
-		if (jsocket.core.websocket.manuallyDisconnected == true) {
-			jsocket.core.websocket.manuallyDisconnected = false;
+		this.connectedToServer = false;
+		if (this.manuallyDisconnected == true) {
+			this.manuallyDisconnected = false;
 		} else {
-			jsocket.core.websocket.connect();
+			this.connect();
 		}
 		return (true);
 	},
@@ -126,11 +122,10 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	error: function(msg) {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('ERROR', msg);
-		jsocket.core.websocket.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
+		this.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
 		return (true);
 	},
 
@@ -141,17 +136,14 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		if (typeof jsocket.core.websocket.api != 'object') {
+		if (typeof this.api != 'object') {
 			return (false);
 		}
-        //console.log('RECEIVE', msg);
 		msg = msg.data;
-		if (msg.data == '{"from": "connect", "value": "true"}') {
-			jsocket.core.websocket.send('{"cmd": "connected", "args": "null", "app": ""}');
-		}
+        console.log('Websocket receive: ', msg);
 		var tab = msg.split("\n");
 		for (var i = 0; i < tab.length; ++i) {
-			jsocket.core.websocket.api.onReceive(tab[i]);
+			this.api.onReceive(tab[i]);
 		}
 		return (true);
 	},
@@ -162,46 +154,14 @@ jsocket.core.websocket = {
 	 * @param {String} cmd La commande a lancer
 	 * @param {Int} delay Le temps d'attente
 	 */
-	setTimeout: function(cmd, delay) {
-		if (jsocket.core.websocket.isWorking == true) {
-			setTimeout(cmd, delay);
+	setTimeout: function(method, delay, args) {
+		if (this.isWorking == true) {
+            if (args) {
+                jsocket.utils.defer(method, delay, this, args);
+            } else {
+                jsocket.utils.defer(method, delay, this);
+            }
 		}
-	},
-
-	/**
-	 * Addslashes les caracteres ' " \\ \0
-	 * @param {String} str Le texte a addslasher
-	 * @return {String} La chaine avec les caracteres echapes
-	 */
-	addslashes: function(str) {
-		if (typeof(str) == 'string') {
-			str = encodeURIComponent(str);
-			str = str.replace(/\'/g, "%27");
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.websocket.addslashes(str[i]);
-			}
-		}
-		return (str);
-	},
-
-	/**
-	 * Supprime tous les slashes des caracteres ' " \\ \0
-	 * @param {String} str Le texte a stripslasher
-	 * @return {String} La chaine avec les caracteres non echapes
-	 */
-	stripslashes: function (str) {
-		if (typeof(str) == 'string') {
-			str = str.replace(/\%27/g, "'");
-			str = decodeURIComponent(str);
-		}
-		else if (typeof(str) == 'object') {
-			for (var i in str) {
-				str[i] = jsocket.core.websocket.stripslashes(str[i]);
-			}
-		}
-		return (str);
 	},
 
 	/**
@@ -211,16 +171,17 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	write: function(msg) {
-		if (jsocket.core.websocket.connectedToServer == false) {
-			jsocket.core.websocket.connect();
+		if (this.connectedToServer == false) {
+			this.connect();
 		}
-		if (jsocket.core.websocket.connectedToServer) {
-			jsocket.core.websocket.socket.send(msg + "\n");
+		if (this.connectedToServer) {
+            console.log('Websocket send: ', msg);
+			this.socket.send(msg + "\n");
 		} else {
-			if (typeof jsocket.core.websocket.api != 'object') {
+			if (typeof this.api != 'object') {
 				return (false);
 			}
-			jsocket.core.websocket.setTimeout("jsocket.core.websocket.send('" + msg + "');", 500);
+			this.setTimeout(this.send, 500, msg);
 			return (false);
 		}
 		return (true);
@@ -232,7 +193,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le message a ete envoye sinon False
 	 */
 	send: function(msg) {
-		return (jsocket.core.websocket.write(msg));
+		return (this.write(msg));
 	},
 
 	/**
@@ -240,9 +201,9 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		if (jsocket.core.websocket.socket != null) {
-			jsocket.core.websocket.manuallyDisconnected = true;
-            jsocket.core.websocket.socket.close();
+		if (this.socket != null) {
+			this.manuallyDisconnected = true;
+            this.socket.close();
         }
 		return (true);
 	}

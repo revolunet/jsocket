@@ -10,7 +10,7 @@ $out = dirname(__FILE__).'/jsocket.js';
 $files = array(
 	'code/jsocket.min.js',
 	'lib/json2.js',
-	'code/protocol.js',
+	'code/utils.js',
 	'code/core/tcp.js',
 	'code/core/http.js',
 	'code/core/websocket.js',

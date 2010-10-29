@@ -530,7 +530,7 @@ class Protocol(object):
                         key = client.unique_key
                         name = client.getName()
                         to_send = {"name": name, "key": key, "status": status}
-                        Log().add("[+] Client: envoie du status master vers l'utilisateur: " %
+                        Log().add("[+] Client: envoie du status master vers l'utilisateur: %s" %
                                   name, 'yellow')
                         json = Protocol.forgeJSON('status', simplejson.JSONEncoder().encode(to_send), {'channel': client.room_name})
                         if user is not None:

@@ -134,14 +134,20 @@ jsocket.api.settings = {
 	 * @param {Object} Parametre optionnel de configuration {@link jsocket.api.settings}
 	 */
 	connect: function(settings) {
-		if (typeof settings != undefined && settings != null) {
-			jsocket.api.configure(settings);
+        if (jsocket.core.websocket.available == false) {
+            jsocket.core.websocket.loaded();
+        }
+        if (jsocket.core.http.available == false) {
+            jsocket.core.http.loaded();
+        }
+		if (typeof settings != 'undefined' && settings != null) {
+			this.configure(settings);
 		}
-		if (jsocket.api.core == null) {
-			jsocket.api.setCore();
+		if (this.core == null) {
+			this.setCore();
 		}
-		jsocket.api.core.api = this;
-		jsocket.api.core.connect();
+		this.core.api = this;
+		this.core.connect();
 	},
 
 	/**
@@ -151,16 +157,16 @@ jsocket.api.settings = {
 	 * @param {Object} Configuration {@link jsocket.api.settings}
 	 */
 	configure: function(settings) {
-		for (core in jsocket.api.settings) {
+		for (core in this.settings) {
 			if (typeof settings[core] == 'object') {
-				for (opt in jsocket.api.settings[core]) {
+				for (opt in this.settings[core]) {
 					if (typeof settings[core][opt] != 'undefined') {
-						jsocket.api.settings[core][opt] = settings[core][opt];
+						this.settings[core][opt] = settings[core][opt];
 					}
 				}
 			}
             else if (typeof settings[core] == 'string') {
-                jsocket.api.settings[core] = settings[core];
+                this.settings[core] = settings[core];
             }
 		}
 	},
@@ -170,7 +176,13 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-		jsocket.api.method(jsocket.core.websocket);
+        if (jsocket.core.websocket.available == true) {
+            this.method(jsocket.core.websocket);
+        } else if (jsocket.core.tcp.available == true) {
+            this.method(jsocket.core.tcp);
+        } else {
+            this.method(jsocket.core.http);
+        }
 	},
 
 	/**
@@ -178,8 +190,8 @@ jsocket.api.settings = {
 	 * @return {Boolean} True si la deconnection a reussie sinon False
 	 */
 	disconnect: function() {
-		if (jsocket.api.core != null) {
-			return (jsocket.api.core.close());
+		if (this.core && typeof this.core != 'undefined') {
+			return (this.core.close());
 		}
 		return (false);
 	},
@@ -196,18 +208,27 @@ jsocket.api.settings = {
 	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
 	 */
 	method: function(newCore) {
-		if (jsocket.api.core != null) {
-			jsocket.api.disconnect();
-			jsocket.api.uid = '';
-			jsocket.api.core.isWorking = false;
-			jsocket.api.core = newCore;
-			jsocket.api.core.isWorking = true;
-			jsocket.api.core.api = this;
-			jsocket.api.core.connect();
+        if (jsocket.core.websocket.available == false) {
+            jsocket.core.websocket.loaded();
+        }
+        if (jsocket.core.http.available == false) {
+            jsocket.core.http.loaded();
+        }
+        if (newCore.available == false) {
+            newCore = jsocket.core.http;
+        }
+		if (this.core != null) {
+			this.disconnect();
+			this.uid = '';
+			this.core.isWorking = false;
+			this.core = newCore;
+			this.core.isWorking = true;
+			this.core.api = this;
+			this.core.connect();
 		} else {
-			jsocket.api.core = newCore;
-			jsocket.api.core.isWorking = true;
-			jsocket.api.core.api = this;
+			this.core = newCore;
+			this.core.isWorking = true;
+			this.core.api = this;
 		}
 	},
 
@@ -232,10 +253,10 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	register: function(appName, appObject) {
 		var newApp = appObject || { };
-		jsocket.api.app[appName] = newApp;
-		jsocket.api.app[appName].isMaster = false;
-		if (typeof jsocket.api.app[appName].onHistory == 'undefined') {
-			jsocket.api.app[appName].onHistory = jsocket.api.onHistory;
+		this.app[appName] = newApp;
+		this.app[appName].isMaster = false;
+		if (typeof this.app[appName].onHistory == 'undefined') {
+			this.app[appName].onHistory = this.onHistory;
 		}
 	},
 
@@ -246,7 +267,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @return {Boolean} True si l'application exists sinon False
 	 */
 	appExists: function(appName) {
-		if (typeof(jsocket.api.app[appName]) != 'undefined') {
+		if (typeof(this.app[appName]) != 'undefined') {
 			return (true);
 		}
 		return (false);
@@ -260,8 +281,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @return {Boolean} True si le callback a ete appele sinon False
 	 */
 	appCallback: function(appName, callName, args) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"].' + callName)) != 'undefined') {
-			eval('jsocket.api.app["' + appName + '"].' + callName + '(args);');
+		if (typeof this.app[appName][callName] != 'undefined') {
+			this.app[appName][callName].call(this, args);
 			return (true);
 		}
 		return (false);
@@ -274,8 +295,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Mixed} args Les arguments a passer au callback
 	 */
 	appCallbacks: function(callName, args) {
-		for (var i in jsocket.api.app) {
-			jsocket.api.appCallback(i, callName, args);
+		for (var i in this.app) {
+			this.appCallback(i, callName, args);
 		}
 	},
 
@@ -284,16 +305,16 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Boolean} enable True pour activer la console False pour desactiver
 	 */
 	debug: function(enable) {
-		if (jsocket.api.core.initialized == false) {
-			setTimeout("jsocket.api.debug(" + enable + ");", 1000);
+		if (this.core.available == false) {
+			jsocket.utils.defer(this.debug, 1000, this, enable);
 			return (false);
 		}
 		if (enable == true) {
-			jsocket.api.debug = true;
+			this.debug = true;
 			document.getElementById('socketBridge').style.top = '0px';
 		}
 		else {
-			jsocket.api.debug = false;
+			this.debug = false;
 			document.getElementById('socketBridge').style.top = '-1000px';
 		}
 	},
@@ -311,31 +332,32 @@ jsocket.api.register('myApplicationName', myApplication);
 			return (false);
 		}
 		if (j.from != null && j.value != null) {
-			func_name = j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
-			var args = { };
-			args.value = (j.value != null ? j.value: '');
-			args.channel = (j.channel != null ? j.channel: '');
-			args.app = (j.app != null ? j.app: '');
+			func_name = 'on' + j.from.substring(0, 1).toUpperCase() + j.from.substring(1, j.from.length);
+			var args = {
+                value: (j.value ? j.value : ''),
+                channel: (j.channel ? j.channel : ''),
+                app: (j.app ? j.app : '')
+            };
 			if (j.from == 'history') {
-				args.channel = decodeURIComponent(args.channel.replace(/%27/g, "'"));
-				args.app = decodeURIComponent(args.app.replace(/%27/g, "'"));
+				args.channel = jsocket.utils.stripslashes(args.channel);
+				args.app = jsocket.utils.stripslashes(args.app);
 			} else {
-				args = jsocket.api.core.stripslashes(args);
+				args = jsocket.utils.stripslashes(args);
 			}
 			if (j.app != null && j.app.length > 0 &&
-				jsocket.api.appExists(j.app) == true) {
+				this.appExists(j.app) == true) {
 				try {
-					jsocket.api.appCallback(args['app'], 'on' + func_name, args);
+					this.appCallback(args['app'], func_name, args);
 				} catch(e) {
 					return (false);
 				}
 			}
 			else {
 				try {
-					jsocket.api.appCallbacks('on' + func_name, args);
-					eval('jsocket.api.on' + func_name + "(args)");
+					this.appCallbacks(func_name, args);
+					this[func_name].call(this, args);
 				} catch(e) {
-					return (jsocket.api.onError(e));
+					return (this.onError(e));
 				}
 			}
 		}
@@ -349,9 +371,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} args Tableau contenant l'identifiant unique de l'utilisateur
 	 */
 	onConnected: function(args) {
-        //console.log('onConnected', args);
-		jsocket.api.uid = args.value;
-		jsocket.api.sendPool();
+		this.uid = args.value;
+		this.sendPool();
+		this.onReceive('{"from": "connect", "value": true}');
 	},
 
 	/**
@@ -378,8 +400,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * plusieurs commandes JSON. (Si plusieurs, elle sont alors separees par des \n)
 	 */
 	onReceive: function(message) {
-		//console.log('jsocket.api.receive: ', message);
-		jsocket.api.parser(message);
+		this.parser(message);
 	},
 
 	/**
@@ -406,17 +427,17 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe pour passer admin sur le serveur
 	 */
 	auth: function(appName, channel, password) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
-			jsocket.api.app[appName].isMaster = true;
+		if (typeof this.app[appName] != 'undefined') {
+			this.app[appName].isMaster = true;
 		}
 		var json = {
 			cmd: 'auth',
 			args: password,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -426,17 +447,17 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe du channel
 	 */
 	chanAuth: function(appName, channel, password) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
-			jsocket.api.app[appName].isMaster = true;
+		if (typeof this.app[appName] != 'undefined') {
+			this.app[appName].isMaster = true;
 		}
 		var json = {
 			cmd: 'chanAuth',
 			args: password,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -467,9 +488,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: [ channel, password ],
 			channel: channel,
 			app: appName,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -491,9 +512,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: channel,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -511,17 +532,17 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} password Le mot de passe du salon
 	 */
 	create: function(appName, channel, password) {
-		if (typeof(eval('jsocket.api.app["' + appName + '"]')) != 'undefined') {
-			jsocket.api.app[appName].isMaster = true;
+		if (typeof this.app[appName] != 'undefined') {
+			this.app[appName].isMaster = true;
 		}
 		var json = {
 			cmd: 'create',
 			args: [ channel, password ],
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -543,9 +564,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: channel,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -560,9 +581,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: nickname,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -587,9 +608,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: command,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -612,9 +633,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: channel,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -636,9 +657,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: 'null',
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -660,7 +681,7 @@ jsocket.api.register('myApplicationName', myApplication);
 			if (typeof values[i]['json'] != 'undefined') {
 				var cmd = values[i]['json'].replace(/\%27/g, "'");
 				cmd = decodeURIComponent(cmd);
-				jsocket.api.parser(cmd);
+				this.parser(cmd);
 			}
 		}
 	},
@@ -680,9 +701,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: tab,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -705,9 +726,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: 'null',
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -730,9 +751,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: status,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -754,9 +775,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: 'null',
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -779,9 +800,9 @@ jsocket.api.register('myApplicationName', myApplication);
 			args: password,
 			app: appName,
 			channel: channel,
-			uid: 'jsocket.api.uid'
+			uid: '.uid.'
 		};
-		jsocket.api.send(jsocket.protocol.forge(json));
+		this.send(jsocket.utils.forge(json));
 	},
 
 	/**
@@ -798,9 +819,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onError: function(error) {
-		//console.log('jsocket.api.onError: ', error);
-		jsocket.api.method(jsocket.core.websocket);
-		jsocket.api.connect();
+		this.method(jsocket.core.websocket);
+		this.connect();
 	},
 
 	/**
@@ -810,10 +830,13 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * alors la methode de dialogue avec le serveur par TCP.
 	 */
 	onWebSocketError: function() {
-		if (jsocket.core.tcp.isWorking == false) {
-			jsocket.api.method(jsocket.core.tcp);
-			jsocket.api.connect();
-		}
+        if (jsocket.core.tcp.available == true &&
+            jsocket.core.tcp.isWorking == false) {
+            this.method(jsocket.core.tcp);
+        } else if (jsocket.core.http.isWorking == false) {
+            this.method(jsocket.core.http);
+        }
+        this.connect();
 	},
 
 	/**
@@ -825,9 +848,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	onTCPError: function(error) {
 		if (jsocket.core.http.isWorking == false) {
-			jsocket.api.method(jsocket.core.http);
-			jsocket.api.connect();
+			this.method(jsocket.core.http);
 		}
+        this.connect();
 	},
 
 	/**
@@ -836,25 +859,23 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * en queue sont envoyes au serveur.
 	 */
 	sendPool: function() {
-		for (var i = 0; i < jsocket.api.commands.length; ++i) {
-			//console.log('jsocket.api.send: ', jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
-			jsocket.api.core.send(jsocket.api.commands[i].replace(/jsocket\.api\.uid/, jsocket.api.uid));
+		for (var i = 0; i < this.commands.length; ++i) {
+			this.core.send(this.commands[i].replace(/\.uid\./, this.uid));
 		}
-		jsocket.api.commands = [ ];
+		this.commands = [ ];
 	},
 
 	/**
 	 * Gestion de queue pour les commandes a envoyer.
-	 * Si jsocket.api.uid est null/empty alors on stock les
+	 * Si this.uid est null/empty alors on stock les
 	 * commands puis on les envoie lorsque l'uid est renseigne.
 	 * @param {String} msg Le message (commande JSON) a envoyer
 	 */
 	send: function(msg) {
-		if (jsocket.api.uid != '') {
-			//console.log('jsocket.api.send: ', msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
-			jsocket.api.core.send(msg.replace(/jsocket\.api\.uid/, jsocket.api.uid));
-		} else if (jsocket.api.commands.length < 10) {
-			jsocket.api.commands.push(msg);
+		if (this.uid != '') {
+			this.core.send(msg.replace(/\.uid\./, this.uid));
+		} else if (this.commands.length < 10) {
+			this.commands.push(msg);
 		}
 	}
 };
