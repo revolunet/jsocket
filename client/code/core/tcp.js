@@ -120,9 +120,24 @@ jsocket.core.tcp = {
 			return (false);
 		}
 		this.connectedToServer = true;
+        this.keepAlive();
 		this.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
 		return (true);
 	},
+
+    /**
+     * Send keep alive request to server to prevent watchdog to delete client.
+     */
+    keepAlive: function() {
+        if (this.connectedToServer && this.isWorking) {
+            this.api.send(jsocket.utils.forge({
+                        cmd: 'keepalive',
+                        uid: '.uid.'}));
+        }
+        if (this.isWorking) {
+            this.setTimeout(this.keepAlive, this.api.settings.keepAliveTimer);
+        }
+    },
 
 	/**
 	 * Ferme la connection au serveur

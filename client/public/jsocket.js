@@ -745,9 +745,24 @@ jsocket.core.tcp = {
 			return (false);
 		}
 		this.connectedToServer = true;
+        this.keepAlive();
 		this.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
 		return (true);
 	},
+
+    /**
+     * Send keep alive request to server to prevent watchdog to delete client.
+     */
+    keepAlive: function() {
+        if (this.connectedToServer && this.isWorking) {
+            this.api.send(jsocket.utils.forge({
+                        cmd: 'keepalive',
+                        uid: '.uid.'}));
+        }
+        if (this.isWorking) {
+            this.setTimeout(this.keepAlive, this.api.settings.keepAliveTimer);
+        }
+    },
 
 	/**
 	 * Ferme la connection au serveur
@@ -1091,6 +1106,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function() {
+        return (false);
         this.connectedToServer = false;
 		if ('WebSocket' in window) {
 			this.available = true;
@@ -1132,9 +1148,24 @@ jsocket.core.websocket = {
 			return (false);
 		}
 		this.connectedToServer = true;
+        this.keepAlive();
 		this.socket.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": "" }');
 		return (true);
 	},
+
+    /**
+     * Send keep alive request to server to prevent watchdog to delete client.
+     */
+    keepAlive: function() {
+        if (this.connectedToServer && this.isWorking) {
+            this.api.send(jsocket.utils.forge({
+                        cmd: 'keepalive',
+                        uid: '.uid.'}));
+        }
+        if (this.isWorking) {
+            this.setTimeout(this.keepAlive, this.api.settings.keepAliveTimer);
+        }
+    },
 
 	/**
 	 * @event disconnected
@@ -1344,6 +1375,8 @@ jsocket.api = {
 	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#loaded}</tt></b></li>
 	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
 	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>vhost (optional): Vhost</tt></b></li>
+	 * <li><b><tt>keepAliveTimer: Timer pour le keepalive</tt></b></li>
 	 * </ul></div></p>
 	 * Ce parametre peut etre changer directement comme dans l'exemple ci-dessous
 	 * ou via la methode {@link jsocket.api.configure}
@@ -1362,7 +1395,8 @@ jsocket.api.settings = {
     host: 'localhost',
     port: 8082
   },
-  vhost:'test.quickprez.com'
+  vhost:'test.quickprez.com',
+  keepAliveTimer: 60000
 };
 </code></pre>
 	 */
@@ -1379,7 +1413,8 @@ jsocket.api.settings = {
 			host: 'localhost',
 			port: 8082
 		},
-        vhost:''
+        vhost:'',
+        keepAliveTimer: 60000
 	},
 
 	/**
@@ -2122,7 +2157,7 @@ jsocket.api.register('myApplicationName', myApplication);
 		for (var i = 0; i < this.commands.length; ++i) {
 			this.core.send(this.commands[i].replace(/\.uid\./, this.uid));
 		}
-		this.commands = [ ];
+		this.commands = [];
 	},
 
 	/**

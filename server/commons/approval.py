@@ -16,6 +16,7 @@ class ApprovalProtocol(object):
         self.commands = {
             'refresh': lambda l: True,
             'connected': lambda l: True,
+            'keepalive': lambda l: True,
             'history': self.default,
             'auth': self.default,
             'create': self.default,
@@ -47,7 +48,8 @@ class ApprovalProtocol(object):
 
 class Approval(object):
     """
-    Classe permettant de faire valider les commandes json ainsi que de recuperer les reponses
+    Classe permettant de faire valider les commandes
+    JSON ainsi que de recuperer les reponses
     """
 
     instance = None
@@ -74,14 +76,14 @@ class Approval(object):
             pass
 
     def httpSendMessage(self, cmd):
-            try:
-                    uid = Session().create(None, 'http')
-                    decoded = simplejson.loads(cmd)
-                    if decoded.get('cmd', None) is not None:
-                        return self.jsonProtocol.parse(Session().get(uid),
-                                                       decoded)
-            except ValueError:
-                    pass
+        try:
+            uid = Session().create(None, 'http')
+            decoded = simplejson.loads(cmd)
+            if decoded.get('cmd', None) is not None:
+                return self.jsonProtocol.parse(Session().get(uid),
+                                               decoded)
+        except ValueError:
+            pass
 
     def validate(self, datas, callback=None, atype=None):
         """
