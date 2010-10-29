@@ -140,7 +140,6 @@ jsocket.core.websocket = {
 			return (false);
 		}
 		msg = msg.data;
-        console.log('Websocket receive: ', msg);
 		var tab = msg.split("\n");
 		for (var i = 0; i < tab.length; ++i) {
 			this.api.onReceive(tab[i]);
@@ -175,7 +174,6 @@ jsocket.core.websocket = {
 			this.connect();
 		}
 		if (this.connectedToServer) {
-            console.log('Websocket send: ', msg);
 			this.socket.send(msg + "\n");
 		} else {
 			if (typeof this.api != 'object') {

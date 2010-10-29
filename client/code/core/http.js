@@ -88,9 +88,10 @@ jsocket.core.http = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		this.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
-        this.connected();
+		this._get('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
 		this.pool();
+        this.connected();
+        this.response.waiting = false;
         return (true);
 	},
 
@@ -200,14 +201,14 @@ jsocket.core.http = {
 	 */
     receive: function() {
         this.parentNode.removeChild(this);
-		if (typeof this.api != 'object') {
+		if (typeof jsocket.core.http.api != 'object') {
 			return (false);
 		}
-        if (this.connectedToServer == false) {
-            this.connected();
+        if (jsocket.core.http.connectedToServer == false) {
+            jsocket.core.http.connected();
         }
-        this.response.waiting = false;
-        this.response.lastTime = Math.floor(new Date().getTime() / 1000);
+        jsocket.core.http.response.waiting = false;
+        jsocket.core.http.response.lastTime = Math.floor(new Date().getTime() / 1000);
 		return (true);
     }
 };

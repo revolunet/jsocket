@@ -25,44 +25,44 @@ jsocket.api = {
 	/**
 	 * Le core a utiliser par defaut
 	 * @private
-	 * @type Object
+	 * @type {Object}
 	 */
 	core: null,
 
 	/**
 	 * A activer pour afficher les commandes JSON en entree/sortie
 	 * @private
-	 * @type Boolean
+	 * @type {Boolean}
 	 */
 	debug: false,
 
 	/**
 	 * Le tableau des applications enregistrees dans l'API
 	 * @private
-	 * @type Array
+	 * @type {Object}
 	 */
-	app: [ ],
+	app: {},
 
 	/**
 	 * L'uid du client une fois connecte
 	 * @public
-	 * @type String
+	 * @type {String}
 	 */
 	uid: '',
 
 	/**
 	 * La liste des commandes en attente d'envoie
 	 * @private
-	 * @type Array
+	 * @type {Array}
 	 */
-	commands: [ ],
+	commands: [],
 
 	/**
 	 * La liste des cores disponibles.
 	 * Si un core ne fonctionne pas, alors
 	 * le core suivant est teste.
 	 * @private
-	 * @type Object
+	 * @type {Object}
 	 */
 	cores: {
 		tcp: {
@@ -144,10 +144,11 @@ jsocket.api.settings = {
 			this.configure(settings);
 		}
 		if (this.core == null) {
-			this.setCore();
-		}
-		this.core.api = this;
-		this.core.connect();
+			jsocket.utils.defer(this.setCore, 1000, this);
+		} else {
+            this.core.api = this;
+            this.core.connect();
+        }
 	},
 
 	/**
@@ -181,7 +182,7 @@ jsocket.api.settings = {
         } else if (jsocket.core.tcp.available == true) {
             this.method(jsocket.core.tcp);
         } else {
-            this.method(jsocket.core.http);
+            this.method(jsocket.core.tcp);
         }
 	},
 
@@ -208,6 +209,9 @@ jsocket.api.settings = {
 	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
 	 */
 	method: function(newCore) {
+        if (this.debug) {
+            console.log('[jsocket-api] method: ', newCore);
+        }
         if (jsocket.core.websocket.available == false) {
             jsocket.core.websocket.loaded();
         }
@@ -229,6 +233,9 @@ jsocket.api.settings = {
 			this.core = newCore;
 			this.core.isWorking = true;
 			this.core.api = this;
+            if (this.core.connectedToServer == false) {
+                this.core.connect();
+            }
 		}
 	},
 
@@ -252,7 +259,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Object} appObject L'application contenant les callbacks
 	 */
 	register: function(appName, appObject) {
-		var newApp = appObject || { };
+		var newApp = appObject || {};
 		this.app[appName] = newApp;
 		this.app[appName].isMaster = false;
 		if (typeof this.app[appName].onHistory == 'undefined') {
@@ -282,7 +289,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	appCallback: function(appName, callName, args) {
 		if (typeof this.app[appName][callName] != 'undefined') {
-			this.app[appName][callName].call(this, args);
+			this.app[appName][callName](args);
 			return (true);
 		}
 		return (false);
@@ -295,8 +302,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Mixed} args Les arguments a passer au callback
 	 */
 	appCallbacks: function(callName, args) {
-		for (var i in this.app) {
-			this.appCallback(i, callName, args);
+		for (var appName in this.app) {
+			this.appCallback(appName, callName, args);
 		}
 	},
 
@@ -325,6 +332,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} text Le texte a transformer
 	 */
 	parser: function(text) {
+        if (this.debug) {
+            console.log('[jsocket-api] receive: ', text);
+        }
 		var j = { };
 		try {
 			j = JSON.parse(text);
@@ -349,10 +359,9 @@ jsocket.api.register('myApplicationName', myApplication);
 				try {
 					this.appCallback(args['app'], func_name, args);
 				} catch(e) {
-					return (false);
+					return (this.onError(e));
 				}
-			}
-			else {
+			} else {
 				try {
 					this.appCallbacks(func_name, args);
 					this[func_name].call(this, args);
@@ -819,8 +828,6 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onError: function(error) {
-		this.method(jsocket.core.websocket);
-		this.connect();
 	},
 
 	/**
@@ -872,6 +879,9 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} msg Le message (commande JSON) a envoyer
 	 */
 	send: function(msg) {
+        if (this.debug) {
+            console.log('[jsocket-api] send: ', msg);
+        }
 		if (this.uid != '') {
 			this.core.send(msg.replace(/\.uid\./, this.uid));
 		} else if (this.commands.length < 10) {

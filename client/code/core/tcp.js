@@ -121,7 +121,6 @@ jsocket.core.tcp = {
 		}
 		this.connectedToServer = true;
 		this.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
-		this.api.onReceive('{"from": "connect", "value": true}');
 		return (true);
 	},
 
