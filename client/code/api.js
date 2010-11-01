@@ -214,7 +214,7 @@ jsocket.api.settings = {
 	 */
 	method: function(newCore) {
         if (this.debug) {
-            console.log('[jsocket-api] method: ', newCore);
+            //console.log('[jsocket-api] method: ', newCore);
         }
         if (jsocket.core.websocket.available == false) {
             jsocket.core.websocket.loaded();
@@ -337,7 +337,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	parser: function(text) {
         if (this.debug) {
-            console.log('[jsocket-api] receive: ', text);
+           // console.log('[jsocket-api] receive: ', text);
         }
 		var j = { };
 		try {
@@ -884,7 +884,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 */
 	send: function(msg) {
         if (this.debug) {
-            console.log('[jsocket-api] send: ', msg);
+            //console.log('[jsocket-api] send: ', msg);
         }
 		if (this.uid != '') {
 			this.core.send(msg.replace(/\.uid\./, this.uid));
