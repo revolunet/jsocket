@@ -854,7 +854,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onTCPError: function(error) {
-        console.log('onTCPError');
+     //   console.log('onTCPError');
 		if (jsocket.core.http.isWorking == false) {
 			this.method(jsocket.core.http);
 		}

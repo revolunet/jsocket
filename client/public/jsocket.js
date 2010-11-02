@@ -1097,7 +1097,13 @@ jsocket.core.http = {
 	 * @return {Boolean} True si la commande a ete envoyee a l'API sinon False
 	 */
     receive: function() {
-        this.parentNode.removeChild(this);
+    
+        if ( this.readyState && (this.readyState == "loaded" || this.readyState == "complete") ) {
+                if (this.parentNode) this.parentNode.removeChild(this);
+            }
+        else {
+            if (this.parentNode) this.parentNode.removeChild(this);
+            }
 		if (typeof jsocket.core.http.api != 'object') {
 			return (false);
 		}
@@ -2195,7 +2201,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onTCPError: function(error) {
-        console.log('onTCPError');
+     //   console.log('onTCPError');
 		if (jsocket.core.http.isWorking == false) {
 			this.method(jsocket.core.http);
 		}
