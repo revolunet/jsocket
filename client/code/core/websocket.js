@@ -41,13 +41,18 @@ jsocket.core.websocket = {
 	 */
 	socket: null,
 
+    /**
+     * Core name
+     * @private
+     * @type String
+     */
+    name: 'websocket',
+
 	/**
-	 * @event loaded
-	 * Initialisation du code WebSocket
-	 * @return {Boolean} True si l'application a ete chargee
+	 * Retourne true si le core websocket est disponible, false sinon.
+	 * @return {Boolean} True si le core websocket est disponible sinon false
 	 */
-	loaded: function() {
-        this.connectedToServer = false;
+	isAvailable: function() {
 		if ('WebSocket' in window) {
 			this.available = true;
 		} else {

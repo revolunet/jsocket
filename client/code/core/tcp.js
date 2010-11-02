@@ -34,28 +34,74 @@ jsocket.core.tcp = {
 	 */
 	isWorking: false,
 
+    /**
+     * True si le flash a appele le callback de load.
+     * @private
+     * @type Boolean
+     */
+    isLoaded: false,
+
+    /**
+     * Core name
+     * @private
+     * @type String
+     */
+    name: 'tcp',
+
+    /**
+     * Last try date time
+     * @private
+     * @type Integer
+     */
+    lastTry: false,
+
 	/**
 	 * @event loaded
 	 * Callback appele par flash lorsque le swf est charge
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function() {
-		this.available = true;
+        this.isLoaded = true;
 		this.connectedToServer = false;
 		this.socket = document.getElementById("socketBridge");
 		this.output = document.getElementById("jsocketBridgeOutput");
 		return (true);
 	},
 
+    /**
+     * Retourne true si le core TCP est disponible, false sinon.
+     * @return {Boolean} True si le core TCP est disponible, sinon false
+     */
+    isAvailable: function() {
+        if (typeof navigator != 'undefined' &&
+            typeof navigator.mimeTypes != 'undefined' &&
+            (typeof navigator.mimeTypes['application/x-shockware-flash'] != 'undefined' ||
+             typeof navigator.plugins['Shockwave Flash'] != 'undefined' ||
+             typeof navigator.plugins['Shockwave Flash 2.0'] != 'undefined')) {
+            this.available = true;
+        } else {
+            this.available = false;
+        }
+        return (this.available);
+    },
+
 	/**
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
+        if (this.lastTry == false) {
+            this.lastTry = new Date().getTime();
+        }
         if (this.available == false) {
             this.api.parser('{"from": "TCPError", "value": "TCP is not available"}');
             return (false);
         }
-		if (this.connectedToServer == false) {
+        if (typeof this.lastTry != 'undefined' && new Date().getTime() - this.lastTry > 2000) {
+            this.api.parser('{"from": "TCPError", "value": "TCP is not available"}');
+            return (false);
+        }
+		if (this.isLoaded == true &&
+            this.connectedToServer == false) {
 			this.socket.connect(this.api.settings.tcp.host, this.api.settings.tcp.port);
 		} else if (this.connectedToServer == false) {
 			this.setTimeout(this.connect, 500);

@@ -58,13 +58,20 @@ jsocket.core.http = {
 	 */
 	isWorking: false,
 
+    /**
+     * Core name
+     * @private
+     * @type String
+     */
+    name: 'http',
+
 	/**
-	 * Initialisation du core HTTP
-	 * @return {Boolean} True si l'application a ete chargee
+	 * Return true si le core HTTP est disponible, sinon false.
+	 * @return {Boolean} True si le code HTTP est disponible, sinon false
 	 */
-	loaded: function()	{
+	isAvailable: function()	{
 		this.available = true;
-		return (true);
+		return (this.available);
 	},
 
     /**

@@ -659,28 +659,74 @@ jsocket.core.tcp = {
 	 */
 	isWorking: false,
 
+    /**
+     * True si le flash a appele le callback de load.
+     * @private
+     * @type Boolean
+     */
+    isLoaded: false,
+
+    /**
+     * Core name
+     * @private
+     * @type String
+     */
+    name: 'tcp',
+
+    /**
+     * Last try date time
+     * @private
+     * @type Integer
+     */
+    lastTry: false,
+
 	/**
 	 * @event loaded
 	 * Callback appele par flash lorsque le swf est charge
 	 * @return {Boolean} True si l'application a ete chargee
 	 */
 	loaded: function() {
-		this.available = true;
+        this.isLoaded = true;
 		this.connectedToServer = false;
 		this.socket = document.getElementById("socketBridge");
 		this.output = document.getElementById("jsocketBridgeOutput");
 		return (true);
 	},
 
+    /**
+     * Retourne true si le core TCP est disponible, false sinon.
+     * @return {Boolean} True si le core TCP est disponible, sinon false
+     */
+    isAvailable: function() {
+        if (typeof navigator != 'undefined' &&
+            typeof navigator.mimeTypes != 'undefined' &&
+            (typeof navigator.mimeTypes['application/x-shockware-flash'] != 'undefined' ||
+             typeof navigator.plugins['Shockwave Flash'] != 'undefined' ||
+             typeof navigator.plugins['Shockwave Flash 2.0'] != 'undefined')) {
+            this.available = true;
+        } else {
+            this.available = false;
+        }
+        return (this.available);
+    },
+
 	/**
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
+        if (this.lastTry == false) {
+            this.lastTry = new Date().getTime();
+        }
         if (this.available == false) {
             this.api.parser('{"from": "TCPError", "value": "TCP is not available"}');
             return (false);
         }
-		if (this.connectedToServer == false) {
+        if (typeof this.lastTry != 'undefined' && new Date().getTime() - this.lastTry > 2000) {
+            this.api.parser('{"from": "TCPError", "value": "TCP is not available"}');
+            return (false);
+        }
+		if (this.isLoaded == true &&
+            this.connectedToServer == false) {
 			this.socket.connect(this.api.settings.tcp.host, this.api.settings.tcp.port);
 		} else if (this.connectedToServer == false) {
 			this.setTimeout(this.connect, 500);
@@ -902,13 +948,20 @@ jsocket.core.http = {
 	 */
 	isWorking: false,
 
+    /**
+     * Core name
+     * @private
+     * @type String
+     */
+    name: 'http',
+
 	/**
-	 * Initialisation du core HTTP
-	 * @return {Boolean} True si l'application a ete chargee
+	 * Return true si le core HTTP est disponible, sinon false.
+	 * @return {Boolean} True si le code HTTP est disponible, sinon false
 	 */
-	loaded: function()	{
+	isAvailable: function()	{
 		this.available = true;
-		return (true);
+		return (this.available);
 	},
 
     /**
@@ -1100,13 +1153,18 @@ jsocket.core.websocket = {
 	 */
 	socket: null,
 
+    /**
+     * Core name
+     * @private
+     * @type String
+     */
+    name: 'websocket',
+
 	/**
-	 * @event loaded
-	 * Initialisation du code WebSocket
-	 * @return {Boolean} True si l'application a ete chargee
+	 * Retourne true si le core websocket est disponible, false sinon.
+	 * @return {Boolean} True si le core websocket est disponible sinon false
 	 */
-	loaded: function() {
-        this.connectedToServer = false;
+	isAvailable: function() {
 		if ('WebSocket' in window) {
 			this.available = true;
 		} else {
@@ -1317,7 +1375,7 @@ jsocket.api = {
 	 * @private
 	 * @type {Boolean}
 	 */
-	debug: false,
+	isDebug: false,
 
 	/**
 	 * Le tableau des applications enregistrees dans l'API
@@ -1368,12 +1426,12 @@ jsocket.api = {
 	/**
 	 * <p>Parametres de configuration:</p>
 	 * <p><div class="mdetail-params"><ul>
-	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
-	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
-	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http#loaded}</tt></b></li>
-	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#loaded}</tt></b></li>
-	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
-	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#isAvailable}</tt></b></li>
+	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp#isAvailable}</tt></b></li>
+	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http#isAvailable}</tt></b></li>
+	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#isAvailable}</tt></b></li>
+	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#isAvailable}</tt></b></li>
+	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#isAvailable}</tt></b></li>
 	 * <li><b><tt>vhost (optional): Vhost</tt></b></li>
 	 * <li><b><tt>keepAliveTimer: Timer pour le keepalive</tt></b></li>
 	 * </ul></div></p>
@@ -1422,20 +1480,19 @@ jsocket.api.settings = {
 	 */
 	connect: function(settings) {
         if (jsocket.core.websocket.available == false) {
-            jsocket.core.websocket.loaded();
+            jsocket.core.websocket.isAvailable();
         }
         if (jsocket.core.http.available == false) {
-            jsocket.core.http.loaded();
+            jsocket.core.http.isAvailable();
         }
 		if (typeof settings != 'undefined' && settings != null) {
 			this.configure(settings);
 		}
 		if (this.core == null) {
-			jsocket.utils.defer(this.setCore, 1000, this);
-		} else {
-            this.core.api = this;
-            this.core.connect();
-        }
+            this.setCore();
+		}
+        this.core.api = this;
+        this.core.connect();
 	},
 
 	/**
@@ -1464,12 +1521,12 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-        if (jsocket.core.websocket.available == true) {
+        if (jsocket.core.websocket.isAvailable() == true) {
             this.method(jsocket.core.websocket);
-        } else if (jsocket.core.tcp.available == true) {
+        } else if (jsocket.core.tcp.isAvailable() == true) {
             this.method(jsocket.core.tcp);
         } else {
-            this.method(jsocket.core.tcp);
+            this.method(jsocket.core.http);
         }
 	},
 
@@ -1489,33 +1546,31 @@ jsocket.api.settings = {
 	 *
 	 * <p>Cores disponibles:
 	 * <div class="mdetail-params"><ul>
-	 * <li><b><tt>{@link jsocket.core.tcp#loaded}</tt></b></li>
-	 * <li><b><tt>{@link jsocket.core.http#loaded}</tt></b></li>
-	 * <li><b><tt>{@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.tcp#isAvailable}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.http#isAvailable}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.websocket#isAvailable}</tt></b></li>
 	 * </ul></div></p>
 	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
 	 */
 	method: function(newCore) {
-        if (this.debug) {
-            //console.log('[jsocket-api] method: ', newCore);
+        if (this.isDebug) {
+            console.log('[jsocket-api] method: ', newCore);
         }
-        if (jsocket.core.websocket.available == false) {
-            jsocket.core.websocket.loaded();
-        }
-        if (jsocket.core.http.available == false) {
-            jsocket.core.http.loaded();
-        }
-        if (newCore.available == false) {
+        if (newCore.isAvailable() == false) {
             newCore = jsocket.core.http;
         }
 		if (this.core != null) {
-			this.disconnect();
+            if (this.connectedToServer == true) {
+                this.disconnect();
+            }
 			this.uid = '';
 			this.core.isWorking = false;
 			this.core = newCore;
 			this.core.isWorking = true;
 			this.core.api = this;
-			this.core.connect();
+            if (this.core.connectedToServer == false) {
+                this.core.connect();
+            }
 		} else {
 			this.core = newCore;
 			this.core.isWorking = true;
@@ -1599,16 +1654,16 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Boolean} enable True pour activer la console False pour desactiver
 	 */
 	debug: function(enable) {
-		if (this.core.available == false) {
+		if (this.core.isAvailable() == false) {
 			jsocket.utils.defer(this.debug, 1000, this, enable);
 			return (false);
 		}
 		if (enable == true) {
-			this.debug = true;
+			this.isDebug = true;
 			document.getElementById('socketBridge').style.top = '0px';
 		}
 		else {
-			this.debug = false;
+			this.isDebug = false;
 			document.getElementById('socketBridge').style.top = '-1000px';
 		}
 	},
@@ -1619,8 +1674,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} text Le texte a transformer
 	 */
 	parser: function(text) {
-        if (this.debug) {
-           // console.log('[jsocket-api] receive: ', text);
+        if (this.isDebug) {
+            console.log('[jsocket-api] receive: ', text);
         }
 		var j = { };
 		try {
@@ -2124,13 +2179,12 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * alors la methode de dialogue avec le serveur par TCP.
 	 */
 	onWebSocketError: function() {
-        if (jsocket.core.tcp.available == true &&
+        if (jsocket.core.tcp.isAvailable() == true &&
             jsocket.core.tcp.isWorking == false) {
             this.method(jsocket.core.tcp);
         } else if (jsocket.core.http.isWorking == false) {
             this.method(jsocket.core.http);
         }
-        this.connect();
 	},
 
 	/**
@@ -2141,10 +2195,10 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onTCPError: function(error) {
+        console.log('onTCPError');
 		if (jsocket.core.http.isWorking == false) {
 			this.method(jsocket.core.http);
 		}
-        this.connect();
 	},
 
 	/**
@@ -2166,8 +2220,8 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} msg Le message (commande JSON) a envoyer
 	 */
 	send: function(msg) {
-        if (this.debug) {
-            //console.log('[jsocket-api] send: ', msg);
+        if (this.isDebug) {
+            console.log('[jsocket-api] send: ', msg);
         }
 		if (this.uid != '') {
 			this.core.send(msg.replace(/\.uid\./, this.uid));
