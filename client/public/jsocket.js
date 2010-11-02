@@ -700,10 +700,16 @@ jsocket.core.tcp = {
     isAvailable: function() {
         if (typeof navigator != 'undefined' &&
             typeof navigator.mimeTypes != 'undefined' &&
-            (typeof navigator.mimeTypes['application/x-shockware-flash'] != 'undefined' ||
-             typeof navigator.plugins['Shockwave Flash'] != 'undefined' ||
-             typeof navigator.plugins['Shockwave Flash 2.0'] != 'undefined')) {
+            typeof navigator.mimeTypes['application/x-shockwave-flash'] != 'undefined' &&
+            navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin != null) {
             this.available = true;
+        } else if (window.ActiveXObject) {
+            try {
+                var a = new ActiveXObject( "ShockwaveFlash.ShockwaveFlash" );
+                this.available = true;
+            } catch( oError ) {
+                this.available = false;
+            }
         } else {
             this.available = false;
         }
@@ -1165,6 +1171,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le core websocket est disponible sinon false
 	 */
 	isAvailable: function() {
+        return (false);
 		if ('WebSocket' in window) {
 			this.available = true;
 		} else {
