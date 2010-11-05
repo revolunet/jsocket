@@ -9,7 +9,6 @@ class Client(object):
     Interface commune aux clients TCP et HTTP.
     Regroupe les informations qui caracterise un client.
     """
-
     def __init__(self, room):
         """
         HTTP/TCP Client constructeur.

@@ -8,7 +8,6 @@ class TwistedTCPClient(Protocol):
     """
     Classe TCP utilisee par twisted.
     """
-
     DELIMITER_FROM = "\x00"
     DELIMITER_TO = "\xff"
 
@@ -19,9 +18,9 @@ class TwistedTCPClient(Protocol):
 
     def callbackSend(self, responses):
         """
-        Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes
+        Callback appele par le :func:`WorkerParser`
+        lorsque des reponses sont pretes
         """
-
         for json in responses:
             self.send(str(json))
 
@@ -75,10 +74,13 @@ class TwistedTCPClient(Protocol):
         """
         Methode appelee lorsque l'utilisateur recoit des donnees
         """
-
         if '<policy-file-request/>' in data:
-            Log().add('[TCP] Received: %s' % data)
-            self.send('<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd"><cross-domain-policy><allow-access-from domain="*" to-ports="*" secure="false" /></cross-domain-policy>' + "\x00", False)
+            Log().add('[tcp] Received: %s' % data)
+            self.send('%s%s%s%s%s' % (
+                '<!DOCTYPE cross-domain-policy SYSTEM ',
+                '"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd"',
+                '><cross-domain-policy><allow-access-from domain="*" to-ports',
+                '="*" secure="false" /></cross-domain-policy>', "\x00"), False)
         else:
             valid_data = self.__findReceived(data)
             for v_data in valid_data:
@@ -88,7 +90,7 @@ class TwistedTCPClient(Protocol):
                 for cmd in commands:
                     if len(cmd) < 1:
                         continue
-                    Log().add('[TCP] Received: %s' % cmd)
+                    Log().add('[tcp] Received: %s' % cmd)
                     uid = Approval().validate(cmd, self.callbackSend, 'tcp')
                     if uid is not None:
                         self.uid = uid
@@ -97,7 +99,6 @@ class TwistedTCPClient(Protocol):
         """
         Methode appelee lorsqu'un nouvel utilisateur se connecte
         """
-
         self.uid = None
         self.connected = True
 
@@ -105,10 +106,9 @@ class TwistedTCPClient(Protocol):
         """
         Methode appelee lorsqu'un utilisateur se deconnecte
         """
-
         self.connected = False
         if self.uid is not None:
-            Log().add('[TCP] Logout %s' % str(self.uid))
+            Log().add('[tcp] Logout %s' % str(self.uid))
             Session().delete(self.uid)
         self.transport.loseConnection()
 
@@ -117,7 +117,6 @@ class TwistedTCPClient(Protocol):
         Methode permettant d'ecrire le message sur
         la socket si l'utilisateur est connecte
         """
-
         if self.connected is True:
             if setDelimiters is True:
                 msg = "%s%s%s" % (

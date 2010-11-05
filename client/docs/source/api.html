@@ -41,7 +41,7 @@ jsocket.api = {
 	 * @private
 	 * @type {Boolean}
 	 */
-	debug: false,
+	isDebug: false,
 
 	/**
 	 * Le tableau des applications enregistrees dans l'API
@@ -64,40 +64,15 @@ jsocket.api = {
 	 */
 	commands: [],
 
-	/**
-	 * La liste des cores disponibles.
-	 * Si un core ne fonctionne pas, alors
-	 * le core suivant est teste.
-	 * @private
-	 * @type {Object}
-	 */
-	cores: {
-		tcp: {
-			object: jsocket.core.tcp,
-			tested: false,
-			worked: true
-		},
-		http: {
-			object: jsocket.core.http,
-			tested: false,
-			worked: true
-		},
-		websocket: {
-			object: jsocket.core.websocket,
-			tested: false,
-			worked: true
-		}
-	},
-
 	<div id="prop-jsocket.api-settings"></div>/**
 	 * <p>Parametres de configuration:</p>
 	 * <p><div class="mdetail-params"><ul>
-	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
-	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp#loaded}</tt></b></li>
-	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http#loaded}</tt></b></li>
-	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#loaded}</tt></b></li>
-	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
-	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#isAvailable}</tt></b></li>
+	 * <li><b><tt>tcp.port: Port pour le core {@link jsocket.core.tcp#isAvailable}</tt></b></li>
+	 * <li><b><tt>http.url: Url pour le core {@link jsocket.core.http#isAvailable}</tt></b></li>
+	 * <li><b><tt>http.refreshTimer: Temps entre chaque rafraichissement (en ms) pour le core {@link jsocket.core.http#isAvailable}</tt></b></li>
+	 * <li><b><tt>websocket.host: Host pour le core {@link jsocket.core.websocket#isAvailable}</tt></b></li>
+	 * <li><b><tt>websocket.port: Port pour le core {@link jsocket.core.websocket#isAvailable}</tt></b></li>
 	 * <li><b><tt>vhost (optional): Vhost</tt></b></li>
 	 * <li><b><tt>keepAliveTimer: Timer pour le keepalive</tt></b></li>
 	 * </ul></div></p>
@@ -146,19 +121,18 @@ jsocket.api.settings = {
 	 */
 	connect: function(settings) {
         if (jsocket.core.websocket.available == false) {
-            jsocket.core.websocket.loaded();
+            jsocket.core.websocket.isAvailable();
         }
         if (jsocket.core.http.available == false) {
-            jsocket.core.http.loaded();
+            jsocket.core.http.isAvailable();
         }
 		if (typeof settings != 'undefined' && settings != null) {
 			this.configure(settings);
 		}
 		if (this.core == null) {
-			jsocket.utils.defer(this.setCore, 1000, this);
+            this.setCore();
 		} else {
-            this.core.api = this;
-            this.core.connect();
+            this.method(this.core);
         }
 	},
 
@@ -188,12 +162,12 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-        if (jsocket.core.websocket.available == true) {
+        if (jsocket.core.websocket.isAvailable() == true) {
             this.method(jsocket.core.websocket);
-        } else if (jsocket.core.tcp.available == true) {
+        } else if (jsocket.core.tcp.isAvailable() == true) {
             this.method(jsocket.core.tcp);
         } else {
-            this.method(jsocket.core.tcp);
+            this.method(jsocket.core.http);
         }
 	},
 
@@ -202,7 +176,7 @@ jsocket.api.settings = {
 	 * @return {Boolean} True si la deconnection a reussie sinon False
 	 */
 	disconnect: function() {
-		if (this.core && typeof this.core != 'undefined') {
+		if (typeof this.core != 'undefined' && this.core) {
 			return (this.core.close());
 		}
 		return (false);
@@ -213,33 +187,31 @@ jsocket.api.settings = {
 	 *
 	 * <p>Cores disponibles:
 	 * <div class="mdetail-params"><ul>
-	 * <li><b><tt>{@link jsocket.core.tcp#loaded}</tt></b></li>
-	 * <li><b><tt>{@link jsocket.core.http#loaded}</tt></b></li>
-	 * <li><b><tt>{@link jsocket.core.websocket#loaded}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.tcp#isAvailable}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.http#isAvailable}</tt></b></li>
+	 * <li><b><tt>{@link jsocket.core.websocket#isAvailable}</tt></b></li>
 	 * </ul></div></p>
 	 * @param {Object} newCore La variable contenant le nouveau jsocketCore (tcp, http, websocket)
 	 */
 	method: function(newCore) {
-        if (this.debug) {
+        if (this.isDebug) {
             console.log('[jsocket-api] method: ', newCore);
         }
-        if (jsocket.core.websocket.available == false) {
-            jsocket.core.websocket.loaded();
-        }
-        if (jsocket.core.http.available == false) {
-            jsocket.core.http.loaded();
-        }
-        if (newCore.available == false) {
+        if (newCore.isAvailable() == false) {
             newCore = jsocket.core.http;
         }
 		if (this.core != null) {
-			this.disconnect();
+            if (this.core.connectedToServer == true) {
+                this.disconnect();
+            }
 			this.uid = '';
 			this.core.isWorking = false;
 			this.core = newCore;
 			this.core.isWorking = true;
 			this.core.api = this;
-			this.core.connect();
+            if (this.core.connectedToServer == false) {
+                this.core.connect();
+            }
 		} else {
 			this.core = newCore;
 			this.core.isWorking = true;
@@ -323,17 +295,21 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {Boolean} enable True pour activer la console False pour desactiver
 	 */
 	debug: function(enable) {
-		if (this.core.available == false) {
+		if (this.core.isAvailable() == false) {
 			jsocket.utils.defer(this.debug, 1000, this, enable);
 			return (false);
 		}
 		if (enable == true) {
-			this.debug = true;
-			document.getElementById('socketBridge').style.top = '0px';
+			this.isDebug = true;
+            if (document.getElementById('socketBridge')) {
+                document.getElementById('socketBridge').style.top = '0px';
+            }
 		}
 		else {
-			this.debug = false;
-			document.getElementById('socketBridge').style.top = '-1000px';
+			this.isDebug = false;
+            if (document.getElementById('socketBridge')) {
+                document.getElementById('socketBridge').style.top = '-1000px';
+            }
 		}
 	},
 
@@ -343,13 +319,13 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} text Le texte a transformer
 	 */
 	parser: function(text) {
-        if (this.debug) {
+        if (this.isDebug) {
             console.log('[jsocket-api] receive: ', text);
         }
-		var j = { };
+		var j = {};
 		try {
 			j = JSON.parse(text);
-		} catch(e) {
+		} catch (e) {
 			return (false);
 		}
 		if (j.from != null && j.value != null) {
@@ -848,13 +824,12 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * alors la methode de dialogue avec le serveur par TCP.
 	 */
 	onWebSocketError: function() {
-        if (jsocket.core.tcp.available == true &&
+        if (jsocket.core.tcp.isAvailable() == true &&
             jsocket.core.tcp.isWorking == false) {
             this.method(jsocket.core.tcp);
         } else if (jsocket.core.http.isWorking == false) {
             this.method(jsocket.core.http);
         }
-        this.connect();
 	},
 
 	/**
@@ -868,7 +843,6 @@ jsocket.api.register('myApplicationName', myApplication);
 		if (jsocket.core.http.isWorking == false) {
 			this.method(jsocket.core.http);
 		}
-        this.connect();
 	},
 
 	/**
@@ -890,7 +864,7 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} msg Le message (commande JSON) a envoyer
 	 */
 	send: function(msg) {
-        if (this.debug) {
+        if (this.isDebug) {
             console.log('[jsocket-api] send: ', msg);
         }
 		if (this.uid != '') {

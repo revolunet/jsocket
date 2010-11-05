@@ -66,7 +66,8 @@ jsocket.core.websocket = {
 	 */
 	connect: function() {
 		if (this.available == false) {
-			this.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
+			this.api.parser(jsocket.utils.forge({from: 'WebSocketError',
+                                                 value: 'WebSocket not available'}));
 			return (false);
 		}
 		if (!this.socket) {
@@ -89,12 +90,11 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.connectedToServer = true;
         this.keepAlive();
-		this.socket.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": "" }');
+		this.socket.send(jsocket.utils.forge({
+                    cmd: 'connected',
+                    args: { vhost: this.api.settings.vhost }}));
 		return (true);
 	},
 
@@ -118,11 +118,8 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.api.uid = '';
-		this.api.parser('{"from": "disconnect", "value": true}');
+		this.api.parser(jsocket.utils.forge({from: 'disconnect', value: true}));
 		if (this.connectedToServer == false) {
 			return (false);
 		}
@@ -142,10 +139,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	error: function(msg) {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
-		this.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
+		this.api.parser(jsocket.utils.forge({from: 'WebSocketError', value: msg}));
 		return (true);
 	},
 
@@ -156,9 +150,6 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		msg = msg.data;
 		var tab = msg.split("\n");
 		for (var i = 0; i < tab.length; ++i) {
@@ -196,9 +187,6 @@ jsocket.core.websocket = {
 		if (this.connectedToServer) {
 			this.socket.send(msg + "\n");
 		} else {
-			if (typeof this.api != 'object') {
-				return (false);
-			}
 			this.setTimeout(this.send, 500, msg);
 			return (false);
 		}

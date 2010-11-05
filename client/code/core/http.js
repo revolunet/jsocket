@@ -49,7 +49,7 @@ jsocket.core.http = {
 	 * @private
 	 * @type Array
 	 */
-	commands: [ ],
+	commands: [],
 
 	/**
 	 * True si ce core est utilise par l'API sinon False
@@ -95,9 +95,13 @@ jsocket.core.http = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		this._get('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
+        if (this.connectedToServer == true) {
+            return (false);
+        }
+		this._get(jsocket.utils.forge({
+                    cmd: 'connected',
+                    args: { vhost: this.api.settings.vhost }}));
 		this.pool();
-        this.connected();
         this.response.waiting = false;
         return (true);
 	},
@@ -109,10 +113,12 @@ jsocket.core.http = {
 	 * @return {Boolean} False si l'API n'est pas definie
 	 */
 	pool: function() {
-		if (typeof this.api != 'object' || this.isWorking == false) {
+		if (this.isWorking == false) {
 			return (false);
 		}
-		this.write();
+        if (this.connectedToServer == true) {
+            this.write();
+        }
 		jsocket.utils.defer(this.pool, this.api.settings.http.refreshTimer, this);
 	},
 
@@ -145,18 +151,18 @@ jsocket.core.http = {
 	 * @return {Boolean} True si les commandes ont ete envoyees sinon False
 	 */
 	write: function() {
-		if (typeof this.api != 'object' ||
-			this.checkResponse() == false) {
+		if (this.checkResponse() == false) {
 			return (false);
 		}
 		msg = '';
 		if (this.commands.length > 0) {
 			msg = this.commands.join("\n");
-			this.commands = [ ];
+			this.commands = [];
             this._get(msg + "\n");
 		} else {
-            this._get('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
-                      this.api.uid + '"}\n');
+            this._get(jsocket.utils.forge({
+                        cmd: 'refresh',
+                        uid: this.api.uid}));
 		}
 		return (true);
 	},
@@ -179,9 +185,6 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.connectedToServer = true;
 		return (true);
 	},
@@ -192,10 +195,7 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
-		this.api.parser('{"from": "disconnect", "value": true}');
+		this.api.parser(jsocket.utils.forge({from: 'disconnect', value: true}));
 		this.connectedToServer = false;
 		this.connect();
 		return (true);
@@ -208,9 +208,6 @@ jsocket.core.http = {
 	 */
     receive: function() {
         this.parentNode.removeChild(this);
-		if (typeof jsocket.core.http.api != 'object') {
-			return (false);
-		}
         if (jsocket.core.http.connectedToServer == false) {
             jsocket.core.http.connected();
         }

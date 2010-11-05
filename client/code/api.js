@@ -58,31 +58,6 @@ jsocket.api = {
 	commands: [],
 
 	/**
-	 * La liste des cores disponibles.
-	 * Si un core ne fonctionne pas, alors
-	 * le core suivant est teste.
-	 * @private
-	 * @type {Object}
-	 */
-	cores: {
-		tcp: {
-			object: jsocket.core.tcp,
-			tested: false,
-			worked: true
-		},
-		http: {
-			object: jsocket.core.http,
-			tested: false,
-			worked: true
-		},
-		websocket: {
-			object: jsocket.core.websocket,
-			tested: false,
-			worked: true
-		}
-	},
-
-	/**
 	 * <p>Parametres de configuration:</p>
 	 * <p><div class="mdetail-params"><ul>
 	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#isAvailable}</tt></b></li>
@@ -149,9 +124,9 @@ jsocket.api.settings = {
 		}
 		if (this.core == null) {
             this.setCore();
-		}
-        this.core.api = this;
-        this.core.connect();
+		} else {
+            this.method(this.core);
+        }
 	},
 
 	/**
@@ -194,7 +169,7 @@ jsocket.api.settings = {
 	 * @return {Boolean} True si la deconnection a reussie sinon False
 	 */
 	disconnect: function() {
-		if (this.core && typeof this.core != 'undefined') {
+		if (typeof this.core != 'undefined' && this.core) {
 			return (this.core.close());
 		}
 		return (false);
@@ -219,7 +194,7 @@ jsocket.api.settings = {
             newCore = jsocket.core.http;
         }
 		if (this.core != null) {
-            if (this.connectedToServer == true) {
+            if (this.core.connectedToServer == true) {
                 this.disconnect();
             }
 			this.uid = '';
@@ -319,11 +294,15 @@ jsocket.api.register('myApplicationName', myApplication);
 		}
 		if (enable == true) {
 			this.isDebug = true;
-			document.getElementById('socketBridge').style.top = '0px';
+            if (document.getElementById('socketBridge')) {
+                document.getElementById('socketBridge').style.top = '0px';
+            }
 		}
 		else {
 			this.isDebug = false;
-			document.getElementById('socketBridge').style.top = '-1000px';
+            if (document.getElementById('socketBridge')) {
+                document.getElementById('socketBridge').style.top = '-1000px';
+            }
 		}
 	},
 
@@ -336,10 +315,10 @@ jsocket.api.register('myApplicationName', myApplication);
         if (this.isDebug) {
             console.log('[jsocket-api] receive: ', text);
         }
-		var j = { };
+		var j = {};
 		try {
 			j = JSON.parse(text);
-		} catch(e) {
+		} catch (e) {
 			return (false);
 		}
 		if (j.from != null && j.value != null) {
@@ -854,7 +833,6 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onTCPError: function(error) {
-        console.log('onTCPError');
 		if (jsocket.core.http.isWorking == false) {
 			this.method(jsocket.core.http);
 		}

@@ -8,7 +8,6 @@ class ClientWebSocket(WebSocketHandler):
     """
     Classe WebSocket HTML5 utilisee par twisted
     """
-
     def __init__(self, transport):
         WebSocketHandler.__init__(self, transport)
         self.uid = None
@@ -16,13 +15,14 @@ class ClientWebSocket(WebSocketHandler):
 
     def callbackSend(self, responses):
         """
-        Callback appele par le :func:`WorkerParser` lorsque des reponses sont pretes
+        Callback appele par le :func:`WorkerParser`
+        lorsque des reponses sont pretes
         """
         if responses is None:
             return False
         for json in responses:
             if json is not None and len(json) and \
-                   '{"from": "connected",' not in json:
+                   '"connected"' not in json:
                 self.send(json)
         return True
 
@@ -30,16 +30,15 @@ class ClientWebSocket(WebSocketHandler):
         """
         Methode appelee lorsque l'utilisateur recoit des donnees
         """
-        Log().add('[WebSocket] Received: %s' % frame)
+        Log().add('[websocket] Received: %s' % frame)
         self.connected = True
         commands = frame.split("\n")
         uid = None
         for cmd in commands:
-            if '{"cmd": "connected",' in cmd:
+            if len(cmd) > 0:
                 uid = Approval().validate(cmd, self.callbackSend, 'websocket')
+            if '"connected"' in cmd:
                 self.send('{"from": "connected", "value": "%s"}' % uid)
-            elif len(cmd) > 0:
-                uid = Approval().validate(cmd, self.callbackSend, 'websocket')
             if uid is not None:
                 self.uid = uid
 
@@ -49,13 +48,14 @@ class ClientWebSocket(WebSocketHandler):
         """
         self.connected = False
         if self.uid is not None:
-            Log().add('[WebSocket] Logout %s' % str(self.uid))
+            Log().add('[websocket] Logout %s' % str(self.uid))
             Session().delete(self.uid)
         self.transport.loseConnection()
 
     def send(self, msg):
         """
-        Methode permettant d'ecrire le message sur la socket si l'utilisateur est connecte
+        Methode permettant d'ecrire le message sur
+        la socket si l'utilisateur est connecte
         """
         if self.connected is True:
             msg = msg.encode('utf8')

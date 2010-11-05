@@ -545,7 +545,7 @@ jsocket.utils = {
 	 * @param {Object} obj Objet javascript
 	 * @return {String} Commande JSON
 	 */
-	forge : function(obj) {
+	forge: function(obj) {
 		for (var i in obj) {
 			obj[i] = this.addslashes(obj[i]);
 		}
@@ -561,8 +561,7 @@ jsocket.utils = {
 		if (typeof str == 'string') {
 			str = encodeURIComponent(str);
 			str = str.replace(/\'/g, "%27");
-		}
-		else if (typeof str == 'object') {
+		} else if (typeof str == 'object') {
 			for (var i in str) {
 				str[i] = this.addslashes(str[i]);
 			}
@@ -579,8 +578,7 @@ jsocket.utils = {
 		if (typeof str == 'string') {
 			str = str.replace(/\%27/g, "'");
 			str = decodeURIComponent(str);
-		}
-		else if (typeof str == 'object') {
+		} else if (typeof str == 'object') {
 			for (var i in str) {
 				str[i] = this.stripslashes(str[i]);
 			}
@@ -601,6 +599,9 @@ jsocket.utils = {
         }
         return function() {
             var callArgs = args || arguments;
+            if (typeof callArgs != 'object') {
+                callArgs = [];
+            }
             return fn.apply(obj || window, callArgs);
         };
     },
@@ -705,9 +706,9 @@ jsocket.core.tcp = {
             this.available = true;
         } else if (window.ActiveXObject) {
             try {
-                var a = new ActiveXObject( "ShockwaveFlash.ShockwaveFlash" );
+                var a = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
                 this.available = true;
-            } catch( oError ) {
+            } catch (oError) {
                 this.available = false;
             }
         } else {
@@ -724,11 +725,13 @@ jsocket.core.tcp = {
             this.lastTry = new Date().getTime();
         }
         if (this.available == false) {
-            this.api.parser('{"from": "TCPError", "value": "TCP is not available"}');
+            this.api.parser(jsocket.utils.forge({from: 'TCPError',
+                                                 value: 'TCP is not available'}));
             return (false);
         }
         if (typeof this.lastTry != 'undefined' && new Date().getTime() - this.lastTry > 2000) {
-            this.api.parser('{"from": "TCPError", "value": "TCP is not available"}');
+            this.api.parser(jsocket.utils.forge({from: 'TCPError',
+                                                 value: 'TCP is not available'}));
             return (false);
         }
 		if (this.isLoaded == true &&
@@ -769,9 +772,6 @@ jsocket.core.tcp = {
 		if (this.connectedToServer) {
 			this.socket.write(msg + "\n");
 		} else {
-			if (typeof this.api != 'object') {
-				return (false);
-			}
 			this.setTimeout(this.send, 500, msg);
 			return (false);
 		}
@@ -793,12 +793,10 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.connectedToServer = true;
         this.keepAlive();
-		this.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
+		this.send(jsocket.utils.forge({cmd: 'connected',
+                        args: {vhost: this.api.settings.vhost}}));
 		return (true);
 	},
 
@@ -807,9 +805,8 @@ jsocket.core.tcp = {
      */
     keepAlive: function() {
         if (this.connectedToServer && this.isWorking) {
-            this.api.send(jsocket.utils.forge({
-                        cmd: 'keepalive',
-                        uid: '.uid.'}));
+            this.api.send(jsocket.utils.forge({cmd: 'keepalive',
+                                               uid: '.uid.'}));
         }
         if (this.isWorking) {
             this.setTimeout(this.keepAlive, this.api.settings.keepAliveTimer);
@@ -832,11 +829,9 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.api.uid = '';
-		this.api.parser('{"from": "disconnect", "value": true}');
+		this.api.parser(jsocket.utils.forge({from: 'disconnect',
+                        value: true}));
 		this.connectedToServer = false;
 		this.connect();
 		return (true);
@@ -849,12 +844,9 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	ioError: function(msg) {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
-		this.api.parser('{"from": "error", "value": "' + msg + '"}');
+		this.api.parser(jsocket.utils.forge({from: 'error', value: msg}));
 		if (this.connectedToServer == false) {
-			this.api.parser('{"from": "TCPError", "value": "Input/Output error"}');
+			this.api.parser(jsocket.utils.forge({from: 'TCPError', value: 'Input/Output error'}));
 		}
 		return (true);
 	},
@@ -866,12 +858,9 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	securityError: function(msg) {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
-		this.api.parser('{"from": "error", "value": "' + msg + '"}');
+		this.api.parser(jsocket.utils.forge({from: 'error', value: msg}));
 		if (this.connectedToServer == false) {
-			this.api.parser('{"from": "TCPError", "value": "Security error"}');
+			this.api.parser(jsocket.utils.forge({from: 'TCPError', value: 'Security error'}));
 		}
 		return (true);
 	},
@@ -883,9 +872,6 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		var tab = decodeURIComponent(msg).split("\n");
 		for (var i = 0; i < tab.length; ++i) {
 			this.api.onReceive(tab[i]);
@@ -945,7 +931,7 @@ jsocket.core.http = {
 	 * @private
 	 * @type Array
 	 */
-	commands: [ ],
+	commands: [],
 
 	/**
 	 * True si ce core est utilise par l'API sinon False
@@ -991,9 +977,13 @@ jsocket.core.http = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
-		this._get('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": ""}');
+        if (this.connectedToServer == true) {
+            return (false);
+        }
+		this._get(jsocket.utils.forge({
+                    cmd: 'connected',
+                    args: { vhost: this.api.settings.vhost }}));
 		this.pool();
-        this.connected();
         this.response.waiting = false;
         return (true);
 	},
@@ -1005,10 +995,12 @@ jsocket.core.http = {
 	 * @return {Boolean} False si l'API n'est pas definie
 	 */
 	pool: function() {
-		if (typeof this.api != 'object' || this.isWorking == false) {
+		if (this.isWorking == false) {
 			return (false);
 		}
-		this.write();
+        if (this.connectedToServer == true) {
+            this.write();
+        }
 		jsocket.utils.defer(this.pool, this.api.settings.http.refreshTimer, this);
 	},
 
@@ -1041,18 +1033,18 @@ jsocket.core.http = {
 	 * @return {Boolean} True si les commandes ont ete envoyees sinon False
 	 */
 	write: function() {
-		if (typeof this.api != 'object' ||
-			this.checkResponse() == false) {
+		if (this.checkResponse() == false) {
 			return (false);
 		}
 		msg = '';
 		if (this.commands.length > 0) {
 			msg = this.commands.join("\n");
-			this.commands = [ ];
+			this.commands = [];
             this._get(msg + "\n");
 		} else {
-            this._get('{"cmd": "refresh", "args": "null", "app": "", "uid": "' +
-                      this.api.uid + '"}\n');
+            this._get(jsocket.utils.forge({
+                        cmd: 'refresh',
+                        uid: this.api.uid}));
 		}
 		return (true);
 	},
@@ -1075,9 +1067,6 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.connectedToServer = true;
 		return (true);
 	},
@@ -1088,10 +1077,7 @@ jsocket.core.http = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
-		this.api.parser('{"from": "disconnect", "value": true}');
+		this.api.parser(jsocket.utils.forge({from: 'disconnect', value: true}));
 		this.connectedToServer = false;
 		this.connect();
 		return (true);
@@ -1104,9 +1090,6 @@ jsocket.core.http = {
 	 */
     receive: function() {
         this.parentNode.removeChild(this);
-		if (typeof jsocket.core.http.api != 'object') {
-			return (false);
-		}
         if (jsocket.core.http.connectedToServer == false) {
             jsocket.core.http.connected();
         }
@@ -1171,7 +1154,6 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le core websocket est disponible sinon false
 	 */
 	isAvailable: function() {
-        return (false);
 		if ('WebSocket' in window) {
 			this.available = true;
 		} else {
@@ -1185,7 +1167,8 @@ jsocket.core.websocket = {
 	 */
 	connect: function() {
 		if (this.available == false) {
-			this.api.parser('{"from": "WebSocketError", "value": "WebSocket not available"}');
+			this.api.parser(jsocket.utils.forge({from: 'WebSocketError',
+                                                 value: 'WebSocket not available'}));
 			return (false);
 		}
 		if (!this.socket) {
@@ -1208,12 +1191,11 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.connectedToServer = true;
         this.keepAlive();
-		this.socket.send('{"cmd": "connected", "args": { "vhost":"' + this.api.settings.vhost + '" }, "app": "" }');
+		this.socket.send(jsocket.utils.forge({
+                    cmd: 'connected',
+                    args: { vhost: this.api.settings.vhost }}));
 		return (true);
 	},
 
@@ -1237,11 +1219,8 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		this.api.uid = '';
-		this.api.parser('{"from": "disconnect", "value": true}');
+		this.api.parser(jsocket.utils.forge({from: 'disconnect', value: true}));
 		if (this.connectedToServer == false) {
 			return (false);
 		}
@@ -1261,10 +1240,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	error: function(msg) {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
-		this.api.parser('{"from": "WebSocketError", "value": "' + msg + '"}');
+		this.api.parser(jsocket.utils.forge({from: 'WebSocketError', value: msg}));
 		return (true);
 	},
 
@@ -1275,9 +1251,6 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	receive: function(msg) {
-		if (typeof this.api != 'object') {
-			return (false);
-		}
 		msg = msg.data;
 		var tab = msg.split("\n");
 		for (var i = 0; i < tab.length; ++i) {
@@ -1315,9 +1288,6 @@ jsocket.core.websocket = {
 		if (this.connectedToServer) {
 			this.socket.send(msg + "\n");
 		} else {
-			if (typeof this.api != 'object') {
-				return (false);
-			}
 			this.setTimeout(this.send, 500, msg);
 			return (false);
 		}
@@ -1406,31 +1376,6 @@ jsocket.api = {
 	commands: [],
 
 	/**
-	 * La liste des cores disponibles.
-	 * Si un core ne fonctionne pas, alors
-	 * le core suivant est teste.
-	 * @private
-	 * @type {Object}
-	 */
-	cores: {
-		tcp: {
-			object: jsocket.core.tcp,
-			tested: false,
-			worked: true
-		},
-		http: {
-			object: jsocket.core.http,
-			tested: false,
-			worked: true
-		},
-		websocket: {
-			object: jsocket.core.websocket,
-			tested: false,
-			worked: true
-		}
-	},
-
-	/**
 	 * <p>Parametres de configuration:</p>
 	 * <p><div class="mdetail-params"><ul>
 	 * <li><b><tt>tcp.host: Host pour le core {@link jsocket.core.tcp#isAvailable}</tt></b></li>
@@ -1497,9 +1442,9 @@ jsocket.api.settings = {
 		}
 		if (this.core == null) {
             this.setCore();
-		}
-        this.core.api = this;
-        this.core.connect();
+		} else {
+            this.method(this.core);
+        }
 	},
 
 	/**
@@ -1542,7 +1487,7 @@ jsocket.api.settings = {
 	 * @return {Boolean} True si la deconnection a reussie sinon False
 	 */
 	disconnect: function() {
-		if (this.core && typeof this.core != 'undefined') {
+		if (typeof this.core != 'undefined' && this.core) {
 			return (this.core.close());
 		}
 		return (false);
@@ -1567,7 +1512,7 @@ jsocket.api.settings = {
             newCore = jsocket.core.http;
         }
 		if (this.core != null) {
-            if (this.connectedToServer == true) {
+            if (this.core.connectedToServer == true) {
                 this.disconnect();
             }
 			this.uid = '';
@@ -1667,11 +1612,15 @@ jsocket.api.register('myApplicationName', myApplication);
 		}
 		if (enable == true) {
 			this.isDebug = true;
-			document.getElementById('socketBridge').style.top = '0px';
+            if (document.getElementById('socketBridge')) {
+                document.getElementById('socketBridge').style.top = '0px';
+            }
 		}
 		else {
 			this.isDebug = false;
-			document.getElementById('socketBridge').style.top = '-1000px';
+            if (document.getElementById('socketBridge')) {
+                document.getElementById('socketBridge').style.top = '-1000px';
+            }
 		}
 	},
 
@@ -1684,10 +1633,10 @@ jsocket.api.register('myApplicationName', myApplication);
         if (this.isDebug) {
             console.log('[jsocket-api] receive: ', text);
         }
-		var j = { };
+		var j = {};
 		try {
 			j = JSON.parse(text);
-		} catch(e) {
+		} catch (e) {
 			return (false);
 		}
 		if (j.from != null && j.value != null) {
@@ -2202,7 +2151,6 @@ jsocket.api.register('myApplicationName', myApplication);
 	 * @param {String} error Le message d'erreur
 	 */
 	onTCPError: function(error) {
-        console.log('onTCPError');
 		if (jsocket.core.http.isWorking == false) {
 			this.method(jsocket.core.http);
 		}

@@ -12,7 +12,7 @@ jsocket.utils = {
 	 * @param {Object} obj Objet javascript
 	 * @return {String} Commande JSON
 	 */
-	forge : function(obj) {
+	forge: function(obj) {
 		for (var i in obj) {
 			obj[i] = this.addslashes(obj[i]);
 		}
@@ -28,8 +28,7 @@ jsocket.utils = {
 		if (typeof str == 'string') {
 			str = encodeURIComponent(str);
 			str = str.replace(/\'/g, "%27");
-		}
-		else if (typeof str == 'object') {
+		} else if (typeof str == 'object') {
 			for (var i in str) {
 				str[i] = this.addslashes(str[i]);
 			}
@@ -46,8 +45,7 @@ jsocket.utils = {
 		if (typeof str == 'string') {
 			str = str.replace(/\%27/g, "'");
 			str = decodeURIComponent(str);
-		}
-		else if (typeof str == 'object') {
+		} else if (typeof str == 'object') {
 			for (var i in str) {
 				str[i] = this.stripslashes(str[i]);
 			}
@@ -68,6 +66,9 @@ jsocket.utils = {
         }
         return function() {
             var callArgs = args || arguments;
+            if (typeof callArgs != 'object') {
+                callArgs = [];
+            }
             return fn.apply(obj || window, callArgs);
         };
     },
