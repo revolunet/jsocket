@@ -1192,7 +1192,6 @@ jsocket.core.websocket = {
 	 * @return {Boolean} True si le core websocket est disponible sinon false
 	 */
 	isAvailable: function() {
-        return (false);
 		if ('WebSocket' in window) {
 			this.available = true;
 		} else {
