@@ -177,9 +177,9 @@ jsocket.core.tcp = {
         this.lastTry = false;
 		this.connectedToServer = true;
         this.keepAlive();
-		this.send(jsocket.utils.forge({
-                    cmd: 'connected',
-                    args: {vhost: this.api.settings.vhost}}));
+        
+        this.send('{ "cmd": "connected", "args": { "vhost": "' + this.api.settings.vhost + '" }}');
+        
 		return (true);
 	},
 

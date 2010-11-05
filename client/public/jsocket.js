@@ -803,9 +803,9 @@ jsocket.core.tcp = {
         this.lastTry = false;
 		this.connectedToServer = true;
         this.keepAlive();
-		this.send(jsocket.utils.forge({
-                    cmd: 'connected',
-                    args: {vhost: this.api.settings.vhost}}));
+        
+        this.send('{ "cmd": "connected", "args": { "vhost": "' + this.api.settings.vhost + '" }}');
+        
 		return (true);
 	},
 
@@ -998,9 +998,9 @@ jsocket.core.http = {
         if (this.connectedToServer == true) {
             return (false);
         }
-		this._get(jsocket.utils.forge({
-                    cmd: 'connected',
-                    args: { vhost: this.api.settings.vhost }}));
+        
+        this._get('{ "cmd": "connected", "args": { "vhost": "' + this.api.settings.vhost + '" }}');
+      
 		this.pool();
         this.response.waiting = false;
         return (true);
@@ -1239,9 +1239,7 @@ jsocket.core.websocket = {
         this.lastTry = false;
 		this.connectedToServer = true;
         this.keepAlive();
-		this.socket.send(jsocket.utils.forge({
-                    cmd: 'connected',
-                    args: { vhost: this.api.settings.vhost }}));
+		this.socket.send('{ "cmd": "connected", "args": { "vhost": "' + this.api.settings.vhost + '" }}');
 		return (true);
 	},
 

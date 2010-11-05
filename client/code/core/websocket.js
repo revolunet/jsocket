@@ -107,9 +107,7 @@ jsocket.core.websocket = {
         this.lastTry = false;
 		this.connectedToServer = true;
         this.keepAlive();
-		this.socket.send(jsocket.utils.forge({
-                    cmd: 'connected',
-                    args: { vhost: this.api.settings.vhost }}));
+		this.socket.send('{ "cmd": "connected", "args": { "vhost": "' + this.api.settings.vhost + '" }}');
 		return (true);
 	},
 

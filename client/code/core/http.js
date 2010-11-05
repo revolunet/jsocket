@@ -98,9 +98,9 @@ jsocket.core.http = {
         if (this.connectedToServer == true) {
             return (false);
         }
-		this._get(jsocket.utils.forge({
-                    cmd: 'connected',
-                    args: { vhost: this.api.settings.vhost }}));
+        
+        this._get('{ "cmd": "connected", "args": { "vhost": "' + this.api.settings.vhost + '" }}');
+      
 		this.pool();
         this.response.waiting = false;
         return (true);
