@@ -169,8 +169,10 @@ jsocket.api.settings = {
 	 * @return {Boolean} True si la deconnection a reussie sinon False
 	 */
 	disconnect: function() {
-		if (typeof this.core != 'undefined' && this.core) {
-			return (this.core.close());
+		if (typeof this.core != 'undefined' &&
+            this.core && this.core.close() == true) {
+            this.uid = '';
+            return (true);
 		}
 		return (false);
 	},

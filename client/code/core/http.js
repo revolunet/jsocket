@@ -128,6 +128,9 @@ jsocket.core.http = {
 	 */
 	close: function() {
 		this.connectedToServer = false;
+        this._get(jsocket.utils.forge({
+                    cmd: 'disconnected',
+                    uid: this.api.uid}));
 		return (true);
 	},
 

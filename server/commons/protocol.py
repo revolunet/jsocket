@@ -71,6 +71,7 @@ class Protocol(object):
             'part': self.__cmd_part,
             'chanAuth': self.__cmd_chanAuth,
             'connected': self.__cmd_connected,
+            'disconnected': self.__cmd_disconnected,
             'forward': self.__cmd_forward,
             'remove': self.__cmd_remove,
             'message': self.__cmd_message,
@@ -150,6 +151,21 @@ class Protocol(object):
         Le client est connecte, sa cle unique lui est send
         """
         return ('"%s"' % str(self.client.unique_key))
+
+    # {"cmd" : "disconnected", "uid": "$uid"}
+    @jsonPrototype('disconnected')
+    def __cmd_disconnected(self, args=None):
+        """
+        Le client est deconnecte
+        """
+        from log.logger import Log
+        from commons.session import Session
+
+        Log().add('[%s] %s disconnected' % (
+            self.client.type, str(self.client.getName())), 'red')
+        if Session().delete(self.client.unique_key) == True:
+            return ('true')
+        return ('false')
 
     # {"cmd" : "auth", "args": "masterpassword", "channel": "", "app" : ""}
     @jsonPrototype('auth')

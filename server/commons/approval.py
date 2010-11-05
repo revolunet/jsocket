@@ -16,6 +16,7 @@ class ApprovalProtocol(object):
         self.commands = {
             'refresh': lambda l: True,
             'connected': lambda l: True,
+            'disconnected': self.uid,
             'keepalive': lambda l: True,
             'history': self.default,
             'auth': self.default,
@@ -44,6 +45,12 @@ class ApprovalProtocol(object):
                json.get('uid', None) is not None and \
                json.get('channel', None) is not None and \
                json.get('app', None) is not None
+
+    def uid(self, json):
+        """
+        Return True si la commande json comprend la cle uid
+        """
+        return json.get('uid', None) is not None
 
 
 class Approval(object):
