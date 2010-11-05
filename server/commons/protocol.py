@@ -500,7 +500,7 @@ class Protocol(object):
                                                    appName=appName,
                                                    password=password):
             Log().add("[+] Client: le client %s a changer le mot de passe master du channel: %s" %
-                      (str(self.client.getName(), channelName)), 'yellow')
+                      (str(self.client.getName()), str(channelName)), 'yellow')
             return ('true')
         else:
             if self.client.master == False:
