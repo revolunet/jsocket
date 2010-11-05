@@ -367,48 +367,51 @@ class Protocol(object):
         Envoie un message a une liste d'utilisateurs
         """
         message = args.get('args', '')
-        if len(message) == 0:
-            return ('false')
-        else:
-            channelName = args['channel']
-            appName = args['app']
-            ret = False
-            if message[0] and len(message[0]) != 0:
-                if len(message) > 1 and len(message[1]) > 0:
-                    if len(message[1][0]) == 0:
-                        ret = self.client.room.message(channelName=channelName,
-                                                       appName=appName,
-                                                       sender=self.uid,
-                                                       users=['master'],
-                                                       message=message[0])
-                    elif message[1][0] == '*':
-                        ret = self.client.room.message(channelName=channelName,
-                                                       appName=appName,
-                                                       sender=self.uid,
-                                                       users=['all'],
-                                                       message=message[0])
-                    elif message[1][0] == 'master':
-                        ret = self.client.room.message(channelName=channelName,
-                                                       appName=appName,
-                                                       sender=self.uid,
-                                                       users=['master'],
-                                                       message=message[0])
+        try:
+            if len(message) == 0:
+                return ('false')
+            else:
+                channelName = args['channel']
+                appName = args['app']
+                ret = False
+                if message[0] and len(message[0]) != 0:
+                    if len(message) > 1 and len(message[1]) > 0:
+                        if len(message[1][0]) == 0:
+                            ret = self.client.room.message(channelName=channelName,
+                                                           appName=appName,
+                                                           sender=self.uid,
+                                                           users=['master'],
+                                                           message=message[0])
+                        elif message[1][0] == '*':
+                            ret = self.client.room.message(channelName=channelName,
+                                                           appName=appName,
+                                                           sender=self.uid,
+                                                           users=['all'],
+                                                           message=message[0])
+                        elif message[1][0] == 'master':
+                            ret = self.client.room.message(channelName=channelName,
+                                                           appName=appName,
+                                                           sender=self.uid,
+                                                           users=['master'],
+                                                           message=message[0])
+                        else:
+                            ret = self.client.room.message(channelName=channelName,
+                                                           appName=appName,
+                                                           sender=self.uid,
+                                                           users=message[1],
+                                                           message=message[0])
                     else:
                         ret = self.client.room.message(channelName=channelName,
                                                        appName=appName,
                                                        sender=self.uid,
-                                                       users=message[1],
+                                                       users=['master'],
                                                        message=message[0])
-                else:
-                    ret = self.client.room.message(channelName=channelName,
-                                                   appName=appName,
-                                                   sender=self.uid,
-                                                   users=['master'],
-                                                   message=message[0])
-            if ret:
-                return ('true')
-            else:
-                return ('false')
+        except:
+            ret = False
+        if ret:
+            return ('true')
+        else:
+            return ('false')
 
     # {"cmd": "nick", "args": "nickName", "app": "appName"}
     @jsonPrototype('nick')
