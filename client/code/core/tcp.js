@@ -55,6 +55,13 @@ jsocket.core.tcp = {
      */
     lastTry: false,
 
+    /**
+     * Flag lorsque la connection est ferme manuellement
+     * @private
+     * @type Boolean
+     */
+    manuallyDisconnected: false,
+
 	/**
 	 * @event loaded
 	 * Callback appele par flash lorsque le swf est charge
@@ -103,7 +110,7 @@ jsocket.core.tcp = {
                                                  value: 'TCP is not available'}));
             return (false);
         }
-        if (typeof this.lastTry != 'undefined' && new Date().getTime() - this.lastTry > 2000) {
+        if (new Date().getTime() - this.lastTry > 2000) {
             this.api.parser(jsocket.utils.forge({from: 'TCPError',
                                                  value: 'TCP is not available'}));
             return (false);
@@ -167,10 +174,12 @@ jsocket.core.tcp = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
+        this.lastTry = false;
 		this.connectedToServer = true;
         this.keepAlive();
-		this.send(jsocket.utils.forge({cmd: 'connected',
-                        args: {vhost: this.api.settings.vhost}}));
+		this.send(jsocket.utils.forge({
+                    cmd: 'connected',
+                    args: {vhost: this.api.settings.vhost}}));
 		return (true);
 	},
 
@@ -192,8 +201,11 @@ jsocket.core.tcp = {
 	 * @return {Boolean} True si la connection a ete fermee sinon False
 	 */
 	close: function() {
-		this.socket.close();
-		this.connectedToServer = false;
+        if (this.socket) {
+            this.manuallyDisconnected = true;
+            this.socket.close();
+            this.disconnected();
+        }
 		return (true);
 	},
 
@@ -204,10 +216,16 @@ jsocket.core.tcp = {
 	 */
 	disconnected: function() {
 		this.api.uid = '';
-		this.api.parser(jsocket.utils.forge({from: 'disconnect',
-                        value: true}));
+		this.api.parser(jsocket.utils.forge({from: 'disconnect', value: true}));
+        if (this.connectedToServer == false) {
+            return (false);
+        }
 		this.connectedToServer = false;
-		this.connect();
+        if (this.manuallyDisconnected == true) {
+            this.manuallyDisconnected = false;
+        } else {
+            this.connect();
+        }
 		return (true);
 	},
 

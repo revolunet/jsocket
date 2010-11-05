@@ -48,6 +48,13 @@ jsocket.core.websocket = {
      */
     name: 'websocket',
 
+    /**
+     * Last connection try time
+     * @private
+     * @type Boolean
+     */
+    lastTry: false,
+
 	/**
 	 * Retourne true si le core websocket est disponible, false sinon.
 	 * @return {Boolean} True si le core websocket est disponible sinon false
@@ -65,22 +72,29 @@ jsocket.core.websocket = {
 	 * Initialise une connection via une socket sur le server:port
 	 */
 	connect: function() {
+        if (this.lastTry == false) {
+            this.lastTry = new Date().getTime();
+        }
 		if (this.available == false) {
 			this.api.parser(jsocket.utils.forge({from: 'WebSocketError',
                                                  value: 'WebSocket not available'}));
 			return (false);
 		}
-		if (!this.socket) {
-			this.socket = new WebSocket('ws://' + this.api.settings.websocket.host +
+        if (new Date().getTime() - this.lastTry > 2000) {
+            this.api.parser(jsocket.utils.forge({from: 'WebSocketError',
+                                                 value: 'WebSocket connect timeout'}));
+            return (false);
+        }
+        if (this.socket == null) {
+            this.socket = new WebSocket('ws://' + this.api.settings.websocket.host +
                                         ':' + this.api.settings.websocket.port + '/jsocket');
-			this.socket.onmessage = jsocket.utils.createDelegate(this.receive, this);
-			this.socket.onerror = jsocket.utils.createDelegate(this.error, this);
-			this.socket.onopen = jsocket.utils.createDelegate(this.connected, this);
-			this.socket.onclose = jsocket.utils.createDelegate(this.disconnected, this);
-		}
-		else if (this.connectedToServer == false) {
-			this.setTimeout(this.connect, 500);
-		}
+            this.socket.onmessage = jsocket.utils.createDelegate(this.receive, this);
+            this.socket.onerror = jsocket.utils.createDelegate(this.error, this);
+            this.socket.onopen = jsocket.utils.createDelegate(this.connected, this);
+            this.socket.onclose = jsocket.utils.createDelegate(this.disconnected, this);
+        } else if (this.connectedToServer == false) {
+            this.setTimeout(this.connect, 500);
+        }
         return (true);
 	},
 
@@ -90,6 +104,7 @@ jsocket.core.websocket = {
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	connected: function() {
+        this.lastTry = false;
 		this.connectedToServer = true;
         this.keepAlive();
 		this.socket.send(jsocket.utils.forge({
@@ -113,11 +128,26 @@ jsocket.core.websocket = {
     },
 
 	/**
+	 * Ferme la connection au serveur
+	 * @return {Boolean} True si la connection a ete fermee sinon False
+	 */
+	close: function() {
+		if (this.socket) {
+			this.manuallyDisconnected = true;
+            this.socket.close();
+        }
+		return (true);
+	},
+
+	/**
 	 * @event disconnected
 	 * Callback appele par flash lorsqu'une deconnection a ete effectuee
 	 * @return {Boolean} False si le core n'est pas attache a l'API sinon True
 	 */
 	disconnected: function() {
+        if (this.socket) {
+            delete this.socket;
+        }
 		this.api.uid = '';
 		this.api.parser(jsocket.utils.forge({from: 'disconnect', value: true}));
 		if (this.connectedToServer == false) {
@@ -200,17 +230,5 @@ jsocket.core.websocket = {
 	 */
 	send: function(msg) {
 		return (this.write(msg));
-	},
-
-	/**
-	 * Ferme la connection au serveur
-	 * @return {Boolean} True si la connection a ete fermee sinon False
-	 */
-	close: function() {
-		if (this.socket != null) {
-			this.manuallyDisconnected = true;
-            this.socket.close();
-        }
-		return (true);
 	}
 };

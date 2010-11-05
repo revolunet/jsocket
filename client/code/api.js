@@ -113,12 +113,6 @@ jsocket.api.settings = {
 	 * @param {Object} Parametre optionnel de configuration {@link jsocket.api.settings}
 	 */
 	connect: function(settings) {
-        if (jsocket.core.websocket.available == false) {
-            jsocket.core.websocket.isAvailable();
-        }
-        if (jsocket.core.http.available == false) {
-            jsocket.core.http.isAvailable();
-        }
 		if (typeof settings != 'undefined' && settings != null) {
 			this.configure(settings);
 		}
@@ -199,11 +193,13 @@ jsocket.api.settings = {
             if (this.core.connectedToServer == true) {
                 this.disconnect();
             }
-			this.uid = '';
-			this.core.isWorking = false;
-			this.core = newCore;
-			this.core.isWorking = true;
-			this.core.api = this;
+            if (this.core != newCore) {
+                this.uid = '';
+                this.core.isWorking = false;
+                this.core = newCore;
+                this.core.isWorking = true;
+                this.core.api = this;
+            }
             if (this.core.connectedToServer == false) {
                 this.core.connect();
             }
