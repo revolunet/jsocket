@@ -197,11 +197,25 @@ class Protocol(object):
             users = self.client.room.list_users(channelName=args, appName=appName)
         else:
             users = self.client.room.list_users(channelName=channelName, appName=appName)
+        
+        ruid = args.get('uid')
+        channel = self.client.room.Channel(channelName=channelName, appName=appName)
+        
+        isMaster = False
+        if channel:
+            isMaster = channel.isMaster( ruid )
+        
         for u in users:
             user = Session().get(u)
             if user is not None:
-                status = user.status
+                # if sender isclient and user is client: continue
                 key = user.unique_key
+                isMaster2 = False
+                if channel:
+                    isMaster2 = channel.isMaster( key )
+                if not isMaster and not isMaster2:
+                    continue
+                status = user.status
                 name = user.getName()
                 to_send = {"name": name, "key": key, "status": status}
                 str.append(to_send)
