@@ -3,6 +3,7 @@ from log.logger import Log
 from commons.approval import Approval
 from commons.session import Session
 
+import simplejson
 
 class ClientHTTP(resource.Resource):
     """
@@ -41,12 +42,20 @@ class ClientHTTP(resource.Resource):
         """
         cuid = None
         if request.args.get('json', None) is not None:
-            Log().add('[http-get] Receive: %s' % request.args['json'][0])
             commands = request.args['json'][0].split("\n")
             for cmd in commands:
-                if '"httpCreateChannel"' in cmd:
+                jsoncmd = None
+                try:
+                    jsoncmd = simplejson.loads( cmd ).get('cmd')
+                except:
+                    pass
+                
+                if jsoncmd != 'refresh':
+                    Log().add('[http-get] Receive: %s' % cmd)
+                    
+                if jsoncmd == 'httpCreateChannel':
                     return Approval().httpCreateChannel(cmd)
-                elif '"httpSendMessage"' in cmd:
+                elif jsoncmd == 'httpSendMessage':
                     return Approval().httpSendMessage(cmd)
                 uid = Approval().validate(cmd, None, 'http')
                 if uid is not None and cuid is None:
