@@ -31,7 +31,7 @@ class Log(object):
             self.__logs = logging.getLogger("server")
             self.__logs.setLevel(logging.DEBUG)
             self.__logfile = open('%s%slog/logs_exception.log' %
-                                  (sys.path[0], os.sep), 'w', 0)
+                                  (sys.path[0], os.sep), 'a', 0)
             self.__logTraceback()
             self.__queue = Queue.Queue(SETTINGS.LOG_QUEUE_SIZE)
             for i in range(0, SETTINGS.LOG_THREADING_SIZE):
