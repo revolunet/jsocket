@@ -184,7 +184,7 @@ jsocket.api.settings = {
 	 */
 	method: function(newCore) {
         if (this.isDebug) {
-            console.log('[jsocket-api] method: ', newCore);
+            console.log('[jsocket-api] method: ', newCore, newCore.name);
         }
         if (newCore.isAvailable() == false) {
             newCore = jsocket.core.http;

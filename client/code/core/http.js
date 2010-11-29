@@ -215,7 +215,7 @@ jsocket.core.http = {
              this.readyState == "complete") &&
             this.parentNode) {
             this.parentNode.removeChild(this);
-        } else if (this.parentNode) {
+        } else if (this.readyState != "loading" && this.parentNode) {
             this.parentNode.removeChild(this);
         }
 		if (typeof jsocket.core.http.api != 'object') {

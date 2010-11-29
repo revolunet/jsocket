@@ -1115,7 +1115,7 @@ jsocket.core.http = {
              this.readyState == "complete") &&
             this.parentNode) {
             this.parentNode.removeChild(this);
-        } else if (this.parentNode) {
+        } else if (this.readyState != "loading" && this.parentNode) {
             this.parentNode.removeChild(this);
         }
 		if (typeof jsocket.core.http.api != 'object') {
@@ -1549,7 +1549,7 @@ jsocket.api.settings = {
 	 */
 	method: function(newCore) {
         if (this.isDebug) {
-            console.log('[jsocket-api] method: ', newCore);
+            console.log('[jsocket-api] method: ', newCore, newCore.name);
         }
         if (newCore.isAvailable() == false) {
             newCore = jsocket.core.http;
