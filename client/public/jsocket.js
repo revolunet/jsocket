@@ -1514,9 +1514,10 @@ jsocket.api.settings = {
 	 * @private
 	 */
 	setCore: function() {
-        if (jsocket.core.websocket.isAvailable() == true) {
-            this.method(jsocket.core.websocket);
-        } else if (jsocket.core.tcp.isAvailable() == true) {
+        //if (jsocket.core.websocket.isAvailable() == true) {
+        //    this.method(jsocket.core.websocket);
+        //} else 
+	if (jsocket.core.tcp.isAvailable() == true) {
             this.method(jsocket.core.tcp);
         } else {
             this.method(jsocket.core.http);
