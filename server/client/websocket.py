@@ -1,15 +1,19 @@
 from server.websocket import WebSocketHandler
+from twisted.internet.protocol import Protocol
 from commons.approval import Approval
 from commons.session import Session
 from log.logger import Log
 
 
-class ClientWebSocket(WebSocketHandler):
+class ClientWebSocket(Protocol):
+
+    location = "/jsocket"
+
     """
     Classe WebSocket HTML5 utilisee par twisted
     """
-    def __init__(self, transport):
-        WebSocketHandler.__init__(self, transport)
+    def __init__(self):#, transport):
+        #Protocol.__init__(self, transport)
         self.uid = None
         self.connected = False
 
@@ -25,6 +29,12 @@ class ClientWebSocket(WebSocketHandler):
                    '"connected"' not in json:
                 self.send(json)
         return True
+
+    def dataReceived(self, data):
+        """
+        Alias for frameReceived.
+        """
+        self.frameReceived(data)
 
     def frameReceived(self, frame):
         """

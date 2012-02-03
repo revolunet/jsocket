@@ -4,12 +4,14 @@ from log.logger import Log
 from config.settings import SETTINGS
 from client.tcp import TwistedTCPClient
 from client.http import ClientHTTP
-from server.websocket import WebSocketSite
 from client.websocket import ClientWebSocket
 
 from twisted.web import server
 from twisted.internet import reactor, protocol
 from twisted.web.static import File
+from twisted.internet.protocol import Factory
+from server.txws import WebSocketFactory
+
 
 
 class TwistedTCPFactory(protocol.Factory):
@@ -35,10 +37,9 @@ class ServerTwisted(threading.Thread):
         Log().add("[+] WebSocket HTML5 Server launched on %s:%s" %
                   (SETTINGS.SERVER_HOST, SETTINGS.SERVER_WEBSOCKET_PORT),
                   "green")
-        root = FileNoListing(".")
-        site = WebSocketSite(root)
-        site.addHandler('/jsocket', ClientWebSocket)
-        reactor.listenTCP(SETTINGS.SERVER_WEBSOCKET_PORT, site,
+        wsfactory = Factory()
+        wsfactory.protocol = ClientWebSocket
+        reactor.listenTCP(SETTINGS.SERVER_WEBSOCKET_PORT, WebSocketFactory(wsfactory),
                           interface=SETTINGS.SERVER_HOST)
 
         # HTTP Server
