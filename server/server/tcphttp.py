@@ -15,6 +15,9 @@ from twisted.web.static import File
 class TwistedTCPFactory(protocol.Factory):
     protocol = TwistedTCPClient
 
+class FileNoListing(File):
+	def directoryListing(self):
+		return None
 
 class ServerTwisted(threading.Thread):
 
@@ -32,7 +35,7 @@ class ServerTwisted(threading.Thread):
         Log().add("[+] WebSocket HTML5 Server launched on %s:%s" %
                   (SETTINGS.SERVER_HOST, SETTINGS.SERVER_WEBSOCKET_PORT),
                   "green")
-        root = File(".")
+        root = FileNoListing(".")
         site = WebSocketSite(root)
         site.addHandler('/jsocket', ClientWebSocket)
         reactor.listenTCP(SETTINGS.SERVER_WEBSOCKET_PORT, site,
