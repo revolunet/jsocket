@@ -3,19 +3,19 @@ jSocket API
 
 jSocket is a Python/Twisted server with a javascript client API.
 
-The goal is to easyly bring real-time communications into any webapp thanks a transparent javascript API.
+The goal is to bring real-time communications into any webapp thanks to a transparent javascript API.
 
-The Javascript API is responsible of establishing the best transport available and switch to fallbacks transports if needed. 
+The Javascript API is responsible of selecting the best transport available and switch to any fallback if needed. 
 
-For some reasons, the API is similar to IRC but it should be much simpler.
+For some reasons, the API is similar to IRC but it *should* be much simpler.
 
  - A `room` is created with an initial password
  - Users can join the room with that password
  - A `master` user can join the room with a special admin password and have more control
 
  - A standard user can only send `messages` to the `master`user. 
- - `Master`user broadcast messages to any client
- - Standard users are not allowed to communicate together. (This behaviour should be configurable 'per channel')
+ - `Master` user broadcasts messages to any client
+ - Standard users are not allowed to communicate together in a single room. (This behaviour should be configurable 'per channel')
 
 See working examples in `client/examples`
 
@@ -44,17 +44,12 @@ Usage
      - connect to the service
 
 
-Notes 
----
- - Host example pages on an http server
-
-
 Todo
 ---
  - Server and client API redesign & docs: things should be **much much simpler**
  - think about encryption/security
- - implement JSONP+CORS for the http failover
- - BUG MacOSX + restart srv. the Ctrl+C never closes
+ - implement JSONP+CORS for the cross-domain http failover (we need a local proxy for this actually)
+ - BUG MacOSX + restart srv. the Ctrl+C never closes the http+tcp servers.
 
 
 Requirements:
