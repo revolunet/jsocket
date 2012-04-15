@@ -44,7 +44,7 @@ class SETTINGS(object):
     WATCHDOG_SLEEP_TIME = 3
     WATCHDOG_MAX_IDLE_TIME = 1000
     WATCHDOG_HTTP_DISCONNECT_TIME = 10
-    ROOM_EMPTY_TIME = 10
+    ROOM_EMPTY_TIME = 30
 
     """
     LOG CONFIGURATION
@@ -55,7 +55,4 @@ class SETTINGS(object):
     """
     DEFAULT APPLICATION ON STARTUP
     """
-    STARTUP_APP = [
-        {'name': 'irc', 'app': 'default'},
-        {'name': 'test', 'app': 'default'}
-    ]
+    STARTUP_APP = []

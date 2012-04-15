@@ -1,6 +1,8 @@
 from config.settings import SETTINGS
 import simplejson
 
+from log.logger import Log
+
 
 def isMaster(attrs):
     def _isMaster(f):
@@ -120,7 +122,11 @@ class Protocol(object):
                                         password=password,
                                         uid=self.client.unique_key,
                                         masterPwd=masterPwd, forceJoin=False)
+                Log().add("[+] Channel : create room %s" %
+                      channelName, 'green')
                 return ('true')
+        Log().add("[-] Channel : cannot create room %s" %
+                      channelName, 'red')
         return ('false')
 
     #  { "cmd": "httpSendMessage", "args": { "channel": "system", "adminPwd":"pouetpouet", "to":["0xc5a7ebfcca23b0fL","xxx"], "message":"alert(1111)" } , "app": "system" }
@@ -158,7 +164,6 @@ class Protocol(object):
         """
         Le client est deconnecte
         """
-        from log.logger import Log
         from commons.session import Session
 
         Log().add('[%s] %s disconnected' % (
@@ -173,7 +178,6 @@ class Protocol(object):
         """
         Authentifie un client en tant que master du server.
         """
-        from log.logger import Log
 
         if args['args'] == self.client.master_password:
             self.client.master = True
@@ -226,7 +230,6 @@ class Protocol(object):
         """
         Retourne la policy pour un client flash.
         """
-        from log.logger import Log
 
         Log().add("[+] Send policy file request to %s" %
                   str(self.client.getName()))
@@ -239,7 +242,6 @@ class Protocol(object):
         """
         On supprime un channel, si celui si existe et que Client est Master
         """
-        from log.logger import Log
 
         channelName = args['args']
         appName = args['app']
@@ -258,7 +260,6 @@ class Protocol(object):
         """
         Creation d'un nouveau channel si le Client est Master
         """
-        from log.logger import Log
 
         appName = args['app']
         channelName = args['args'][0]
@@ -287,7 +288,6 @@ class Protocol(object):
         """
         Ajoute un client dans le salon specifie
         """
-        from log.logger import Log
 
         appName = args['app']
         channelName = args['args'][0]
@@ -316,7 +316,6 @@ class Protocol(object):
         """
         Supprime un client du salon specifie
         """
-        from log.logger import Log
 
         channelName = args['args']
         appName = args['app']
@@ -347,7 +346,6 @@ class Protocol(object):
         """
         Auth pour definir si le Client est desormais master ou non d'une application
         """
-        from log.logger import Log
 
         appName = args['app']
         channelName = args['channel']
@@ -449,7 +447,6 @@ class Protocol(object):
         """
         Permet au client de change de pseudo
         """
-        from log.logger import Log
 
         Log().add("[+] Client: le client %s a change son nickname en: %s" %
                   (str(self.client.getName()), args['args']), 'yellow')
@@ -462,7 +459,6 @@ class Protocol(object):
         """
         Retourne le status de l'utilisateur
         """
-        from log.logger import Log
 
         Log().add("[+] Client: le client %s a demande son status" %
                   str(self.client.getName()), 'yellow')
@@ -474,7 +470,6 @@ class Protocol(object):
         """
         Change le status de l'utilisateur
         """
-        from log.logger import Log
 
         appName = args['app']
         Log().add("[+] Client: le client %s a change son status en: %s" %
@@ -492,7 +487,6 @@ class Protocol(object):
         """
         Retourne l'heure a laquelle c'est connecte le client
         """
-        from log.logger import Log
 
         Log().add("[+] Client: le client %s a demande l'heure de connection" %
                   str(self.client.getName()), 'yellow')
@@ -504,7 +498,6 @@ class Protocol(object):
         """
         Change le mot de passe master d'un channel
         """
-        from log.logger import Log
 
         channelName = args['channel']
         password = args['args']
@@ -530,7 +523,6 @@ class Protocol(object):
         """
         Envoie le status aux clients lors d'une action ( join / part ... connect ...)
         """
-        from log.logger import Log
         from commons.session import Session
 
         if client.room_name:

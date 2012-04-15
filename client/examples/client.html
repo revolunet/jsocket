@@ -1,0 +1,53 @@
+<html>
+	<head>
+
+		<style>
+			textarea {
+				width:800px;
+				height:500px;
+				font-family:courier;
+				font-size:10px;
+			}
+		</style>
+		<script src="debug.js"></script>
+	</head>
+	<body>
+		<h1>Client page example</h1>
+		
+		<button onclick="start()">connect</button>
+		<button onclick="disconnect()">disconnect</button><br><br>
+		<input type=text placeholder='message to send' id=msg size=50 ><button onclick="send()">SEND</button><br><br>
+		<textarea id='log' ></textarea>
+		<script>
+
+			function disconnect() {
+				jsocket.api.disconnect();
+			}
+
+			function send() {
+				var msg = document.getElementById('msg').value;
+				debug('SEND MESSAGE');
+				jsocket.api.message(jsocketConfig.APP_NAME, jsocketConfig.ROOM, [ msg, [ 'master' ]] );
+			}
+
+			function start() {
+				
+				var NICK = 'Client nickname';
+
+				jsocket.api.app[jsocketConfig.APP_NAME].onConnect = function(info) {
+					debug('onConnected', info);
+					// when ready, set nick and auth as admin
+					jsocket.api.nick(jsocketConfig.APP_NAME, jsocketConfig.ROOM, NICK);
+					// join the channel
+					jsocket.api.join( jsocketConfig.APP_NAME , jsocketConfig.ROOM, jsocketConfig.ROOM_PWD);
+				};
+
+				// GO !
+				debug('start connection');
+				jsocket.api.connect();
+			}
+		</script>
+		<script src="../public/jsocket.js"></script>
+		<script src="config.js"></script>
+	</body>
+</html>
